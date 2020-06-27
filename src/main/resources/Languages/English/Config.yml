@@ -1,0 +1,148 @@
+#Command prefix
+Prefix: '&bLite&3SignIn &f&l>>> '
+
+#Plugin language
+#Provide Chinese and English by default
+Language: English
+
+#This function is used to record the order in which players sign in daily.
+Enable-Sign-In-Ranking: true
+
+#Whether to use the PlaceholderAPI
+Use-PlaceholderAPI: true
+
+#Whether to remind players to remember to check in when they join server.
+Join-Reminder-Messages: true
+
+Auto-Save: 
+    Enabled: false
+    Only-MySQL: true
+    #Minute
+    Delay: 10
+    
+#Retroactive Card
+#Its role is to supplement the missing sign-in date.
+Retroactive-Card:
+    Enabled: true
+    #Intervals for SignIn.
+    Intervals: 5
+    #Quantity required
+    Quantity-Required: 1
+    #The lower limit date, players can not re-sign the date before this.
+    #PS: 2019/11/15 is the day the first version of this plugin is completed.
+    Minimum-Date: '2019-11-15'
+    #Required item.
+    Required-Item:
+        #If false, the retroactive card will not be an item, but a virtual prop.
+        #You can use: /signin info [player] to check the number of cards a player has.
+        Enabled: false
+        #Custom item name
+        #You can edit it in CustomItems.yml.
+        CustomItem: 'RetroactiveCard'
+
+#MySQL Database settings
+MySQL-Storage:
+    Enabled: false
+    Hostname: localhost
+    Port: 3306
+    Username: 'root'
+    Password: 'password'
+    #Database's name
+    Database: 'signin'
+    #More connection parameters. If you are not a developer and are not familiar with JDBC, please do not modify it.
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    #The number of times the system automatically repairs the connection when the database connection is disconnected (-1 is infinite)
+    Automatic-Repair: -1
+    #Player data refresh interval (seconds). -1 is none, only refresh the data when entering the server (it is recommended to do this when using MySQL on a single server)
+    Refresh-Interval: 5
+    Table-Name: playerdata
+    
+#SQLite Database settings
+#Storage priority: Yaml < SQLite < MySQL
+SQLite-Storage:
+    #The default is enabled, if false, it will be converted to Yaml storage.
+    Enabled: false
+    #Database file name.
+    Database-File: 'Database.db'
+    #File path.
+    Database-Path: 'plugins/LiteSignIn/'
+    #The number of times the system automatically repairs the connection when the database connection is disconnected (-1 is infinite)
+    Automatic-Repair: -1
+    #Player data refresh interval (seconds). -1 is none, only refresh the data when entering the server
+    Refresh-Interval: 5
+    Table-Name: playerdata
+    
+Database-Management:
+    Backup:
+        Enabled: true
+        #Turn on automatic backup (performed every time the server is turned off)
+        Auto-Backup: false
+        #Backup's folder path
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #Backup file name
+        Backup-File: 'Backup-{time}.db'
+        Time-Format: 'yyyy-MM-dd-HH-mm-ss'
+    Rollback:
+        Enabled: true
+        #Backup's folder path (the backup file will be selected from here for rollback)
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #Whether to perform a backup before performing a rollback
+        Rollback-With-Backup: true
+    
+#Order of sign-in reward tasks (giving items, executing commands, sending messages)
+#The default order is: Items reward -> commands execution -> messages sending
+Reward-Task-Sequence:
+- ITEMS_REWARD
+- COMMANDS_EXECUTION
+- MESSAGES_SENDING
+    
+Permissions:
+    #About retroactive card permissions
+    Retroactive-Card:
+        #Use retroactive card.
+        Use:
+            Permission: signin.retroactive-card.use
+            Default: true
+        #Hold a retroactive card.
+        #If there is no permission, it will be automatically confiscated by the system.
+        Hold:
+            Permission: signin.retroactive-card.hold
+            Default: true
+    #About commands permissions
+    Commands:
+        Help: 
+            Permission: signin.command.help=
+            Default: true
+        Reload: 
+            Permission: signin.command.reload
+            Default: false
+        GUI: 
+            Permission: signin.command.gui
+            Default: true
+        Designated-GUI: 
+            Permission: signin.command.designatedgui
+            Default: false
+        Click: 
+            Permission: signin.command.click
+            Default: true
+        Click-Others: 
+            Permission: signin.command.clickothers
+            Default: false
+        RetroactiveCard:
+            Permission: signin.command.retroactivecard
+            Default: false
+        Info: 
+            Permission: signin.command.info
+            Default: false
+        ItemCollection: 
+            Permission: signin.command.itemcollection
+            Default: false
+        Save: 
+            Permission: signin.command.save
+            Default: false
+        LeaderBoard:
+            Permission: signin.command.leaderboard
+            Default: true
+            Designated-Date:
+                Permission: signin.command.leaderboard.designateddate
+                Default: false

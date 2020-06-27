@@ -1,0 +1,26 @@
+#Set reward items manually.
+#The setting range is limited, this function is no longer updated, it is recommended to use the "Item-Collection" below to manage special items.
+Manual-Settings:
+    'Super_Diamond_Sword':
+        Item: DIAMOND_SWORD
+        Display-Name: '&e&lSuper Diamond Sword'
+        Lore:
+        - '&8Reward sample item.'
+        Enchantment:
+        - 'unbreaking:10'
+        - 'sharpness:10'
+    'RetroactiveCard':
+        Item: PAPER
+        Display-Name: '&e&lRetroactive Card'
+        Lore:
+        - ''
+        - '&7You can use this retroactive card'
+        - '&7to sign-in on unchecked dates.'
+        - ''
+        - '&aUsage:'
+        - '&cPlace the card in the item inventory,'
+        - '&cOpen the sign-in menu, Click the unchecked dates button.'
+        
+#Collection list.
+#Use the command "/signin itemcollection" to manage special NBT items
+Item-Collection: {}

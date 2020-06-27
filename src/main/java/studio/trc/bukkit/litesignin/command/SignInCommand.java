@@ -183,15 +183,11 @@ public class SignInCommand
                                 placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
                                 placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
                                 MessageUtil.sendMessage(sender, "Command-Messages.Click.To-Other-Player.Successfully-Signed-In", placeholders);
-//                                for (String message :  ".Command-Messages.Click.To-Other-Player.Successfully-Signed-In")) {
-//                                }
                                 Map<String, String> placeholders_2 = new HashMap();
                                 placeholders_2.put("{admin}", sender.getName());
                                 placeholders_2.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
                                 placeholders_2.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
                                 MessageUtil.sendMessage(player, "Command-Messages.Click.To-Other-Player.Messages-at-Sign-In", placeholders_2);
-//                                for (String message :  ".Command-Messages.Click.To-Other-Player.Messages-at-Sign-In")) {
-//                                }
                             }
                         } else {
                             if (args[1].isEmpty()) {

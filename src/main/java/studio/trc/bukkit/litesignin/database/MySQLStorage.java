@@ -164,10 +164,12 @@ public class MySQLStorage
         int continuousSignIn = getContinuousSignIn();
         int totalNumber = getCumulativeNumber();
         SignInDate today = SignInDate.getInstance(new Date());
+        int week = today.getWeek();
         SignInRewardQueue rewardQueue = new SignInRewardQueue(this);
         rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
         rewardQueue.addReward(new SignInSpecialDateReward(group, today));
         rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+        rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
         if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
         else {
             rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
@@ -352,12 +354,12 @@ public class MySQLStorage
             return;
         }
         List<SignInDate> historys = new ArrayList();
-        boolean add = true;
+        boolean added = false;
         if (!getHistory().isEmpty()) {
             for (SignInDate date : getHistory()) {
                 if (date.compareTo(historicalDate) > 0) {
-                    if (add) {
-                        add = false;
+                    if (!added) {
+                        added = true;
                         historys.add(historicalDate);
                         historys.add(date);
                     } else {
@@ -366,6 +368,9 @@ public class MySQLStorage
                 } else {
                     historys.add(date);
                 }
+            }
+            if (!added) {
+                historys.add(historicalDate);
             }
         } else {
             historys.add(historicalDate);

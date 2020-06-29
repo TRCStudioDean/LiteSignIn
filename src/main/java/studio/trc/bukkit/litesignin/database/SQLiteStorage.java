@@ -24,13 +24,7 @@ import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.reward.SignInRewardQueue;
-import studio.trc.bukkit.litesignin.reward.type.SignInNormalReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInRetroactiveTimeReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInSpecialDateReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInSpecialRankingReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInSpecialTimePeriodReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInSpecialTimeReward;
-import studio.trc.bukkit.litesignin.reward.type.SignInStatisticsTimeReward;
+import studio.trc.bukkit.litesignin.reward.type.*;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 
 import org.bukkit.Bukkit;
@@ -170,10 +164,12 @@ public class SQLiteStorage
         int continuousSignIn = getContinuousSignIn();
         int totalNumber = getCumulativeNumber();
         SignInDate today = SignInDate.getInstance(new Date());
+        int week = today.getWeek();
         SignInRewardQueue rewardQueue = new SignInRewardQueue(this);
         rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
         rewardQueue.addReward(new SignInSpecialDateReward(group, today));
         rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+        rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
         if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
         else {
             rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
@@ -358,12 +354,12 @@ public class SQLiteStorage
             return;
         }
         List<SignInDate> historys = new ArrayList();
-        boolean add = true;
+        boolean added = false;
         if (!getHistory().isEmpty()) {
             for (SignInDate date : getHistory()) {
                 if (date.compareTo(historicalDate) > 0) {
-                    if (add) {
-                        add = false;
+                    if (!added) {
+                        added = true;
                         historys.add(historicalDate);
                         historys.add(date);
                     } else {
@@ -372,6 +368,9 @@ public class SQLiteStorage
                 } else {
                     historys.add(date);
                 }
+            }
+            if (!added) {
+                historys.add(historicalDate);
             }
         } else {
             historys.add(historicalDate);

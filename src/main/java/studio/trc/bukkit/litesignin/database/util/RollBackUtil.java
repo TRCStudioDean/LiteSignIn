@@ -83,6 +83,15 @@ public class RollBackUtil
                         resetDatabase(MySQLEngine.getConnection(), MySQLEngine.getDatabase() + "." + MySQLEngine.getTable());
                     } else if (PluginControl.useSQLiteStorage()) {
                         resetDatabase(SQLiteEngine.getConnection(), SQLiteEngine.getTable());
+                    } else {
+                        File playerFolder = new File("plugins/LiteSignIn/Players/");
+                        if (!playerFolder.exists()) {
+                            playerFolder.mkdirs();
+                        } else {
+                            for (File playerFile : playerFolder.listFiles()) {
+                                playerFile.delete();
+                            }
+                        }
                     }
                     while (rs.next()) {
                         String uuid = rs.getString("UUID");
@@ -133,15 +142,7 @@ public class RollBackUtil
                             statement.setString(11, history);
                             statement.executeUpdate();
                         } else {
-                            File playerFolder = new File("plugins/LiteSignIn/Players/");
-                            if (!playerFolder.exists()) {
-                                playerFolder.mkdirs();
-                            } else {
-                                for (File playerFile : playerFolder.listFiles()) {
-                                    playerFile.delete();
-                                }
-                            }
-                            File file = new File(playerFolder, uuid + ".yml");
+                            File file = new File("plugins/LiteSignIn/Players/" + uuid + ".yml");
                             file.createNewFile();
                             FileConfiguration data = new YamlConfiguration();
                             data.set("Name", name);

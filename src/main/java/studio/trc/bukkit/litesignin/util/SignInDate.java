@@ -159,6 +159,13 @@ public class SignInDate
         }
     }
     
+    public int getWeek() {
+        int[] weekDays = {7, 1, 2, 3, 4, 5, 6};
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, day);
+        return weekDays[cal.get(Calendar.DAY_OF_WEEK) - 1];
+    }
+    
     public int getYear() {
         return year;
     }

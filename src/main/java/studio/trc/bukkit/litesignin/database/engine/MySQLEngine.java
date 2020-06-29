@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class MySQLEngine
 {
@@ -43,7 +46,9 @@ public class MySQLEngine
             connectToDatabase();
         } else try {
             SQLReloading = true;
-            if (Main.language.get("Reconnect") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("Reconnect").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            SignInPluginProperties.sendOperationMessage("Reconnect", placeholders);
             Thread closing = new Thread(() -> {
                 try {
                     if (!connection.isClosed()) {
@@ -69,13 +74,33 @@ public class MySQLEngine
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + parameter, username, password);
-            if (Main.language.get("SuccessfulConnection") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("SuccessfulConnection").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
-            connection.prepareStatement("CREATE DATABASE IF NOT EXISTS " + database + "; CREATE TABLE IF NOT EXISTS " + database + "." + table + "(UUID VARCHAR(36) NOT NULL, Name VARCHAR(16), Year INT, Month INT, Day INT, Hour INT, Minute INT, Second INT, Continuous INT, RetroactiveCard INT, History LONGTEXT, PRIMARY KEY (UUID))").executeUpdate();
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            SignInPluginProperties.sendOperationMessage("SuccessfulConnection", placeholders);
+            connection.prepareStatement("CREATE DATABASE IF NOT EXISTS " + database + ";"
+                    + " CREATE TABLE IF NOT EXISTS " + database + "." + table + "("
+                    + "UUID VARCHAR(36) NOT NULL,"
+                    + " Name VARCHAR(16),"
+                    + " Year INT,"
+                    + " Month INT,"
+                    + " Day INT,"
+                    + " Hour INT,"
+                    + " Minute INT,"
+                    + " Second INT,"
+                    + " Continuous INT,"
+                    + " RetroactiveCard INT,"
+                    + " History LONGTEXT,"
+                    + " PRIMARY KEY (UUID))").executeUpdate();
         } catch (ClassNotFoundException ex) {
-            if (Main.language.get("NoDriverFound") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("NoDriverFound").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            SignInPluginProperties.sendOperationMessage("NoDriverFound", placeholders);
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("MySQL-Storage.Enabled", false);
         } catch (SQLException ex) {
-            if (Main.language.get("ConnectionError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("ConnectionError").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("{error}", ex.getLocalizedMessage()).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            placeholders.put("{error}", ex.getLocalizedMessage());
+            SignInPluginProperties.sendOperationMessage("ConnectionError", placeholders);
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("MySQL-Storage.Enabled", false);
         }
     }
@@ -95,14 +120,21 @@ public class MySQLEngine
             while (true) {
                 try {
                     connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database + parameter, username, password);
-                    if (Main.language.get("ConnectionRepair") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("ConnectionRepair").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+                    Map<String, String> placeholders = new HashMap();
+                    placeholders.put("{database}", "MySQL");
+                    SignInPluginProperties.sendOperationMessage("ConnectionRepair", placeholders);
                     break;
                 } catch (SQLException ex) {
                     number++;
                     if (number == ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("MySQL-Storage.Automatic-Repair")) {
-                        if (Main.language.get("ConnectionRepairFailure") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("ConnectionRepairFailure").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("{number}", String.valueOf(number)).replace("&", "§"));
+                        Map<String, String> placeholders = new HashMap();
+                        placeholders.put("{database}", "MySQL");
+                        placeholders.put("{number}", String.valueOf(number));
+                        SignInPluginProperties.sendOperationMessage("ConnectionRepairFailure", placeholders);
                     } else {
-                        if (Main.language.get("BeyondRepair") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("BeyondRepair").replace("{database}", "MySQL").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+                        Map<String, String> placeholders = new HashMap();
+                        placeholders.put("{database}", "MySQL");
+                        SignInPluginProperties.sendOperationMessage("BeyondRepair", placeholders);
                         break;
                     }
                 }
@@ -120,7 +152,10 @@ public class MySQLEngine
             while (!databaseExist()) {}
             statement.executeUpdate();
         }  catch (SQLException ex) {
-            if (Main.language.get("DataSavingError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("DataSavingError").replace("{database}", "MySQL").replace("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
+            SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
             try {
                 if (getConnection().isClosed()) repairConnection();
             } catch (SQLException ex1) {}
@@ -133,7 +168,10 @@ public class MySQLEngine
             while (!databaseExist()) {}
             return statement.executeQuery();
         } catch (SQLException ex) {
-            if (Main.language.get("DataReadingError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("DataReadingError").replace("{database}", "MySQL").replace("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
+            SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);
             try {
                 if (getConnection().isClosed()) repairConnection();
             } catch (SQLException ex1) {}
@@ -148,7 +186,10 @@ public class MySQLEngine
             while (!databaseExist()) {}
             connection.createStatement().executeUpdate(sql);
         } catch (SQLException ex) {
-            if (Main.language.get("DataSavingError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("DataSavingError").replace("{database}", "MySQL").replace("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
+            SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
             try {
                 if (getConnection().isClosed()) repairConnection();
             } catch (SQLException ex1) {}
@@ -162,7 +203,10 @@ public class MySQLEngine
             while (!databaseExist()) {}
             return connection.createStatement().executeQuery(sql);
         } catch (SQLException ex) {
-            if (Main.language.get("DataReadingError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("DataReadingError").replace("{database}", "MySQL").replace("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
+            SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);
             try {
                 if (getConnection().isClosed()) repairConnection();
             } catch (SQLException ex1) {}

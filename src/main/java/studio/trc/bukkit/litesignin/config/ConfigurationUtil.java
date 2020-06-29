@@ -20,6 +20,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.util.PluginControl;
+import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class ConfigurationUtil
 {
@@ -83,7 +84,9 @@ public class ConfigurationUtil
         } catch (IOException | InvalidConfigurationException ex) {
             File oldFile = new File("plugins/LiteSignIn/" + fileType.getFileName() + ".old");
             File file = new File("plugins/LiteSignIn/" + fileType.getFileName());
-            if (Main.language.get("ConfigurationLoadingError") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("ConfigurationLoadingError").replace("{file}", fileType.getFileName()).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{file}", fileType.getFileName());
+            SignInPluginProperties.sendOperationMessage("ConfigurationLoadingError", placeholders);
             if (oldFile.exists()) {
                 oldFile.delete();
             }
@@ -91,7 +94,7 @@ public class ConfigurationUtil
             saveResource(fileType);
             try (InputStreamReader newConfig = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
                 getFileConfiguration(fileType).load(newConfig);
-                if (Main.language.get("ConfigurationRepair") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("ConfigurationRepair").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                SignInPluginProperties.sendOperationMessage("ConfigurationRepair", true);
             } catch (IOException | InvalidConfigurationException ex1) {
                 ex1.printStackTrace();
             }

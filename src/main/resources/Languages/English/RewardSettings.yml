@@ -39,6 +39,7 @@ Reward-Settings:
                 Disabled-Modules:
                     #It is recommended to enable it to prevent players from directly receiving special rewards on certain special dates.
                     Special-Dates: true
+                    Special-Weeks: true
                     Special-Times: false
                     Statistics-Times: false
                 Reward-Items:
@@ -61,6 +62,15 @@ Reward-Settings:
                     - '{prefix}&aYou signed in for a week in a row, Get extra rewards: &e&lSuper Diamond Sword &aand &eGolden Apple x1'
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
+                    - 'golden_apple:1'
+            #Triggered when sign-in in on a speical week.
+            Special-Weeks:
+                #Sunday
+                7:
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&aToday is Sunday, reward an extra golden apple!'
+                    Reward-Items:
                     - 'golden_apple:1'
             #Triggered when the sign-in total reaches a certain number of times.
             Statistics-Times:
@@ -136,6 +146,7 @@ Reward-Settings:
             Retroactive-Time:
                 Disabled-Modules:
                     Special-Dates: true
+                    Special-Weeks: true
                     Special-Times: false
                     Statistics-Times: false
                 Reward-Items:

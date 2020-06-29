@@ -23,6 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -194,6 +195,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Already_SignIn;
@@ -238,6 +240,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Missed_SignIn;
@@ -301,6 +304,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                 key.setItemMeta(im);
                 items.add(key);
@@ -393,6 +397,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Already_SignIn;
@@ -437,6 +442,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Missed_SignIn;
@@ -500,6 +506,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                 key.setItemMeta(im);
                 items.add(key);
@@ -592,6 +599,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Already_SignIn;
@@ -632,6 +640,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Missed_SignIn;
@@ -682,6 +691,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Already_SignIn;
@@ -722,6 +732,7 @@ public class SignInGUI
                             }
                         }
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                     key.setItemMeta(im);
                     keyType = KeyType.Nothing_SignIn;
@@ -770,6 +781,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name").replace("{day}", String.valueOf(i + 1)).replace("&", "§"), player));
                 key.setItemMeta(im);
                 items.add(key);
@@ -850,6 +862,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name").replace("&", "§"), player));
                 other.setItemMeta(im);
                 other.setAmount(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") != null ? ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") : 1);
@@ -921,6 +934,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name").replace("&", "§"), player));
                 other.setItemMeta(im);
                 other.setAmount(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") != null ? ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") : 1);
@@ -991,6 +1005,7 @@ public class SignInGUI
                         }
                     }
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Hide-Enchants") != null) im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name").replace("&", "§"), player));
                 other.setItemMeta(im);
                 other.setAmount(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") != null ? ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Amount") : 1);

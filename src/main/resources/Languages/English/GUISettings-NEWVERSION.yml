@@ -23,6 +23,7 @@ English:
                 Lore: []
             Nothing-SignIn:
                 Item: YELLOW_TERRACOTTA
+                Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
                 Display-Name: '&6{day}th &eToday!'
@@ -166,6 +167,7 @@ Chinese:
                 Lore: []
             Nothing-SignIn:
                 Item: YELLOW_TERRACOTTA
+                Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
                 Display-Name: '&e日期 &6{day}号 &e未签到'

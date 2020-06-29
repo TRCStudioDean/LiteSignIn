@@ -35,6 +35,7 @@ public class SignInRetroactiveTimeReward
         Map<SignInRewardModule, Boolean> map = new HashMap();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).get("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules") != null) {
             map.put(SignInRewardModule.SPECIALDATE, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
+            map.put(SignInRewardModule.SPECIALWEEK, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
             map.put(SignInRewardModule.SPECIALTIME, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Times"));
             map.put(SignInRewardModule.STATISTICSTIME, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
         }

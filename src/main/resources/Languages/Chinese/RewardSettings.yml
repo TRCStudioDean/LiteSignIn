@@ -40,6 +40,7 @@ Reward-Settings:
                 Disabled-Modules:
                     #建议开启， 以防止玩家直接获得某些特殊日期的专属奖励
                     Special-Dates: true
+                    Special-Weeks: true
                     Special-Times: false
                     Statistics-Times: false
                 Reward-Items:
@@ -65,6 +66,15 @@ Reward-Settings:
                     - '{prefix}&a连续签到一周！额外赠送附魔&e&l钻石剑&a与&e&l金苹果&a！'
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
+                    - 'golden_apple:1'
+            #特别周签到时触发
+            Special-Weeks:
+                #周日
+                7:
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&a今天是周末，额外奖励一个金苹果！'
+                    Reward-Items:
                     - 'golden_apple:1'
             #签到总计达到一定次数时触发
             Statistics-Times:
@@ -142,6 +152,7 @@ Reward-Settings:
             Retroactive-Time:
                 Disabled-Modules:
                     Special-Dates: true
+                    Special-Weeks: true
                     Special-Times: false
                     Statistics-Times: false
                 Reward-Items:

@@ -28,6 +28,11 @@ public enum SignInRewardModule
     SPECIALTIMEPERIOD,
     
     /**
+     * Special weeks's reward.
+     */
+    SPECIALWEEK,
+    
+    /**
      * Special sign-in ranking's reward.
      */
     SPECIALRANKING,

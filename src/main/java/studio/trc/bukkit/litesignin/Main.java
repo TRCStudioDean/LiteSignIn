@@ -1,8 +1,7 @@
 package studio.trc.bukkit.litesignin;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +17,7 @@ import studio.trc.bukkit.litesignin.event.Quit;
 import studio.trc.bukkit.litesignin.event.Join;
 import studio.trc.bukkit.litesignin.nms.JsonItemStack;
 import studio.trc.bukkit.litesignin.util.PluginControl;
+import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -30,13 +30,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main
     extends JavaPlugin
 {
-    
-    /**
-     * System Language
-     */
-    public static Properties language = new Properties();
-    public static String lang = Locale.getDefault().toString();
-    
     /**
      * Main instance
      */
@@ -46,19 +39,10 @@ public class Main
     public void onEnable() {
         main = this;
         
-        if (lang.equalsIgnoreCase("zh_cn")) {
-            try {
-                language.load(getClass().getResourceAsStream("/Languages/Chinese.properties"));
-            } catch (IOException ex) {}
-        } else {
-            try {
-                language.load(getClass().getResourceAsStream("/Languages/English.properties"));
-            } catch (IOException ex) {}
-        }
-        if (language.get("LanguageLoaded") != null) getServer().getConsoleSender().sendMessage(language.getProperty("LanguageLoaded").replace("&", "§"));
+        SignInPluginProperties.reloadProperties();
         
         if (!getDescription().getName().equals("LiteSignIn")) {
-            if (language.get("PluginNameChange") != null) getServer().getConsoleSender().sendMessage(language.getProperty("PluginNameChange").replace("&", "§"));
+            SignInPluginProperties.sendOperationMessage("PluginNameChange");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -70,7 +54,7 @@ public class Main
         getCommand("litesignin").setTabCompleter(new SignInCommand());
         registerEvent();
         JsonItemStack.reloadNMS();
-        if (language.get("PluginEnabledSuccessfully") != null) getServer().getConsoleSender().sendMessage(language.getProperty("PluginEnabledSuccessfully").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+        SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", true);
     }
     
     @Override
@@ -79,12 +63,16 @@ public class Main
             for (MySQLStorage data : MySQLStorage.cache.values()) {
                 data.saveData();
             }
-            if (language.get("DatabaseSave") != null) getServer().getConsoleSender().sendMessage(language.getProperty("DatabaseSave").replace("{database}", "MySQL").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "MySQL");
+            SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);
         } else if (PluginControl.useSQLiteStorage()) {
             for (SQLiteStorage data : SQLiteStorage.cache.values()) {
                 data.saveData();
             }
-            if (language.get("DatabaseSave") != null) getServer().getConsoleSender().sendMessage(language.getProperty("DatabaseSave").replace("{database}", "SQLite").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{database}", "SQLite");
+            SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);
         }
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Database-Management.Backup.Auto-Backup")) {
             MessageUtil.sendMessage(getServer().getConsoleSender(), "Database-Management.Backup.Auto-Backup");

@@ -44,10 +44,10 @@ public class PluginControl
             if (!Placeholders.getInstance().isRegistered()) {
                 Placeholders.getInstance().register();
             }
-            if (Main.language.get("FindThePlaceholderAPI") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("FindThePlaceholderAPI").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", true);
         } catch (Error ex) {
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("Use-PlaceholderAPI", false);
-            if (Main.language.get("PlaceholderAPINotFound") != null) Main.getInstance().getServer().getConsoleSender().sendMessage(Main.language.getProperty("PlaceholderAPINotFound").replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"));
+            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", true);
         }
         Bukkit.getOnlinePlayers().stream().filter((ps) -> (Menu.menuOpening.containsKey(ps.getUniqueId()))).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();

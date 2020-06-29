@@ -26,6 +26,7 @@ English:
             Nothing-SignIn:
                 Item: STAINED_CLAY
                 Data: 4
+                Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
                 Display-Name: '&6{day}th &eToday!'
@@ -175,6 +176,7 @@ Chinese:
             Nothing-SignIn:
                 Item: STAINED_CLAY
                 Data: 4
+                Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
                 Display-Name: '&e日期 &6{day}号 &e未签到'

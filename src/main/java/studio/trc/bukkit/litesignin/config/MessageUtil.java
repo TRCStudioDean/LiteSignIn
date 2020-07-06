@@ -89,13 +89,13 @@ public class MessageUtil
                         int end = 0;
                         for (String splitText : split) {
                             end++;
-                            newArray.add(new TextComponent(toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                            newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             if (end < split.length || plainText.endsWith(placeholder)) {
-                                newArray.add(new TextComponent(toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                                newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             }
                         }
                     } else {
-                        newArray.add(new TextComponent(toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                        newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                     }
                 }
                 rawBCMessage = newArray.toArray(new BaseComponent[0]);
@@ -117,7 +117,54 @@ public class MessageUtil
             for (String placeholder : baseComponents.keySet()) {
                 message = message.replace(placeholder, baseComponents.get(placeholder).toPlainText());
             }
-            sender.sendMessage(message);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
+    }
+    
+    public static void sendJsonMessage(CommandSender sender, String message, Map<String, BaseComponent> baseComponents, Map<String, String> placeholders) {
+        for (String keySet : placeholders.keySet()) {
+            message = message.replace(keySet, placeholders.get(keySet));
+        }
+        if (sender instanceof Player) {
+            BaseComponent[] rawBCMessage = new BaseComponent[] {new TextComponent(message)};
+            for (String placeholder : baseComponents.keySet()) {
+                List<BaseComponent> newArray = new ArrayList();
+                for (BaseComponent bc : rawBCMessage) {
+                    String plainText = bc.toPlainText();
+                    if (plainText.contains(placeholder)) {
+                        String[] split = plainText.split(placeholder);
+                        int end = 0;
+                        for (String splitText : split) {
+                            end++;
+                            newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                            if (end < split.length || plainText.endsWith(placeholder)) {
+                                newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                            }
+                        }
+                    } else {
+                        newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                    }
+                }
+                rawBCMessage = newArray.toArray(new BaseComponent[0]);
+            }
+            List<BaseComponent> bcMessage = new ArrayList();
+            for (BaseComponent bc : rawBCMessage) {
+                boolean non = true;
+                for (String placeholder : baseComponents.keySet()) {
+                    if (bc.toPlainText().equals(placeholder)) {
+                        bcMessage.add(baseComponents.get(placeholder));
+                        non = false;
+                        break;
+                    }
+                }
+                if (non) bcMessage.add(bc);
+            }
+            ((Player) sender).spigot().sendMessage(bcMessage.toArray(new BaseComponent[0]));
+        } else {
+            for (String placeholder : baseComponents.keySet()) {
+                message = message.replace(placeholder, baseComponents.get(placeholder).toPlainText());
+            }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
     }
     

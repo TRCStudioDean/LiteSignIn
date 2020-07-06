@@ -150,7 +150,7 @@ Chinese:
                 - 52
 English:
     SignIn-GUI-Settings:
-        GUI-Name: '&cSignIn Menu &b&l>>> &8{date}'
+        GUI-Name: '&cSignIn Menu &b&l| &8{date}'
         Specified-Month-GUI-Name: '&3&lHistorical month &8{month}'
         Specified-Year-GUI-Name: '&3&lHistorical month &8{month}, {year}'
         Date-Format: 'yyyy/MM/dd'

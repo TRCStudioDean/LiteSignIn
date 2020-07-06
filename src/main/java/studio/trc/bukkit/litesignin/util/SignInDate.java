@@ -14,6 +14,8 @@ public class SignInDate
     private final int minute;
     private final int second;
     
+    private boolean timePeriodFound = false;
+    
     public SignInDate(Date d) throws Exception {
         String[] date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(d).split("-");
         
@@ -40,6 +42,7 @@ public class SignInDate
         hour = Integer.valueOf(date[3]);
         minute = Integer.valueOf(date[4]);
         second = Integer.valueOf(date[5]);
+        timePeriodFound = true;
     }
     
     public SignInDate(String[] date) throws Exception {
@@ -68,6 +71,7 @@ public class SignInDate
             hour = Integer.valueOf(date[3]);
             minute = Integer.valueOf(date[4]);
             second = Integer.valueOf(date[5]);
+            timePeriodFound = true;
         } else {
             hour = 0;
             minute = 0;
@@ -123,6 +127,7 @@ public class SignInDate
         this.hour = hour;
         this.minute = minute;
         this.second = second;
+        timePeriodFound = true;
     }
     
     public SignInDate(String datatext) throws Exception {
@@ -152,6 +157,7 @@ public class SignInDate
             hour = Integer.valueOf(date[3]);
             minute = Integer.valueOf(date[4]);
             second = Integer.valueOf(date[5]);
+            timePeriodFound = true;
         } else {
             hour = 0;
             minute = 0;
@@ -241,8 +247,12 @@ public class SignInDate
         return cal.getTimeInMillis();
     }
     
-    public String getDataText() {
-        return year + "-" + month + "-" + day;
+    public boolean hasTimePeriod() {
+        return timePeriodFound;
+    }
+    
+    public String getDataText(boolean timePeriod) {
+        return timePeriod ? year + "-" + month + "-" + day + "-" + hour + "-" + minute + "-" + second : year + "-" + month + "-" + day;
     }
     
     public static List<SignInDate> sort(List<SignInDate> dates) {
@@ -301,14 +311,14 @@ public class SignInDate
     
     @Override
     public String toString() {
-        return getDataText();
+        return getDataText(timePeriodFound);
     }
     
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof SignInDate) {
-            SignInDate h = (SignInDate) obj;
-            if (h.getYear() == year && h.getMonth() == month && h.getDay() == day) {
+            SignInDate date = (SignInDate) obj;
+            if (date.getYear() == year && date.getMonth() == month && date.getDay() == day) {
                 return true;
             }
         }
@@ -318,9 +328,13 @@ public class SignInDate
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + this.year;
-        hash = 17 * hash + this.month;
-        hash = 17 * hash + this.day;
+        hash = 89 * hash + this.year;
+        hash = 89 * hash + this.month;
+        hash = 89 * hash + this.day;
+        hash = 89 * hash + this.hour;
+        hash = 89 * hash + this.minute;
+        hash = 89 * hash + this.second;
+        hash = 89 * hash + (this.timePeriodFound ? 1 : 0);
         return hash;
     }
     

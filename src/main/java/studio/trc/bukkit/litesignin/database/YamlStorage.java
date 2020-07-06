@@ -297,7 +297,7 @@ public class YamlStorage
     public void setHistory(List<SignInDate> history, boolean saveData) {
         List<String> data = new ArrayList();
         for (SignInDate dates : history) {
-            data.add(dates.getDataText());
+            data.add(dates.getDataText(dates.hasTimePeriod()));
         }
         config.set("History", data);
         if (saveData) saveData();
@@ -321,6 +321,7 @@ public class YamlStorage
     
     @Override
     public void signIn(SignInDate historicalDate) {
+        historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getSecond());
         if (PluginControl.getRetroactiveCardMinimumDate() != null && historicalDate.compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
             return;
         }

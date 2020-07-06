@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +83,7 @@ public class SignInQueue
         }
         try {
             if (PluginControl.useMySQLStorage() && !MySQLEngine.getConnection().isClosed()) {
-                ResultSet rs = MySQLEngine.executeQuery(MySQLEngine.getConnection().prepareStatement("SELECT * FROM " + MySQLEngine.getDatabase() + "." + MySQLEngine.getTable() + " WHERE History LIKE '%" + date.getDataText() + "%'"));
+                ResultSet rs = MySQLEngine.executeQuery(MySQLEngine.getConnection().prepareStatement("SELECT * FROM " + MySQLEngine.getDatabase() + "." + MySQLEngine.getTable() + " WHERE History LIKE '%" + date.getDataText(false) + "%'"));
                 clear();
                 while (rs.next()) {
                     try {
@@ -91,7 +92,25 @@ public class SignInQueue
                         if (date.equals(SignInDate.getInstance(new Date()))) {
                             time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
                         } else {
-                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                            List<SignInDate> list = new ArrayList();
+                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                list.add(SignInDate.getInstance(data));
+                            }
+                            Integer hour = null, minute = null, second = null;
+                            for (SignInDate history : list) {
+                                if (history.equals(date)) {
+                                    if (history.hasTimePeriod()) {
+                                        hour = history.getHour();
+                                        minute = history.getMinute();
+                                        second = history.getSecond();
+                                    }
+                                }
+                            }
+                            if (hour != null && minute != null && second != null) {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                            } else {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                            }
                         }
                         add(new SignInQueueElement(uuid, time, rs.getString("Name")));
                     } catch (Exception ex) {
@@ -100,7 +119,7 @@ public class SignInQueue
                 }
                 lastUpdateTime.put(date, System.currentTimeMillis());
             } else if (PluginControl.useSQLiteStorage() && !SQLiteEngine.getConnection().isClosed()) {
-                ResultSet rs = SQLiteEngine.executeQuery(SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE History LIKE '%" + date.getDataText() + "%'"));
+                ResultSet rs = SQLiteEngine.executeQuery(SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE History LIKE '%" + date.getDataText(false) + "%'"));
                 clear();
                 while (rs.next()) {
                     try {
@@ -109,7 +128,25 @@ public class SignInQueue
                         if (date.equals(SignInDate.getInstance(new Date()))) {
                             time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
                         } else {
-                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                            List<SignInDate> list = new ArrayList();
+                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                list.add(SignInDate.getInstance(data));
+                            }
+                            Integer hour = null, minute = null, second = null;
+                            for (SignInDate history : list) {
+                                if (history.equals(date)) {
+                                    if (history.hasTimePeriod()) {
+                                        hour = history.getHour();
+                                        minute = history.getMinute();
+                                        second = history.getSecond();
+                                    }
+                                }
+                            }
+                            if (hour != null && minute != null && second != null) {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                            } else {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                            }
                         }
                         add(new SignInQueueElement(uuid, time, rs.getString("Name")));
                     } catch (Exception ex) {
@@ -130,7 +167,7 @@ public class SignInQueue
                     Logger.getLogger(SignInQueue.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (!yamlFile.contains("Date") || !SignInDate.getInstance(yamlFile.getString("Date")).equals(date)) {
-                    yamlFile.set("Date", SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay()).getDataText());
+                    yamlFile.set("Date", SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay()).getDataText(true));
                     yamlFile.set("Record", null);
                     saveData();
                     return;
@@ -160,7 +197,7 @@ public class SignInQueue
     public void addRecord(UUID uuid, SignInDate date) {
         SignInDate today = SignInDate.getInstance(new Date());
         if (!yamlFile.contains("Date") || !SignInDate.getInstance(yamlFile.getString("Date")).equals(today)) {
-            yamlFile.set("Date", SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay()).getDataText());
+            yamlFile.set("Date", SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay()).getDataText(true));
             yamlFile.set("Record", null);
             clear();
             saveData();
@@ -190,12 +227,37 @@ public class SignInQueue
             return 0;
         }
         int rank = 1;
-        for (SignInQueueElement element : this) {
-            if (user.getSignInDate().compareTo(element.getSignInDate()) > 0) {
-                rank++;
+        if (user.getSignInDate().hasTimePeriod()) {
+            for (SignInQueueElement element : this) {
+                if (user.getSignInDate().compareTo(element.getSignInDate()) > 0 && element.getSignInDate().hasTimePeriod()) {
+                    rank++;
+                }
+            }
+        } else {
+            for (SignInQueueElement element : this) {
+                if (element.getSignInDate().hasTimePeriod()) {
+                    rank++;
+                }
+            }
+            for (SignInQueueElement element : getUnknownTimesElement()) {
+                if (!element.getUUID().equals(uuid)) {
+                    rank++;
+                } else {
+                    return rank;
+                }
             }
         }
         return rank;
+    }
+    
+    public List<SignInQueueElement> getUnknownTimesElement() {
+        List<SignInQueueElement> list = new ArrayList();
+        for (SignInQueueElement element : this) {
+            if (!element.getSignInDate().hasTimePeriod()) {
+                list.add(element);
+            }
+        }
+        return list;
     }
     
     public void checkUpdate() {

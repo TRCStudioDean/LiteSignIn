@@ -136,7 +136,7 @@ public class Menu
                                 for (String commands : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
                                     if (commands.toLowerCase().startsWith("server:")) {
                                         Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toPlaceholderAPIResult(commands.substring(7)
-                                            .replace("{dateText}", columns.getDate().getDataText())
+                                            .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
@@ -144,7 +144,7 @@ public class Menu
                                     } else if (commands.toLowerCase().startsWith("op:")) {
                                         if (player.isOp()) {
                                             player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
-                                            .replace("{dateText}", columns.getDate().getDataText())
+                                            .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
@@ -152,7 +152,7 @@ public class Menu
                                         } else {
                                             player.setOp(true);
                                             player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
-                                            .replace("{dateText}", columns.getDate().getDataText())
+                                            .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
@@ -161,7 +161,7 @@ public class Menu
                                         }
                                     } else {
                                         player.performCommand(MessageUtil.toPlaceholderAPIResult(commands
-                                        .replace("{dateText}", columns.getDate().getDataText())
+                                        .replace("{dateText}", columns.getDate().getDataText(false))
                                         .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                         .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                         .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
@@ -172,7 +172,7 @@ public class Menu
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
                                 for (String message : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
                                     player.sendMessage(MessageUtil.toPlaceholderAPIResult(message
-                                        .replace("{dateText}", columns.getDate().getDataText())
+                                        .replace("{dateText}", columns.getDate().getDataText(false))
                                         .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                         .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                         .replace("{previousPageMonth}", String.valueOf(previousPageMonth))

@@ -128,34 +128,44 @@ English:
             Number-Of-Single-Page: 10
             Date-Format: 'yyyy/MM/dd/'
             Time-Format: 'HH:mm:ss'
-            Unknown-Player: 'UnknownPlayer&8(UUID:{uuid})'
+            Unknown-Player: '&3UnknownPlayer&8(UUID:{uuid})'
+            Unknown-Time: '&eUnknownTime'
             Player-Show:
+                Text:
+                    Self: '&2{player}'
+                    Other-Players: '&3{player}'
                 Command: 'litesignin info {player}'
                 Hover:
                 - '&5Click to view player &e{player}''s &5 personal information'
             Previous-Page:
-                Text: 'Previous Page'
+                Text: '&b&lPrevious Page'
                 Hover:
                 - '&5Click to go to the previous page'
                 - '&7Current Page: &e{page}'
+                - '&7Previous Page: &e{previousPage}'
             Next-Page:
-                Text: 'Next Page'
+                Text: '&b&lNext Page'
                 Hover:
                 - '&5Click to go to the next page'
                 - '&7Current Page: &e{page}'
+                - '&7Next Page: &e{nextPage}'
             Invalid-Number: '{prefix}&cThe page number you specified &e{page} &c does not exist! Please enter a valid number!'
             Date-Not-Exist: '{prefix}&cThe date you specified &e{date} &c is invalid! Please enter the correct date! &7(yyyy-MM-dd)'
             List-Format:
                 Today:
                     Usually:
-                        Self: '  &4# &b&l{ranking}&f. &2%player% &5&l- &c&n{time}&f &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. &3%player% &5&l- &e{time}'
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
                     Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. &2%player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. &3%player% &5&l- &e{time} &5[Tied for {ranking}]'
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
                 Historical-Date:
-                    Self: '  &4# &b&l{ranking}&f. &2%player% &7<- Im here.'
-                    Other-Players: '  &c# &e{ranking}&f. &3%player%'
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
             Empty: '{prefix}&aDate &e{date} &a No one signed in.'
             Non-Database-mode: '{prefix}&eYou must be in &bSQLite &e or &bMySQL &e storage mode to be able to query the sign-in ranking of history dates!'
             LeaderBoard-Messages:
@@ -163,14 +173,14 @@ English:
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
             - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
             - '  %leaderboard%'
-            - '  &a<<< &b%previousPage% &c&l| &b%nextPage% &a>>>'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            List-Messages:
+            Historical-Date-LeaderBoard-Messages:
             - '{prefix}&e&lHistorical date &d{date} &e&lSign-In List'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
             - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
             - '  %leaderboard%'
-            - '  &a<<< &b%previousPage% &c&l| &b%nextPage% &a>>>'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
         ItemCollection:
             Help: 
@@ -359,34 +369,44 @@ Chinese:
             Number-Of-Single-Page: 10
             Date-Format: 'yyyy年MM月dd日'
             Time-Format: 'HH:mm:ss'
-            Unknown-Player: '未知玩家&8(UUID:{uuid})'
+            Unknown-Player: '&3未知玩家&8(UUID:{uuid})'
+            Unknown-Time: '&e未知时间'
             Player-Show:
+                Text:
+                    Self: '&2{player}'
+                    Other-Players: '&3{player}'
                 Command: 'litesignin info {player}'
                 Hover:
                 - '&5点击查看玩家 &e{player} &5的个人信息'
             Previous-Page:
-                Text: '上一页'
+                Text: '&b&l上一页'
                 Hover:
                 - '&5点击转到上一页'
                 - '&7当前页数: &e{page}'
+                - '&7上一页: &e{previousPage}'
             Next-Page:
-                Text: '下一页'
+                Text: '&b&l下一页'
                 Hover:
                 - '&5点击转到下一页'
                 - '&7当前页数: &e{page}'
+                - '&7下一页: &e{nextPage}'
             Invalid-Number: '{prefix}&c您所指定的页数 &e{page} &c不存在! 请输入有效的数字!'
             Date-Not-Exist: '{prefix}&c您所指定的日期 &e{date} &c无效! 请输入正确的日期! &7(年-月-日)'
             List-Format:
                 Today:
                     Usually:
-                        Self: '  &4# &b&l{ranking}&f. &2%player% &5&l- &c&n{time}&f &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. &3%player% &5&l- &e{time}'
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
                     Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. &2%player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. &3%player% &5&l- &e{time} &5[并列第{ranking}名]'
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
                 Historical-Date:
-                    Self: '  &4# &b&l{ranking}&f. &2%player% &7<- 我在这.'
-                    Other-Players: '  &c# &e{ranking}&f. &3%player%'
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
             Empty: '{prefix}&a日期 &e{date} &a没有任何人签到.'
             Non-Database-mode: '{prefix}&e你必须是 &bSQLite &e或 &bMySQL &e储存模式才能够查询过往日期的签到排名!'
             LeaderBoard-Messages:
@@ -394,14 +414,14 @@ Chinese:
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
             - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
             - '  %leaderboard%'
-            - '  &a<<< &b%previousPage% &c&l| &b%nextPage% &a>>>'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            List-Messages:
-            - '{prefix}&e&l历史日期 &d{date} &e&l签到列表'
+            Historical-Date-LeaderBoard-Messages:
+            - '{prefix}&e&l历史日期 &d{date} &e&l签到排行榜'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
             - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
             - '  %leaderboard%'
-            - '  &a<<< &b%previousPage% &c&l| &b%nextPage% &a>>>'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
             - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
         ItemCollection:
             Help: 

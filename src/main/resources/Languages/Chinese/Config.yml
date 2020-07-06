@@ -69,7 +69,7 @@ MySQL-Storage:
 #储存模式优先级: Yaml < SQLite < MySQL
 SQLite-Storage:
     #默认为启用，若关闭则转为Yaml储存格式
-    Enabled: false
+    Enabled: true
     #数据库文件名
     Database-File: 'Database.db'
     #数据库文件夹路径

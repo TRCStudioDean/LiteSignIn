@@ -35,6 +35,6 @@ public class SignInQueueElement
     
     @Override
     public String toString() {
-        return uuid.toString() + ":" + date.getDataText() + "-" + date.getHour() + "-" + date.getMinute() + "-" + date.getSecond() + ":" + name;
+        return uuid.toString() + ":" + date.getDataText(date.hasTimePeriod()) + ":" + name;
     }
 }

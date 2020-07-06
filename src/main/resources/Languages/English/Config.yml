@@ -61,7 +61,7 @@ MySQL-Storage:
 #Storage priority: Yaml < SQLite < MySQL
 SQLite-Storage:
     #The default is enabled, if false, it will be converted to Yaml storage.
-    Enabled: false
+    Enabled: true
     #Database file name.
     Database-File: 'Database.db'
     #File path.

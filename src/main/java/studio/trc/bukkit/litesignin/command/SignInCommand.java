@@ -1119,24 +1119,94 @@ public class SignInCommand
         if (page <= 0) {
             page = maxPage;
         }
-        if (date.equals(SignInDate.getInstance(new Date()))) {
-            for (String message : MessageUtil.getMessageList("Command-Messages.LeaderBoard.LeaderBoard-Messages")) {
-                if (message.contains("%leaderboard%")) {
-                    if (sender instanceof Player) {
-                        Player player = (Player) sender;
-                        int ranking = queue.getRank(player.getUniqueId());
-                        for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                            List<SignInQueueElement> userArray = queue.getRankingUser(rank);
-                            if (userArray.isEmpty()) continue;
-                            if (ranking != rank) {
-                                if (userArray.size() == 1) {
-                                    SignInQueueElement element = userArray.get(0);
+        boolean today = date.equals(SignInDate.getInstance(new Date()));
+        String listFormatPath = today ? "Today" : "Historical-Date";
+        for (String message : today ? 
+                MessageUtil.getMessageList("Command-Messages.LeaderBoard.LeaderBoard-Messages") : 
+                MessageUtil.getMessageList("Command-Messages.LeaderBoard.Historical-Date-LeaderBoard-Messages")) {
+            if (message.contains("%leaderboard%")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    int ranking = queue.getRank(player.getUniqueId());
+                    for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
+                        List<SignInQueueElement> userArray = queue.getRankingUser(rank);
+                        if (userArray.isEmpty()) continue;
+                        if (ranking != rank) {
+                            if (userArray.size() == 1) {
+                                SignInQueueElement element = userArray.get(0);
+                                String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
+                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players").contains("%player%")) {
+                                    String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
+                                    if (name == null) {
+                                        OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
+                                        if (offlineplayer != null) {
+                                            name = offlineplayer.getName();
+                                        }
+                                    }
+                                    if (name != null) {
+                                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name));
+                                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
+                                        List<BaseComponent> hoverText = new ArrayList();
+                                        int end = 0;
+                                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
+                                        for (String hover : array) {
+                                            end++;
+                                            hoverText.add(new TextComponent(hover
+                                                .replace("{player}", name)
+                                                .replace("{total}", String.valueOf(queue.size()))
+                                                .replace("{date}", dateName)
+                                                .replace("{ranking}", String.valueOf(rank))
+                                                .replace("{time}", timeName)
+                                                .replace("{page}", String.valueOf(page))
+                                                .replace("{maxPage}", String.valueOf(maxPage))
+                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                            if (end != array.size()) {
+                                                hoverText.add(new TextComponent("\n"));
+                                            }
+                                        }
+                                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                                        click.setClickEvent(ce);
+                                        click.setHoverEvent(he);
+                                        Map<String, BaseComponent> baseComponents = new HashMap();
+                                        baseComponents.put("%player%", click);
+                                        Map<String, String> placeholders = new HashMap();
+                                        placeholders.put("{player}", name);
+                                        placeholders.put("{total}", String.valueOf(queue.size()));
+                                        placeholders.put("{date}", dateName);
+                                        placeholders.put("{ranking}", String.valueOf(rank));
+                                        placeholders.put("{time}", timeName);
+                                        placeholders.put("{page}", String.valueOf(page));
+                                        placeholders.put("{maxPage}", String.valueOf(maxPage));
+                                        MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), baseComponents, placeholders);
+                                    } else {
+                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
+                                                .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
+                                                .replace("{total}", String.valueOf(queue.size()))
+                                                .replace("{date}", dateName)
+                                                .replace("{ranking}", String.valueOf(rank))
+                                                .replace("{time}", timeName)
+                                                .replace("{page}", String.valueOf(page))
+                                                .replace("{maxPage}", String.valueOf(maxPage))
+                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                    }
+                                } else {
+                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
+                                        .replace("{total}", String.valueOf(queue.size()))
+                                        .replace("{date}", dateName)
+                                        .replace("{ranking}", String.valueOf(rank))
+                                        .replace("{time}", timeName)
+                                        .replace("{page}", String.valueOf(page))
+                                        .replace("{maxPage}", String.valueOf(maxPage))
+                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                }
+                            } else {
+                                for (SignInQueueElement user : userArray) {
+                                    SignInQueueElement element = user;
                                     String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                    String timeName = element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
-                                    if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players").contains("%player%")) {
-                                        String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players").split("%player%");
-                                        List<BaseComponent> bc = new ArrayList();
-                                        String name = element.getName() != null ? element.getName() : null;
+                                    String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                    if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players").contains("%player%")) {
+                                        String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
                                         if (name == null) {
                                             OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
                                             if (offlineplayer != null) {
@@ -1144,7 +1214,7 @@ public class SignInCommand
                                             }
                                         }
                                         if (name != null) {
-                                            BaseComponent click = new TextComponent(name);
+                                            BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name));
                                             ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
                                             List<BaseComponent> hoverText = new ArrayList();
                                             int end = 0;
@@ -1167,22 +1237,19 @@ public class SignInCommand
                                             HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
                                             click.setClickEvent(ce);
                                             click.setHoverEvent(he);
-                                            for (int i = 0;i < splitMessage.length;i++) {
-                                                bc.add(new TextComponent(splitMessage[i]
-                                                    .replace("{total}", String.valueOf(queue.size()))
-                                                    .replace("{date}", dateName)
-                                                    .replace("{ranking}", String.valueOf(rank))
-                                                    .replace("{time}", timeName)
-                                                    .replace("{page}", String.valueOf(page))
-                                                    .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players").endsWith("%player%")) {
-                                                    bc.add(click);
-                                                }
-                                            }
-                                            ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
+                                            Map<String, BaseComponent> baseComponents = new HashMap();
+                                            baseComponents.put("%player%", click);
+                                            Map<String, String> placeholders = new HashMap();
+                                            placeholders.put("{player}", name);
+                                            placeholders.put("{total}", String.valueOf(queue.size()));
+                                            placeholders.put("{date}", dateName);
+                                            placeholders.put("{ranking}", String.valueOf(rank));
+                                            placeholders.put("{time}", timeName);
+                                            placeholders.put("{page}", String.valueOf(page));
+                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
+                                            MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), baseComponents, placeholders);
                                         } else {
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players")
+                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                                     .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                                     .replace("{total}", String.valueOf(queue.size()))
                                                     .replace("{date}", dateName)
@@ -1193,7 +1260,7 @@ public class SignInCommand
                                                     .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
                                         }
                                     } else {
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players")
+                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                             .replace("{total}", String.valueOf(queue.size()))
                                             .replace("{date}", dateName)
                                             .replace("{ranking}", String.valueOf(rank))
@@ -1201,469 +1268,16 @@ public class SignInCommand
                                             .replace("{page}", String.valueOf(page))
                                             .replace("{maxPage}", String.valueOf(maxPage))
                                             .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                    }
-                                } else {
-                                    for (SignInQueueElement user : userArray) {
-                                        SignInQueueElement element = user;
-                                        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                        String timeName = element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
-                                        if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").contains("%player%")) {
-                                            String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").split("%player%");
-                                            List<BaseComponent> bc = new ArrayList();
-                                            String name = element.getName() != null ? element.getName() : null;
-                                            if (name == null) {
-                                                OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                                if (offlineplayer != null) {
-                                                    name = offlineplayer.getName();
-                                                }
-                                            }
-                                            if (name != null) {
-                                                BaseComponent click = new TextComponent(name);
-                                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
-                                                List<BaseComponent> hoverText = new ArrayList();
-                                                int end = 0;
-                                                List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                                for (String hover : array) {
-                                                    end++;
-                                                    hoverText.add(new TextComponent(hover
-                                                        .replace("{player}", name)
-                                                        .replace("{total}", String.valueOf(queue.size()))
-                                                        .replace("{date}", dateName)
-                                                        .replace("{ranking}", String.valueOf(rank))
-                                                        .replace("{time}", timeName)
-                                                        .replace("{page}", String.valueOf(page))
-                                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                    if (end != array.size()) {
-                                                        hoverText.add(new TextComponent("\n"));
-                                                    }
-                                                }
-                                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                                click.setClickEvent(ce);
-                                                click.setHoverEvent(he);
-                                                for (int i = 0;i < splitMessage.length;i++) {
-                                                    bc.add(new TextComponent(splitMessage[i]
-                                                        .replace("{total}", String.valueOf(queue.size()))
-                                                        .replace("{date}", dateName)
-                                                        .replace("{ranking}", String.valueOf(rank))
-                                                        .replace("{time}", timeName)
-                                                        .replace("{page}", String.valueOf(page))
-                                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                    if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").endsWith("%player%")) {
-                                                        bc.add(click);
-                                                    }
-                                                }
-                                                ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
-                                            } else {
-                                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players")
-                                                        .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
-                                                        .replace("{total}", String.valueOf(queue.size()))
-                                                        .replace("{date}", dateName)
-                                                        .replace("{ranking}", String.valueOf(rank))
-                                                        .replace("{time}", timeName)
-                                                        .replace("{page}", String.valueOf(page))
-                                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                            }
-                                        } else {
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players")
-                                                .replace("{total}", String.valueOf(queue.size()))
-                                                .replace("{date}", dateName)
-                                                .replace("{ranking}", String.valueOf(rank))
-                                                .replace("{time}", timeName)
-                                                .replace("{page}", String.valueOf(page))
-                                                .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (userArray.size() == 1) {
-                                    String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                    String timeName = queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
-                                    if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Self").contains("%player%")) {
-                                        String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Self").split("%player%");
-                                        List<BaseComponent> bc = new ArrayList();
-                                        String name = player.getName();
-                                        BaseComponent click = new TextComponent(name);
-                                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
-                                        List<BaseComponent> hoverText = new ArrayList();
-                                        int end = 0;
-                                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                        for (String hover : array) {
-                                            end++;
-                                            hoverText.add(new TextComponent(hover
-                                                .replace("{player}", name)
-                                                .replace("{total}", String.valueOf(queue.size()))
-                                                .replace("{date}", dateName)
-                                                .replace("{ranking}", String.valueOf(rank))
-                                                .replace("{time}", timeName)
-                                                .replace("{page}", String.valueOf(page))
-                                                .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                            if (end != array.size()) {
-                                                hoverText.add(new TextComponent("\n"));
-                                            }
-                                        }
-                                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                        click.setHoverEvent(he);
-                                        click.setClickEvent(ce);
-                                        for (int i = 0;i < splitMessage.length;i++) {
-                                            bc.add(new TextComponent(splitMessage[i]
-                                                .replace("{total}", String.valueOf(queue.size()))
-                                                .replace("{date}", dateName)
-                                                .replace("{ranking}", String.valueOf(rank))
-                                                .replace("{time}", timeName)
-                                                .replace("{page}", String.valueOf(page))
-                                                .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                            if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Self").endsWith("%player%")) {
-                                                bc.add(click);
-                                            }
-                                        }
-                                        ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
-                                    } else {
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Self")
-                                            .replace("{total}", String.valueOf(queue.size()))
-                                            .replace("{date}", dateName)
-                                            .replace("{ranking}", String.valueOf(rank))
-                                            .replace("{time}", timeName)
-                                            .replace("{page}", String.valueOf(page))
-                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                    }
-                                } else {
-                                    for (SignInQueueElement user : userArray) {
-                                        if (user.getUUID().equals(player.getUniqueId())) {
-                                            String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                            String timeName = queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
-                                            if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Self").contains("%player%")) {
-                                                String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Self").split("%player%");
-                                                List<BaseComponent> bc = new ArrayList();
-                                                String name = player.getName();
-                                                BaseComponent click = new TextComponent(name);
-                                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
-                                                List<BaseComponent> hoverText = new ArrayList();
-                                                int end = 0;
-                                                List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                                for (String hover : array) {
-                                                    end++;
-                                                    hoverText.add(new TextComponent(hover
-                                                        .replace("{player}", name)
-                                                        .replace("{total}", String.valueOf(queue.size()))
-                                                        .replace("{date}", dateName)
-                                                        .replace("{ranking}", String.valueOf(rank))
-                                                        .replace("{time}", timeName)
-                                                        .replace("{page}", String.valueOf(page))
-                                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                    if (end != array.size()) {
-                                                        hoverText.add(new TextComponent("\n"));
-                                                    }
-                                                }
-                                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                                click.setHoverEvent(he);
-                                                click.setClickEvent(ce);
-                                                for (int i = 0;i < splitMessage.length;i++) {
-                                                    bc.add(new TextComponent(splitMessage[i]
-                                                        .replace("{total}", String.valueOf(queue.size()))
-                                                        .replace("{date}", dateName)
-                                                        .replace("{ranking}", String.valueOf(rank))
-                                                        .replace("{time}", timeName)
-                                                        .replace("{page}", String.valueOf(page))
-                                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                    if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Self").endsWith("%player%")) {
-                                                        bc.add(click);
-                                                    }
-                                                }
-                                                ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
-                                            } else {
-                                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Self")
-                                                    .replace("{total}", String.valueOf(queue.size()))
-                                                    .replace("{date}", dateName)
-                                                    .replace("{ranking}", String.valueOf(rank))
-                                                    .replace("{time}", timeName)
-                                                    .replace("{page}", String.valueOf(page))
-                                                    .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                            }
-                                        } else {
-                                            SignInQueueElement element = user;
-                                            String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                            String timeName = element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
-                                            if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").contains("%player%")) {
-                                                String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").split("%player%");
-                                                List<BaseComponent> bc = new ArrayList();
-                                                String name = element.getName() != null ? element.getName() : null;
-                                                if (name == null) {
-                                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                                    if (offlineplayer != null) {
-                                                        name = offlineplayer.getName();
-                                                    }
-                                                }
-                                                if (name != null) {
-                                                    BaseComponent click = new TextComponent(name);
-                                                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
-                                                    List<BaseComponent> hoverText = new ArrayList();
-                                                    int end = 0;
-                                                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                                    for (String hover : array) {
-                                                        end++;
-                                                        hoverText.add(new TextComponent(hover
-                                                            .replace("{player}", name)
-                                                            .replace("{total}", String.valueOf(queue.size()))
-                                                            .replace("{date}", dateName)
-                                                            .replace("{ranking}", String.valueOf(rank))
-                                                            .replace("{time}", timeName)
-                                                            .replace("{page}", String.valueOf(page))
-                                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                        if (end != array.size()) {
-                                                            hoverText.add(new TextComponent("\n"));
-                                                        }
-                                                    }
-                                                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                                    click.setClickEvent(ce);
-                                                    click.setHoverEvent(he);
-                                                    for (int i = 0;i < splitMessage.length;i++) {
-                                                        bc.add(new TextComponent(splitMessage[i]
-                                                            .replace("{total}", String.valueOf(queue.size()))
-                                                            .replace("{date}", dateName)
-                                                            .replace("{ranking}", String.valueOf(rank))
-                                                            .replace("{time}", timeName)
-                                                            .replace("{page}", String.valueOf(page))
-                                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players").endsWith("%player%")) {
-                                                            bc.add(click);
-                                                        }
-                                                    }
-                                                    ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
-                                                } else {
-                                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players")
-                                                            .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
-                                                            .replace("{total}", String.valueOf(queue.size()))
-                                                            .replace("{date}", dateName)
-                                                            .replace("{ranking}", String.valueOf(rank))
-                                                            .replace("{time}", timeName)
-                                                            .replace("{page}", String.valueOf(page))
-                                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                                }
-                                            } else {
-                                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players")
-                                                    .replace("{total}", String.valueOf(queue.size()))
-                                                    .replace("{date}", dateName)
-                                                    .replace("{ranking}", String.valueOf(rank))
-                                                    .replace("{time}", timeName)
-                                                    .replace("{page}", String.valueOf(page))
-                                                    .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                            }
-                                        }
                                     }
                                 }
                             }
-                        }
-                    } else {
-                        for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                            List<SignInQueueElement> userArray = queue.getRankingUser(rank);
-                            if (userArray.isEmpty()) continue;
+                        } else {
                             if (userArray.size() == 1) {
-                                SignInQueueElement element = userArray.get(0);
-                                String name = element.getName() != null ? element.getName() : null;
-                                if (name == null) {
-                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                    if (offlineplayer != null) {
-                                        name = offlineplayer.getName();
-                                    }
-                                }
-                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Usually.Other-Players")
-                                    .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
-                                    .replace("{total}", String.valueOf(queue.size()))
-                                    .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                    .replace("{ranking}", String.valueOf(rank))
-                                    .replace("{time}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")))
-                                    .replace("{page}", String.valueOf(page))
-                                    .replace("{maxPage}", String.valueOf(maxPage))
-                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                            } else {
-                                for (SignInQueueElement element : userArray) {
-                                    String name = element.getName() != null ? element.getName() : null;
-                                    if (name == null) {
-                                        OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                        if (offlineplayer != null) {
-                                            name = offlineplayer.getName();
-                                        }
-                                    }
-                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Today.Tiel-Ranking.Other-Players")
-                                        .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
-                                        .replace("{total}", String.valueOf(queue.size()))
-                                        .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                        .replace("{ranking}", String.valueOf(rank))
-                                        .replace("{time}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")))
-                                        .replace("{page}", String.valueOf(page))
-                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (!(sender instanceof Player)) {
-                        sender.sendMessage(message
-                            .replace("%previousPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"))
-                            .replace("%nextPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"))
-                            .replace("{total}", String.valueOf(queue.size()))
-                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                            .replace("{page}", String.valueOf(page))
-                            .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                        continue;
-                    }
-                    Map<String, BaseComponent> baseComponents = new HashMap();
-                    if (message.contains("%previousPage%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover");
-                        for (String hover : array) {
-                            end++;
-                            hoverText.add(new TextComponent(hover
-                                .replace("{total}", String.valueOf(queue.size()))
-                                .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                .replace("{page}", String.valueOf(page))
-                                .replace("{maxPage}", String.valueOf(maxPage))
-                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
-                            }
-                        }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText() + " " + (page - 1));
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        baseComponents.put("%previousPage%", click);
-                    }
-                    if (message.contains("%nextPage%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover");
-                        for (String hover : array) {
-                            end++;
-                            hoverText.add(new TextComponent(hover
-                                .replace("{total}", String.valueOf(queue.size()))
-                                .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                .replace("{page}", String.valueOf(page))
-                                .replace("{maxPage}", String.valueOf(maxPage))
-                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
-                            }
-                        }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText() + " " + (page + 1));
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        baseComponents.put("%nextPage%", click);
-                    }
-                    if (baseComponents.isEmpty()) {
-                        sender.sendMessage(message
-                            .replace("{total}", String.valueOf(queue.size()))
-                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                            .replace("{page}", String.valueOf(page))
-                            .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                    } else {
-                        MessageUtil.sendJsonMessage(sender, message, baseComponents);
-                    }
-                }
-            }
-        } else {
-            for (String message : MessageUtil.getMessageList("Command-Messages.LeaderBoard.List-Messages")) {
-                if (message.contains("%leaderboard%")) {
-                    if (sender instanceof Player) {
-                        Player player = (Player) sender;
-                        for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                            SignInQueueElement element = queue.get(rank - 1);
-                            if (!element.getUUID().equals(player.getUniqueId())) {
-                                if (element == null) continue;
                                 String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players").contains("%player%")) {
-                                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players").split("%player%");
-                                    List<BaseComponent> bc = new ArrayList();
-                                    String name = element.getName() != null ? element.getName() : null;
-                                    if (name == null) {
-                                        OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                        if (offlineplayer != null) {
-                                            name = offlineplayer.getName();
-                                        }
-                                    }
-                                    if (name != null) {
-                                        BaseComponent click = new TextComponent(name);
-                                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
-                                        List<BaseComponent> hoverText = new ArrayList();
-                                        int end = 0;
-                                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                        for (String hover : array) {
-                                            end++;
-                                            hoverText.add(new TextComponent(hover
-                                                .replace("{player}", name)
-                                                .replace("{total}", String.valueOf(queue.size()))
-                                                .replace("{date}", dateName)
-                                                .replace("{ranking}", String.valueOf(rank))
-                                                .replace("{page}", String.valueOf(page))
-                                                .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                            if (end != array.size()) {
-                                                hoverText.add(new TextComponent("\n"));
-                                            }
-                                        }
-                                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                        click.setClickEvent(ce);
-                                        click.setHoverEvent(he);
-                                        for (int i = 0;i < splitMessage.length;i++) {
-                                            bc.add(new TextComponent(splitMessage[i]
-                                                .replace("{total}", String.valueOf(queue.size()))
-                                                .replace("{date}", dateName)
-                                                .replace("{ranking}", String.valueOf(rank))
-                                                .replace("{page}", String.valueOf(page))
-                                                .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                            if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players").endsWith("%player%")) {
-                                                bc.add(click);
-                                            }
-                                        }
-                                        ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
-                                    } else {
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players")
-                                            .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
-                                            .replace("{total}", String.valueOf(queue.size()))
-                                            .replace("{date}", dateName)
-                                            .replace("{ranking}", String.valueOf(rank))
-                                            .replace("{page}", String.valueOf(page))
-                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                    }
-                                } else {
-                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players")
-                                        .replace("{total}", String.valueOf(queue.size()))
-                                        .replace("{date}", dateName)
-                                        .replace("{ranking}", String.valueOf(rank))
-                                        .replace("{page}", String.valueOf(page))
-                                        .replace("{maxPage}", String.valueOf(maxPage))
-                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                                }
-                            } else {
-                                String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Self").contains("%player%")) {
-                                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Self").split("%player%");
-                                    List<BaseComponent> bc = new ArrayList();
+                                String timeName = queue.getElement(player.getUniqueId()).getSignInDate().hasTimePeriod() ? queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self").contains("%player%")) {
                                     String name = player.getName();
-                                    BaseComponent click = new TextComponent(name);
+                                    BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self").replace("{player}", name));
                                     ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
                                     List<BaseComponent> hoverText = new ArrayList();
                                     int end = 0;
@@ -1675,6 +1289,7 @@ public class SignInCommand
                                             .replace("{total}", String.valueOf(queue.size()))
                                             .replace("{date}", dateName)
                                             .replace("{ranking}", String.valueOf(rank))
+                                            .replace("{time}", timeName)
                                             .replace("{page}", String.valueOf(page))
                                             .replace("{maxPage}", String.valueOf(maxPage))
                                             .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
@@ -1685,121 +1300,277 @@ public class SignInCommand
                                     HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
                                     click.setHoverEvent(he);
                                     click.setClickEvent(ce);
-                                    for (int i = 0;i < splitMessage.length;i++) {
-                                        bc.add(new TextComponent(splitMessage[i]
-                                            .replace("{total}", String.valueOf(queue.size()))
-                                            .replace("{date}", dateName)
-                                            .replace("{ranking}", String.valueOf(rank))
-                                            .replace("{page}", String.valueOf(page))
-                                            .replace("{maxPage}", String.valueOf(maxPage))
-                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Self").endsWith("%player%")) {
-                                            bc.add(click);
-                                        }
-                                    }
-                                    ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
+                                    Map<String, BaseComponent> baseComponents = new HashMap();
+                                    baseComponents.put("%player%", click);
+                                    Map<String, String> placeholders = new HashMap();
+                                    placeholders.put("{player}", name);
+                                    placeholders.put("{total}", String.valueOf(queue.size()));
+                                    placeholders.put("{date}", dateName);
+                                    placeholders.put("{ranking}", String.valueOf(rank));
+                                    placeholders.put("{time}", timeName);
+                                    placeholders.put("{page}", String.valueOf(page));
+                                    placeholders.put("{maxPage}", String.valueOf(maxPage));
+                                    MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self"), baseComponents, placeholders);
                                 } else {
-                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Self")
+                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self")
                                         .replace("{total}", String.valueOf(queue.size()))
                                         .replace("{date}", dateName)
                                         .replace("{ranking}", String.valueOf(rank))
+                                        .replace("{time}", timeName)
                                         .replace("{page}", String.valueOf(page))
                                         .replace("{maxPage}", String.valueOf(maxPage))
                                         .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
                                 }
+                            } else {
+                                for (SignInQueueElement user : userArray) {
+                                    if (user.getUUID().equals(player.getUniqueId())) {
+                                        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
+                                        String timeName = queue.getElement(player.getUniqueId()).getSignInDate().hasTimePeriod() ? queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                        if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self").contains("%player%")) {
+                                            String name = player.getName();
+                                            BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self").replace("{player}", name));
+                                            ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
+                                            List<BaseComponent> hoverText = new ArrayList();
+                                            int end = 0;
+                                            List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
+                                            for (String hover : array) {
+                                                end++;
+                                                hoverText.add(new TextComponent(hover
+                                                    .replace("{player}", name)
+                                                    .replace("{total}", String.valueOf(queue.size()))
+                                                    .replace("{date}", dateName)
+                                                    .replace("{ranking}", String.valueOf(rank))
+                                                    .replace("{time}", timeName)
+                                                    .replace("{page}", String.valueOf(page))
+                                                    .replace("{maxPage}", String.valueOf(maxPage))
+                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                if (end != array.size()) {
+                                                    hoverText.add(new TextComponent("\n"));
+                                                }
+                                            }
+                                            HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                                            click.setHoverEvent(he);
+                                            click.setClickEvent(ce);
+                                            Map<String, BaseComponent> baseComponents = new HashMap();
+                                            baseComponents.put("%player%", click);
+                                            Map<String, String> placeholders = new HashMap();
+                                            placeholders.put("{player}", name);
+                                            placeholders.put("{total}", String.valueOf(queue.size()));
+                                            placeholders.put("{date}", dateName);
+                                            placeholders.put("{ranking}", String.valueOf(rank));
+                                            placeholders.put("{time}", timeName);
+                                            placeholders.put("{page}", String.valueOf(page));
+                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
+                                            MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self"), baseComponents, placeholders);
+                                        } else {
+                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self")
+                                                .replace("{total}", String.valueOf(queue.size()))
+                                                .replace("{date}", dateName)
+                                                .replace("{ranking}", String.valueOf(rank))
+                                                .replace("{time}", timeName)
+                                                .replace("{page}", String.valueOf(page))
+                                                .replace("{maxPage}", String.valueOf(maxPage))
+                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        }
+                                    } else {
+                                        SignInQueueElement element = user;
+                                        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
+                                        String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                        if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players").contains("%player%")) {
+                                            String name = element.getName() != null ? element.getName() : null;
+                                            if (name == null) {
+                                                OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
+                                                if (offlineplayer != null) {
+                                                    name = offlineplayer.getName();
+                                                }
+                                            }
+                                            if (name != null) {
+                                                BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name));
+                                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command").replace("{player}", name));
+                                                List<BaseComponent> hoverText = new ArrayList();
+                                                int end = 0;
+                                                List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
+                                                for (String hover : array) {
+                                                    end++;
+                                                    hoverText.add(new TextComponent(hover
+                                                        .replace("{player}", name)
+                                                        .replace("{total}", String.valueOf(queue.size()))
+                                                        .replace("{date}", dateName)
+                                                        .replace("{ranking}", String.valueOf(rank))
+                                                        .replace("{time}", timeName)
+                                                        .replace("{page}", String.valueOf(page))
+                                                        .replace("{maxPage}", String.valueOf(maxPage))
+                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                    if (end != array.size()) {
+                                                        hoverText.add(new TextComponent("\n"));
+                                                    }
+                                                }
+                                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                                                click.setClickEvent(ce);
+                                                click.setHoverEvent(he);
+                                                Map<String, BaseComponent> baseComponents = new HashMap();
+                                                baseComponents.put("%player%", click);
+                                                Map<String, String> placeholders = new HashMap();
+                                                placeholders.put("{total}", String.valueOf(queue.size()));
+                                                placeholders.put("{date}", dateName);
+                                                placeholders.put("{ranking}", String.valueOf(rank));
+                                                placeholders.put("{time}", timeName);
+                                                placeholders.put("{page}", String.valueOf(page));
+                                                placeholders.put("{maxPage}", String.valueOf(maxPage));
+                                                MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), baseComponents, placeholders);
+                                            } else {
+                                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                                        .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
+                                                        .replace("{total}", String.valueOf(queue.size()))
+                                                        .replace("{date}", dateName)
+                                                        .replace("{ranking}", String.valueOf(rank))
+                                                        .replace("{time}", timeName)
+                                                        .replace("{page}", String.valueOf(page))
+                                                        .replace("{maxPage}", String.valueOf(maxPage))
+                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                            }
+                                        } else {
+                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                                .replace("{total}", String.valueOf(queue.size()))
+                                                .replace("{date}", dateName)
+                                                .replace("{ranking}", String.valueOf(rank))
+                                                .replace("{time}", timeName)
+                                                .replace("{page}", String.valueOf(page))
+                                                .replace("{maxPage}", String.valueOf(maxPage))
+                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        }
+                                    }
+                                }
                             }
                         }
-                    } else {
-                        for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                            SignInQueueElement element = queue.get(rank - 1);
-                            if (element == null) continue;
-                            String name = element.getName() != null ? element.getName() : null;
+                    }
+                } else {
+                    for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
+                        List<SignInQueueElement> userArray = queue.getRankingUser(rank);
+                        if (userArray.isEmpty()) continue;
+                        if (userArray.size() == 1) {
+                            SignInQueueElement element = userArray.get(0);
+                            String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
                             if (name == null) {
                                 OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
                                 if (offlineplayer != null) {
                                     name = offlineplayer.getName();
                                 }
                             }
-                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format.Historical-Date.Other-Players")
+                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
                                 .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                 .replace("{total}", String.valueOf(queue.size()))
                                 .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                                 .replace("{ranking}", String.valueOf(rank))
-                                .replace("{time}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")))
+                                .replace("{time}", element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time"))
                                 .replace("{page}", String.valueOf(page))
                                 .replace("{maxPage}", String.valueOf(maxPage))
                                 .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        } else {
+                            for (SignInQueueElement element : userArray) {
+                                String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
+                                if (name == null) {
+                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
+                                    if (offlineplayer != null) {
+                                        name = offlineplayer.getName();
+                                    }
+                                }
+                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                    .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
+                                    .replace("{total}", String.valueOf(queue.size()))
+                                    .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
+                                    .replace("{ranking}", String.valueOf(rank))
+                                    .replace("{time}", element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time"))
+                                    .replace("{page}", String.valueOf(page))
+                                    .replace("{maxPage}", String.valueOf(maxPage))
+                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                            }
                         }
                     }
+                }
+            } else {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(message
+                        .replace("%previousPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"))
+                        .replace("%nextPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"))
+                        .replace("{total}", String.valueOf(queue.size()))
+                        .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
+                        .replace("{page}", String.valueOf(page))
+                        .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
+                        .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
+                        .replace("{maxPage}", String.valueOf(maxPage))
+                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                    continue;
+                }
+                Map<String, BaseComponent> baseComponents = new HashMap();
+                if (message.contains("%previousPage%")) {
+                    BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"));
+                    List<BaseComponent> hoverText = new ArrayList();
+                    int end = 0;
+                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover");
+                    for (String hover : array) {
+                        end++;
+                        hoverText.add(new TextComponent(hover
+                            .replace("{total}", String.valueOf(queue.size()))
+                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
+                            .replace("{page}", String.valueOf(page))
+                            .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
+                            .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
+                            .replace("{maxPage}", String.valueOf(maxPage))
+                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                        if (end != array.size()) {
+                            hoverText.add(new TextComponent("\n"));
+                        }
+                    }
+                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText(false) + " " + (page - 1));
+                    click.setClickEvent(ce);
+                    click.setHoverEvent(he);
+                    baseComponents.put("%previousPage%", click);
+                }
+                if (message.contains("%nextPage%")) {
+                    BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"));
+                    List<BaseComponent> hoverText = new ArrayList();
+                    int end = 0;
+                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover");
+                    for (String hover : array) {
+                        end++;
+                        hoverText.add(new TextComponent(hover
+                            .replace("{total}", String.valueOf(queue.size()))
+                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
+                            .replace("{page}", String.valueOf(page))
+                            .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
+                            .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
+                            .replace("{maxPage}", String.valueOf(maxPage))
+                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                        if (end != array.size()) {
+                            hoverText.add(new TextComponent("\n"));
+                        }
+                    }
+                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText(false) + " " + (page + 1));
+                    click.setClickEvent(ce);
+                    click.setHoverEvent(he);
+                    baseComponents.put("%nextPage%", click);
+                }
+                if (baseComponents.isEmpty()) {
+                    sender.sendMessage(message
+                        .replace("{total}", String.valueOf(queue.size()))
+                        .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
+                        .replace("{page}", String.valueOf(page))
+                        .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
+                        .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
+                        .replace("{maxPage}", String.valueOf(maxPage))
+                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
                 } else {
-                    if (!(sender instanceof Player)) {
-                        sender.sendMessage(message
-                            .replace("%previousPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"))
-                            .replace("%nextPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"))
-                            .replace("{total}", String.valueOf(queue.size()))
-                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                            .replace("{page}", String.valueOf(page))
-                            .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                        continue;
-                    }
-                    Map<String, BaseComponent> baseComponents = new HashMap();
-                    if (message.contains("%previousPage%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover");
-                        for (String hover : array) {
-                            end++;
-                            hoverText.add(new TextComponent(hover
-                                .replace("{total}", String.valueOf(queue.size()))
-                                .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                .replace("{page}", String.valueOf(page))
-                                .replace("{maxPage}", String.valueOf(maxPage))
-                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
-                            }
-                        }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText() + " " + (page - 1));
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        baseComponents.put("%previousPage%", click);
-                    }
-                    if (message.contains("%nextPage%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover");
-                        for (String hover : array) {
-                            end++;
-                            hoverText.add(new TextComponent(hover
-                                .replace("{total}", String.valueOf(queue.size()))
-                                .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                                .replace("{page}", String.valueOf(page))
-                                .replace("{maxPage}", String.valueOf(maxPage))
-                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
-                            }
-                        }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText() + " " + (page + 1));
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        baseComponents.put("%nextPage%", click);
-                    }
-                    if (baseComponents.isEmpty()) {
-                        sender.sendMessage(message
-                            .replace("{total}", String.valueOf(queue.size()))
-                            .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
-                            .replace("{page}", String.valueOf(page))
-                            .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
-                    } else {
-                        MessageUtil.sendJsonMessage(sender, message, baseComponents);
-                    }
+                    Map<String, String> placeholders = new HashMap();
+                    placeholders.put("{total}", String.valueOf(queue.size()));
+                    placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
+                    placeholders.put("{page}", String.valueOf(page));
+                    placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
+                    placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
+                    placeholders.put("{maxPage}", String.valueOf(maxPage));
+                    MessageUtil.sendJsonMessage(sender, message, baseComponents, placeholders);
                 }
             }
         }

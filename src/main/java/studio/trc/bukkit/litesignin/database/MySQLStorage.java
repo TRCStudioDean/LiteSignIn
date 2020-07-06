@@ -345,6 +345,7 @@ public class MySQLStorage
     
     @Override
     public void signIn(SignInDate historicalDate) {
+        historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getSecond());
         if (PluginControl.getRetroactiveCardMinimumDate() != null && historicalDate.compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
             return;
         }

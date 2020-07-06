@@ -336,7 +336,7 @@ public class SQLiteStorage
         }
         setSignInTime(today, false);
         List<SignInDate> historys = getHistory();
-        historys.add(SignInDate.getInstance(today.getYear(), today.getMonth(), today.getDay()));
+        historys.add(today);
         setHistory(clearUselessData(historys), false);
         setContinuousSignIn(SignInDate.getContinuous(historys), true);
         SignInQueue.getInstance().loadQueue();

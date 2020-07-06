@@ -313,7 +313,7 @@ public class YamlStorage
         }
         setSignInTime(today, false);
         List<SignInDate> history = clearUselessData(getHistory());
-        history.add(SignInDate.getInstance(today.getYear(), today.getMonth(), today.getDay()));
+        history.add(today);
         setHistory(history, false);
         setContinuousSignIn(SignInDate.getContinuous(history), true);
         giveReward(false);

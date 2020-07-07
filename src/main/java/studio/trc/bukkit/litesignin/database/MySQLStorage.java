@@ -332,7 +332,7 @@ public class MySQLStorage
         PlayerSignInEvent event = new PlayerSignInEvent(uuid, today, false);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            return;//序列化
+            return;
         }
         setSignInTime(today, false);
         List<SignInDate> historys = getHistory();

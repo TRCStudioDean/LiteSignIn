@@ -195,6 +195,14 @@ public class SQLiteEngine
         return null;
     }
     
+    public static String getFileName() {
+        return fileName;
+    }
+    
+    public static String getFilePath() {
+        return filePath;
+    }
+    
     /**
      * Back up all player data.
      * @param filePath Backup file path. 
@@ -215,6 +223,9 @@ public class SQLiteEngine
                     + " RetroactiveCard INT,"
                     + " History LONGTEXT,"
                     + " PRIMARY KEY (UUID))").executeUpdate();
+            if (connection.isClosed()) {
+                connectToDatabase();
+            }
             ResultSet rs = executeQuery(connection.prepareStatement("SELECT * FROM " + table));
             while (rs.next()) {
                 String uuid = rs.getString("UUID");

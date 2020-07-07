@@ -345,7 +345,7 @@ public class SQLiteStorage
     
     @Override
     public void signIn(SignInDate historicalDate) {
-        historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getSecond());
+        historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getDay());
         if (PluginControl.getRetroactiveCardMinimumDate() != null && historicalDate.compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
             return;
         }
@@ -357,23 +357,22 @@ public class SQLiteStorage
         List<SignInDate> historys = new ArrayList();
         boolean added = false;
         if (!getHistory().isEmpty()) {
-            for (SignInDate date : getHistory()) {
-                if (date.compareTo(historicalDate) > 0) {
+            for (SignInDate records : getHistory()) {
+                if (historicalDate.compareTo(records) > 0) {
+                    historys.add(records);
+                } else if (historicalDate.compareTo(records) == 0) {
+                    historys.add(historicalDate);
+                    added = true;
+                } else if (historicalDate.compareTo(records) < 0) {
                     if (!added) {
-                        added = true;
                         historys.add(historicalDate);
-                        historys.add(date);
-                    } else {
-                        historys.add(date);
+                        added = true;
                     }
-                } else {
-                    historys.add(date);
+                    historys.add(records);
                 }
             }
-            if (!added) {
-                historys.add(historicalDate);
-            }
-        } else {
+        }
+        if (!added) {
             historys.add(historicalDate);
         }
         setHistory(clearUselessData(historys), false);

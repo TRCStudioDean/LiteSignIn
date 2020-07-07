@@ -269,6 +269,7 @@ public class SignInDate
         int month = dates.get(0).getMonth();
         int day = dates.get(0).getDay();
         for (SignInDate date : dates) {
+            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
             boolean breakSign = true;
             if (year == date.getYear()) {
                 int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};

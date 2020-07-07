@@ -74,6 +74,9 @@ public class RollBackUtil
             this.rollBackUsers = rollBackUsers;
         }
         
+        //SQLite mode only.
+        private Connection tempConnection;
+        
         public void run() {
             Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
             if (rollBackFile.exists()) {
@@ -82,7 +85,9 @@ public class RollBackUtil
                     if (PluginControl.useMySQLStorage()) {
                         resetDatabase(MySQLEngine.getConnection(), MySQLEngine.getDatabase() + "." + MySQLEngine.getTable());
                     } else if (PluginControl.useSQLiteStorage()) {
-                        resetDatabase(SQLiteEngine.getConnection(), SQLiteEngine.getTable());
+                        SQLiteEngine.getConnection().close();
+                        tempConnection = DriverManager.getConnection("jdbc:sqlite:" + SQLiteEngine.getFilePath() + SQLiteEngine.getFileName());
+                        resetDatabase(tempConnection, SQLiteEngine.getTable());
                     } else {
                         File playerFolder = new File("plugins/LiteSignIn/Players/");
                         if (!playerFolder.exists()) {
@@ -127,7 +132,7 @@ public class RollBackUtil
                             statement.setString(11, history);
                             statement.executeUpdate();
                         } else if (PluginControl.useSQLiteStorage()) {
-                            PreparedStatement statement = SQLiteEngine.getConnection().prepareStatement("INSERT INTO " + SQLiteEngine.getTable() + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
+                            PreparedStatement statement = tempConnection.prepareStatement("INSERT INTO " + SQLiteEngine.getTable() + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
                                     + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             statement.setString(1, uuid);
                             statement.setString(2, name);
@@ -159,9 +164,15 @@ public class RollBackUtil
                             data.save(file);
                         }
                     }
-                    MySQLStorage.cache.clear();
-                    SQLiteStorage.cache.clear();
-                    YamlStorage.cache.clear();
+                    if (PluginControl.useMySQLStorage()) {
+                        MySQLStorage.cache.clear();
+                        MySQLEngine.reloadConnectionParameters();
+                    } else if (PluginControl.useSQLiteStorage()) {
+                        SQLiteStorage.cache.clear();
+                        SQLiteEngine.reloadConnectionParameters();
+                    } else {
+                        YamlStorage.cache.clear();
+                    }
                     for (CommandSender sender : rollBackUsers) {
                         if (sender != null) {
                             Map<String, String> placeholders = new HashMap();
@@ -174,6 +185,15 @@ public class RollBackUtil
                         Map<String, String> placeholders = new HashMap();
                         placeholders.put("{error}", t.getLocalizedMessage() != null ? t.getLocalizedMessage() : "null");
                         MessageUtil.sendMessage(sender, "Database-Management.RollBack.Failed", placeholders);
+                    }
+                    if (PluginControl.useMySQLStorage()) {
+                        MySQLStorage.cache.clear();
+                        MySQLEngine.reloadConnectionParameters();
+                    } else if (PluginControl.useSQLiteStorage()) {
+                        SQLiteStorage.cache.clear();
+                        SQLiteEngine.reloadConnectionParameters();
+                    } else {
+                        YamlStorage.cache.clear();
                     }
                     t.printStackTrace();
                 }

@@ -1,11 +1,13 @@
 package studio.trc.bukkit.litesignin.util;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class SignInDate
+    implements Serializable
 {
     private final int year;
     private final int month;

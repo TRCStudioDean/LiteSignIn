@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
@@ -23,11 +22,14 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PluginControl
 {
+    public static String nmsVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    
     public static void reload() {
         ConfigurationUtil.reloadConfig();
         YamlStorage.cache.clear();
@@ -52,6 +54,25 @@ public class PluginControl
         Bukkit.getOnlinePlayers().stream().filter((ps) -> (Menu.menuOpening.containsKey(ps.getUniqueId()))).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();
         AutoSave.startThread();
+    }
+    
+    public static void savePlayerData() {
+        YamlStorage.cache.values().stream().forEach((yaml) -> {
+            yaml.saveData();
+        });
+        MySQLStorage.cache.values().stream().forEach((mysql) -> {
+            mysql.saveData();
+        });
+        SQLiteStorage.cache.values().stream().forEach((sqlite) -> {
+            sqlite.saveData();
+        });
+    }
+    
+    public static void hideEnchants(ItemMeta im) {
+        if (getNMSVersion().startsWith("v1_7")) {
+            return;
+        }
+        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
     
     public static double getMySQLRefreshInterval() {
@@ -82,18 +103,6 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Sign-In-Ranking");
     }
     
-    public static void savePlayerData() {
-        for (YamlStorage yaml : YamlStorage.cache.values()) {
-            yaml.saveData();
-        }
-        for (MySQLStorage mysql : MySQLStorage.cache.values()) {
-            mysql.saveData();
-        }
-        for (SQLiteStorage sqlite : SQLiteStorage.cache.values()) {
-            sqlite.saveData();
-        }
-    }
-    
     public static int getRetroactiveCardQuantityRequired() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("Retroactive-Card.Quantity-Required");
     }
@@ -120,6 +129,10 @@ public class PluginControl
     
     public static String getPrefix() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix").replace("&", "§");
+    }
+    
+    public static String getNMSVersion() {
+        return PluginControl.nmsVersion;
     }
     
     public static ItemStack getRetroactiveCardRequiredItem(Player player) {

@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.util.CustomItem;
+import studio.trc.bukkit.litesignin.util.PluginControl;
 
 /**
  * Used by /signin itemcollection.
@@ -24,7 +25,6 @@ import studio.trc.bukkit.litesignin.util.CustomItem;
  */
 public class JsonItemStack
 {
-    public static String nmsVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     public static Class<?> craftItemStack;
     public static Class<?> nbtTagCompound;
     public static Class<?> itemStack;
@@ -32,17 +32,13 @@ public class JsonItemStack
     
     public static void reloadNMS() {
         try {
-            craftItemStack = Class.forName("org.bukkit.craftbukkit." + nmsVersion + ".inventory.CraftItemStack");
-            nbtTagCompound = Class.forName("net.minecraft.server." + nmsVersion + ".NBTTagCompound");
-            itemStack = Class.forName("net.minecraft.server." + nmsVersion + ".ItemStack");
+            craftItemStack = Class.forName("org.bukkit.craftbukkit." + PluginControl.nmsVersion + ".inventory.CraftItemStack");
+            nbtTagCompound = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".NBTTagCompound");
+            itemStack = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".ItemStack");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
             nmsFound = false;
         }
-    }
-    
-    public static String getNMSVersion() {
-        return nmsVersion;
     }
     
     public static BaseComponent[] getJsonItemStackArray(List<CustomItem> itemStackList) {

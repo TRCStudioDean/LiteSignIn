@@ -88,31 +88,29 @@ public class SignInQueue
                 while (rs.next()) {
                     try {
                         UUID uuid = UUID.fromString(rs.getString("UUID"));
-                        SignInDate time;
+                        SignInDate time = null;
                         if (date.equals(SignInDate.getInstance(new Date()))) {
                             time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
                         } else {
-                            List<SignInDate> list = new ArrayList();
-                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                                list.add(SignInDate.getInstance(data));
-                            }
                             Integer hour = null, minute = null, second = null;
-                            for (SignInDate history : list) {
-                                if (history.equals(date)) {
-                                    if (history.hasTimePeriod()) {
-                                        hour = history.getHour();
-                                        minute = history.getMinute();
-                                        second = history.getSecond();
+                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                SignInDate targetDate = SignInDate.getInstance(data);
+                                if (date.equals(targetDate)) {
+                                    if (targetDate.hasTimePeriod()) {
+                                        hour = targetDate.getHour();
+                                        minute = targetDate.getMinute();
+                                        second = targetDate.getSecond();
                                     }
+                                    if (hour != null && minute != null && second != null) {
+                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                                    } else {
+                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                                    }
+                                    break;
                                 }
                             }
-                            if (hour != null && minute != null && second != null) {
-                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
-                            } else {
-                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-                            }
                         }
-                        add(new SignInQueueElement(uuid, time, rs.getString("Name")));
+                        if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -124,31 +122,29 @@ public class SignInQueue
                 while (rs.next()) {
                     try {
                         UUID uuid = UUID.fromString(rs.getString("UUID"));
-                        SignInDate time;
+                        SignInDate time = null;
                         if (date.equals(SignInDate.getInstance(new Date()))) {
                             time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
                         } else {
-                            List<SignInDate> list = new ArrayList();
-                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                                list.add(SignInDate.getInstance(data));
-                            }
                             Integer hour = null, minute = null, second = null;
-                            for (SignInDate history : list) {
-                                if (history.equals(date)) {
-                                    if (history.hasTimePeriod()) {
-                                        hour = history.getHour();
-                                        minute = history.getMinute();
-                                        second = history.getSecond();
+                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                SignInDate targetDate = SignInDate.getInstance(data);
+                                if (date.equals(targetDate)) {
+                                    if (targetDate.hasTimePeriod()) {
+                                        hour = targetDate.getHour();
+                                        minute = targetDate.getMinute();
+                                        second = targetDate.getSecond();
                                     }
+                                    if (hour != null && minute != null && second != null) {
+                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                                    } else {
+                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                                    }
+                                    break;
                                 }
                             }
-                            if (hour != null && minute != null && second != null) {
-                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
-                            } else {
-                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-                            }
                         }
-                        add(new SignInQueueElement(uuid, time, rs.getString("Name")));
+                        if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

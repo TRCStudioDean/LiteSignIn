@@ -1458,7 +1458,7 @@ public class SignInCommand
                                 }
                             }
                             sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
-                                .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
+                                .replace("%player%", name != null ? MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                 .replace("{total}", String.valueOf(queue.size()))
                                 .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                                 .replace("{ranking}", String.valueOf(rank))
@@ -1476,7 +1476,7 @@ public class SignInCommand
                                     }
                                 }
                                 sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
-                                    .replace("%player%", name != null ? name : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
+                                    .replace("%player%", name != null ? MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                     .replace("{total}", String.valueOf(queue.size()))
                                     .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                                     .replace("{ranking}", String.valueOf(rank))

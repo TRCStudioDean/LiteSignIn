@@ -10,7 +10,6 @@ import java.util.Map;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import static studio.trc.bukkit.litesignin.database.engine.SQLiteEngine.connectToDatabase;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class MySQLEngine

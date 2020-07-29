@@ -95,6 +95,8 @@ Reward-Task-Sequence:
 - ITEMS_REWARD
 - COMMANDS_EXECUTION
 - MESSAGES_SENDING
+- BROADCAST_MESSAGES_SENDING
+- PLAYSOUNDS
     
 Permissions:
     #About retroactive card permissions

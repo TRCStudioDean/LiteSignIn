@@ -217,20 +217,41 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/RewardSettings.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        if (lang.equalsIgnoreCase("zh_cn")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
+                        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+                        if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+                            if (lang.equalsIgnoreCase("zh_cn")) {
+                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings-OLDVERSION.yml");
+                                try (OutputStream out = new FileOutputStream(configFile)) {
+                                    int b;
+                                    while ((b = is.read()) != -1) {
+                                        out.write((char) b);
+                                    }
+                                }
+                            } else {
+                                InputStream is = Main.class.getResourceAsStream("/Languages/English/RewardSettings-OLDVERSION.yml");
+                                try (OutputStream out = new FileOutputStream(configFile)) {
+                                    int b;
+                                    while ((b = is.read()) != -1) {
+                                        out.write((char) b);
+                                    }
                                 }
                             }
                         } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/English/RewardSettings.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
+                            if (lang.equalsIgnoreCase("zh_cn")) {
+                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings-NEWVERSION.yml");
+                                try (OutputStream out = new FileOutputStream(configFile)) {
+                                    int b;
+                                    while ((b = is.read()) != -1) {
+                                        out.write((char) b);
+                                    }
+                                }
+                            } else {
+                                InputStream is = Main.class.getResourceAsStream("/Languages/English/RewardSettings-NEWVERSION.yml");
+                                try (OutputStream out = new FileOutputStream(configFile)) {
+                                    int b;
+                                    while ((b = is.read()) != -1) {
+                                        out.write((char) b);
+                                    }
                                 }
                             }
                         }

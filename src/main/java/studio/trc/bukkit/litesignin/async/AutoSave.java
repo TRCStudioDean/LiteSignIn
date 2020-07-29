@@ -6,6 +6,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.database.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.YamlStorage;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
@@ -21,13 +22,10 @@ public class AutoSave
             try {
                 if (PluginControl.dataAutoSave()) {
                     if (!ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Auto-Save.Only-MySQL")) {
-                        for (YamlStorage yaml : YamlStorage.cache.values()) {
-                            yaml.saveData();
-                        }
+                        YamlStorage.cache.values().stream().forEach(YamlStorage::saveData);
+                        SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
                     }
-                    for (MySQLStorage mysql : MySQLStorage.cache.values()) {
-                        mysql.saveData();
-                    }
+                    MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
                     MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Auto-Save");
                 }
             } catch (Exception e) {}

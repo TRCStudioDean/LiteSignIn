@@ -1,3 +1,4 @@
+#奖励设置
 Reward-Settings:
     #权限组优先级，顺序从上到下
     Groups-Priority:
@@ -24,6 +25,13 @@ Reward-Settings:
                 - 'diamond:1'
                 - 'gold_ingot:3'
                 - 'iron_ingot:6'
+                #在签到时发送广播信息
+                #在此选项中的信息将会被所有人看见
+                Broadcast-Messages: []
+                #在签到时播放声音
+                #格式： [声音]-[音量]-[音调]-[是否所有人都能听见]
+                Play-Sounds: 
+                - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 #在签到时执行命令
                 #格式： "[执行对象]:[命令]"
                 #"执行对象" 可以是 "op" 、 "server"、 无
@@ -43,6 +51,8 @@ Reward-Settings:
                     Special-Weeks: true
                     Special-Times: false
                     Statistics-Times: false
+                Play-Sounds: 
+                - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
                 - 'diamond:1'
                 - 'gold_ingot:3'
@@ -55,6 +65,10 @@ Reward-Settings:
                     Override-default-rewards: true
                     Messages: 
                     - '{prefix}&a连续签到三天！ 奖励&e翻倍&a！'
+                    Broadcast-Messages:
+                    - '{prefix}&a玩家 &e{player} &a连续签到了三天!'
+                    Play-Sounds: 
+                    - 'ENTITY_PLAYER_LEVELUP-1-0-TRUE'
                     Reward-Items:
                     - 'diamond:1'
                     - 'gold_ingot:3'
@@ -64,6 +78,10 @@ Reward-Settings:
                     Override-default-rewards: false
                     Messages: 
                     - '{prefix}&a连续签到一周！额外赠送附魔&e&l钻石剑&a与&e&l金苹果&a！'
+                    Broadcast-Messages:
+                    - '{prefix}&a玩家 &e{player} &a连续签到了一周!'
+                    Play-Sounds: 
+                    - 'ENTITY_PLAYER_LEVELUP-1-0-TRUE'
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
                     - 'golden_apple:1'
@@ -107,7 +125,7 @@ Reward-Settings:
                     #时间限制，如果您的方案是准时签到以外的方案，你可以在这里设置上限时间
                     #“23:59:59” 在这里表示将会在每一天的22:30:00到23:59:59签到时触发
                     Time-Limit: '23:59:59'
-                    Override-default-rewards: true
+                    Override-default-rewards: false
                     Messages: 
                     - '{prefix}&a夜已深， 注意休息！'
                     #深夜一杯牛奶助眠（误）
@@ -118,7 +136,7 @@ Reward-Settings:
                     Option: Before_This_Time #在03:00:00之前签到
                     #03:00:00前到00:00:00时签到时触发
                     Time-Limit: '00:00:00'
-                    Override-default-rewards: true
+                    Override-default-rewards: false
                     Messages: 
                     - '{prefix}&a夜已深， 注意休息！'
                     Reward-Items:
@@ -127,13 +145,13 @@ Reward-Settings:
             Special-Ranking:
                 #全服第一名
                 '1':
-                    Override-default-rewards: true
+                    Override-default-rewards: false
                     Messages: 
                     - '{prefix}&a你今天是全服第一个签到的玩家，奖励翻倍！'
                     Reward-Items:
-                    - 'diamond:2'
-                    - 'gold_ingot:6'
-                    - 'iron_ingot:12'
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
         #这个是自定义的组，以示范
         VIP:
             #使用权限

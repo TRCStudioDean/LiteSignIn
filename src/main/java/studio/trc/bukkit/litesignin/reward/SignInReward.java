@@ -1,6 +1,5 @@
 package studio.trc.bukkit.litesignin.reward;
 
-import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -8,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
+import studio.trc.bukkit.litesignin.reward.util.SignInSound;
+import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 
 public interface SignInReward
 {
@@ -18,23 +19,31 @@ public interface SignInReward
     public SignInGroup getGroup();
     
     /**
-     * Get SignInReward module.
+     * Get SignInReward module
      * It is used to indicate the reward form of SignInReward.
      * @return 
      */
     public SignInRewardModule getModule();
     
     /**
-     * Get messages.
      * @return 
      */
     public List<String> getMessages();
     
     /**
-     * Get commands.
+     * @return 
+     */
+    public List<String> getBroadcastMessages();
+    
+    /**
      * @return 
      */
     public List<SignInRewardCommand> getCommands();
+    
+    /**
+     * @return 
+     */
+    public List<SignInSound> getSounds();
     
     /**
      * Get Reward items.

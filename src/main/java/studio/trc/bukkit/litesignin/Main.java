@@ -60,16 +60,12 @@ public class Main
     @Override
     public void onDisable() {
         if (PluginControl.useMySQLStorage()) {
-            for (MySQLStorage data : MySQLStorage.cache.values()) {
-                data.saveData();
-            }
+            MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
             Map<String, String> placeholders = new HashMap();
             placeholders.put("{database}", "MySQL");
             SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);
         } else if (PluginControl.useSQLiteStorage()) {
-            for (SQLiteStorage data : SQLiteStorage.cache.values()) {
-                data.saveData();
-            }
+            SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
             Map<String, String> placeholders = new HashMap();
             placeholders.put("{database}", "SQLite");
             SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);

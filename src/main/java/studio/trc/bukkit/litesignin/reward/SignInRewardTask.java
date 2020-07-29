@@ -6,5 +6,9 @@ public enum SignInRewardTask {
     
     COMMANDS_EXECUTION,
     
+    BROADCAST_MESSAGES_SENDING,
+    
+    PLAYSOUNDS,
+    
     MESSAGES_SENDING;
 }

@@ -878,7 +878,6 @@ public class SignInCommand
                             CustomItem item = CustomItem.getCustomItem(args[2]);
                             if (item != null) {
                                 if (MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").contains("%item%")) {
-                                    item.delete();
                                     if (!(sender instanceof Player)) {
                                         String name;
                                         try {
@@ -898,6 +897,7 @@ public class SignInCommand
                                         }
                                     }
                                     ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
+                                    item.delete();
                                 } else {
                                     Map<String, String> placeholders = new HashMap();
                                     placeholders.put("{name}", args[2]);
@@ -956,12 +956,14 @@ public class SignInCommand
                                 Map<String, String> placeholders = new HashMap();
                                 placeholders.put("{player}", args[3]);
                                 MessageUtil.sendMessage(sender, "Command-Messages.ItemCollection.Give.Player-Offline", placeholders);
+                                return true;
                             }
                             CustomItem ci = CustomItem.getCustomItem(args[2]);
                             if (ci == null) {
                                 Map<String, String> placeholders = new HashMap();
                                 placeholders.put("{name}", args[2]);
                                 MessageUtil.sendMessage(sender, "Command-Messages.ItemCollection.Give.Not-Exist", placeholders);
+                                return true;
                             } else {
                                 ci.give(player);
                                 if (MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").contains("%item%")) {

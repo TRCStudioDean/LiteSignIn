@@ -3,7 +3,6 @@ package studio.trc.bukkit.litesignin.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -46,7 +45,7 @@ public class CustomItem
         List<CustomItem> itemList = new ArrayList();
         for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getConfigurationSection("Item-Collection").getKeys(false)) {
             ItemStack itemStack = ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getItemStack("Item-Collection." + name);
-            if (itemStack != null && itemStack.getType() != Material.AIR) {
+            if (itemStack != null) {
                 itemList.add(new CustomItem(itemStack, name));
             }
         }

@@ -158,9 +158,9 @@ public class SignInGUI
                 if (playerdata.alreadySignIn(historicalDate)) {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -203,9 +203,9 @@ public class SignInGUI
                 } else {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -268,9 +268,9 @@ public class SignInGUI
                 ItemStack key;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
                     } else {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
@@ -360,9 +360,9 @@ public class SignInGUI
                 if (playerdata.alreadySignIn(historicalDate)) {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -405,9 +405,9 @@ public class SignInGUI
                 } else {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -470,9 +470,9 @@ public class SignInGUI
                 ItemStack key;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
                     } else {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
@@ -562,9 +562,9 @@ public class SignInGUI
                 if (playerdata.alreadySignIn(historicalDate)) {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -606,9 +606,9 @@ public class SignInGUI
                     keyType = KeyType.Already_SignIn;
                 } else {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
                     } else {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
@@ -654,9 +654,9 @@ public class SignInGUI
                 if (playerdata.alreadySignIn(historicalDate)) {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
                         } else {
-                            key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
+                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
@@ -698,9 +698,9 @@ public class SignInGUI
                     keyType = KeyType.Already_SignIn;
                 } else {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data") != null) {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data"));
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data"));
                     } else {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1);
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1);
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Lore") != null) {
@@ -744,9 +744,9 @@ public class SignInGUI
                 ItemStack key;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
                     } else {
-                        key = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
+                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
@@ -825,9 +825,9 @@ public class SignInGUI
                 ItemStack other;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data") != null) {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
                     } else {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);
@@ -897,9 +897,9 @@ public class SignInGUI
                 ItemStack other;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data") != null) {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
                     } else {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);
@@ -968,9 +968,9 @@ public class SignInGUI
                 ItemStack other;
                 try {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data") != null) {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Data"));
                     } else {
-                        other = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
+                        other = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Item").toUpperCase()), 1);
                     }
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);

@@ -141,9 +141,9 @@ public class PluginControl
             ItemStack is;
             try {
                 if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Data") != null) {
-                    is = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getInt("Manual-Settings." + itemName + ".Data"));
+                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getInt("Manual-Settings." + itemName + ".Data"));
                 } else {
-                    is = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1);
+                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1);
                 }
             } catch (IllegalArgumentException ex2) {
                 return null;

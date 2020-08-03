@@ -218,7 +218,7 @@ public class ConfigurationUtil
                     if (!configFile.exists()) {
                         configFile.createNewFile();
                         String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-                        if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+                        if (version.startsWith("v1_7") || version.startsWith("v1_8")) {
                             if (lang.equalsIgnoreCase("zh_cn")) {
                                 InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings-OLDVERSION.yml");
                                 try (OutputStream out = new FileOutputStream(configFile)) {

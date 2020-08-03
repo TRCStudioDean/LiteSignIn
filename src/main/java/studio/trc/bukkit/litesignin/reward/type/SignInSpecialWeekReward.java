@@ -93,7 +93,7 @@ public class SignInSpecialWeekReward
             for (String item : ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Weeks." + week + ".Reward-Items")) {
                 String[] itemdata = item.split(":");
                 try {
-                    ItemStack is = new ItemStack(Material.getMaterial(itemdata[0].toUpperCase()));
+                    ItemStack is = new ItemStack(Material.valueOf(itemdata[0].toUpperCase()));
                     try {
                         if (itemdata[1].contains("-")) {
                             is.setAmount(PluginControl.getRandom(itemdata[1]));
@@ -109,9 +109,9 @@ public class SignInSpecialWeekReward
                         ItemStack is;
                         try {
                             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Data")) {
-                                is = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getInt("Manual-Settings." + itemdata[0] + ".Data"));
+                                is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getInt("Manual-Settings." + itemdata[0] + ".Data"));
                             } else {
-                                is = new ItemStack(Material.getMaterial(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1);
+                                is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1);
                             }
                         } catch (IllegalArgumentException ex2) {
                             continue;

@@ -11,7 +11,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,10 +30,24 @@ public class JsonItemStack
     public static boolean nmsFound;
     
     public static void reloadNMS() {
+        
+        //craftbukkit
         try {
             craftItemStack = Class.forName("org.bukkit.craftbukkit." + PluginControl.nmsVersion + ".inventory.CraftItemStack");
-            nbtTagCompound = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".NBTTagCompound");
-            itemStack = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".ItemStack");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
+            nmsFound = false;
+        }
+        
+        //net.minecraft.server
+        try {
+            if (PluginControl.nmsVersion.startsWith("v1_17")) {
+                nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
+                itemStack = Class.forName("net.minecraft.world.item.ItemStack");
+            } else {
+                nbtTagCompound = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".NBTTagCompound");
+                itemStack = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".ItemStack"); 
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
             nmsFound = false;

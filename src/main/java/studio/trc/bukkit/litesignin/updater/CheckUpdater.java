@@ -23,7 +23,7 @@ public class CheckUpdater
     private static String link;
     private static String description;
     private static Thread checkUpdateThread;
-    private static SignInDate date;
+    private static SignInDate date = SignInDate.getInstance(new Date());
     
     /**
      * Initialize programs.
@@ -56,7 +56,6 @@ public class CheckUpdater
                         placeholders.put("{nowVersion}", nowVersion);
                         placeholders.put("{description}", description_);
                         MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Checked", placeholders);
-                        date = SignInDate.getInstance(new Date());
                     }
                 } catch (InvalidConfigurationException | IOException ex) {
                     MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Error");
@@ -64,6 +63,7 @@ public class CheckUpdater
             } catch (MalformedURLException ex) {
                 MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Error");
             }
+            date = SignInDate.getInstance(new Date());
         });
     }
     
@@ -71,6 +71,7 @@ public class CheckUpdater
      * Start check updater.
      */
     public static void checkUpdate() {
+        initialize();
         checkUpdateThread.start();
     }
     

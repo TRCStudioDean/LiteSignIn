@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
+import studio.trc.bukkit.litesignin.updater.CheckUpdater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
@@ -76,5 +78,40 @@ public class Join
                 }
             }
         }, "AsyncPlayerJoinThread").start();
+        if (CheckUpdater.isFoundANewVersion() && PluginControl.enableUpdater()) {
+            if (PluginControl.hasPermission(player, "Permissions.Updater")) {
+                SignInDate now = SignInDate.getInstance(new Date());
+                if (now.getYear() != CheckUpdater.getTimeOfLastCheckUpdate().getYear() ||
+                    now.getMonth() != CheckUpdater.getTimeOfLastCheckUpdate().getMonth() ||
+                    now.getDay() != CheckUpdater.getTimeOfLastCheckUpdate().getDay()) {
+                    CheckUpdater.checkUpdate();
+                }
+                String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
+                MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
+                    if (text.contains("%link%")) {
+                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Updater.Link.Player-Text"));
+                        List<BaseComponent> hoverText = new ArrayList();
+                        int end = 0;
+                        List<String> array = MessageUtil.getMessageList("Updater.Link.Hover-Text");
+                        for (String hover : array) {
+                            end++;
+                            hoverText.add(new TextComponent(hover.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            if (end != array.size()) {
+                                hoverText.add(new TextComponent("\n"));
+                            }
+                        }
+                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                        ClickEvent ce = new ClickEvent(ClickEvent.Action.OPEN_URL, CheckUpdater.getLink());
+                        click.setClickEvent(ce);
+                        click.setHoverEvent(he);
+                        Map<String, BaseComponent> baseComponents = new HashMap();
+                        baseComponents.put("%link%", click);
+                        MessageUtil.sendJsonMessage(player, text, baseComponents);
+                    } else {
+                        player.sendMessage(text.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                    }
+                });
+            }
+        }
     }
 }

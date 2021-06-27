@@ -26,6 +26,10 @@ Auto-Save:
     #Minute
     Delay: 10
     
+#Whether enable Metrics
+#Detailed: bstats.org
+Metrics: true
+    
 #Retroactive Card
 #Its role is to supplement the missing sign-in date.
 Retroactive-Card:

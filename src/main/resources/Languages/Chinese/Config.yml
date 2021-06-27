@@ -14,6 +14,11 @@ Enable-Sign-In-Ranking: true
 #是否在玩家进入服务器的时候提醒玩家签到
 Join-Reminder-Messages: true
 
+#是否检查更新
+#仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
+#此功能并不会造成服务器产生过多流量（每次检测产生约不到1kb网络流量）
+Updater: true
+
 #自动保存数据
 Auto-Save: 
     #是否启用
@@ -124,6 +129,10 @@ Permissions:
         Hold:
             Permission: signin.retroactive-card.hold
             Default: true
+    #插件更新检测相关权限
+    Updater: 
+        Permission: signin.updater
+        Default: false
     #命令相关权限
     Commands:
         Help: 

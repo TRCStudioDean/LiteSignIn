@@ -14,6 +14,12 @@ Use-PlaceholderAPI: true
 #Whether to remind players to remember to check in when they join server.
 Join-Reminder-Messages: true
 
+#Whether to check update
+#Only running at server starting. 
+#It will check the latest version of the plugin, and report to the console and authorized players.
+#This function will not cause the server to generate too much traffic. (Less than 1kb)
+Updater: true
+
 Auto-Save: 
     Enabled: false
     Only-MySQL: true
@@ -110,6 +116,10 @@ Permissions:
         Hold:
             Permission: signin.retroactive-card.hold
             Default: true
+    #About updater's permission
+    Updater: 
+        Permission: signin.updater
+        Default: false
     #About commands permissions
     Commands:
         Help: 

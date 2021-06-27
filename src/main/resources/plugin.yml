@@ -1,7 +1,7 @@
 name: LiteSignIn
-version: 1.4.0
+version: 1.4.1
 main: studio.trc.bukkit.litesignin.Main
-author: TRCRedstoner
+author: TRCStudioDean
 api-version: 1.13
 softdepend: [PlaceholderAPI]
 commands:

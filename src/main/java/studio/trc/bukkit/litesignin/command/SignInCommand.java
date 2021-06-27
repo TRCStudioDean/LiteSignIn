@@ -24,6 +24,7 @@ import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.nms.JsonItemStack;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.queue.SignInQueueElement;
+import studio.trc.bukkit.litesignin.updater.CheckUpdater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.CustomItem;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -46,6 +47,14 @@ public class SignInCommand
         if (BackupUtil.isBackingUp()) {
             MessageUtil.sendMessage(sender, "Database-Management.Backup.BackingUp");
             return true;
+        }
+        if (PluginControl.enableUpdater()) {
+            SignInDate now = SignInDate.getInstance(new Date());
+            if (now.getYear() != CheckUpdater.getTimeOfLastCheckUpdate().getYear() ||
+                now.getMonth() != CheckUpdater.getTimeOfLastCheckUpdate().getMonth() ||
+                now.getDay() != CheckUpdater.getTimeOfLastCheckUpdate().getDay()) {
+                CheckUpdater.checkUpdate();
+            }
         }
         if (args.length == 0) {
             MessageUtil.sendMessage(sender, "Command-Messages.Unknown-Command");

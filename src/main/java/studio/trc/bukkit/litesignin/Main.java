@@ -16,6 +16,8 @@ import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.event.Quit;
 import studio.trc.bukkit.litesignin.event.Join;
 import studio.trc.bukkit.litesignin.nms.JsonItemStack;
+import studio.trc.bukkit.litesignin.updater.CheckUpdater;
+import studio.trc.bukkit.litesignin.util.metrics.Metrics;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
@@ -23,7 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import studio.trc.bukkit.litesignin.updater.CheckUpdater;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -36,6 +37,7 @@ public class Main
      * Main instance
      */
     private static Main main;
+    private static Metrics metrics;
     
     @Override
     public void onEnable() {
@@ -56,7 +58,6 @@ public class Main
         getCommand("litesignin").setTabCompleter(new SignInCommand());
         registerEvent();
         JsonItemStack.reloadNMS();
-        CheckUpdater.initialize();
         SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", true);
         
         //It will run after the server is started.
@@ -68,6 +69,11 @@ public class Main
                 }
             }
         }.runTask(main);
+        
+        //Metrics
+        if (PluginControl.enableMetrics()) {
+            metrics = new Metrics(main, 11849);
+        }
     }
     
     @Override
@@ -98,6 +104,10 @@ public class Main
     
     public static Main getInstance() {
         return main;
+    }
+    
+    public static Metrics getMetrics() {
+        return metrics;
     }
     
     public static void registerEvent() {

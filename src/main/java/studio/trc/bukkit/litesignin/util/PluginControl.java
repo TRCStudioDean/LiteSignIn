@@ -127,6 +127,10 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Updater");
     }
     
+    public static boolean enableMetrics() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Metrics");
+    }
+    
     public static SignInDate getRetroactiveCardMinimumDate() {
         return SignInDate.getInstance(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Minimum-Date"));
     }

@@ -236,6 +236,18 @@ English:
         RollBack:
             Successfully: '{prefix}&aSuccessfully rolled back data to &b{file} &a.'
             Failed: '{prefix}&cRollback failed with error: &e{error}'
+    Updater:
+        Link:
+            Player-Text: '&d&l[ClickHere]'
+            Console-Text: '&d{link}'
+            Hover-Text:
+            - '&5Click to get the downloads link.'
+        Checked: 
+        - '{prefix}&aA new version has been released: &bv{version}'
+        - '&6- &3Now version: &6v{nowVersion}'
+        - '&6- &3Download link: %link%'
+        - '&6- &3Update log: {description}'
+        Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
 Chinese:
     No-Permission: '{prefix}&c你没有这么做的权限!'
     Unavailable-Command: '{prefix}&c控制台不能使用这个命令.'
@@ -477,3 +489,15 @@ Chinese:
         RollBack:
             Successfully: '{prefix}&a成功将数据回档到 &b{file} &a.'
             Failed: '{prefix}&c回档失败， 出现错误: &e{error}'
+    Updater:
+        Link:
+            Player-Text: '&d&l[点击查看]'
+            Console-Text: '&d{link}'
+            Hover-Text:
+            - '&5点击获取下载链接'
+        Checked: 
+        - '{prefix}&a发现插件存在最新版本: &bv{version}'
+        - '&6- &3服务器运行版本: &6v{nowVersion}'
+        - '&6- &3下载地址: %link%'
+        - '&6- &3更新日志: {description}'
+        Error: '{prefix}&c无法获取插件最新版本, 请检查你的网络是否正常! '

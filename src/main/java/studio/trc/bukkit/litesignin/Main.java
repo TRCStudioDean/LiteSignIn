@@ -22,6 +22,8 @@ import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import studio.trc.bukkit.litesignin.updater.CheckUpdater;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -54,7 +56,18 @@ public class Main
         getCommand("litesignin").setTabCompleter(new SignInCommand());
         registerEvent();
         JsonItemStack.reloadNMS();
+        CheckUpdater.initialize();
         SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", true);
+        
+        //It will run after the server is started.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (PluginControl.enableUpdater()) {
+                    CheckUpdater.checkUpdate();
+                }
+            }
+        }.runTask(main);
     }
     
     @Override

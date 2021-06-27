@@ -75,6 +75,10 @@ public class Configuration
 
     public boolean getBoolean(String path) {
         if (config.get(path) == null) {
+            if (type.equals(ConfigurationType.CONFIG)) {
+                repairConfigurationSection(path);
+                return config.getBoolean(path);
+            }
             return false;
         } else {
             return config.getBoolean(path);

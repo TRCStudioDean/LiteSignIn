@@ -80,12 +80,6 @@ public class Join
         }, "AsyncPlayerJoinThread").start();
         if (CheckUpdater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (PluginControl.hasPermission(player, "Permissions.Updater")) {
-                SignInDate now = SignInDate.getInstance(new Date());
-                if (now.getYear() != CheckUpdater.getTimeOfLastCheckUpdate().getYear() ||
-                    now.getMonth() != CheckUpdater.getTimeOfLastCheckUpdate().getMonth() ||
-                    now.getDay() != CheckUpdater.getTimeOfLastCheckUpdate().getDay()) {
-                    CheckUpdater.checkUpdate();
-                }
                 String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
                     if (text.contains("%link%")) {

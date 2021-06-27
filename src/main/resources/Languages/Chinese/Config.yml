@@ -28,6 +28,10 @@ Auto-Save:
     #延迟（分钟）
     Delay: 10
     
+#是否启用Metrics
+#详见bStats.org
+Metrics: true
+    
 #补签卡
 Retroactive-Card:
     #如果为false， 则不启用补签功能

@@ -123,6 +123,10 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Join-Reminder-Messages");
     }
     
+    public static boolean enableUpdater() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Updater");
+    }
+    
     public static SignInDate getRetroactiveCardMinimumDate() {
         return SignInDate.getInstance(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Minimum-Date"));
     }

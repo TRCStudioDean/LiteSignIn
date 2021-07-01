@@ -1,7 +1,6 @@
 package studio.trc.bukkit.litesignin.util;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -10,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import studio.trc.bukkit.litesignin.Main;
+import studio.trc.bukkit.litesignin.config.MessageUtil;
 
 public class SignInPluginProperties
 {
@@ -17,18 +17,11 @@ public class SignInPluginProperties
      * System Language
      */
     public static Properties propertiesFile = new Properties();
-    public static Locale lang = Locale.getDefault();
     
     public static void reloadProperties() {
-        if (lang.equals(Locale.SIMPLIFIED_CHINESE) || lang.equals(Locale.CHINESE)) {
-            try {
-                propertiesFile.load(Main.class.getResourceAsStream("/Languages/Chinese.properties"));
-            } catch (IOException ex) {}
-        } else {
-            try {
-                propertiesFile.load(Main.class.getResourceAsStream("/Languages/English.properties"));
-            } catch (IOException ex) {}
-        }
+        try {
+            propertiesFile.load(Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + ".properties"));
+        } catch (IOException ex) {}
         sendOperationMessage("LanguageLoaded");
     }
     

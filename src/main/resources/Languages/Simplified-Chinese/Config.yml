@@ -1,0 +1,186 @@
+#命令前缀
+Prefix: '&bLite&3SignIn &f&l>>> '
+
+#插件语言
+Language: Simplified-Chinese
+
+#是否使用PlaceholderAPI
+Use-PlaceholderAPI: true
+
+#是否启用签到排名榜功能
+#此功能用于登记每日签到玩家的先后顺序
+Enable-Sign-In-Ranking: true
+
+#是否在玩家进入服务器的时候提醒玩家签到
+Join-Reminder-Messages: true
+
+#是否检查更新
+#仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
+#此功能并不会造成服务器产生过多流量（每次检测产生约不到1kb网络流量）
+Updater: true
+
+#自动保存数据
+Auto-Save: 
+    #是否启用
+    Enabled: false
+    #是否仅MySQL储存时启用
+    Only-MySQL: true
+    #延迟（分钟）
+    Delay: 10
+    
+#是否启用Metrics
+#详见bStats.org
+Metrics: true
+    
+#补签卡
+Retroactive-Card:
+    #如果为false， 则不启用补签功能
+    Enabled: true
+    #补签的间隔， 单位秒
+    Intervals: 5
+    #每一次补签所需的补签卡数量
+    Quantity-Required: 1
+    #下限日期，玩家无法对这之前的日期进行补签
+    #PS: 2019年11月15日是本插件初代版本完工之日
+    Minimum-Date: '2019-11-15'
+    #所需物品
+    Required-Item:
+        #如果为false， 则补签卡将不是一个可以被放置于物品栏中的物品，而会是虚拟道具
+        #你可以使用/signin info [玩家] 查看一名玩家拥有的补签卡数量
+        Enabled: false
+        #自定义物品的名字
+        #你可以在CustomItems.yml文件中编辑它。
+        CustomItem: 'RetroactiveCard'
+
+#MySQL 数据库设置
+MySQL-Storage:
+    Enabled: false
+    #主机名
+    Hostname: localhost
+    #端口
+    Port: 3306
+    #用户名
+    Username: 'root'
+    #密码
+    Password: 'password'
+    #数据库名称
+    Database: 'signin'
+    #更多连接参数，如果你不是一名开发者，并且不熟知JDBC，请不要修改它
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    #当数据库连接丢失时，自动修复的次数， 填-1即为无数次
+    Automatic-Repair: -1
+    #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据（建议在单服务端使用MySQL的情况下才这么做）
+    Refresh-Interval: 5
+    #数据表名称
+    Table-Name: playerdata
+    
+#SQLite 数据库设置
+#储存模式优先级: Yaml < SQLite < MySQL
+SQLite-Storage:
+    #默认为启用，若关闭则转为Yaml储存格式
+    Enabled: true
+    #数据库文件名
+    Database-File: 'Database.db'
+    #数据库文件夹路径
+    Database-Path: 'plugins/LiteSignIn/'
+    #当数据库连接丢失时，自动修复的次数， 填-1即为无数次
+    Automatic-Repair: -1
+    #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据
+    Refresh-Interval: 5
+    #数据表名称
+    Table-Name: playerdata
+    
+#数据管理设置
+Database-Management:
+    #备份
+    Backup:
+        #是否允许使用备份功能
+        Enabled: true
+        #是否开启自动备份（每一次服务器关闭时进行）
+        Auto-Backup: false
+        #备份文件夹路径
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #备份文件名称
+        Backup-File: 'Backup-{time}'
+        #时间格式
+        Time-Format: 'yyyy-MM-dd-HH-mm-ss'
+    #回档
+    Rollback:
+        #是否允许使用回档功能
+        Enabled: true
+        #备份文件夹路径（将从此处选择备份文件进行回档）
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #执行回档前，是否先进行备份
+        Rollback-With-Backup: true
+    
+#签到奖励任务顺序
+#默认顺序依次是 物品奖励 -> 命令执行 -> 信息发送 -> 广播信息-> 播放声音
+Reward-Task-Sequence:
+- ITEMS_REWARD
+- COMMANDS_EXECUTION
+- MESSAGES_SENDING
+- BROADCAST_MESSAGES_SENDING
+- PLAYSOUNDS
+
+#权限设置
+#当Default为true时，将默认所有人都有权限。
+Permissions:
+    #补签卡相关权限
+    Retroactive-Card:
+        #使用补签卡
+        Use:
+            Permission: signin.retroactive-card.use
+            Default: true
+        #持有补签卡，若无权限则会自动被系统没收
+        Hold:
+            Permission: signin.retroactive-card.hold
+            Default: true
+    #插件更新检测相关权限
+    Updater: 
+        Permission: signin.updater
+        Default: false
+    #命令相关权限
+    Commands:
+        Help: 
+            Permission: signin.command.help
+            Default: true
+        Reload: 
+            Permission: signin.command.reload
+            Default: false
+        GUI: 
+            Permission: signin.command.gui
+            Default: true
+        Designated-GUI: 
+            Permission: signin.command.designatedgui
+            Default: false
+        Click: 
+            Permission: signin.command.click
+            Default: true
+        Click-Others: 
+            Permission: signin.command.clickothers
+            Default: false
+        Info: 
+            Permission: signin.command.info
+            Default: false
+        RetroactiveCard:
+            Permission: signin.command.retroactivecard
+            Default: false
+        ItemCollection: 
+            Permission: signin.command.itemcollection
+            Default: false
+        Save: 
+            Permission: signin.command.save
+            Default: false
+        Database:
+            Backup:
+                Permission: signin.command.database.backup
+                Default: false
+            Rollback:
+                Permission: signin.command.database.rollback
+                Default: false
+        LeaderBoard:
+            Permission: signin.command.leaderboard
+            Default: true
+            Designated-Date:
+                Permission: signin.command.leaderboard.designateddate
+                Default: false

@@ -37,11 +37,16 @@ public class CheckUpdater
                     yaml.load(reader);
                     String version = yaml.getString("latest-version");
                     String downloadLink = yaml.getString("link");
-                    String description_;
-                    if (MessageUtil.getLanguage().equalsIgnoreCase("Chinese") || MessageUtil.getLanguage().contains("中文")) {
-                        description_ = yaml.getString("description.Chinese");
+                    String description_ = "description.Default";
+                    if (yaml.get("description." + MessageUtil.getLanguage()) != null) {
+                        description_ = yaml.getString("description." + MessageUtil.getLanguage());
                     } else {
-                        description_ = yaml.getString("description.Default");
+                        for (String languages : yaml.getConfigurationSection("description").getKeys(false)) {
+                            if (MessageUtil.getLanguage().contains(languages)) {
+                                description_ = yaml.getString("description." + MessageUtil.getLanguage());
+                                break;
+                            }
+                        }
                     }
                     String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
                     if (!nowVersion.equalsIgnoreCase(version)) {

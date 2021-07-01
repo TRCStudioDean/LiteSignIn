@@ -1,253 +1,3 @@
-English:
-    No-Permission: '{prefix}&cYou don''t have permission to do this!'
-    Unavailable-Command: '{prefix}&cThe console cannot use this command.'
-    Auto-Save: '{prefix}&aAll Player''s data has been saved!'
-    Unable-To-Re-SignIn: '{prefix}&cThis server has not enabled the re sign-in function.'
-    Repaired-Config-Section: '{prefix}&cPlugin cannot obtain the configuration file &e{config} &c path &7{path}&c, which has been fixed by obtaining the default configuration file.'
-    Second: 'second'
-    Minute: 'minute'
-    Hour: 'hour'
-    Day: 'day'
-    Month: 'month'
-    Year: 'year'
-    GUI-SignIn-Messages:
-        Open-GUI: '&c&l[Click Here!]'
-        Hover-Text:
-        - '&5Click here to open the sign-in menu.'
-        - '&7Date: &e{date}'
-        Join-Messages:
-        - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
-        Retroactive-Card-Cooldown:
-        - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
-        Unable-To-Hold:
-        - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
-        Minimum-Date:
-        - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
-        SignIn-Messages:
-        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        - ''
-        - '  {prefix}&dSuccessfully signed in!'
-        - ''
-        - '  &c# &aYou have been signed in for &e{continuous} &adays!'
-        - '  &c# &aToday''s sign-in ranking is &b{queue} &a.'
-        - ''
-        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        Need-More-Retroactive-Cards:
-        - '{prefix}&cYou still need &e{cards} &cretrospective &acards &cto sign-in!'
-        Retroactive-SignIn-Messages:
-        - '{prefix}&aDate &e{date} &ahas been successfully sign-in! You have been signed in for &e{continuous}&a days!'
-    Command-Messages:
-        Unknown-Command: '{prefix}&cUnknown command, Please use &6/signin help &cto view command list.'
-        Help-Command: 
-        - '{prefix}&aHelp &f&l>>>'
-        - ' &6/signin help &cView command help.'
-        - ' &6/signin reload &cReload configuration files.'
-        - ' &6/signin gui &8[month] &cOpen the Sign In GUI menu.'
-        - ' &6/signin click &8[Date or playerName] [playerName] &cSign in now, or sign in for historical date. &7(Date format: [y-m-d] Example: /signin click ''2015-8-11'' playerName)'
-        - ' &6/signin save &cSave data for all online players.'
-        - ' &6/signin info [playerName] &cView player''s information.'
-        - ' &6/signin leaderboard &8[Date] [Page] &cView the sign-in leaderboard for today or a specified date.'
-        - ' &6/signin itemcollection &cCollection of management items.'
-        Reload: '{prefix}&aConfiguration files has been reloaded.'
-        RetroactiveCard:
-            Help: '{prefix}&aUsage: &6/signin retroactivecard &c[give/set/take] &d[Amount] &7[Player] &aGive, Set or Take retroactive cards from player.'
-            Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
-            Invalid-Number: '{prefix}&cInvalid number &e{number} &c!'
-            Player-Offline: '{prefix}&cPlayer &e{player} &cis offline.'
-            Player-Not-Exist: '{prefix}&cPlayer &e{player} &cdoes not exist!'
-            Give: '{prefix}&aSuccessfully gave &c{amount} &aretroactive cards to the player &e{player}&a.'
-            Set: '{prefix}&aSuccessfully set the number of player &e{player}''s &aretroactive cards to &c{amount}&a.'
-            Take: '{prefix}&aSuccessfully removed &c{amount} &aretroactive cards from player &e{player}&a.'
-        Database:
-            Help:
-            - '{prefix}&aHelp: '
-            - ' &6/signin database backup &cBack up all current data.'
-            - ' &6/signin database rollback [FileName] &cRoll back all data'
-            - ' &6/signin database confirm &cConfirm the operation.'
-            Feature-Disabled: '{prefix}&cThis feature has been disabled.'
-            Confirm:
-                Button:
-                    Text: '&a&l&n[Click Here!]'
-                    Hover:
-                    - '&5Click to confirm the operation'
-                Need-Confirm:
-                - '&6Please use the command &a/signin database confirm &6to confirm the operation.'
-                - '&6Or %button%'
-                Invalid-Operation: '{prefix}&cThere are no pending operations.'
-            Backup: '{prefix}&aIt may take a long time to start backing up data...'
-            Rollback:
-                Help: '{prefix}&cUsage: /signin database rollback [FileName]'
-                File-Not-Exist: '{prefix}&cBackup file {file} &cis not exist!'
-                Start-Rollback: '{prefix}&aStarting to rollback data to backup &e{file}&a, it may take a long time...'
-        Click:
-            Player-Not-Exist: '{prefix}&cThe player &e{player} &cis not exist!'
-            Invalid-Date: '{prefix}&cInvalid date &e{date} &c! Example: /signin click 2015-8-11.'
-            To-Self:
-                Today-has-been-Signed-In: '{prefix}&cYou have signed in today. Please don''t sign in again.'
-                Specified-Date-has-been-Signed-In: '{prefix}&cDate &e{date} &chas been signed in, Please don''t sign in again.'
-                Minimum-Date:
-                - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
-                Successfully-Signed-In:
-                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-                - ''
-                - '  {prefix}&dSuccessfully signed in!'
-                - ''
-                - '  &c# &aYou have been signed in for &e{continuous} &adays!'
-                - '  &c# &aToday''s sign-in ranking is &b{queue} &a.'
-                - ''
-                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-                Unable-To-Hold:
-                - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
-                Retroactive-Card-Cooldown:
-                - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
-                Need-More-Retroactive-Cards:
-                - '{prefix}&cYou still need &e{cards} &cretrospective &acards &cto sign-in!'
-                Successfully-Retroactive-Signed-In:
-                - '{prefix}&aDate &e{date} &ahas been successfully sign-in! You have been signed in for &e{continuous}&a days!'
-            To-Other-Player:
-                Today-has-been-Signed-In: '{prefix}&cPlayer &6{player} &chave signed in today. Please don''t sign in again.'
-                Specified-Date-has-been-Signed-In: '{prefix}&cPlayer &6{player} &chave signed at &e{date}&c. Please don''t sign in again.'
-                Minimum-Date:
-                - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
-                Successfully-Signed-In:
-                - '{prefix}&aSuccessfully signed in! Player &6{player} &ahave been signed in for &e{continuous}&a days!'
-                Successfully-Retroactive-Signed-In:
-                - '{prefix}&aSuccessfully signed in at date &e{date}&a! Player &6{player} &ahave been signed in for &e{continuous}&a days!'
-                Messages-at-Sign-In:
-                - '{prefix}&6{admin} &ahelp you sign in automatically. You have been signed in for &e{continuous} &aconsecutive days.'
-                Messages-at-Retroactive-Sign-In:
-                - '{prefix}&6{admin} &ahelp you sign in automatically at date &e{date}&a! You have been signed in for &e{continuous} &aconsecutive days.'
-        GUI: 
-            Normal: '{prefix}&bSign In menu has been open.'
-            Specified-Month: '{prefix}&bYou opened the sign in record menu in Month: {month}'
-            Invalid-Month: '{prefix}&cInvalid month {month}, Please enter the correct month &7[1-12]'
-            Specified-Year: '{prefix}&bYou opened the sign in record menu for: &e{year}-{month}'
-            Invalid-Year: '{prefix}&cInvalid year {year}, Please enter the correct year.'
-        Save: '{prefix}&aAll Player''s data has been saved!'
-        LeaderBoard:
-            Number-Of-Single-Page: 10
-            Date-Format: 'yyyy/MM/dd/'
-            Time-Format: 'HH:mm:ss'
-            Unknown-Player: '&3UnknownPlayer&8(UUID:{uuid})'
-            Unknown-Time: '&eUnknownTime'
-            Player-Show:
-                Text:
-                    Self: '&2{player}'
-                    Other-Players: '&3{player}'
-                Command: 'litesignin info {player}'
-                Hover:
-                - '&5Click to view player &e{player}''s &5 personal information'
-            Previous-Page:
-                Text: '&b&lPrevious Page'
-                Hover:
-                - '&5Click to go to the previous page'
-                - '&7Current Page: &e{page}'
-                - '&7Previous Page: &e{previousPage}'
-            Next-Page:
-                Text: '&b&lNext Page'
-                Hover:
-                - '&5Click to go to the next page'
-                - '&7Current Page: &e{page}'
-                - '&7Next Page: &e{nextPage}'
-            Invalid-Number: '{prefix}&cThe page number you specified &e{page} &c does not exist! Please enter a valid number!'
-            Date-Not-Exist: '{prefix}&cThe date you specified &e{date} &c is invalid! Please enter the correct date! &7(yyyy-MM-dd)'
-            List-Format:
-                Today:
-                    Usually:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
-                    Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
-                Historical-Date:
-                    Usually:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
-                    Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
-            Empty: '{prefix}&aDate &e{date} &a No one signed in.'
-            Non-Database-mode: '{prefix}&eYou must be in &bSQLite &e or &bMySQL &e storage mode to be able to query the sign-in ranking of history dates!'
-            LeaderBoard-Messages:
-            - '{prefix}&e&lLeaderBoard &d{date}'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
-            - '  %leaderboard%'
-            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            Historical-Date-LeaderBoard-Messages:
-            - '{prefix}&e&lHistorical date &d{date} &e&lSign-In List'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
-            - '  %leaderboard%'
-            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        ItemCollection:
-            Help: 
-                - '{prefix}&aHelp &f&l>>>'
-                - ' &6/signin itemcollection list &cList all collectibles'
-                - ' &6/signin itemcollection add [name] &cAdd the item on you hand to the collection list'
-                - ' &6/signin itemcollection delete [name] &cDelete item'
-                - ' &6/signin itemcollection give [name] &8[player] &cGive designated collectibles to yourself or other players'
-                - '&c&lDescription: The &dcollectibles feature can serialize and add some items containing complex NBT to the &aCustomItems.yml &bfile,'
-                - '&dYou can add the name of the collectible in the &bReward-Items &doption of the &aRewardSettings.yml &dfile to set the items given for the sign-in reward. For details, please see the notes in the configuration file.'
-            List:
-                Empty: '{prefix}&aThe list is empty.'
-                Messages:
-                - '{prefix}&aThere are currently &e{amount} &acollectibles. The list of collectibles is as follows: &c%list%'
-                - '&dYou can add the name of the above collection to the &bReward-Items &doption in the &aRewardSettings.yml &dfile to set the items given for the sign-in reward. For details, please see the notes in the configuration file.'
-            Add:
-                Help: '{prefix}&cUsage: &6/signin itemcollection add [name]'
-                Doesnt-Have-Item-In-Hand: '{prefix}&cYou need to take the items you need to perform the operation in your hand!'
-                Successfully: '{prefix}&aSuccessfully added the item you have &r%item% &aname: &e{name} &ato the collection list.'
-                Already-Exist: '{prefix}&cItem of collection name &e{name} &calready exist!'
-            Delete:
-                Help: '{prefix}&cUsage: &6/signin itemcollection delete [name]'
-                Successfully: '{prefix}&aSuccessfully deleted item &r%item% &aname: &e{name} &afrom the collection list.'
-                Not-Exist: '{prefix}&cCollectible name &e{name} &c''s item does not exist! Please use &a/signin itemcollection list &c to list all collectibles!'
-            Give:
-                Help: '{prefix}&cUsage: &6/signin itemcollection give [name] [player]'
-                Player-Offline: '{prefix}&cPlayer &e{player} &cis not online!'
-                Give-Yourself: '{prefix}&aThe item &r%item% &a name: &e{name} &ahas been given to yourself.'
-                Give-Others: '{prefix}&aItem &r%item% &aname: &e{name} &ahas been given to players &c{player} &a.'
-                Not-Exist: '{prefix}&cCollectible name &e{name} &c''s item does not exist! Please use &a/signin itemcollection list &c to list all collectibles!'
-        Info:
-            Help: '{prefix}&aHelp: &6/signin info &7[playerName]'
-            true: '&aYes'
-            false: '&cNo'
-            Unknown-Group: 'Unknown&8(Need to be online!)'
-            Player-Not-Exist: '{prefix}&cThe player &e{player} &cis not exist!'
-            Info: 
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '&6 Player &a{player}''s &6Information: '
-            - '&6 SignIn: {signin}'
-            - '&6 Group: &5{group}'
-            - '&6 Today''s ranking: &3No.{queue}'
-            - '&6 Number of retroactive card: &d{retroactivecard}'
-            - '&6 Number of consecutive sign-in: &b{continuous}'
-            - '&6 Total sign-in days: &e{total} days'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-    Database-Management:
-        Backup:
-            Successfully: '{prefix}&aSuccessfully backed up data to &b{file} &a.'
-            Failed: '{prefix}&cBackup failed with error: &e{error}'
-            BackingUp: '{prefix}&eThe plug-in is backing up data. Please perform this operation later.'
-            Auto-Backup: '{prefix}&aStart backing up data, this may take a long time...'
-        RollBack:
-            Successfully: '{prefix}&aSuccessfully rolled back data to &b{file} &a.'
-            Failed: '{prefix}&cRollback failed with error: &e{error}'
-    Updater:
-        Link:
-            Player-Text: '&d&l[ClickHere]'
-            Console-Text: '&d{link}'
-            Hover-Text:
-            - '&5Click to get the downloads link.'
-        Checked: 
-        - '{prefix}&aA new version has been released: &bv{version}'
-        - '&6- &3Now version: &6v{nowVersion}'
-        - '&6- &3Download link: %link%'
-        - '&6- &3Update log: {description}'
-        Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
 Simplified-Chinese:
     No-Permission: '{prefix}&c你没有这么做的权限!'
     Unavailable-Command: '{prefix}&c控制台不能使用这个命令.'
@@ -754,6 +504,256 @@ Traditional-Chinese:
         - '&6- &3下載地址: %link%'
         - '&6- &3更新日誌: {description}'
         Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網絡是否正常! '
+English:
+    No-Permission: '{prefix}&cYou don''t have permission to do this!'
+    Unavailable-Command: '{prefix}&cThe console cannot use this command.'
+    Auto-Save: '{prefix}&aAll Player''s data has been saved!'
+    Unable-To-Re-SignIn: '{prefix}&cThis server has not enabled the re sign-in function.'
+    Repaired-Config-Section: '{prefix}&cPlugin cannot obtain the configuration file &e{config} &c path &7{path}&c, which has been fixed by obtaining the default configuration file.'
+    Second: 'second'
+    Minute: 'minute'
+    Hour: 'hour'
+    Day: 'day'
+    Month: 'month'
+    Year: 'year'
+    GUI-SignIn-Messages:
+        Open-GUI: '&c&l[Click Here!]'
+        Hover-Text:
+        - '&5Click here to open the sign-in menu.'
+        - '&7Date: &e{date}'
+        Join-Messages:
+        - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
+        Retroactive-Card-Cooldown:
+        - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
+        Unable-To-Hold:
+        - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
+        Minimum-Date:
+        - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
+        SignIn-Messages:
+        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        - ''
+        - '  {prefix}&dSuccessfully signed in!'
+        - ''
+        - '  &c# &aYou have been signed in for &e{continuous} &adays!'
+        - '  &c# &aToday''s sign-in ranking is &b{queue} &a.'
+        - ''
+        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        Need-More-Retroactive-Cards:
+        - '{prefix}&cYou still need &e{cards} &cretrospective &acards &cto sign-in!'
+        Retroactive-SignIn-Messages:
+        - '{prefix}&aDate &e{date} &ahas been successfully sign-in! You have been signed in for &e{continuous}&a days!'
+    Command-Messages:
+        Unknown-Command: '{prefix}&cUnknown command, Please use &6/signin help &cto view command list.'
+        Help-Command: 
+        - '{prefix}&aHelp &f&l>>>'
+        - ' &6/signin help &cView command help.'
+        - ' &6/signin reload &cReload configuration files.'
+        - ' &6/signin gui &8[month] &cOpen the Sign In GUI menu.'
+        - ' &6/signin click &8[Date or playerName] [playerName] &cSign in now, or sign in for historical date. &7(Date format: [y-m-d] Example: /signin click ''2015-8-11'' playerName)'
+        - ' &6/signin save &cSave data for all online players.'
+        - ' &6/signin info [playerName] &cView player''s information.'
+        - ' &6/signin leaderboard &8[Date] [Page] &cView the sign-in leaderboard for today or a specified date.'
+        - ' &6/signin itemcollection &cCollection of management items.'
+        Reload: '{prefix}&aConfiguration files has been reloaded.'
+        RetroactiveCard:
+            Help: '{prefix}&aUsage: &6/signin retroactivecard &c[give/set/take] &d[Amount] &7[Player] &aGive, Set or Take retroactive cards from player.'
+            Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
+            Invalid-Number: '{prefix}&cInvalid number &e{number} &c!'
+            Player-Offline: '{prefix}&cPlayer &e{player} &cis offline.'
+            Player-Not-Exist: '{prefix}&cPlayer &e{player} &cdoes not exist!'
+            Give: '{prefix}&aSuccessfully gave &c{amount} &aretroactive cards to the player &e{player}&a.'
+            Set: '{prefix}&aSuccessfully set the number of player &e{player}''s &aretroactive cards to &c{amount}&a.'
+            Take: '{prefix}&aSuccessfully removed &c{amount} &aretroactive cards from player &e{player}&a.'
+        Database:
+            Help:
+            - '{prefix}&aHelp: '
+            - ' &6/signin database backup &cBack up all current data.'
+            - ' &6/signin database rollback [FileName] &cRoll back all data'
+            - ' &6/signin database confirm &cConfirm the operation.'
+            Feature-Disabled: '{prefix}&cThis feature has been disabled.'
+            Confirm:
+                Button:
+                    Text: '&a&l&n[Click Here!]'
+                    Hover:
+                    - '&5Click to confirm the operation'
+                Need-Confirm:
+                - '&6Please use the command &a/signin database confirm &6to confirm the operation.'
+                - '&6Or %button%'
+                Invalid-Operation: '{prefix}&cThere are no pending operations.'
+            Backup: '{prefix}&aIt may take a long time to start backing up data...'
+            Rollback:
+                Help: '{prefix}&cUsage: /signin database rollback [FileName]'
+                File-Not-Exist: '{prefix}&cBackup file {file} &cis not exist!'
+                Start-Rollback: '{prefix}&aStarting to rollback data to backup &e{file}&a, it may take a long time...'
+        Click:
+            Player-Not-Exist: '{prefix}&cThe player &e{player} &cis not exist!'
+            Invalid-Date: '{prefix}&cInvalid date &e{date} &c! Example: /signin click 2015-8-11.'
+            To-Self:
+                Today-has-been-Signed-In: '{prefix}&cYou have signed in today. Please don''t sign in again.'
+                Specified-Date-has-been-Signed-In: '{prefix}&cDate &e{date} &chas been signed in, Please don''t sign in again.'
+                Minimum-Date:
+                - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
+                Successfully-Signed-In:
+                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+                - ''
+                - '  {prefix}&dSuccessfully signed in!'
+                - ''
+                - '  &c# &aYou have been signed in for &e{continuous} &adays!'
+                - '  &c# &aToday''s sign-in ranking is &b{queue} &a.'
+                - ''
+                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+                Unable-To-Hold:
+                - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
+                Retroactive-Card-Cooldown:
+                - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
+                Need-More-Retroactive-Cards:
+                - '{prefix}&cYou still need &e{cards} &cretrospective &acards &cto sign-in!'
+                Successfully-Retroactive-Signed-In:
+                - '{prefix}&aDate &e{date} &ahas been successfully sign-in! You have been signed in for &e{continuous}&a days!'
+            To-Other-Player:
+                Today-has-been-Signed-In: '{prefix}&cPlayer &6{player} &chave signed in today. Please don''t sign in again.'
+                Specified-Date-has-been-Signed-In: '{prefix}&cPlayer &6{player} &chave signed at &e{date}&c. Please don''t sign in again.'
+                Minimum-Date:
+                - '{prefix}&cYou cannot re sign-in the date before &e{date} &c.'
+                Successfully-Signed-In:
+                - '{prefix}&aSuccessfully signed in! Player &6{player} &ahave been signed in for &e{continuous}&a days!'
+                Successfully-Retroactive-Signed-In:
+                - '{prefix}&aSuccessfully signed in at date &e{date}&a! Player &6{player} &ahave been signed in for &e{continuous}&a days!'
+                Messages-at-Sign-In:
+                - '{prefix}&6{admin} &ahelp you sign in automatically. You have been signed in for &e{continuous} &aconsecutive days.'
+                Messages-at-Retroactive-Sign-In:
+                - '{prefix}&6{admin} &ahelp you sign in automatically at date &e{date}&a! You have been signed in for &e{continuous} &aconsecutive days.'
+        GUI: 
+            Normal: '{prefix}&bSign In menu has been open.'
+            Specified-Month: '{prefix}&bYou opened the sign in record menu in Month: {month}'
+            Invalid-Month: '{prefix}&cInvalid month {month}, Please enter the correct month &7[1-12]'
+            Specified-Year: '{prefix}&bYou opened the sign in record menu for: &e{year}-{month}'
+            Invalid-Year: '{prefix}&cInvalid year {year}, Please enter the correct year.'
+        Save: '{prefix}&aAll Player''s data has been saved!'
+        LeaderBoard:
+            Number-Of-Single-Page: 10
+            Date-Format: 'yyyy/MM/dd/'
+            Time-Format: 'HH:mm:ss'
+            Unknown-Player: '&3UnknownPlayer&8(UUID:{uuid})'
+            Unknown-Time: '&eUnknownTime'
+            Player-Show:
+                Text:
+                    Self: '&2{player}'
+                    Other-Players: '&3{player}'
+                Command: 'litesignin info {player}'
+                Hover:
+                - '&5Click to view player &e{player}''s &5 personal information'
+            Previous-Page:
+                Text: '&b&lPrevious Page'
+                Hover:
+                - '&5Click to go to the previous page'
+                - '&7Current Page: &e{page}'
+                - '&7Previous Page: &e{previousPage}'
+            Next-Page:
+                Text: '&b&lNext Page'
+                Hover:
+                - '&5Click to go to the next page'
+                - '&7Current Page: &e{page}'
+                - '&7Next Page: &e{nextPage}'
+            Invalid-Number: '{prefix}&cThe page number you specified &e{page} &c does not exist! Please enter a valid number!'
+            Date-Not-Exist: '{prefix}&cThe date you specified &e{date} &c is invalid! Please enter the correct date! &7(yyyy-MM-dd)'
+            List-Format:
+                Today:
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
+                Historical-Date:
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[Tied for {ranking}] &7<- Im here.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[Tied for {ranking}]'
+            Empty: '{prefix}&aDate &e{date} &a No one signed in.'
+            Non-Database-mode: '{prefix}&eYou must be in &bSQLite &e or &bMySQL &e storage mode to be able to query the sign-in ranking of history dates!'
+            LeaderBoard-Messages:
+            - '{prefix}&e&lLeaderBoard &d{date}'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
+            - '  %leaderboard%'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            Historical-Date-LeaderBoard-Messages:
+            - '{prefix}&e&lHistorical date &d{date} &e&lSign-In List'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '  &aTotal number: &e&l{total} &c&l| &aCurrent page: &6&l{page}&7/&6&l{maxPage}'
+            - '  %leaderboard%'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        ItemCollection:
+            Help: 
+                - '{prefix}&aHelp &f&l>>>'
+                - ' &6/signin itemcollection list &cList all collectibles'
+                - ' &6/signin itemcollection add [name] &cAdd the item on you hand to the collection list'
+                - ' &6/signin itemcollection delete [name] &cDelete item'
+                - ' &6/signin itemcollection give [name] &8[player] &cGive designated collectibles to yourself or other players'
+                - '&c&lDescription: The &dcollectibles feature can serialize and add some items containing complex NBT to the &aCustomItems.yml &bfile,'
+                - '&dYou can add the name of the collectible in the &bReward-Items &doption of the &aRewardSettings.yml &dfile to set the items given for the sign-in reward. For details, please see the notes in the configuration file.'
+            List:
+                Empty: '{prefix}&aThe list is empty.'
+                Messages:
+                - '{prefix}&aThere are currently &e{amount} &acollectibles. The list of collectibles is as follows: &c%list%'
+                - '&dYou can add the name of the above collection to the &bReward-Items &doption in the &aRewardSettings.yml &dfile to set the items given for the sign-in reward. For details, please see the notes in the configuration file.'
+            Add:
+                Help: '{prefix}&cUsage: &6/signin itemcollection add [name]'
+                Doesnt-Have-Item-In-Hand: '{prefix}&cYou need to take the items you need to perform the operation in your hand!'
+                Successfully: '{prefix}&aSuccessfully added the item you have &r%item% &aname: &e{name} &ato the collection list.'
+                Already-Exist: '{prefix}&cItem of collection name &e{name} &calready exist!'
+            Delete:
+                Help: '{prefix}&cUsage: &6/signin itemcollection delete [name]'
+                Successfully: '{prefix}&aSuccessfully deleted item &r%item% &aname: &e{name} &afrom the collection list.'
+                Not-Exist: '{prefix}&cCollectible name &e{name} &c''s item does not exist! Please use &a/signin itemcollection list &c to list all collectibles!'
+            Give:
+                Help: '{prefix}&cUsage: &6/signin itemcollection give [name] [player]'
+                Player-Offline: '{prefix}&cPlayer &e{player} &cis not online!'
+                Give-Yourself: '{prefix}&aThe item &r%item% &a name: &e{name} &ahas been given to yourself.'
+                Give-Others: '{prefix}&aItem &r%item% &aname: &e{name} &ahas been given to players &c{player} &a.'
+                Not-Exist: '{prefix}&cCollectible name &e{name} &c''s item does not exist! Please use &a/signin itemcollection list &c to list all collectibles!'
+        Info:
+            Help: '{prefix}&aHelp: &6/signin info &7[playerName]'
+            true: '&aYes'
+            false: '&cNo'
+            Unknown-Group: 'Unknown&8(Need to be online!)'
+            Player-Not-Exist: '{prefix}&cThe player &e{player} &cis not exist!'
+            Info: 
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '&6 Player &a{player}''s &6Information: '
+            - '&6 SignIn: {signin}'
+            - '&6 Group: &5{group}'
+            - '&6 Today''s ranking: &3No.{queue}'
+            - '&6 Number of retroactive card: &d{retroactivecard}'
+            - '&6 Number of consecutive sign-in: &b{continuous}'
+            - '&6 Total sign-in days: &e{total} days'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+    Database-Management:
+        Backup:
+            Successfully: '{prefix}&aSuccessfully backed up data to &b{file} &a.'
+            Failed: '{prefix}&cBackup failed with error: &e{error}'
+            BackingUp: '{prefix}&eThe plug-in is backing up data. Please perform this operation later.'
+            Auto-Backup: '{prefix}&aStart backing up data, this may take a long time...'
+        RollBack:
+            Successfully: '{prefix}&aSuccessfully rolled back data to &b{file} &a.'
+            Failed: '{prefix}&cRollback failed with error: &e{error}'
+    Updater:
+        Link:
+            Player-Text: '&d&l[ClickHere]'
+            Console-Text: '&d{link}'
+            Hover-Text:
+            - '&5Click to get the downloads link.'
+        Checked: 
+        - '{prefix}&aA new version has been released: &bv{version}'
+        - '&6- &3Now version: &6v{nowVersion}'
+        - '&6- &3Download link: %link%'
+        - '&6- &3Update log: {description}'
+        Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
 Japanese:
     No-Permission: '{prefix}&cこれを行う権限がありません！'
     Unavailable-Command: '{prefix}&cこのコマンドはコンソールでは使用できません。'

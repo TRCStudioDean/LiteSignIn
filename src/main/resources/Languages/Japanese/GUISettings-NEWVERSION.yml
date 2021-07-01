@@ -1,3 +1,151 @@
+Japanese:
+    SignIn-GUI-Settings:
+        GUI-Name: '&cメニュー &b&l>>> &8{date}'
+        Specified-Month-GUI-Name: '&3&l歴史の月: &8{month}月'
+        Specified-Year-GUI-Name: '&3&l歴史の月: &8{month}月, {year}年'
+        Date-Format: 'yyyy年MM月dd日'
+        Key:
+            Already-SignIn:
+                Item: LIME_TERRACOTTA
+                Display-Name: '&6{day}日 &aをサインインしました'
+                Lore: 
+                - ''
+                - '&e{continuous} 日&f連続でサインインしました。'
+                - '&e続けて頑張ってね！'
+                - ''
+                - '&eこのボタンをクリックすると、'
+                - '&d{date}&eのランキングをチェックする。'
+                Close-GUI: true
+                Commands:
+                - 'litesignin leaderboard {dateText}'
+            Comming-Soon:
+                Item: CYAN_TERRACOTTA
+                Display-Name: '&6{day}日&7はまだ到着していません'
+                Lore: []
+            Nothing-SignIn:
+                Item: YELLOW_TERRACOTTA
+                Hide-Enchants: true
+                Enchantment:
+                - DURABILITY:10
+                Display-Name: '&e今日は&6{day}&eです。'
+                Lore:
+                - ''
+                - '&7まだサインインしていません。'
+                - ''
+                - '&eここをクリックしてサインインする。'
+            Missed-SignIn:
+                Item: RED_TERRACOTTA
+                Display-Name: '&6{day}日&7をサインインしません'
+                Lore:
+                - ''
+                - '&7遡及カードを使用してビザを更新できます'
+                - '&7あなたが持っているカードの数： &6{cards}'
+                - ''
+                - '&eここをクリックしてビザを更新する。'
+            Slots:
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+        Others:
+            'About':
+                Item: CLOCK
+                Display-Name: '&6関連情報'
+                Close-GUI: false
+                Lore:
+                - ''
+                - '&e{continuous}日&f連続でサインインしました'
+                - '&f合計： &e{total-number} &f回'
+                Slot: 49
+            'OpenMainMenu':
+                Item: BOOK
+                Display-Name: '&6メインメニューに戻る'
+                Close-GUI: false
+                Commands:
+                - 'menu'
+                Lore:
+                - ''
+                - '&eここをクリックして戻る。'
+                Slot: 45
+            'CloseGUI':
+                Item: BARRIER
+                Display-Name: '&6閉じる'
+                Close-GUI: true
+                Messages:
+                - '{prefix}&cサインインインターフェイスを閉じました。'
+                Slot: 53
+            'PreviousPage':
+                Item: PAPER
+                Display-Name: '&d前のページ'
+                Lore:
+                - ''
+                - '&7コマンド&a/signin gui [月] [年]&7を使用して、'
+                - '&7関連するレコードを表示することもできます。'
+                - ''
+                - '&eここをクリックして、'
+                - '&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
+                Slot: 48
+                Commands:
+                - 'signin gui {previousPageMonth} {previousPageYear}'
+            'NextPage':
+                Item: PAPER
+                Display-Name: '&d次のページ'
+                Lore:
+                - ''
+                - '&7コマンド&a/signin gui [月] [年]&7を使用して、'
+                - '&7関連するレコードを表示することもできます。'
+                - ''
+                - '&eここをクリックして、'
+                - '&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
+                Slot: 50
+                Commands:
+                - 'signin gui {nextPageMonth} {nextPageYear}'
+            'Barrier':
+                Item: GRAY_STAINED_GLASS_PANE
+                Display-Name: '&8分割線'
+                Close-GUI: false
+                Lore: []
+                Slots:
+                - 0
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                - 6
+                - 7
+                - 8
+                - 46
+                - 47
+                - 51
+                - 52
 English:
     SignIn-GUI-Settings:
         GUI-Name: '&cSignIn Menu &b&l| &8{date}'
@@ -409,151 +557,6 @@ Traditional-Chinese:
                 - '&7以切換指定月份與年份的簽到菜單查看歷史記錄'
                 - ''
                 - '&e點擊打開 &b{nextPageYear}年{nextPageMonth}月 &e的簽到菜單'
-                Slot: 50
-                Commands:
-                - 'signin gui {nextPageMonth} {nextPageYear}'
-            'Barrier':
-                Item: GRAY_STAINED_GLASS_PANE
-                Display-Name: '&8分割線'
-                Close-GUI: false
-                Lore: []
-                Slots:
-                - 0
-                - 1
-                - 2
-                - 3
-                - 4
-                - 5
-                - 6
-                - 7
-                - 8
-                - 46
-                - 47
-                - 51
-                - 52
-Japanese:
-    SignIn-GUI-Settings:
-        GUI-Name: '&cメニュー &b&l>>> &8{date}'
-        Specified-Month-GUI-Name: '&3&l歴史の月: &8{month}月'
-        Specified-Year-GUI-Name: '&3&l歴史の月: &8{month}月, {year}年'
-        Date-Format: 'yyyy年MM月dd日'
-        Key:
-            Already-SignIn:
-                Item: LIME_TERRACOTTA
-                Display-Name: '&6{day}日 &aをサインインしました'
-                Lore: 
-                - ''
-                - '&e{continuous} 日&f連続でサインインしました。'
-                - '&e続けて頑張ってね！'
-                - ''
-                - '&eこのボタンをクリックすると、&d{date}&eのランキングをチェックする。'
-                Close-GUI: true
-                Commands:
-                - 'litesignin leaderboard {dateText}'
-            Comming-Soon:
-                Item: CYAN_TERRACOTTA
-                Display-Name: '&6{day}日&7はまだ到着していません'
-                Lore: []
-            Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
-                Hide-Enchants: true
-                Enchantment:
-                - DURABILITY:10
-                Display-Name: '&e今日は&6{day}&eです。'
-                Lore:
-                - ''
-                - '&7まだサインインしていません。'
-                - ''
-                - '&eここをクリックしてサインインする。'
-            Missed-SignIn:
-                Item: RED_TERRACOTTA
-                Display-Name: '&6{day}日&7をサインインしません'
-                Lore:
-                - ''
-                - '&7遡及カードを使用してビザを更新できます'
-                - '&7あなたが持っているカードの数： &6{cards}'
-                - ''
-                - '&eここをクリックしてビザを更新する。'
-            Slots:
-            - 9
-            - 10
-            - 11
-            - 12
-            - 13
-            - 14
-            - 15
-            - 16
-            - 17
-            - 18
-            - 19
-            - 20
-            - 21
-            - 22
-            - 23
-            - 24
-            - 25
-            - 26
-            - 27
-            - 28
-            - 29
-            - 30
-            - 31
-            - 32
-            - 33
-            - 34
-            - 35
-            - 36
-            - 37
-            - 38
-            - 39
-        Others:
-            'About':
-                Item: CLOCK
-                Display-Name: '&6関連情報'
-                Close-GUI: false
-                Lore:
-                - ''
-                - '&e{continuous}日&f連続でサインインしました'
-                - '&f合計： &e{total-number} &f回'
-                Slot: 49
-            'OpenMainMenu':
-                Item: BOOK
-                Display-Name: '&6メインメニューに戻る'
-                Close-GUI: false
-                Commands:
-                - 'menu'
-                Lore:
-                - ''
-                - '&eここをクリックして戻る。'
-                Slot: 45
-            'CloseGUI':
-                Item: BARRIER
-                Display-Name: '&6閉じる'
-                Close-GUI: true
-                Messages:
-                - '{prefix}&cサインインインターフェイスを閉じました。'
-                Slot: 53
-            'PreviousPage':
-                Item: PAPER
-                Display-Name: '&d前のページ'
-                Lore:
-                - ''
-                - '&7コマンド&a/signingui [月] [年]&7を使用して、'
-                - '&7関連するレコードを表示することもできます。'
-                - ''
-                - '&eここをクリックして、&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
-                Slot: 48
-                Commands:
-                - 'signin gui {previousPageMonth} {previousPageYear}'
-            'NextPage':
-                Item: PAPER
-                Display-Name: '&d次のページ'
-                Lore:
-                - ''
-                - '&7コマンド&a/signingui [月] [年]&7を使用して、'
-                - '&7関連するレコードを表示することもできます。'
-                - ''
-                - '&eここをクリックして、&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'

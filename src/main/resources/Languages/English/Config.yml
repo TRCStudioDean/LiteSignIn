@@ -100,7 +100,7 @@ Database-Management:
         Rollback-With-Backup: true
     
 #Order of sign-in reward tasks (giving items, executing commands, sending messages)
-#The default order is: Items reward -> commands execution -> messages sending
+#The default order is: Items reward -> commands execution -> messages sending -> broadcast messages sending -> play sounds
 Reward-Task-Sequence:
 - ITEMS_REWARD
 - COMMANDS_EXECUTION
@@ -108,6 +108,8 @@ Reward-Task-Sequence:
 - BROADCAST_MESSAGES_SENDING
 - PLAYSOUNDS
     
+#Permission settings
+#If the option "Default" is true, Everyone will have permission to use command.
 Permissions:
     #About retroactive card permissions
     Retroactive-Card:

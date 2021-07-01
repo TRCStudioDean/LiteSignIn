@@ -1,0 +1,26 @@
+#手动设置奖励物品
+#设置范围有限，此项功能已不再更新，推荐使用下方Item-Collection以管理特殊物品
+Manual-Settings:
+    'Super_Diamond_Sword':
+        Item: DIAMOND_SWORD
+        Display-Name: '&e&l超级钻石剑'
+        Lore:
+        - '&8奖励样品'
+        Enchantment:
+        - 'unbreaking:10'
+        - 'sharpness:10'
+    'RetroactiveCard':
+        Item: PAPER
+        Display-Name: '&e&l补签卡'
+        Lore:
+        - ''
+        - '&7您可以使用这张补签卡'
+        - '&7对未签到的日期进行签到'
+        - ''
+        - '&a使用方法:'
+        - '&c在背包中拥有补签卡的前提下'
+        - '&c打开签到菜单， 单击漏签的日期即可.'
+        
+#收藏品列表
+#使用命令/signin itemcollection对特殊NBT的物品进行管理
+Item-Collection: {}

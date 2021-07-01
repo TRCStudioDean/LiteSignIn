@@ -37,6 +37,14 @@ public class DefaultConfigurationFile
                 fileName = "GUISettings-NEWVERSION.yml";
             }
         }
+        if (type.equals(ConfigurationType.REWARDSETTINGS)) {
+            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+                fileName = "RewardSettings-OLDVERSION.yml";
+            } else {
+                fileName = "RewardSettings-NEWVERSION.yml";
+            }
+        }
         try (Reader Config = new InputStreamReader(Main.getInstance().getClass().getResource("/Languages/" + jarPath + "/" + fileName).openStream(), "UTF-8")) {
             FileConfiguration configFile = new YamlConfiguration();
             configFile.load(Config);

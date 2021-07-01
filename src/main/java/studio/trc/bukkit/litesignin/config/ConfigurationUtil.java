@@ -8,12 +8,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -108,7 +106,6 @@ public class ConfigurationUtil
     }
 
     private static void saveResource(ConfigurationType file) {
-        String lang = Locale.getDefault().toString();
         if (!new File("plugins/LiteSignIn").exists()) {
             new File("plugins/LiteSignIn").mkdir();
         }
@@ -118,21 +115,11 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/Config.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        if (lang.equalsIgnoreCase("zh_cn")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/Config.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
-                            }
-                        } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/English/Config.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/Config.yml");
+                        try (OutputStream out = new FileOutputStream(configFile)) {
+                            int b;
+                            while ((b = is.read()) != -1) {
+                                out.write((char) b);
                             }
                         }
                     }
@@ -144,21 +131,11 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/Messages.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        if (lang.equalsIgnoreCase("zh_cn")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/Messages.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
-                            }
-                        } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/English/Messages.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/Messages.yml");
+                        try (OutputStream out = new FileOutputStream(configFile)) {
+                            int b;
+                            while ((b = is.read()) != -1) {
+                                out.write((char) b);
                             }
                         }
                     }
@@ -172,39 +149,19 @@ public class ConfigurationUtil
                         configFile.createNewFile();
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
-                            if (lang.equalsIgnoreCase("zh_cn")) {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/GUISettings-OLDVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
-                                }
-                            } else {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/English/GUISettings-OLDVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/GUISettings-OLDVERSION.yml");
+                            try (OutputStream out = new FileOutputStream(configFile)) {
+                                int b;
+                                while ((b = is.read()) != -1) {
+                                    out.write((char) b);
                                 }
                             }
                         } else {
-                            if (lang.equalsIgnoreCase("zh_cn")) {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/GUISettings-NEWVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
-                                }
-                            } else {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/English/GUISettings-NEWVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/GUISettings-NEWVERSION.yml");
+                            try (OutputStream out = new FileOutputStream(configFile)) {
+                                int b;
+                                while ((b = is.read()) != -1) {
+                                    out.write((char) b);
                                 }
                             }
                         }
@@ -219,39 +176,19 @@ public class ConfigurationUtil
                         configFile.createNewFile();
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8")) {
-                            if (lang.equalsIgnoreCase("zh_cn")) {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings-OLDVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
-                                }
-                            } else {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/English/RewardSettings-OLDVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/RewardSettings-OLDVERSION.yml");
+                            try (OutputStream out = new FileOutputStream(configFile)) {
+                                int b;
+                                while ((b = is.read()) != -1) {
+                                    out.write((char) b);
                                 }
                             }
                         } else {
-                            if (lang.equalsIgnoreCase("zh_cn")) {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/RewardSettings-NEWVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
-                                }
-                            } else {
-                                InputStream is = Main.class.getResourceAsStream("/Languages/English/RewardSettings-NEWVERSION.yml");
-                                try (OutputStream out = new FileOutputStream(configFile)) {
-                                    int b;
-                                    while ((b = is.read()) != -1) {
-                                        out.write((char) b);
-                                    }
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/RewardSettings-NEWVERSION.yml");
+                            try (OutputStream out = new FileOutputStream(configFile)) {
+                                int b;
+                                while ((b = is.read()) != -1) {
+                                    out.write((char) b);
                                 }
                             }
                         }
@@ -264,21 +201,11 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/CustomItems.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        if (lang.equalsIgnoreCase("zh_cn")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/Chinese/CustomItems.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
-                            }
-                        } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/English/CustomItems.yml");
-                            try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/CustomItems.yml");
+                        try (OutputStream out = new FileOutputStream(configFile)) {
+                            int b;
+                            while ((b = is.read()) != -1) {
+                                out.write((char) b);
                             }
                         }
                     }

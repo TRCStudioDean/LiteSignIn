@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -13,7 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class DefaultConfigurationFile
 {
@@ -29,11 +27,7 @@ public class DefaultConfigurationFile
     }
     
     public static void loadDefaultConfigurationFile(ConfigurationType type) {
-        Locale lang = SignInPluginProperties.lang;
-        String jarPath = "English";
-        if (lang.equals(Locale.SIMPLIFIED_CHINESE) || lang.equals(Locale.CHINESE)) {
-            jarPath = "Chinese";
-        }
+        String jarPath = MessageUtil.Languages.getLocaleLanguage().getFileName();
         String fileName = type.getFileName();
         if (type.equals(ConfigurationType.GUISETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];

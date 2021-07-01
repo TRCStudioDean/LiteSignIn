@@ -2,6 +2,7 @@ package studio.trc.bukkit.litesignin.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -182,5 +183,41 @@ public class MessageUtil
     
     public static String getLanguage() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Language");
+    }
+    
+    public static enum Languages {
+        
+        SIMPLIFIED_CHINESE("Simplified-Chinese"),
+        
+        TRADITIONAL_CHINESE("Traditional-Chinese"),
+        
+        JAPANESE("Japanese"),
+        
+        ENGLISH("English");
+        
+        public static Languages getLocaleLanguage() {
+            Locale lang = Locale.getDefault();
+            if (lang.equals(Locale.SIMPLIFIED_CHINESE)) {
+                return SIMPLIFIED_CHINESE;
+            } else if (lang.equals(Locale.TRADITIONAL_CHINESE)) {
+                return TRADITIONAL_CHINESE;
+            } else if (lang.equals(Locale.JAPANESE) || lang.equals(Locale.JAPAN)) {
+                return JAPANESE;
+            } if (lang.equals(Locale.CHINA) || lang.equals(Locale.CHINESE)) {
+                return SIMPLIFIED_CHINESE;
+            } else {
+                return ENGLISH;
+            }
+        }
+        
+        private final String fileName;
+        
+        private Languages(String fileName) {
+            this.fileName = fileName;
+        }
+        
+        public String getFileName() {
+            return fileName;
+        }
     }
 }

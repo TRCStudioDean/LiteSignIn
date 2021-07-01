@@ -1,0 +1,209 @@
+#獎勵設置
+Reward-Settings:
+    #權限組優先級，順序從上到下
+    Groups-Priority:
+    - VIP
+    - Default
+    #權限組設置
+    Permission-Groups:
+        #這個是默認組，不可刪除也無法添加權限
+        Default:
+            #正常簽到時觸發
+            Normal-Time:
+                #在簽到時發送信息
+                #支持PlaceholderAPI變量
+                Messages:
+                - '{prefix}&a簽到獎勵已獲取.'
+                #在簽到時獎勵物品
+                #在這個選項中，你可以直接填寫原版物品的名字，
+                #或者是RewardSettings.yml中（包含手動設置的、用命令添加的）的物品。
+                #格式： "[物品名字|收藏品名字]:[數量]"
+                #示例： "diamond:5" 獎勵5個鑽石
+                #你可以使用 "[最小值]-[最大值]" 以隨機獎勵物品的數量。
+                #示例： "diamond:1-3" 隨機獎勵1-3個鑽石。
+                Reward-Items:
+                - 'diamond:1'
+                - 'gold_ingot:3'
+                - 'iron_ingot:6'
+                #在簽到時發送廣播信息
+                #在此選項中的信息將會被所有人看見
+                Broadcast-Messages: []
+                #在簽到時播放聲音
+                #格式： [聲音]-[音量]-[音調]-[是否所有人都能聽見]
+                Play-Sounds:
+                - 'ORB_PICKUP-1-1-FALSE'
+                #在簽到時執行命令
+                #格式： "[執行類型]:[命令]"
+                #"執行類型" 可以是 "op" 、 "server"、 無
+                #分別對應 "玩家以OP權限執行命令"、 "執行控制台命令"、"玩家執行命令"
+                #示例：
+                # "server:say hello" 在控制台中執行"say hello"命令
+                # "op:gamemode creative" 玩家以OP權限執行"gamemode creative"命令
+                # "spawn" 玩家正常執行"spawn"命令
+                #支持PlaceholderAPI變量
+                Commands: []
+            #當玩家使用補簽卡進行補籤時觸發
+            Retroactive-Time:
+                #禁止玩家通過補簽獲得以下模塊的獎勵
+                Disabled-Modules:
+                    #建議開啟， 以防止玩家直接獲得某些特殊日期的專屬獎勵
+                    Special-Dates: true
+                    Special-Weeks: true
+                    Special-Times: false
+                    Statistics-Times: false
+                Reward-Items:
+                - 'diamond:1'
+                - 'gold_ingot:3'
+                - 'iron_ingot:6'
+                Play-Sounds:
+                - 'ORB_PICKUP-1-1-FALSE'
+            #連續簽到一定次數時觸發
+            Special-Times:
+                #三次
+                3:
+                    #是否覆蓋正常簽到下的獎勵
+                    Override-default-rewards: true
+                    Messages:
+                    - '{prefix}&a連續簽到三天！獎勵&e翻倍&a！ '
+                    Broadcast-Messages:
+                    - '{prefix}&a玩家 &e{player} &a連續簽到了三天!'
+                    Play-Sounds:
+                    - 'LEVELUP-1-0-TRUE'
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+                #七次
+                7:
+                    Override-default-rewards: false
+                    Messages:
+                    - '{prefix}&a連續簽到一周！額外贈送附魔&e&l鑽石劍&a與&e&l金蘋果&a！ '
+                    Broadcast-Messages:
+                    - '{prefix}&a玩家 &e{player} &a連續簽到了一周!'
+                    Play-Sounds:
+                    - 'LEVELUP-1-0-TRUE'
+                    Reward-Items:
+                    - 'Super_Diamond_Sword:1'
+                    - 'golden_apple:1'
+            #特別週簽到時觸發
+            Special-Weeks:
+                #週日
+                7:
+                    Override-default-rewards: false
+                    Messages:
+                    - '{prefix}&a今天是周末，額外獎勵一個金蘋果！ '
+                    Reward-Items:
+                    - 'golden_apple:1'
+            #簽到總計達到一定次數時觸發
+            Statistics-Times:
+                100:
+                    Messages:
+                    - '{prefix}&a簽到次數總計達到100次，獲得&e10000&a遊戲硬幣。 '
+                    Commands:
+                    - 'server:eco give {player} 10000'
+            #在特殊日期進行簽到時觸發
+            Special-Dates:
+                #格式: MM-dd （月-日）注意不要把如一月一號寫成“1-1”，而是“01-01”
+                '12-25':
+                    Override-default-rewards: false
+                    Messages:
+                    - '{prefix}&a今天是聖誕節， 聖誕節快樂！ '
+                    Reward-Items:
+                    - 'apple:64'
+            #在特殊時間段進行簽到時觸發
+            Special-Time-periods:
+                #格式： 時:分:秒， 從左往右
+                #最小值: 00:00:00 ,最大值: 23:59:59
+                #不填寫分或秒泛指此分鐘或秒鐘可以是任意時間段
+                #如: '12:00' 指 '12:00:00-12:00:59'
+                # '12' 指 '12:00:00-12:59:59'
+                #晚上十點半
+                '22:30:00':
+                    #檢測方案，分別為： On_Time, After_This_Time, Before_This_Time
+                    #分別對應： 準時簽到， 在這之後簽到， 在這之前簽到
+                    Option: After_This_Time #在22:30:00之後簽到
+                    #時間限制，如果您的方案是準時簽到以外的方案，你可以在這裡設置上限時間
+                    #“23:59:59” 在這裡表示將會在每一天的22:30:00到23:59:59簽到時觸發
+                    Time-Limit: '23:59:59'
+                    Override-default-rewards: true
+                    Messages:
+                    - '{prefix}&a夜已深， 注意休息！ '
+                    Reward-Items:
+                    - 'milk_bucket:1'
+                #凌晨三點
+                '03:00:00':
+                    Option: Before_This_Time #在03:00:00之前簽到
+                    #03:00:00前到00:00:00時簽到時觸發
+                    Time-Limit: '00:00:00'
+                    Override-default-rewards: true
+                    Messages:
+                    - '{prefix}&a夜已深， 注意休息！ '
+                    Reward-Items:
+                    - 'milk_bucket:1'
+            #每日簽到時得到指定名次時觸發
+            Special-Ranking:
+                #全服第一名
+                '1':
+                    Override-default-rewards: true
+                    Messages:
+                    - '{prefix}&a你今天是全服第一個簽到的玩家，獎勵翻倍！ '
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+        #這個是自定義的組，以示範
+        VIP:
+            #使用權限
+            #當玩家擁有這個權限時，將會採用這個組的參數
+            #前提是你沒有搞錯組與組之間的優先級！
+            Permission: signin.reward.vip
+            Normal-Time:
+                Messages:
+                - '{prefix}&a簽到獎勵已獲取.'
+                Reward-Items:
+                - 'diamond:3'
+                - 'gold_ingot:9'
+                - 'iron_ingot:12'
+                Commands:
+                - 'server:points give {player} 10'
+            Retroactive-Time:
+                Disabled-Modules:
+                    Special-Dates: true
+                    Special-Weeks: true
+                    Special-Times: false
+                    Statistics-Times: false
+                Reward-Items:
+                - 'diamond:2'
+                - 'gold_ingot:6'
+                - 'iron_ingot:12'
+            Special-Times:
+                3:
+                    Override-default-rewards: true
+                    Messages:
+                    - '{prefix}&a連續簽到三天！獎勵&e翻倍&a！ '
+                    Reward-Items:
+                    - 'diamond:6'
+                    - 'gold_ingot:18'
+                    - 'iron_ingot:24'
+                    Commands:
+                    - 'server:points give {player} 20'
+                7:
+                    Override-default-rewards: false
+                    Messages:
+                    - '{prefix}&a連續簽到一周！額外贈送附魔&e&l鑽石劍&a與&e&l金蘋果&a！ '
+                    Reward-Items:
+                    - 'Super_Diamond_Sword:1'
+                    - 'golden_apple:1'
+            Statistics-Times:
+                100:
+                    Messages:
+                    - '{prefix}&a簽到次數總計達到100次，獲得&e10000&a遊戲硬幣。 '
+                    Commands:
+                    - 'server:eco give {player} 10000'
+            Special-Dates:
+                '12-25':
+                    Override-default-rewards: false
+                    Messages:
+                    - '{prefix}&a今天是聖誕節， 聖誕節快樂！ '
+                    Reward-Items:
+                    - 'apple:64'

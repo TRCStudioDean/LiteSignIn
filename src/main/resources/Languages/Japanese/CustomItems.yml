@@ -1,0 +1,26 @@
+#手動で設定の報酬アイテム
+Manual-Settings:
+    'Super_Diamond_Sword':
+        Item: DIAMOND_SWORD
+        Display-Name: '&e&lスーパーダイアモンドソード'
+        Lore:
+        - '&8実例'
+        Enchantment:
+        - 'unbreaking:10'
+        - 'sharpness:10'
+    'RetroactiveCard':
+        Item: PAPER
+        Display-Name: '&e&l遡及カード'
+        Lore:
+        - ''
+        - '&7このカードを使う、'
+        - '&7過去の日付を入力します。'
+        - ''
+        - '&a指示:'
+        - '&c在庫ありにはカードがあるなら\'
+        - '&cサインインメニューを開き、'
+        - '&c過去の日付をクリックします。'
+        
+#収集品のリスト
+#コマンド /signin itemcollection を使用して、特別なNBTアイテムを管理します。
+Item-Collection: {}

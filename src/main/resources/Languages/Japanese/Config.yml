@@ -1,0 +1,186 @@
+#コマンドのプレフィックス
+Prefix: '&bLite&3SignIn &f&l>>> '
+
+#プラグインの言語
+Language: Japanese
+
+#PlaceholderAPIを使用するかどうか
+Use-PlaceholderAPI: true
+
+#サインインランキング機能を有効にするかどうか
+#この機能は、毎日サインインするプレイヤーの順番を登録するために使用されます。
+Enable-Sign-In-Ranking: true
+
+#サーバーに入るときにサインインするようにプレーヤーに通知するかどうか
+Join-Reminder-Messages: true
+
+#更新を自動的にチェックするかどうか
+#サーバーが起動するたびに実行され、新しいバージョンが見つかったときに管理者に通知します。
+#この機能により、サーバーが生成するトラフィックが多すぎることはありません（毎回約1kb）
+Updater: true
+
+#データを自動的に保存する
+Auto-Save: 
+    #有効と無効
+    Enabled: false
+    #MySQLモードでのみ有効にするかどうか
+    Only-MySQL: true
+    #冷却時間（分）
+    Delay: 10
+    
+#Metricsを有効にするかどうか
+#詳細については、bstats.orgを参照してください。
+Metrics: true
+    
+#遡及カード
+#過去の日を補うためにそれを使用してす
+Retroactive-Card:
+    #有効と無効
+    Enabled: true
+    #冷却時間（分）
+    Intervals: 5
+    #必要な数量
+    Quantity-Required: 1
+    #下限の日。これより前の日付は無効になります。
+    #PS: 2019/11/15/ は最初のバージョンがリリースされた日です
+    Minimum-Date: '2019-11-15'
+    #必要なもの
+    Required-Item:
+        #「false」の場合、カードはデータになります。 それ以外の場合は、ゲームのインベントリに配置できるアイテムになります。
+        Enabled: false
+        #アイテムの名
+        #CustomItems.ymlファイルで編集できます。
+        CustomItem: 'RetroactiveCard'
+
+#MySQL データベース設定
+MySQL-Storage:
+    #有効と無効
+    Enabled: false
+    #ホスト名
+    Hostname: localhost
+    #ポート
+    Port: 3306
+    #ユーザー名
+    Username: 'root'
+    #パスワード
+    Password: 'password'
+    #データベースの名
+    Database: 'signin'
+    #その他の接続パラメータ。 もし君は開発者ではなく、またはJDBCに精通していない、このオプションを変更しないでください。
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    #データベース接続が失われたときの自動修復の数。 -1を入力すると、数え切れないほどの回数を意味します
+    Automatic-Repair: -1
+    #更新の冷却時間
+    Refresh-Interval: 5
+    #データシート名
+    Table-Name: playerdata
+    
+#SQLite データベース設定
+#ストレージモードの優先度: Yaml < SQLite < MySQL
+SQLite-Storage:
+    #有効と無効
+    Enabled: true
+    #データベースの名
+    Database-File: 'Database.db'
+    #フォルダパス
+    Database-Path: 'plugins/LiteSignIn/'
+    #データベース接続が失われたときの自動修復の数。 -1を入力すると、数え切れないほどの回数を意味します
+    Automatic-Repair: -1
+    #更新の冷却時間
+    Refresh-Interval: 5
+    #データシート名
+    Table-Name: playerdata
+    
+#データベース管理
+Database-Management:
+    #バックアップ
+    Backup:
+        #有効と無効
+        Enabled: true
+        #自動バックアップを有効にするかどうか（サーバーがシャットダウンされるたびに自動実行されます）
+        Auto-Backup: false
+        #フォルダパス
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #バックアップファイルの名
+        Backup-File: 'Backup-{time}'
+        #時間書式
+        Time-Format: 'yyyy-MM-dd-HH-mm-ss'
+    #ロールバック
+    Rollback:
+        #有効と無効
+        Enabled: true
+        #バックアップファイルの名（バックアップフォルダのパスと一致している必要があります）
+        Backup-Folder-Path: 'plugins/LiteSignIn/Backup/'
+        #ロールバックを実行する前にバックアップを作成するかどうか
+        Rollback-With-Backup: true
+    
+#サインインするとき、タスクの実行順序
+Reward-Task-Sequence:
+- ITEMS_REWARD
+- COMMANDS_EXECUTION
+- MESSAGES_SENDING
+- BROADCAST_MESSAGES_SENDING
+- PLAYSOUNDS
+
+#権限設定
+#Defaultがtrueの場合、デフォルトで全員に権限があります。
+Permissions:
+    #遡及カード関連
+    Retroactive-Card:
+        #使用
+        Use:
+            Permission: signin.retroactive-card.use
+            Default: true
+        #この許可がない場合、システムは自動的にカードを没収します
+        Hold:
+            Permission: signin.retroactive-card.hold
+            Default: true
+    #自動更新関連
+    Updater: 
+        Permission: signin.updater
+        Default: false
+    #コマンド関連の権限
+    Commands:
+        Help: 
+            Permission: signin.command.help
+            Default: true
+        Reload: 
+            Permission: signin.command.reload
+            Default: false
+        GUI: 
+            Permission: signin.command.gui
+            Default: true
+        Designated-GUI: 
+            Permission: signin.command.designatedgui
+            Default: false
+        Click: 
+            Permission: signin.command.click
+            Default: true
+        Click-Others: 
+            Permission: signin.command.clickothers
+            Default: false
+        Info: 
+            Permission: signin.command.info
+            Default: false
+        RetroactiveCard:
+            Permission: signin.command.retroactivecard
+            Default: false
+        ItemCollection: 
+            Permission: signin.command.itemcollection
+            Default: false
+        Save: 
+            Permission: signin.command.save
+            Default: false
+        Database:
+            Backup:
+                Permission: signin.command.database.backup
+                Default: false
+            Rollback:
+                Permission: signin.command.database.rollback
+                Default: false
+        LeaderBoard:
+            Permission: signin.command.leaderboard
+            Default: true
+            Designated-Date:
+                Permission: signin.command.leaderboard.designateddate
+                Default: false

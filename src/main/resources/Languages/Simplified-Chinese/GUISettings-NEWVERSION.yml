@@ -1,148 +1,3 @@
-English:
-    SignIn-GUI-Settings:
-        GUI-Name: '&cSignIn Menu &b&l| &8{date}'
-        Specified-Month-GUI-Name: '&3&lHistorical month &8{month}'
-        Specified-Year-GUI-Name: '&3&lHistorical month &8{month}, {year}'
-        Date-Format: 'yyyy/MM/dd'
-        Key:
-            Already-SignIn:
-                Item: LIME_TERRACOTTA
-                Display-Name: '&6{day}th &aAlready signed in'
-                Lore: 
-                - ''
-                - '&fYou have been signed in for &e{continuous} consecutive days&f! '
-                - '&fPlease keep it up!'
-                - ''
-                - '&eClick to view &d{date}''s &eleaderboard'
-                Close-GUI: true
-                Commands:
-                - 'litesignin leaderboard {dateText}'
-            Comming-Soon:
-                Item: CYAN_TERRACOTTA
-                Display-Name: '&6{day}th &7Coming soon.'
-                Lore: []
-            Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
-                Hide-Enchants: true
-                Enchantment:
-                - DURABILITY:10
-                Display-Name: '&6{day}th &eToday!'
-                Lore:
-                - ''
-                - '&7You haven''t signed in today!'
-                - ''
-                - '&eRight click to sign-in!'
-            Missed-SignIn:
-                Item: RED_TERRACOTTA
-                Display-Name: '&7Absent on &6{day}th'
-                Lore: 
-                - ''
-                - '&7You can use the &aRetrospective card &7to sign-in.'
-                - '&7Number of cards you have: &6{cards}'
-                - ''
-                - '&eRight click to sign-in with retrospective card!'
-            Slots:
-            - 9
-            - 10
-            - 11
-            - 12
-            - 13
-            - 14
-            - 15
-            - 16
-            - 17
-            - 18
-            - 19
-            - 20
-            - 21
-            - 22
-            - 23
-            - 24
-            - 25
-            - 26
-            - 27
-            - 28
-            - 29
-            - 30
-            - 31
-            - 32
-            - 33
-            - 34
-            - 35
-            - 36
-            - 37
-            - 38
-            - 39
-        Others:
-            'About':
-                Item: CLOCK
-                Display-Name: '&6About more...'
-                Close-GUI: false
-                Lore:
-                - ''
-                - '&fyou have signed in for &e{continuous} &fconsecutive days'
-                - '&fCurrent cumulative check in times: &e{total-number}'
-                Slot: 49
-            'OpenMainMenu':
-                Item: BOOK
-                Display-Name: '&6Back to main menu.'
-                Close-GUI: false
-                Commands:
-                - 'menu'
-                Lore:
-                - ''
-                - '&eRight click to back.'
-                Slot: 45
-            'CloseGUI':
-                Item: BARRIER
-                Display-Name: '&6Close this menu'
-                Close-GUI: true
-                Messages:
-                - '{prefix}&cClose successfully.'
-                Slot: 53
-            'PreviousPage':
-                Item: PAPER
-                Display-Name: '&dPrevious Page'
-                Lore:
-                - ''
-                - '&7You can use the command: &a/signin gui [Month] [Year]'
-                - '&7to switch the sign-in menu to specify the month and year.'
-                - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
-                Slot: 48
-                Commands:
-                - 'signin gui {previousPageMonth} {previousPageYear}'
-            'NextPage':
-                Item: PAPER
-                Display-Name: '&dNext Page'
-                Lore:
-                - ''
-                - '&7You can use the command: &a/signin gui [Month] [Year]'
-                - '&7to switch the sign-in menu to specify the month and year.'
-                - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
-                Slot: 50
-                Commands:
-                - 'signin gui {nextPageMonth} {nextPageYear}'
-            'Barrier':
-                Item: GRAY_STAINED_GLASS_PANE
-                Display-Name: ''
-                Close-GUI: false
-                Lore: []
-                Slots:
-                - 0
-                - 1
-                - 2
-                - 3
-                - 4
-                - 5
-                - 6
-                - 7
-                - 8
-                - 46
-                - 47
-                - 51
-                - 52
 Simplified-Chinese:
     SignIn-GUI-Settings:
         GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
@@ -415,6 +270,151 @@ Traditional-Chinese:
             'Barrier':
                 Item: GRAY_STAINED_GLASS_PANE
                 Display-Name: '&8分割線'
+                Close-GUI: false
+                Lore: []
+                Slots:
+                - 0
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                - 6
+                - 7
+                - 8
+                - 46
+                - 47
+                - 51
+                - 52
+English:
+    SignIn-GUI-Settings:
+        GUI-Name: '&cSignIn Menu &b&l| &8{date}'
+        Specified-Month-GUI-Name: '&3&lHistorical month &8{month}'
+        Specified-Year-GUI-Name: '&3&lHistorical month &8{month}, {year}'
+        Date-Format: 'yyyy/MM/dd'
+        Key:
+            Already-SignIn:
+                Item: LIME_TERRACOTTA
+                Display-Name: '&6{day}th &aAlready signed in'
+                Lore: 
+                - ''
+                - '&fYou have been signed in for &e{continuous} consecutive days&f! '
+                - '&fPlease keep it up!'
+                - ''
+                - '&eClick to view &d{date}''s &eleaderboard'
+                Close-GUI: true
+                Commands:
+                - 'litesignin leaderboard {dateText}'
+            Comming-Soon:
+                Item: CYAN_TERRACOTTA
+                Display-Name: '&6{day}th &7Coming soon.'
+                Lore: []
+            Nothing-SignIn:
+                Item: YELLOW_TERRACOTTA
+                Hide-Enchants: true
+                Enchantment:
+                - DURABILITY:10
+                Display-Name: '&6{day}th &eToday!'
+                Lore:
+                - ''
+                - '&7You haven''t signed in today!'
+                - ''
+                - '&eRight click to sign-in!'
+            Missed-SignIn:
+                Item: RED_TERRACOTTA
+                Display-Name: '&7Absent on &6{day}th'
+                Lore: 
+                - ''
+                - '&7You can use the &aRetrospective card &7to sign-in.'
+                - '&7Number of cards you have: &6{cards}'
+                - ''
+                - '&eRight click to sign-in with retrospective card!'
+            Slots:
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+        Others:
+            'About':
+                Item: CLOCK
+                Display-Name: '&6About more...'
+                Close-GUI: false
+                Lore:
+                - ''
+                - '&fyou have signed in for &e{continuous} &fconsecutive days'
+                - '&fCurrent cumulative check in times: &e{total-number}'
+                Slot: 49
+            'OpenMainMenu':
+                Item: BOOK
+                Display-Name: '&6Back to main menu.'
+                Close-GUI: false
+                Commands:
+                - 'menu'
+                Lore:
+                - ''
+                - '&eRight click to back.'
+                Slot: 45
+            'CloseGUI':
+                Item: BARRIER
+                Display-Name: '&6Close this menu'
+                Close-GUI: true
+                Messages:
+                - '{prefix}&cClose successfully.'
+                Slot: 53
+            'PreviousPage':
+                Item: PAPER
+                Display-Name: '&dPrevious Page'
+                Lore:
+                - ''
+                - '&7You can use the command: &a/signin gui [Month] [Year]'
+                - '&7to switch the sign-in menu to specify the month and year.'
+                - ''
+                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                Slot: 48
+                Commands:
+                - 'signin gui {previousPageMonth} {previousPageYear}'
+            'NextPage':
+                Item: PAPER
+                Display-Name: '&dNext Page'
+                Lore:
+                - ''
+                - '&7You can use the command: &a/signin gui [Month] [Year]'
+                - '&7to switch the sign-in menu to specify the month and year.'
+                - ''
+                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                Slot: 50
+                Commands:
+                - 'signin gui {nextPageMonth} {nextPageYear}'
+            'Barrier':
+                Item: GRAY_STAINED_GLASS_PANE
+                Display-Name: ''
                 Close-GUI: false
                 Lore: []
                 Slots:

@@ -31,8 +31,8 @@ Reward-Settings:
                 Play-Sounds: 
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 #Execute command when signing in.
-                #Format: "[Command sender]:[command]"
-                #"Command sender" can be "op" 、 "server"、 None
+                #Format: "[Command type]:[command]"
+                #"Command type" can be "op" 、 "server"、 None
                 #Corresponding to "player execute command with OP permission", "execute console command", "player execute command normally".
                 #For example:
                 # "server:say hello" - Execute console command: "say hello"
@@ -98,6 +98,7 @@ Reward-Settings:
                     - 'server:eco give {player} 10000'
             #Triggered when signing in on a special date.
             Special-Dates:
+                #Format: Month-Day (Be careful not to correspond to "1-1" on January 1, it should be "01-01")
                 '12-25':
                     Override-default-rewards: false
                     Messages: 

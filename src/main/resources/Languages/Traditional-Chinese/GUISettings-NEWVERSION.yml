@@ -1,46 +1,45 @@
-English:
+Traditional-Chinese:
     SignIn-GUI-Settings:
-        GUI-Name: '&cSignIn Menu &b&l| &8{date}'
-        Specified-Month-GUI-Name: '&3&lHistorical month &8{month}'
-        Specified-Year-GUI-Name: '&3&lHistorical month &8{month}, {year}'
-        Date-Format: 'yyyy/MM/dd'
+        GUI-Name: '&c簽到菜單 &b&l>>> &8{date}'
+        Specified-Month-GUI-Name: '&3&l歷史月份 &8{month}月'
+        Specified-Year-GUI-Name: '&3&l歷史月份 &8{month}月, {year}年'
+        Date-Format: 'yyyy年MM月dd日'
         Key:
             Already-SignIn:
                 Item: LIME_TERRACOTTA
-                Display-Name: '&6{day}th &aAlready signed in'
-                Lore: 
+                Display-Name: '&a日期 &6{day}號 &a已簽到'
+                Lore:
                 - ''
-                - '&fYou have been signed in for &e{continuous} consecutive days&f! '
-                - '&fPlease keep it up!'
+                - '&f您已連續簽到 &e{continuous} 天&f，繼續堅持！ '
                 - ''
-                - '&eClick to view &d{date}''s &eleaderboard'
+                - '&e點擊查看 &d{date} &e的排行榜'
                 Close-GUI: true
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
                 Item: CYAN_TERRACOTTA
-                Display-Name: '&6{day}th &7Coming soon.'
+                Display-Name: '&7日期 &6{day}號 &7未到達'
                 Lore: []
             Nothing-SignIn:
                 Item: YELLOW_TERRACOTTA
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
-                Display-Name: '&6{day}th &eToday!'
+                Display-Name: '&e日期 &6{day}號 &e未簽到'
                 Lore:
                 - ''
-                - '&7You haven''t signed in today!'
+                - '&7今天您還沒有簽到！ '
                 - ''
-                - '&eRight click to sign-in!'
+                - '&e點擊簽到'
             Missed-SignIn:
                 Item: RED_TERRACOTTA
-                Display-Name: '&7Absent on &6{day}th'
-                Lore: 
+                Display-Name: '&7日期 &6{day}號 &7漏簽'
+                Lore:
                 - ''
-                - '&7You can use the &aRetrospective card &7to sign-in.'
-                - '&7Number of cards you have: &6{cards}'
+                - '&7您可以使用&a補簽卡&7進行補簽'
+                - '&7您擁有的補簽卡數量: &6{cards}'
                 - ''
-                - '&eRight click to sign-in with retrospective card!'
+                - '&e點擊補簽'
             Slots:
             - 9
             - 10
@@ -76,57 +75,57 @@ English:
         Others:
             'About':
                 Item: CLOCK
-                Display-Name: '&6About more...'
+                Display-Name: '&6關於'
                 Close-GUI: false
                 Lore:
                 - ''
-                - '&fyou have signed in for &e{continuous} &fconsecutive days'
-                - '&fCurrent cumulative check in times: &e{total-number}'
+                - '&f您已連續簽到 &e{continuous} &f天'
+                - '&f當前累計簽到次數 &e{total-number} &f次'
                 Slot: 49
             'OpenMainMenu':
                 Item: BOOK
-                Display-Name: '&6Back to main menu.'
+                Display-Name: '&6返回主菜單'
                 Close-GUI: false
                 Commands:
                 - 'menu'
                 Lore:
                 - ''
-                - '&eRight click to back.'
+                - '&e點擊返回'
                 Slot: 45
             'CloseGUI':
                 Item: BARRIER
-                Display-Name: '&6Close this menu'
+                Display-Name: '&6關閉簽到界面'
                 Close-GUI: true
                 Messages:
-                - '{prefix}&cClose successfully.'
+                - '{prefix}&c已關閉簽到界面。 '
                 Slot: 53
             'PreviousPage':
                 Item: PAPER
-                Display-Name: '&dPrevious Page'
+                Display-Name: '&d上一頁'
                 Lore:
                 - ''
-                - '&7You can use the command: &a/signin gui [Month] [Year]'
-                - '&7to switch the sign-in menu to specify the month and year.'
+                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
+                - '&7以切換指定月份與年份的簽到菜單查看歷史記錄'
                 - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                - '&e點擊打開 &b{previousPageYear}年{previousPageMonth}月 &e的簽到菜單'
                 Slot: 48
                 Commands:
                 - 'signin gui {previousPageMonth} {previousPageYear}'
             'NextPage':
                 Item: PAPER
-                Display-Name: '&dNext Page'
+                Display-Name: '&d下一頁'
                 Lore:
                 - ''
-                - '&7You can use the command: &a/signin gui [Month] [Year]'
-                - '&7to switch the sign-in menu to specify the month and year.'
+                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
+                - '&7以切換指定月份與年份的簽到菜單查看歷史記錄'
                 - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                - '&e點擊打開 &b{nextPageYear}年{nextPageMonth}月 &e的簽到菜單'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'
             'Barrier':
                 Item: GRAY_STAINED_GLASS_PANE
-                Display-Name: ''
+                Display-Name: '&8分割線'
                 Close-GUI: false
                 Lore: []
                 Slots:
@@ -143,7 +142,7 @@ English:
                 - 47
                 - 51
                 - 52
-Simplified-Chinese:
+Simplifed-Chinese:
     SignIn-GUI-Settings:
         GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
         Specified-Month-GUI-Name: '&3&l历史月份 &8{month}月'
@@ -287,48 +286,49 @@ Simplified-Chinese:
                 - 47
                 - 51
                 - 52
-Traditional-Chinese:
+English:
     SignIn-GUI-Settings:
-        GUI-Name: '&c簽到菜單 &b&l>>> &8{date}'
-        Specified-Month-GUI-Name: '&3&l歷史月份 &8{month}月'
-        Specified-Year-GUI-Name: '&3&l歷史月份 &8{month}月, {year}年'
-        Date-Format: 'yyyy年MM月dd日'
+        GUI-Name: '&cSignIn Menu &b&l| &8{date}'
+        Specified-Month-GUI-Name: '&3&lHistorical month &8{month}'
+        Specified-Year-GUI-Name: '&3&lHistorical month &8{month}, {year}'
+        Date-Format: 'yyyy/MM/dd'
         Key:
             Already-SignIn:
                 Item: LIME_TERRACOTTA
-                Display-Name: '&a日期 &6{day}號 &a已簽到'
-                Lore:
+                Display-Name: '&6{day}th &aAlready signed in'
+                Lore: 
                 - ''
-                - '&f您已連續簽到 &e{continuous} 天&f，繼續堅持！ '
+                - '&fYou have been signed in for &e{continuous} consecutive days&f! '
+                - '&fPlease keep it up!'
                 - ''
-                - '&e點擊查看 &d{date} &e的排行榜'
+                - '&eClick to view &d{date}''s &eleaderboard'
                 Close-GUI: true
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
                 Item: CYAN_TERRACOTTA
-                Display-Name: '&7日期 &6{day}號 &7未到達'
+                Display-Name: '&6{day}th &7Coming soon.'
                 Lore: []
             Nothing-SignIn:
                 Item: YELLOW_TERRACOTTA
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
-                Display-Name: '&e日期 &6{day}號 &e未簽到'
+                Display-Name: '&6{day}th &eToday!'
                 Lore:
                 - ''
-                - '&7今天您還沒有簽到！ '
+                - '&7You haven''t signed in today!'
                 - ''
-                - '&e點擊簽到'
+                - '&eRight click to sign-in!'
             Missed-SignIn:
                 Item: RED_TERRACOTTA
-                Display-Name: '&7日期 &6{day}號 &7漏簽'
-                Lore:
+                Display-Name: '&7Absent on &6{day}th'
+                Lore: 
                 - ''
-                - '&7您可以使用&a補簽卡&7進行補簽'
-                - '&7您擁有的補簽卡數量: &6{cards}'
+                - '&7You can use the &aRetrospective card &7to sign-in.'
+                - '&7Number of cards you have: &6{cards}'
                 - ''
-                - '&e點擊補簽'
+                - '&eRight click to sign-in with retrospective card!'
             Slots:
             - 9
             - 10
@@ -364,57 +364,57 @@ Traditional-Chinese:
         Others:
             'About':
                 Item: CLOCK
-                Display-Name: '&6關於'
+                Display-Name: '&6About more...'
                 Close-GUI: false
                 Lore:
                 - ''
-                - '&f您已連續簽到 &e{continuous} &f天'
-                - '&f當前累計簽到次數 &e{total-number} &f次'
+                - '&fyou have signed in for &e{continuous} &fconsecutive days'
+                - '&fCurrent cumulative check in times: &e{total-number}'
                 Slot: 49
             'OpenMainMenu':
                 Item: BOOK
-                Display-Name: '&6返回主菜單'
+                Display-Name: '&6Back to main menu.'
                 Close-GUI: false
                 Commands:
                 - 'menu'
                 Lore:
                 - ''
-                - '&e點擊返回'
+                - '&eRight click to back.'
                 Slot: 45
             'CloseGUI':
                 Item: BARRIER
-                Display-Name: '&6關閉簽到界面'
+                Display-Name: '&6Close this menu'
                 Close-GUI: true
                 Messages:
-                - '{prefix}&c已關閉簽到界面。 '
+                - '{prefix}&cClose successfully.'
                 Slot: 53
             'PreviousPage':
                 Item: PAPER
-                Display-Name: '&d上一頁'
+                Display-Name: '&dPrevious Page'
                 Lore:
                 - ''
-                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
-                - '&7以切換指定月份與年份的簽到菜單查看歷史記錄'
+                - '&7You can use the command: &a/signin gui [Month] [Year]'
+                - '&7to switch the sign-in menu to specify the month and year.'
                 - ''
-                - '&e點擊打開 &b{previousPageYear}年{previousPageMonth}月 &e的簽到菜單'
+                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
                 Slot: 48
                 Commands:
                 - 'signin gui {previousPageMonth} {previousPageYear}'
             'NextPage':
                 Item: PAPER
-                Display-Name: '&d下一頁'
+                Display-Name: '&dNext Page'
                 Lore:
                 - ''
-                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
-                - '&7以切換指定月份與年份的簽到菜單查看歷史記錄'
+                - '&7You can use the command: &a/signin gui [Month] [Year]'
+                - '&7to switch the sign-in menu to specify the month and year.'
                 - ''
-                - '&e點擊打開 &b{nextPageYear}年{nextPageMonth}月 &e的簽到菜單'
+                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'
             'Barrier':
                 Item: GRAY_STAINED_GLASS_PANE
-                Display-Name: '&8分割線'
+                Display-Name: ''
                 Close-GUI: false
                 Lore: []
                 Slots:

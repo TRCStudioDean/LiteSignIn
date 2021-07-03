@@ -116,6 +116,9 @@ public class SignInStatisticsTimeReward
                         } catch (IllegalArgumentException ex2) {
                             continue;
                         }
+                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Head-Owner") != null) {
+                            PluginControl.setHead(is, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemdata[0] + ".Head-Owner"), player).replace("{player}", player.getName()));
+                        }
                         ItemMeta im = is.getItemMeta();
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                             List<String> lore = new ArrayList();
@@ -136,6 +139,7 @@ public class SignInStatisticsTimeReward
                                 }
                             }
                         }
+                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Display-Name").replace("&", "§"), player));
                         is.setItemMeta(im);
                         try {

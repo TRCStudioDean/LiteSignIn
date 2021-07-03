@@ -2,7 +2,9 @@ package studio.trc.bukkit.litesignin.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
@@ -25,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class PluginControl
 {
@@ -54,6 +57,7 @@ public class PluginControl
         Bukkit.getOnlinePlayers().stream().filter((ps) -> (Menu.menuOpening.containsKey(ps.getUniqueId()))).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();
         AutoSave.startThread();
+        headCacheData.clear();
     }
     
     public static void savePlayerData() {
@@ -73,6 +77,37 @@ public class PluginControl
             return;
         }
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    }
+    
+    /**
+     * Heads' cache data.
+     */
+    private static final Map<String, ItemMeta> headCacheData = new HashMap();
+    
+    public static void setHead(ItemStack is, String name) {
+        if (getNMSVersion().startsWith("v1_7") || getNMSVersion().startsWith("v1_8") || getNMSVersion().startsWith("v1_9") || getNMSVersion().startsWith("v1_10") || getNMSVersion().startsWith("v1_11") || getNMSVersion().startsWith("v1_12")) {
+            if (is.getType().equals(Material.valueOf("SKULL_ITEM")) && is.getData().getData() == 3) {
+                if (headCacheData.containsKey(name)) {
+                    is.setItemMeta(headCacheData.get(name));
+                } else {
+                    SkullMeta sm = (SkullMeta) is.getItemMeta();
+                    sm.setOwner(name);
+                    headCacheData.put(name, sm);
+                    is.setItemMeta(sm);
+                }
+            }
+        } else {
+            if (is.getType().equals(Material.PLAYER_HEAD)) {
+                if (headCacheData.containsKey(name)) {
+                    is.setItemMeta(headCacheData.get(name));
+                } else {
+                    SkullMeta sm = (SkullMeta) is.getItemMeta();
+                    sm.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+                    headCacheData.put(name, sm);
+                    is.setItemMeta(sm);
+                }
+            }
+        }
     }
     
     public static double getMySQLRefreshInterval() {
@@ -156,6 +191,9 @@ public class PluginControl
             } catch (IllegalArgumentException ex2) {
                 return null;
             }
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Head-Owner") != null) {
+                PluginControl.setHead(is, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemName + ".Head-Owner"), player).replace("{player}", player.getName()));
+            }
             ItemMeta im = is.getItemMeta();
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
                 List<String> lore = new ArrayList();
@@ -176,6 +214,7 @@ public class PluginControl
                     }
                 }
             }
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Display-Name").replace("&", "§"), player));
             is.setItemMeta(im);
             return is;

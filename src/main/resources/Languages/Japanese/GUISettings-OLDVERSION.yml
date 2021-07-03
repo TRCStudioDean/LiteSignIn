@@ -80,7 +80,9 @@ Japanese:
             - 39
         Others:
             'About':
-                Item: WATCH
+                Item: SKULL_ITEM
+                Data: 3
+                Head-Owner: '{player}'
                 Display-Name: '&6関連情報'
                 Close-GUI: false
                 Lore:
@@ -232,7 +234,9 @@ Simplified-Chinese:
             - 39
         Others:
             'About':
-                Item: WATCH
+                Item: SKULL_ITEM
+                Data: 3
+                Head-Owner: '{player}'
                 Display-Name: '&6关于'
                 Close-GUI: false
                 Lore:
@@ -382,7 +386,9 @@ Traditional-Chinese:
             - 39
         Others:
             'About':
-                Item: WATCH
+                Item: SKULL_ITEM
+                Data: 3
+                Head-Owner: '{player}'
                 Display-Name: '&6關於'
                 Close-GUI: false
                 Lore:
@@ -533,7 +539,9 @@ English:
             - 39
         Others:
             'About':
-                Item: WATCH
+                Item: SKULL_ITEM
+                Data: 3
+                Head-Owner: '{player}'
                 Display-Name: '&6About more...'
                 Close-GUI: false
                 Lore:

@@ -75,7 +75,8 @@ English:
             - 39
         Others:
             'About':
-                Item: CLOCK
+                Item: PLAYER_HEAD
+                Head-Owner: '{player}'
                 Display-Name: '&6About more...'
                 Close-GUI: false
                 Lore:
@@ -219,7 +220,8 @@ Simplified-Chinese:
             - 39
         Others:
             'About':
-                Item: CLOCK
+                Item: PLAYER_HEAD
+                Head-Owner: '{player}'
                 Display-Name: '&6关于'
                 Close-GUI: false
                 Lore:
@@ -363,7 +365,8 @@ Traditional-Chinese:
             - 39
         Others:
             'About':
-                Item: CLOCK
+                Item: PLAYER_HEAD
+                Head-Owner: '{player}'
                 Display-Name: '&6關於'
                 Close-GUI: false
                 Lore:
@@ -508,7 +511,8 @@ Japanese:
             - 39
         Others:
             'About':
-                Item: CLOCK
+                Item: PLAYER_HEAD
+                Head-Owner: '{player}'
                 Display-Name: '&6関連情報'
                 Close-GUI: false
                 Lore:

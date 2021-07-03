@@ -114,6 +114,9 @@ public class SignInRetroactiveTimeReward
                         } catch (IllegalArgumentException ex2) {
                             continue;
                         }
+                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Head-Owner") != null) {
+                            PluginControl.setHead(is, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemdata[0] + ".Head-Owner"), player).replace("{player}", player.getName()));
+                        }
                         ItemMeta im = is.getItemMeta();
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                             List<String> lore = new ArrayList();
@@ -122,6 +125,7 @@ public class SignInRetroactiveTimeReward
                             }
                             im.setLore(lore);
                         }
+                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Enchantment")) {
                             for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemdata[0] + ".Enchantment")) {
                                 String[] data = name.split(":");

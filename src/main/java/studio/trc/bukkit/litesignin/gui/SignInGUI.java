@@ -17,16 +17,15 @@ import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
+import studio.trc.bukkit.litesignin.util.PluginControl;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class SignInGUI
 {
@@ -165,6 +164,9 @@ public class SignInGUI
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
+                    }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
@@ -209,6 +211,9 @@ public class SignInGUI
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
+                    }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
@@ -274,6 +279,9 @@ public class SignInGUI
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
+                }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner") != null) {
+                    PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner"), player).replace("{player}", player.getName()));
                 }
                 ItemMeta im = key.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
@@ -367,6 +375,9 @@ public class SignInGUI
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
+                    }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
@@ -411,6 +422,9 @@ public class SignInGUI
                         }
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
+                    }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
@@ -476,6 +490,9 @@ public class SignInGUI
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
+                }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner") != null) {
+                    PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner"), player).replace("{player}", player.getName()));
                 }
                 ItemMeta im = key.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
@@ -569,6 +586,9 @@ public class SignInGUI
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
+                    }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
@@ -609,6 +629,9 @@ public class SignInGUI
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
                     } else {
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
+                    }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
@@ -661,6 +684,9 @@ public class SignInGUI
                     } catch (IllegalArgumentException ex) {
                         key = new ItemStack(Material.BARRIER, i + 1);
                     }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
+                    }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null)  {
                         List<String> lore = new ArrayList();
@@ -701,6 +727,9 @@ public class SignInGUI
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data"));
                     } else {
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1);
+                    }
+                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Head-Owner") != null) {
+                        PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Head-Owner"), player).replace("{player}", player.getName()));
                     }
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Lore") != null) {
@@ -750,6 +779,9 @@ public class SignInGUI
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
+                }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner") != null) {
+                    PluginControl.setHead(key, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner"), player).replace("{player}", player.getName()));
                 }
                 ItemMeta im = key.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
@@ -832,6 +864,9 @@ public class SignInGUI
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner") != null) {
+                    PluginControl.setHead(other, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner"), player).replace("{player}", player.getName()));
+                }
                 ItemMeta im = other.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Lore") != null) {
                     List<String> lore = new ArrayList();
@@ -904,6 +939,9 @@ public class SignInGUI
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);
                 }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner") != null) {
+                    PluginControl.setHead(other, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner"), player).replace("{player}", player.getName()));
+                }
                 ItemMeta im = other.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Lore") != null) {
                     List<String> lore = new ArrayList();
@@ -974,6 +1012,9 @@ public class SignInGUI
                     }
                 } catch (IllegalArgumentException ex) {
                     other = new ItemStack(Material.BARRIER);
+                }
+                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner") != null) {
+                    PluginControl.setHead(other, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Owner"), player).replace("{player}", player.getName()));
                 }
                 ItemMeta im = other.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Lore") != null) {

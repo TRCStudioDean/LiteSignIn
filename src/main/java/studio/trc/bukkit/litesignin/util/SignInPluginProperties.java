@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import studio.trc.bukkit.litesignin.Main;
@@ -28,7 +27,7 @@ public class SignInPluginProperties
     public static void sendOperationMessage(String path) {
         CommandSender sender = Bukkit.getConsoleSender();
         if (propertiesFile.containsKey(path)) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', propertiesFile.getProperty(path)));
+            sender.sendMessage(MessageUtil.toColor(propertiesFile.getProperty(path)));
         }
     }
     
@@ -36,9 +35,9 @@ public class SignInPluginProperties
         CommandSender sender = Bukkit.getConsoleSender();
         if (propertiesFile.containsKey(path)) {
             if (replacePrefix) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', propertiesFile.getProperty(path).replace("{prefix}", PluginControl.getPrefix())));
+                sender.sendMessage(MessageUtil.toColor(propertiesFile.getProperty(path).replace("{prefix}", PluginControl.getPrefix())));
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', propertiesFile.getProperty(path)));
+                sender.sendMessage(MessageUtil.toColor(propertiesFile.getProperty(path)));
             }
         }
     }
@@ -50,7 +49,7 @@ public class SignInPluginProperties
             for (String placeholder : placeholders.keySet()) {
                 message = message.replace(placeholder, placeholders.get(placeholder));
             }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", PluginControl.getPrefix())));
+            sender.sendMessage(MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix())));
         }
     }
 }

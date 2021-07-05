@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import studio.trc.bukkit.litesignin.async.AutoSave;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
@@ -15,9 +16,9 @@ import studio.trc.bukkit.litesignin.database.YamlStorage;
 import studio.trc.bukkit.litesignin.database.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
-import studio.trc.bukkit.litesignin.async.AutoSave;
 import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
+import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -54,20 +55,29 @@ public class PluginControl
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("Use-PlaceholderAPI", false);
             SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", true);
         }
-        Bukkit.getOnlinePlayers().stream().filter((ps) -> (Menu.menuOpening.containsKey(ps.getUniqueId()))).forEachOrdered(Player::closeInventory);
+        Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();
         AutoSave.startThread();
         headCacheData.clear();
+        if (enableSignScript()) {
+            WoodSignUtil.loadScripts();
+            WoodSignUtil.loadSigns();
+            WoodSignUtil.scan();
+            Map<String, String> placeholders = new HashMap();
+            placeholders.put("{scripts}", String.valueOf(WoodSignUtil.getWoodSignScripts().size()));
+            placeholders.put("{signs}", String.valueOf(WoodSignUtil.getAllScriptedSign().size()));
+            SignInPluginProperties.sendOperationMessage("WoodSignScriptLoaded", placeholders);
+        }
     }
     
     public static void savePlayerData() {
-        YamlStorage.cache.values().stream().forEach((yaml) -> {
+        YamlStorage.cache.values().stream().forEach(yaml -> {
             yaml.saveData();
         });
-        MySQLStorage.cache.values().stream().forEach((mysql) -> {
+        MySQLStorage.cache.values().stream().forEach(mysql -> {
             mysql.saveData();
         });
-        SQLiteStorage.cache.values().stream().forEach((sqlite) -> {
+        SQLiteStorage.cache.values().stream().forEach(sqlite -> {
             sqlite.saveData();
         });
     }
@@ -166,12 +176,16 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Metrics");
     }
     
+    public static boolean enableSignScript() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Wood-Signs-Script");
+    }
+    
     public static SignInDate getRetroactiveCardMinimumDate() {
         return SignInDate.getInstance(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Minimum-Date"));
     }
     
     public static String getPrefix() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix").replace("&", "§");
+        return MessageUtil.toColor(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix"));
     }
     
     public static String getNMSVersion() {
@@ -198,7 +212,7 @@ public class PluginControl
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
                 List<String> lore = new ArrayList();
                 for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemName + ".Lore")) {
-                    lore.add(MessageUtil.toPlaceholderAPIResult(lores.replace("&", "§"), player));
+                    lore.add(MessageUtil.toPlaceholderAPIResult(MessageUtil.toColor(lores), player));
                 }
                 im.setLore(lore);
             }
@@ -215,7 +229,7 @@ public class PluginControl
                 }
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Display-Name").replace("&", "§"), player));
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
             is.setItemMeta(im);
             return is;
         } else if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Item-Collection." + itemName) != null) {

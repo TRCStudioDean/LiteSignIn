@@ -32,6 +32,10 @@ Auto-Save:
 #詳細については、bstats.orgを参照してください。
 Metrics: true
     
+#木の看板サインインスクリプト
+#有効にすると、WoodSignSettings.ymlファイルが生成されます。中のこの記事のメモに従って編集してください。
+Wood-Signs-Script: false
+    
 #遡及カード
 #過去の日を補うためにそれを使用してす
 Retroactive-Card:

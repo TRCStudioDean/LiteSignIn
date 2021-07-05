@@ -1,0 +1,37 @@
+Wood-Sign-Scripts:
+    #機能の異なる複数の木製看板を設置作成できます
+    #次の形式で編集してください：
+    '[クリックしてサインイン]':
+        #木製の標識を作成するための権限設定（Config.ymlの権限設定を参照）
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.signin
+        #テキスト設定
+        #木製看板の作成に成功すると、使用される木製看板は自動的に次のテキストになります
+        Sign-Text:
+            Line-1: '&8&l[&b&lクリックしてサインイン&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        #コマンドの実行
+        #書式： "[実行タイプ]:[コマンド]"
+        #"実行タイプ"は、"op"、"server"、または無にすることができます
+        #それぞれ、「プレイヤーがOP権限でコマンドを実行する」、「コンソールコマンドを実行する」、「コマンドを正常に実行する」に対応します。
+        #例： 
+        # "server:say hello" -> コンソールで"say hello"コマンドを実行します
+        # "op:gamemode creative" -> プレイヤーはOP権限で"gamemode creative"コマンドを実行します
+        # "spawn" -> コマンド"spawn"は通常どおり実行します
+        #PlaceholderAPIをサポートする
+        Commands:
+        - 'litesignin click'
+    '[メニューを開く]':
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.gui
+        Sign-Text:
+            Line-1: '&8&l[&a&lメニューを開く&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        Commands:
+        - 'litesignin gui'

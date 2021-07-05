@@ -253,6 +253,267 @@ Japanese:
         - '&6- &3ダウンロードリンク: %link%'
         - '&6- &3更新ログ: {description}'
         Error: '{prefix}&cプラグインの最新バージョンを入手できません。ネットワークが正常かどうかを確認してください。 '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a木の看板＆b{sign}&aの作成か成功しました。'
+        Unable-To-Create: '{prefix}&c木の看板＆b{sign}&cの作成か失败しました。権限がありません: &e{permission}'
+        Successfully-Remove: '{prefix}&c木の看板＆b{sign}&cを削除しました。'
+Simplified-Chinese:
+    No-Permission: '{prefix}&c你没有这么做的权限!'
+    Unavailable-Command: '{prefix}&c控制台不能使用这个命令.'
+    Auto-Save: '{prefix}&a玩家数据已保存!'
+    Unable-To-Re-SignIn: '{prefix}&c本服务器未启用补签功能。'
+    Repaired-Config-Section: '{prefix}&c插件无法获取配置文件 &e{config} &c路径 &7{path}&c, 已通过获取默认配置文件进行修复.'
+    Second: '秒'
+    Minute: '分钟'
+    Hour: '小时'
+    Day: '天'
+    Month: '月'
+    Year: '年'
+    GUI-SignIn-Messages:
+        Open-GUI: '&c&l[点击此处打开签到界面]'
+        Hover-Text:
+        - '&5点击打开签到菜单'
+        - '&7日期: &e{date}'
+        Join-Messages:
+        - '{prefix}&a&l你今天还没有签到! %opengui%'
+        Retroactive-Card-Cooldown:
+        - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
+        Unable-To-Hold:
+        - '{prefix}&c你没有权限持有补签卡， 系统已将你的所有补签卡进行回收。'
+        Minimum-Date:
+        - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
+        SignIn-Messages:
+        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        - ''
+        - '  {prefix}&d今日签到已完成!'
+        - ''
+        - '  &c# &a您已连续签到 &e{continuous} &a天'
+        - '  &c# &a您今天是全服第 &b{queue} &a个签到的玩家'
+        - ''
+        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        Need-More-Retroactive-Cards:
+        - '{prefix}&c你还需要 &e{cards} &c张&a补签卡&c才可以进行补签!'
+        Retroactive-SignIn-Messages:
+        - '{prefix}&a日期 &e{date} &a补签成功， 您已连续签到 &e{continuous} &a天。'
+    Command-Messages:
+        Unknown-Command: '{prefix}&c未知命令, 使用&6/signin help &c查看帮助'
+        Help-Command: 
+        - '{prefix}&a使用帮助 &f&l>>>'
+        - ' &6/signin help &c查看帮助'
+        - ' &6/signin reload &c重载配置文件'
+        - ' &6/signin gui &8[月份] &8[年份] &c打开签到菜单'
+        - ' &6/signin click &8[日期/玩家] [玩家] &c直接签到或对某一日期进行补签&7（日期格式: [年-月-日] 例: /signin click ''2015-8-11''）'
+        - ' &6/signin save &c保存所有在线玩家的数据'
+        - ' &6/signin info [玩家] &c查看玩家的信息'
+        - ' &6/signin leaderboard &8[日期] [页数] &c列出今日或指定日期的签到排行榜'
+        - ' &6/signin itemcollection &c管理收藏品'
+        - ' &6/signin database 数据库/数据管理'
+        Reload: '{prefix}&a已重载配置文件.'
+        RetroactiveCard:
+            Help: '{prefix}&a使用帮助: &6/signin retroactivecard &c[give/set/take] &d[数量] &7[玩家] &a给予/设置/取走玩家身上的补签卡'
+            Unavailable-Feature: '{prefix}&c本服务器未启用补签卡功能。'
+            Invalid-Number: '{prefix}&c无效的数字 &e{number} &c!'
+            Player-Offline: '{prefix}&c玩家 &e{player} &c未在线!'
+            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
+            Give: '{prefix}&a成功给予 &c{amount} &a个补签卡给玩家 &e{player} &a.'
+            Set: '{prefix}&a成功将玩家 &e{player} &a的补签卡数量设置为 &c{amount} &a个.'
+            Take: '{prefix}&a成功从玩家 &e{player} &a身上取走 &c{amount} &a个补签卡.'
+        Database:
+            Help:
+            - '{prefix}&a使用帮助: '
+            - ' &6/signin database backup &c备份当前所有的数据'
+            - ' &6/signin database rollback [备份文件] &c将所有数据进行回档'
+            - ' &6/signin database confirm &c确定操作'
+            Feature-Disabled: '{prefix}&c此功能已经被禁用.'
+            Confirm:
+                Button:
+                    Text: '&a&l&n[点击这里]'
+                    Hover:
+                    - '&5点击确认操作'
+                Need-Confirm:
+                - '&6请使用命令 &a/signin database confirm &6以确认执行此操作'
+                - '&6或者 %button%'
+                Invalid-Operation: '{prefix}&c没有待确认的操作。'
+            Backup: '{prefix}&a开始备份数据， 可能需要较长的时间...'
+            Rollback:
+                Help: '{prefix}&c正确使用方法: /signin database rollback [备份文件]'
+                File-Not-Exist: '{prefix}&c备份文件 {file} &c不存在！'
+                Start-Rollback: '{prefix}&a开始回档数据到备份 &e{file}&a， 可能需要较长时间...'
+        Click: 
+            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
+            Date-Format: 'yyyy年MM月dd日'
+            Invalid-Date: '{prefix}&c无效的日期 &e{date} &c! 例: /signin click 2015-8-11'
+            To-Self:
+                Today-has-been-Signed-In: '{prefix}&c您今天已经签到了，请不要重复签到。'
+                Specified-Date-has-been-Signed-In: '{prefix}&c日期 &e{date} &c已经签到了， 请不要重复签到.'
+                Minimum-Date:
+                - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
+                Successfully-Signed-In:
+                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+                - ''
+                - '  {prefix}&d今日签到已完成!'
+                - ''
+                - '  &c# &a您已连续签到 &e{continuous} &a天'
+                - '  &c# &a您今天是全服第 &b{queue} &a个签到的玩家'
+                - ''
+                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+                Unable-To-Hold:
+                - '{prefix}&c你没有权限持有补签卡， 系统已将你的所有补签卡进行回收。'
+                Retroactive-Card-Cooldown:
+                - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
+                Need-More-Retroactive-Cards:
+                - '{prefix}&c你还需要 &e{cards} &c张&a补签卡&c才可以进行补签!'
+                Successfully-Retroactive-Signed-In:
+                - '{prefix}&a日期 &e{date} &a补签成功， 您已连续签到 &e{continuous} &a天。'
+            To-Other-Player:
+                Today-has-been-Signed-In: '{prefix}&c玩家 &6{player} &c今天已经签到了，请不要重复签到。'
+                Specified-Date-has-been-Signed-In: '{prefix}&c玩家 &6{player} &c已在日期 &e{date} &c签到了， 请不要重复签到.'
+                Minimum-Date:
+                - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
+                Successfully-Signed-In:
+                - '{prefix}&a成功给玩家 &6{player} &a签到， 当前该玩家已连续签到 &e{continuous} &a天。'
+                Successfully-Retroactive-Signed-In:
+                - '{prefix}&a成功给玩家 &6{player} &a日期 &e{date} &a补签， &6{player} &a连续签到 &e{continuous} &a天。'
+                Messages-at-Sign-In:
+                - '{prefix}&a管理员 &6{admin} &a帮助您签到， 您已连续签到 &e{continuous} &a天。'
+                Messages-at-Retroactive-Sign-In:
+                - '{prefix}&a管理员 &6{admin} &a帮助您补签日期 &e{date}&a， 您已连续签到 &e{continuous} &a天。'
+        GUI: 
+            Normal: '{prefix}&b你打开了签到菜单。'
+            Specified-Month: '{prefix}&b你打开了 &e{month}月&b 的签到菜单。'
+            Invalid-Month: '{prefix}&c月份 &e{month} &c不存在，请输入正确的月份 &7[1-12]'
+            Specified-Year: '{prefix}&b你打开了 &e{year}年{month}月&b 的签到菜单。'
+            Invalid-Year: '{prefix}&c年份 &e{year} &c不存在，请输入正确的年份'
+        Save: '{prefix}&a成功保存所有玩家的数据!'
+        LeaderBoard:
+            #每一页显示多少个玩家
+            Number-Of-Single-Page: 10
+            Date-Format: 'yyyy年MM月dd日'
+            Time-Format: 'HH:mm:ss'
+            Unknown-Player: '&3未知玩家&8(UUID:{uuid})'
+            Unknown-Time: '&e未知时间'
+            Player-Show:
+                Text:
+                    Self: '&2{player}'
+                    Other-Players: '&3{player}'
+                Command: 'litesignin info {player}'
+                Hover:
+                - '&5点击查看玩家 &e{player} &5的个人信息'
+            Previous-Page:
+                Text: '&b&l上一页'
+                Hover:
+                - '&5点击转到上一页'
+                - '&7当前页数: &e{page}'
+                - '&7上一页: &e{previousPage}'
+            Next-Page:
+                Text: '&b&l下一页'
+                Hover:
+                - '&5点击转到下一页'
+                - '&7当前页数: &e{page}'
+                - '&7下一页: &e{nextPage}'
+            Invalid-Number: '{prefix}&c您所指定的页数 &e{page} &c不存在! 请输入有效的数字!'
+            Date-Not-Exist: '{prefix}&c您所指定的日期 &e{date} &c无效! 请输入正确的日期! &7(年-月-日)'
+            List-Format:
+                Today:
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
+                Historical-Date:
+                    Usually:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
+                    Tiel-Ranking:
+                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
+                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
+            Empty: '{prefix}&a日期 &e{date} &a没有任何人签到.'
+            Non-Database-mode: '{prefix}&e你必须是 &bSQLite &e或 &bMySQL &e储存模式才能够查询过往日期的签到排名!'
+            LeaderBoard-Messages:
+            - '{prefix}&e&l签到排行榜 &d{date}'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
+            - '  %leaderboard%'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            Historical-Date-LeaderBoard-Messages:
+            - '{prefix}&e&l历史日期 &d{date} &e&l签到排行榜'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
+            - '  %leaderboard%'
+            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+        ItemCollection:
+            Help: 
+                - '{prefix}&a使用帮助 &f&l>>>'
+                - ' &6/signin itemcollection list &c列出所有收藏品'
+                - ' &6/signin itemcollection add [名称] &c将手上的物品添加到收藏品列表'
+                - ' &6/signin itemcollection delete [名称] &c删除指定的收藏品'
+                - ' &6/signin itemcollection give [名称] &8[玩家] &c将指定的收藏品给予自己或其他玩家'
+                - '&c&l说明: &d收藏品功能能够将一些包含复杂的NBT的物品序列化并添加至&aCustomItems.yml&b文件中，'
+                - '&d你可以在&aRewardSettings.yml&d文件的&bReward-Items&d选项中添加收藏品的名字以设置签到奖励所给予的物品， 详细的请查看配置文件中的注释说明.'
+            List:
+                Empty: '{prefix}&a收藏品列表是空的。'
+                Messages:
+                - '{prefix}&a当前一共有 &e{amount} &a件收藏品， 收藏品列表如下: &c%list%'
+                - '&d你可以在&aRewardSettings.yml&d文件的&bReward-Items&d选项中添加以上收藏品的名字以设置签到奖励所给予的物品， 详细的请查看配置文件中的注释说明.'
+            Add:
+                Help: '{prefix}&c使用方法: &6/signin itemcollection add [名称]'
+                Doesnt-Have-Item-In-Hand: '{prefix}&c你需要将需要执行操作的物品拿在手上!'
+                Successfully: '{prefix}&a成功将你手上的物品 &r%item% &a名字: &e{name} &a添加到收藏品列表中.'
+                Already-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品已存在!'
+            Delete:
+                Help: '{prefix}&c使用方法: &6/signin itemcollection delete [名称]'
+                Successfully: '{prefix}&a成功将物品 &r%item% &a名字: &e{name} &a从收藏品列表中删除.'
+                Not-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品不存在! 请使用&a/signin itemcollection list&c列出所有收藏品!'
+            Give:
+                Help: '{prefix}&c使用方法: &6/signin itemcollection give [名称] [玩家]'
+                Player-Offline: '{prefix}&c玩家 &e{player} &c不在线!'
+                Give-Yourself: '{prefix}&a已将物品 &r%item% &a名字: &e{name} &a给予自己。'
+                Give-Others: '{prefix}&a已将物品 &r%item% &a名字: &e{name} &a给予玩家 &c{player} &a.'
+                Not-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品不存在! 请使用&a/signin itemcollection list&c列出所有收藏品!'
+        Info:
+            Help: '{prefix}&a使用帮助: &6/signin info &7[玩家] &a查看玩家的信息'
+            true: '&a是'
+            false: '&c否'
+            Unknown-Group: '未知&8(需在线!)'
+            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
+            Info: 
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+            - '&6 玩家 &a{player} &6的信息: '
+            - '&6 今日是否签到: {signin}'
+            - '&6 所在权限组名: &5{group}'
+            - '&6 今日签到排名: &3{queue}'
+            - '&6 补签卡的数量: &d{retroactivecard}'
+            - '&6 连续签到天数: &b{continuous}'
+            - '&6 总共签到天数: &e{total}'
+            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
+    Database-Management:
+        Backup:
+            Successfully: '{prefix}&a成功备份数据到 &b{file} &a.'
+            Failed: '{prefix}&c备份失败， 出现错误: &e{error}'
+            BackingUp: '{prefix}&e插件正在备份数据中， 请稍后再执行此操作.'
+            Auto-Backup: '{prefix}&a开始备份数据， 这可能需要较长的时间...'
+        RollBack:
+            Successfully: '{prefix}&a成功将数据回档到 &b{file} &a.'
+            Failed: '{prefix}&c回档失败， 出现错误: &e{error}'
+    Updater:
+        Link:
+            Player-Text: '&d&l[点击查看]'
+            Console-Text: '&d{link}'
+            Hover-Text:
+            - '&5点击获取下载链接'
+        Checked: 
+        - '{prefix}&a发现插件存在最新版本: &bv{version}'
+        - '&6- &3服务器运行版本: &6v{nowVersion}'
+        - '&6- &3下载地址: %link%'
+        - '&6- &3更新日志: {description}'
+        Error: '{prefix}&c无法获取插件最新版本, 请检查你的网络是否正常! '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a你已成功创建了签到告示牌 &b{sign}'
+        Unable-To-Create: '{prefix}&c无法创建签到告示牌 &b{sign}&c，您缺少权限: &e{permission}'
+        Successfully-Remove: '{prefix}&c已移除签到告示牌 &b{sign}'
 Traditional-Chinese:
     No-Permission: '{prefix}&c你沒有這麼做的權限!'
     Unavailable-Command: '{prefix}&c控制台不能使用這個命令.'
@@ -506,259 +767,10 @@ Traditional-Chinese:
         - '&6- &3下載地址: %link%'
         - '&6- &3更新日誌: {description}'
         Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網絡是否正常! '
-Simplifed-Chinese:
-    No-Permission: '{prefix}&c你没有这么做的权限!'
-    Unavailable-Command: '{prefix}&c控制台不能使用这个命令.'
-    Auto-Save: '{prefix}&a玩家数据已保存!'
-    Unable-To-Re-SignIn: '{prefix}&c本服务器未启用补签功能。'
-    Repaired-Config-Section: '{prefix}&c插件无法获取配置文件 &e{config} &c路径 &7{path}&c, 已通过获取默认配置文件进行修复.'
-    Second: '秒'
-    Minute: '分钟'
-    Hour: '小时'
-    Day: '天'
-    Month: '月'
-    Year: '年'
-    GUI-SignIn-Messages:
-        Open-GUI: '&c&l[点击此处打开签到界面]'
-        Hover-Text:
-        - '&5点击打开签到菜单'
-        - '&7日期: &e{date}'
-        Join-Messages:
-        - '{prefix}&a&l你今天还没有签到! %opengui%'
-        Retroactive-Card-Cooldown:
-        - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
-        Unable-To-Hold:
-        - '{prefix}&c你没有权限持有补签卡， 系统已将你的所有补签卡进行回收。'
-        Minimum-Date:
-        - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
-        SignIn-Messages:
-        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        - ''
-        - '  {prefix}&d今日签到已完成!'
-        - ''
-        - '  &c# &a您已连续签到 &e{continuous} &a天'
-        - '  &c# &a您今天是全服第 &b{queue} &a个签到的玩家'
-        - ''
-        - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        Need-More-Retroactive-Cards:
-        - '{prefix}&c你还需要 &e{cards} &c张&a补签卡&c才可以进行补签!'
-        Retroactive-SignIn-Messages:
-        - '{prefix}&a日期 &e{date} &a补签成功， 您已连续签到 &e{continuous} &a天。'
-    Command-Messages:
-        Unknown-Command: '{prefix}&c未知命令, 使用&6/signin help &c查看帮助'
-        Help-Command: 
-        - '{prefix}&a使用帮助 &f&l>>>'
-        - ' &6/signin help &c查看帮助'
-        - ' &6/signin reload &c重载配置文件'
-        - ' &6/signin gui &8[月份] &8[年份] &c打开签到菜单'
-        - ' &6/signin click &8[日期/玩家] [玩家] &c直接签到或对某一日期进行补签&7（日期格式: [年-月-日] 例: /signin click ''2015-8-11''）'
-        - ' &6/signin save &c保存所有在线玩家的数据'
-        - ' &6/signin info [玩家] &c查看玩家的信息'
-        - ' &6/signin leaderboard &8[日期] [页数] &c列出今日或指定日期的签到排行榜'
-        - ' &6/signin itemcollection &c管理收藏品'
-        - ' &6/signin database 数据库/数据管理'
-        Reload: '{prefix}&a已重载配置文件.'
-        RetroactiveCard:
-            Help: '{prefix}&a使用帮助: &6/signin retroactivecard &c[give/set/take] &d[数量] &7[玩家] &a给予/设置/取走玩家身上的补签卡'
-            Unavailable-Feature: '{prefix}&c本服务器未启用补签卡功能。'
-            Invalid-Number: '{prefix}&c无效的数字 &e{number} &c!'
-            Player-Offline: '{prefix}&c玩家 &e{player} &c未在线!'
-            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
-            Give: '{prefix}&a成功给予 &c{amount} &a个补签卡给玩家 &e{player} &a.'
-            Set: '{prefix}&a成功将玩家 &e{player} &a的补签卡数量设置为 &c{amount} &a个.'
-            Take: '{prefix}&a成功从玩家 &e{player} &a身上取走 &c{amount} &a个补签卡.'
-        Database:
-            Help:
-            - '{prefix}&a使用帮助: '
-            - ' &6/signin database backup &c备份当前所有的数据'
-            - ' &6/signin database rollback [备份文件] &c将所有数据进行回档'
-            - ' &6/signin database confirm &c确定操作'
-            Feature-Disabled: '{prefix}&c此功能已经被禁用.'
-            Confirm:
-                Button:
-                    Text: '&a&l&n[点击这里]'
-                    Hover:
-                    - '&5点击确认操作'
-                Need-Confirm:
-                - '&6请使用命令 &a/signin database confirm &6以确认执行此操作'
-                - '&6或者 %button%'
-                Invalid-Operation: '{prefix}&c没有待确认的操作。'
-            Backup: '{prefix}&a开始备份数据， 可能需要较长的时间...'
-            Rollback:
-                Help: '{prefix}&c正确使用方法: /signin database rollback [备份文件]'
-                File-Not-Exist: '{prefix}&c备份文件 {file} &c不存在！'
-                Start-Rollback: '{prefix}&a开始回档数据到备份 &e{file}&a， 可能需要较长时间...'
-        Click: 
-            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
-            Date-Format: 'yyyy年MM月dd日'
-            Invalid-Date: '{prefix}&c无效的日期 &e{date} &c! 例: /signin click 2015-8-11'
-            To-Self:
-                Today-has-been-Signed-In: '{prefix}&c您今天已经签到了，请不要重复签到。'
-                Specified-Date-has-been-Signed-In: '{prefix}&c日期 &e{date} &c已经签到了， 请不要重复签到.'
-                Minimum-Date:
-                - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
-                Successfully-Signed-In:
-                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-                - ''
-                - '  {prefix}&d今日签到已完成!'
-                - ''
-                - '  &c# &a您已连续签到 &e{continuous} &a天'
-                - '  &c# &a您今天是全服第 &b{queue} &a个签到的玩家'
-                - ''
-                - '&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-                Unable-To-Hold:
-                - '{prefix}&c你没有权限持有补签卡， 系统已将你的所有补签卡进行回收。'
-                Retroactive-Card-Cooldown:
-                - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
-                Need-More-Retroactive-Cards:
-                - '{prefix}&c你还需要 &e{cards} &c张&a补签卡&c才可以进行补签!'
-                Successfully-Retroactive-Signed-In:
-                - '{prefix}&a日期 &e{date} &a补签成功， 您已连续签到 &e{continuous} &a天。'
-            To-Other-Player:
-                Today-has-been-Signed-In: '{prefix}&c玩家 &6{player} &c今天已经签到了，请不要重复签到。'
-                Specified-Date-has-been-Signed-In: '{prefix}&c玩家 &6{player} &c已在日期 &e{date} &c签到了， 请不要重复签到.'
-                Minimum-Date:
-                - '{prefix}&c你不可以对 &e{date} &c以前的日期进行补签。'
-                Successfully-Signed-In:
-                - '{prefix}&a成功给玩家 &6{player} &a签到， 当前该玩家已连续签到 &e{continuous} &a天。'
-                Successfully-Retroactive-Signed-In:
-                - '{prefix}&a成功给玩家 &6{player} &a日期 &e{date} &a补签， &6{player} &a连续签到 &e{continuous} &a天。'
-                Messages-at-Sign-In:
-                - '{prefix}&a管理员 &6{admin} &a帮助您签到， 您已连续签到 &e{continuous} &a天。'
-                Messages-at-Retroactive-Sign-In:
-                - '{prefix}&a管理员 &6{admin} &a帮助您补签日期 &e{date}&a， 您已连续签到 &e{continuous} &a天。'
-        GUI: 
-            Normal: '{prefix}&b你打开了签到菜单。'
-            Specified-Month: '{prefix}&b你打开了 &e{month}月&b 的签到菜单。'
-            Invalid-Month: '{prefix}&c月份 &e{month} &c不存在，请输入正确的月份 &7[1-12]'
-            Specified-Year: '{prefix}&b你打开了 &e{year}年{month}月&b 的签到菜单。'
-            Invalid-Year: '{prefix}&c年份 &e{year} &c不存在，请输入正确的年份'
-        Save: '{prefix}&a成功保存所有玩家的数据!'
-        LeaderBoard:
-            #每一页显示多少个玩家
-            Number-Of-Single-Page: 10
-            Date-Format: 'yyyy年MM月dd日'
-            Time-Format: 'HH:mm:ss'
-            Unknown-Player: '&3未知玩家&8(UUID:{uuid})'
-            Unknown-Time: '&e未知时间'
-            Player-Show:
-                Text:
-                    Self: '&2{player}'
-                    Other-Players: '&3{player}'
-                Command: 'litesignin info {player}'
-                Hover:
-                - '&5点击查看玩家 &e{player} &5的个人信息'
-            Previous-Page:
-                Text: '&b&l上一页'
-                Hover:
-                - '&5点击转到上一页'
-                - '&7当前页数: &e{page}'
-                - '&7上一页: &e{previousPage}'
-            Next-Page:
-                Text: '&b&l下一页'
-                Hover:
-                - '&5点击转到下一页'
-                - '&7当前页数: &e{page}'
-                - '&7下一页: &e{nextPage}'
-            Invalid-Number: '{prefix}&c您所指定的页数 &e{page} &c不存在! 请输入有效的数字!'
-            Date-Not-Exist: '{prefix}&c您所指定的日期 &e{date} &c无效! 请输入正确的日期! &7(年-月-日)'
-            List-Format:
-                Today:
-                    Usually:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
-                    Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
-                Historical-Date:
-                    Usually:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time}'
-                    Tiel-Ranking:
-                        Self: '  &4# &b&l{ranking}&f. %player% &5&l- &c&n{time}&f &5[并列第{ranking}名] &7<- 我在这.'
-                        Other-Players: '  &c# &e{ranking}&f. %player% &5&l- &e{time} &5[并列第{ranking}名]'
-            Empty: '{prefix}&a日期 &e{date} &a没有任何人签到.'
-            Non-Database-mode: '{prefix}&e你必须是 &bSQLite &e或 &bMySQL &e储存模式才能够查询过往日期的签到排名!'
-            LeaderBoard-Messages:
-            - '{prefix}&e&l签到排行榜 &d{date}'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
-            - '  %leaderboard%'
-            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            Historical-Date-LeaderBoard-Messages:
-            - '{prefix}&e&l历史日期 &d{date} &e&l签到排行榜'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '  &a签到总人数 &e&l{total} &a人 &c&l| &a当前页数 &6&l{page}&7/&6&l{maxPage} &a页'
-            - '  %leaderboard%'
-            - '  &a<<< %previousPage% &c&l| %nextPage% &a>>>'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-        ItemCollection:
-            Help: 
-                - '{prefix}&a使用帮助 &f&l>>>'
-                - ' &6/signin itemcollection list &c列出所有收藏品'
-                - ' &6/signin itemcollection add [名称] &c将手上的物品添加到收藏品列表'
-                - ' &6/signin itemcollection delete [名称] &c删除指定的收藏品'
-                - ' &6/signin itemcollection give [名称] &8[玩家] &c将指定的收藏品给予自己或其他玩家'
-                - '&c&l说明: &d收藏品功能能够将一些包含复杂的NBT的物品序列化并添加至&aCustomItems.yml&b文件中，'
-                - '&d你可以在&aRewardSettings.yml&d文件的&bReward-Items&d选项中添加收藏品的名字以设置签到奖励所给予的物品， 详细的请查看配置文件中的注释说明.'
-            List:
-                Empty: '{prefix}&a收藏品列表是空的。'
-                Messages:
-                - '{prefix}&a当前一共有 &e{amount} &a件收藏品， 收藏品列表如下: &c%list%'
-                - '&d你可以在&aRewardSettings.yml&d文件的&bReward-Items&d选项中添加以上收藏品的名字以设置签到奖励所给予的物品， 详细的请查看配置文件中的注释说明.'
-            Add:
-                Help: '{prefix}&c使用方法: &6/signin itemcollection add [名称]'
-                Doesnt-Have-Item-In-Hand: '{prefix}&c你需要将需要执行操作的物品拿在手上!'
-                Successfully: '{prefix}&a成功将你手上的物品 &r%item% &a名字: &e{name} &a添加到收藏品列表中.'
-                Already-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品已存在!'
-            Delete:
-                Help: '{prefix}&c使用方法: &6/signin itemcollection delete [名称]'
-                Successfully: '{prefix}&a成功将物品 &r%item% &a名字: &e{name} &a从收藏品列表中删除.'
-                Not-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品不存在! 请使用&a/signin itemcollection list&c列出所有收藏品!'
-            Give:
-                Help: '{prefix}&c使用方法: &6/signin itemcollection give [名称] [玩家]'
-                Player-Offline: '{prefix}&c玩家 &e{player} &c不在线!'
-                Give-Yourself: '{prefix}&a已将物品 &r%item% &a名字: &e{name} &a给予自己。'
-                Give-Others: '{prefix}&a已将物品 &r%item% &a名字: &e{name} &a给予玩家 &c{player} &a.'
-                Not-Exist: '{prefix}&c收藏品名字 &e{name} &c的物品不存在! 请使用&a/signin itemcollection list&c列出所有收藏品!'
-        Info:
-            Help: '{prefix}&a使用帮助: &6/signin info &7[玩家] &a查看玩家的信息'
-            true: '&a是'
-            false: '&c否'
-            Unknown-Group: '未知&8(需在线!)'
-            Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在!'
-            Info: 
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-            - '&6 玩家 &a{player} &6的信息: '
-            - '&6 今日是否签到: {signin}'
-            - '&6 所在权限组名: &5{group}'
-            - '&6 今日签到排名: &3{queue}'
-            - '&6 补签卡的数量: &d{retroactivecard}'
-            - '&6 连续签到天数: &b{continuous}'
-            - '&6 总共签到天数: &e{total}'
-            - '&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-    Database-Management:
-        Backup:
-            Successfully: '{prefix}&a成功备份数据到 &b{file} &a.'
-            Failed: '{prefix}&c备份失败， 出现错误: &e{error}'
-            BackingUp: '{prefix}&e插件正在备份数据中， 请稍后再执行此操作.'
-            Auto-Backup: '{prefix}&a开始备份数据， 这可能需要较长的时间...'
-        RollBack:
-            Successfully: '{prefix}&a成功将数据回档到 &b{file} &a.'
-            Failed: '{prefix}&c回档失败， 出现错误: &e{error}'
-    Updater:
-        Link:
-            Player-Text: '&d&l[点击查看]'
-            Console-Text: '&d{link}'
-            Hover-Text:
-            - '&5点击获取下载链接'
-        Checked: 
-        - '{prefix}&a发现插件存在最新版本: &bv{version}'
-        - '&6- &3服务器运行版本: &6v{nowVersion}'
-        - '&6- &3下载地址: %link%'
-        - '&6- &3更新日志: {description}'
-        Error: '{prefix}&c无法获取插件最新版本, 请检查你的网络是否正常! '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a你已成功創建了簽到告示牌 &b{sign}'
+        Unable-To-Create: '{prefix}&c無法創建簽到告示牌 &b{sign}&c，您缺少權限: &e{permission}'
+        Successfully-Remove: '{prefix}&c已移除簽到告示牌 &b{sign}'
 English:
     No-Permission: '{prefix}&cYou don''t have permission to do this!'
     Unavailable-Command: '{prefix}&cThe console cannot use this command.'
@@ -1009,3 +1021,7 @@ English:
         - '&6- &3Download link: %link%'
         - '&6- &3Update log: {description}'
         Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
+    Wood-Sign:
+        Successfully-Create: '{prefix}&aYou have successfully created a sign-in sign &b{sign}'
+        Unable-To-Create: '{prefix}&cUnable to create sign-in sign &b{sign}&c, you not have permission: &e{permission}'
+        Successfully-Remove: '{prefix}&cSign-in sign has been removed &b{sign}'

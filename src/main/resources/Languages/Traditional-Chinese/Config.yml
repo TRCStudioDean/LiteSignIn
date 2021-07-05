@@ -32,6 +32,10 @@ Auto-Save:
 #詳見bStats.org
 Metrics: true
     
+#木牌簽到腳本
+#啟用後將生成WoodSignSettings.yml文件，請在該文件中按照註釋的幫助進行編輯。
+Wood-Signs-Script: false
+    
 #補簽卡
 Retroactive-Card:
     #如果為false， 則不啟用補簽功能

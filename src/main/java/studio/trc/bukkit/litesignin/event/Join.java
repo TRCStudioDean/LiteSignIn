@@ -60,7 +60,7 @@ public class Join
                         List<String> array = MessageUtil.getMessageList("GUI-SignIn-Messages.Hover-Text");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(hover.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix()))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -73,7 +73,7 @@ public class Join
                         baseComponents.put("%opengui%", click);
                         MessageUtil.sendJsonMessage(player, text, baseComponents);
                     } else {
-                        player.sendMessage(text.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        player.sendMessage(MessageUtil.toColor(text.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix())));
                     }
                 }
             }
@@ -89,7 +89,7 @@ public class Join
                         List<String> array = MessageUtil.getMessageList("Updater.Link.Hover-Text");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(hover.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -102,7 +102,7 @@ public class Join
                         baseComponents.put("%link%", click);
                         MessageUtil.sendJsonMessage(player, text, baseComponents);
                     } else {
-                        player.sendMessage(text.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        player.sendMessage(MessageUtil.toColor(text.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix())));
                     }
                 });
             }

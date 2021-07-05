@@ -29,16 +29,16 @@ public class MessageUtil
         if (messages.isEmpty() && !ConfigurationUtil.getConfig(ConfigurationType.MESSAGES).getString(getLanguage() + "." + path).equals("[]")) {
             String message = ConfigurationUtil.getConfig(ConfigurationType.MESSAGES).getString(getLanguage() + "." + path).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n");
             if (PluginControl.usePlaceholderAPI() && sender instanceof Player) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                sender.sendMessage(MessageUtil.toColor(PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                sender.sendMessage(MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
             }
         } else {
             for (String message : messages) {
                 if (PluginControl.usePlaceholderAPI() && sender instanceof Player) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                    sender.sendMessage(MessageUtil.toColor(PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                    sender.sendMessage(MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
                 }
             }
         }
@@ -60,9 +60,9 @@ public class MessageUtil
                 message = message.replace(keySet, placeholders.get(keySet));
             }
             if (PluginControl.usePlaceholderAPI() && sender instanceof Player) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders((Player) sender, message)));
+                sender.sendMessage(MessageUtil.toColor(PlaceholderAPI.setPlaceholders((Player) sender, message)));
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                sender.sendMessage(MessageUtil.toColor(message));
             }
         } else {
             for (String message : messages) {
@@ -70,9 +70,9 @@ public class MessageUtil
                     message = message.replace(keySet, placeholders.get(keySet));
                 }
                 if (PluginControl.usePlaceholderAPI() && sender instanceof Player) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                    sender.sendMessage(MessageUtil.toColor(PlaceholderAPI.setPlaceholders((Player) sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
+                    sender.sendMessage(MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n")));
                 }
             }
         }
@@ -90,13 +90,13 @@ public class MessageUtil
                         int end = 0;
                         for (String splitText : split) {
                             end++;
-                            newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                            newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             if (end < split.length || plainText.endsWith(placeholder)) {
-                                newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                                newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             }
                         }
                     } else {
-                        newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                        newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                     }
                 }
                 rawBCMessage = newArray.toArray(new BaseComponent[0]);
@@ -118,7 +118,7 @@ public class MessageUtil
             for (String placeholder : baseComponents.keySet()) {
                 message = message.replace(placeholder, baseComponents.get(placeholder).toPlainText());
             }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            sender.sendMessage(MessageUtil.toColor(message));
         }
     }
     
@@ -137,13 +137,13 @@ public class MessageUtil
                         int end = 0;
                         for (String splitText : split) {
                             end++;
-                            newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                            newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(splitText, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             if (end < split.length || plainText.endsWith(placeholder)) {
-                                newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                                newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(placeholder, sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                             }
                         }
                     } else {
-                        newArray.add(new TextComponent(ChatColor.translateAlternateColorCodes('&', toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
+                        newArray.add(new TextComponent(MessageUtil.toColor(toPlaceholderAPIResult(bc.toPlainText(), sender).replace("{prefix}", PluginControl.getPrefix()).replace("/n", "\n"))));
                     }
                 }
                 rawBCMessage = newArray.toArray(new BaseComponent[0]);
@@ -165,7 +165,7 @@ public class MessageUtil
             for (String placeholder : baseComponents.keySet()) {
                 message = message.replace(placeholder, baseComponents.get(placeholder).toPlainText());
             }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            sender.sendMessage(toColor(message));
         }
     }
     
@@ -174,7 +174,7 @@ public class MessageUtil
     }
     
     public static String getMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', ConfigurationUtil.getConfig(ConfigurationType.MESSAGES).getString(getLanguage() + "." + path).replace("{prefix}", PluginControl.getPrefix()));
+        return MessageUtil.toColor(ConfigurationUtil.getConfig(ConfigurationType.MESSAGES).getString(getLanguage() + "." + path).replace("{prefix}", PluginControl.getPrefix()));
     }
     
     public static List<String> getMessageList(String path) {
@@ -183,6 +183,10 @@ public class MessageUtil
     
     public static String getLanguage() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Language");
+    }
+    
+    public static String toColor(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
     
     public static enum Languages {

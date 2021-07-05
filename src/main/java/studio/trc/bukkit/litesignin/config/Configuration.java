@@ -24,7 +24,7 @@ public class Configuration
     }
     
     public void repairConfigurationSection(String path) {
-        if (type.equals(ConfigurationType.CUSTOMITEMS)) return;
+        if (type.equals(ConfigurationType.CUSTOMITEMS) || type.equals(ConfigurationType.WOODSIGNSETTINGS)) return;
         FileConfiguration defaultFile = DefaultConfigurationFile.getDefaultConfig(type);
         config.set(path, defaultFile.get(path) != null ? defaultFile.get(path) : "null");
         saveConfig();

@@ -135,7 +135,7 @@ public class SignInSpecialTimePeriodReward
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                             List<String> lore = new ArrayList();
                             for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemdata[0] + ".Lore")) {
-                                lore.add(MessageUtil.toPlaceholderAPIResult(lores.replace("&", "§"), player));
+                                lore.add(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(lores, player)));
                             }
                             im.setLore(lore);
                         }
@@ -152,7 +152,7 @@ public class SignInSpecialTimePeriodReward
                             }
                         }
                         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Display-Name").replace("&", "§"), player));
+                        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Display-Name"), player)));
                         is.setItemMeta(im);
                         try {
                             if (itemdata[1].contains("-")) {
@@ -236,13 +236,13 @@ public class SignInSpecialTimePeriodReward
                             break;
                         }
                         case MESSAGES_SENDING: {
-                            getMessages().stream().forEach(messages -> {player.sendMessage(MessageUtil.toPlaceholderAPIResult(messages.replace("{continuous}", String.valueOf(playerData.getContinuousSignIn())).replace("{queue}", queue).replace("{total-number}", String.valueOf(playerData.getCumulativeNumber())).replace("{player}", player.getName()).replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"), player));});
+                            getMessages().stream().forEach(messages -> {player.sendMessage(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(messages.replace("{continuous}", String.valueOf(playerData.getContinuousSignIn())).replace("{queue}", queue).replace("{total-number}", String.valueOf(playerData.getCumulativeNumber())).replace("{player}", player.getName()).replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")), player)));});
                             break;
                         }
                         case BROADCAST_MESSAGES_SENDING: {
                             getBroadcastMessages().stream().forEach(messages -> {
                                 Bukkit.getOnlinePlayers().stream().forEach(players -> {
-                                    players.sendMessage(MessageUtil.toPlaceholderAPIResult(messages.replace("{continuous}", String.valueOf(playerData.getContinuousSignIn())).replace("{queue}", queue).replace("{total-number}", String.valueOf(playerData.getCumulativeNumber())).replace("{player}", player.getName()).replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")).replace("&", "§"), player));
+                                    players.sendMessage(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(messages.replace("{continuous}", String.valueOf(playerData.getContinuousSignIn())).replace("{queue}", queue).replace("{total-number}", String.valueOf(playerData.getCumulativeNumber())).replace("{player}", player.getName()).replace("{prefix}", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix")), player)));
                                 });
                             });
                             break;

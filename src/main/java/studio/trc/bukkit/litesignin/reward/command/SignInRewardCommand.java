@@ -27,21 +27,21 @@ public class SignInRewardCommand
     public void runWithThePlayer(Player player) {
         switch (type) {
             case PLAYER: {
-                player.performCommand(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()).replace("&", "§"), player));
+                player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()), player)));
                 break;
             }
             case OP: {
                 if (player.isOp()) {
-                    player.performCommand(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()).replace("&", "§"), player));
+                    player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()), player)));
                 } else {
                     player.setOp(true);
-                    player.performCommand(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()).replace("&", "§"), player));
+                    player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()), player)));
                     player.setOp(false);
                 }
                 break;
             }
             case SERVER: {
-                Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()).replace("&", "§"), player));
+                Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command.replace("{player}", player.getName()), player)));
                 break;
             }
         }

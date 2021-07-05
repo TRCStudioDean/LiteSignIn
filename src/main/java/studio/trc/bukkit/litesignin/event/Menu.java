@@ -135,48 +135,48 @@ public class Menu
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
                                 for (String commands : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
                                     if (commands.toLowerCase().startsWith("server:")) {
-                                        Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toPlaceholderAPIResult(commands.substring(7)
+                                        Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(7)
                                             .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                     } else if (commands.toLowerCase().startsWith("op:")) {
                                         if (player.isOp()) {
-                                            player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
+                                            player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
                                             .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                         } else {
                                             player.setOp(true);
-                                            player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
+                                            player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
                                             .replace("{dateText}", columns.getDate().getDataText(false))
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                             player.setOp(false);
                                         }
                                     } else {
-                                        player.performCommand(MessageUtil.toPlaceholderAPIResult(commands
+                                        player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands
                                         .replace("{dateText}", columns.getDate().getDataText(false))
                                         .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                         .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                         .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                        .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                        .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                     }
                                 }
                             }
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
                                 for (String message : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
-                                    player.sendMessage(MessageUtil.toPlaceholderAPIResult(message
+                                    player.sendMessage(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(message
                                         .replace("{dateText}", columns.getDate().getDataText(false))
                                         .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                         .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                         .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                        .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                        .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                 }
                             }
                         } else {
@@ -187,43 +187,43 @@ public class Menu
                                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
                                     for (String commands : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
                                         if (commands.toLowerCase().startsWith("server:")) {
-                                            Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toPlaceholderAPIResult(commands.substring(7)
+                                            Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(7)
                                                 .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                                 .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                                 .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                         } else if (commands.toLowerCase().startsWith("op:")) {
                                             if (player.isOp()) {
-                                                player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
+                                                player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
                                                 .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                                 .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                                 .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                             } else {
                                                 player.setOp(true);
-                                                player.performCommand(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
+                                                player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands.substring(3)
                                                 .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                                 .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                                 .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                                .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                                 player.setOp(false);
                                             }
                                         } else {
-                                            player.performCommand(MessageUtil.toPlaceholderAPIResult(commands
+                                            player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(commands
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                         }
                                     }
                                 }
                                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
                                     for (String message : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
-                                        player.sendMessage(MessageUtil.toPlaceholderAPIResult(message
+                                        player.sendMessage(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(message
                                             .replace("{nextPageMonth}", String.valueOf(nextPageMonth))
                                             .replace("{nextPageYear}", String.valueOf(nextPageYear))
                                             .replace("{previousPageMonth}", String.valueOf(previousPageMonth))
-                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), player));
+                                            .replace("{previousPageYear}", String.valueOf(previousPageYear)).replace("{player}", player.getName()).replace("{prefix}", PluginControl.getPrefix()), player)));
                                     }
                                 }
                             }

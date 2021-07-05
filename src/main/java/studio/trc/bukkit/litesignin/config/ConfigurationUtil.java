@@ -27,6 +27,7 @@ public class ConfigurationUtil
     private final static FileConfiguration guisettings = new YamlConfiguration();
     private final static FileConfiguration rewardsettings = new YamlConfiguration();
     private final static FileConfiguration customitems = new YamlConfiguration();
+    private final static FileConfiguration WOODSIGNSETTINGS = new YamlConfiguration();
     
     public static FileConfiguration getFileConfiguration(ConfigurationType fileType) {
         switch (fileType) {
@@ -35,6 +36,7 @@ public class ConfigurationUtil
             case GUISETTINGS: return guisettings;
             case MESSAGES: return messages;
             case REWARDSETTINGS: return rewardsettings;
+            case WOODSIGNSETTINGS: return WOODSIGNSETTINGS;
             default: return null;
         }
     }
@@ -71,6 +73,11 @@ public class ConfigurationUtil
                 cacheConfig.put(fileType, file);
                 return file;
             }
+            case WOODSIGNSETTINGS: {
+                Configuration file = new Configuration(WOODSIGNSETTINGS, fileType);
+                cacheConfig.put(fileType, file);
+                return file;
+            }
             default: return null;
         }
     }
@@ -101,6 +108,9 @@ public class ConfigurationUtil
     
     public static void reloadConfig() {
         for (ConfigurationType type : ConfigurationType.values()) {
+            if (type.equals(ConfigurationType.WOODSIGNSETTINGS)) {
+                continue;
+            }
             reloadConfig(type);
         }
     }
@@ -212,11 +222,30 @@ public class ConfigurationUtil
                 } catch (IOException ex) {}
                 break;
             }
+            case WOODSIGNSETTINGS: {
+                try {
+                    File configFile = new File("plugins/LiteSignIn/WoodSignSettings.yml");
+                    if (!configFile.exists()) {
+                        configFile.createNewFile();
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/WoodSignSettings.yml");
+                        try (OutputStream out = new FileOutputStream(configFile)) {
+                            int b;
+                            while ((b = is.read()) != -1) {
+                                out.write((char) b);
+                            }
+                        }
+                    }
+                } catch (IOException ex) {}
+                break;
+            }
         }
     }
     
     public static void saveConfig() {
         for (ConfigurationType type : ConfigurationType.values()) {
+            if (type.equals(ConfigurationType.WOODSIGNSETTINGS)) {
+                continue;
+            }
             saveConfig(type);
         }
     }
@@ -242,6 +271,10 @@ public class ConfigurationUtil
                 }
                 case REWARDSETTINGS: {
                     rewardsettings.save("plugins/LiteSignIn/RewardSettings.yml");
+                    break;
+                }
+                case WOODSIGNSETTINGS: {
+                    rewardsettings.save("plugins/LiteSignIn/WoodSignSettings.yml");
                     break;
                 }
             }

@@ -25,7 +25,12 @@ public enum ConfigurationType
     /**
      * CustomItems.yml
      */
-    CUSTOMITEMS("CustomItems.yml");
+    CUSTOMITEMS("CustomItems.yml"),
+    
+    /**
+     * WoodSignSettings.yml
+     */
+    WOODSIGNSETTINGS("WoodSignSettings.yml");
     
     private final String fileName;
     

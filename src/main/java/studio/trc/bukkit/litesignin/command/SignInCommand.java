@@ -547,14 +547,14 @@ public class SignInCommand
                         if (!ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Database-Management.Backup.Enabled")) {
                             return true;
                         }
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        BaseComponent click = new TextComponent(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text").replace("{prefix}", PluginControl.getPrefix())));
                         ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin database confirm");
                         List<BaseComponent> hoverText = new ArrayList();
                         int end = 0;
                         List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(hover.replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{prefix}", PluginControl.getPrefix()))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -565,7 +565,7 @@ public class SignInCommand
                         Map<String, BaseComponent> baseComponents = new HashMap();
                         baseComponents.put("%button%", click);
                         for (String message : MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm")) {
-                            MessageUtil.sendJsonMessage(sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), baseComponents);
+                            MessageUtil.sendJsonMessage(sender, MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix())), baseComponents);
                         }
                         confirmCache.put(sender, Confirm.Backup);
                     } else if (args[1].equalsIgnoreCase("rollback")) {
@@ -587,14 +587,14 @@ public class SignInCommand
                             MessageUtil.sendMessage(sender, "Command-Messages.Database.Rollback.File-Not-Exist", placeholders);
                             return true;
                         }
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text").replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        BaseComponent click = new TextComponent(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text").replace("{prefix}", PluginControl.getPrefix())));
                         ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin database confirm");
                         List<BaseComponent> hoverText = new ArrayList();
                         int end = 0;
                         List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(hover.replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{prefix}", PluginControl.getPrefix()))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -605,7 +605,7 @@ public class SignInCommand
                         Map<String, BaseComponent> baseComponents = new HashMap();
                         baseComponents.put("%button%", click);
                         for (String message : MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm")) {
-                            MessageUtil.sendJsonMessage(sender, message.replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"), baseComponents);
+                            MessageUtil.sendJsonMessage(sender, MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix())), baseComponents);
                         }
                         Confirm confirm = Confirm.Rollback;
                         confirm.setTargetFile(file);
@@ -821,20 +821,20 @@ public class SignInCommand
                                             }
                                             list.append(name).append(", ");
                                         }
-                                        sender.sendMessage(text.replace("%list%", list.toString()).replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        sender.sendMessage(MessageUtil.toColor(text.replace("%list%", list.toString()).replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix())));
                                         continue;
                                     }
                                     String[] splitMessage = text.split("%list%");
                                     List<BaseComponent> bc = new ArrayList();
                                     for (int i = 0;i < splitMessage.length;i++) {
-                                        bc.add(new TextComponent(splitMessage[i].replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                        bc.add(new TextComponent(MessageUtil.toColor(splitMessage[i].replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix()))));
                                         if (i < splitMessage.length - 1 || text.endsWith("%list%")) {
                                             bc.addAll(Arrays.asList(JsonItemStack.getJsonItemStackArray(itemList)));
                                         }
                                     }
                                     ((Player) sender).spigot().sendMessage(bc.toArray(new BaseComponent[] {}));
                                 } else {
-                                    sender.sendMessage(text.replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                    sender.sendMessage(MessageUtil.toColor(text.replace("{amount}", String.valueOf(itemList.size())).replace("{prefix}", PluginControl.getPrefix())));
                                 }
                             }
                         }
@@ -857,13 +857,13 @@ public class SignInCommand
                                         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                             name = is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : is.getType().toString().toLowerCase().replace("_", " ");
                                         }
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix())));
                                         return true;
                                     }
                                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").split("%item%");
                                     List<BaseComponent> bc = new ArrayList();
                                     for (int i = 0;i < splitMessage.length;i++) {
-                                        bc.add(new TextComponent(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                        bc.add(new TextComponent(MessageUtil.toColor(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()))));
                                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").endsWith("%item%")) {
                                             bc.add(JsonItemStack.getJsonItemStack(is));
                                         }
@@ -894,13 +894,13 @@ public class SignInCommand
                                         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                             name = item.getItemStack().getItemMeta().hasDisplayName() ? item.getItemStack().getItemMeta().getDisplayName() : item.getItemStack().getType().toString().toLowerCase().replace("_", " ");
                                         }
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix())));
                                         return true;
                                     }
                                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").split("%item%");
                                     List<BaseComponent> bc = new ArrayList();
                                     for (int i = 0;i < splitMessage.length;i++) {
-                                        bc.add(new TextComponent(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                        bc.add(new TextComponent(MessageUtil.toColor(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()))));
                                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").endsWith("%item%")) {
                                             bc.add(JsonItemStack.getJsonItemStack(item.getItemStack()));
                                         }
@@ -940,13 +940,13 @@ public class SignInCommand
                                             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                                 name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : ci.getItemStack().getType().toString().toLowerCase().replace("_", " ");
                                             }
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").replace("%item%", name).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix())));
                                             return true;
                                         }
                                         String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").split("%item%");
                                         List<BaseComponent> bc = new ArrayList();
                                         for (int i = 0;i < splitMessage.length;i++) {
-                                            bc.add(new TextComponent(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                            bc.add(new TextComponent(MessageUtil.toColor(splitMessage[i].replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()))));
                                             if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").endsWith("%item%")) {
                                                 bc.add(JsonItemStack.getJsonItemStack(ci.getItemStack()));
                                             }
@@ -983,13 +983,13 @@ public class SignInCommand
                                         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                             name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : ci.getItemStack().getType().toString().toLowerCase().replace("_", " ");
                                         }
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").replace("%item%", name).replace("{player}", player.getName()).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").replace("%item%", name).replace("{player}", player.getName()).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix())));
                                         return true;
                                     }
                                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").split("%item%");
                                     List<BaseComponent> bc = new ArrayList();
                                     for (int i = 0;i < splitMessage.length;i++) {
-                                        bc.add(new TextComponent(splitMessage[i].replace("{player}", player.getName()).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                        bc.add(new TextComponent(MessageUtil.toColor(splitMessage[i].replace("{player}", player.getName()).replace("{name}", args[2]).replace("{prefix}", PluginControl.getPrefix()))));
                                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").endsWith("%item%")) {
                                             bc.add(JsonItemStack.getJsonItemStack(ci.getItemStack()));
                                         }
@@ -1163,7 +1163,7 @@ public class SignInCommand
                                         List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
                                         for (String hover : array) {
                                             end++;
-                                            hoverText.add(new TextComponent(hover
+                                            hoverText.add(new TextComponent(MessageUtil.toColor(hover
                                                 .replace("{player}", name)
                                                 .replace("{total}", String.valueOf(queue.size()))
                                                 .replace("{date}", dateName)
@@ -1171,7 +1171,7 @@ public class SignInCommand
                                                 .replace("{time}", timeName)
                                                 .replace("{page}", String.valueOf(page))
                                                 .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                .replace("{prefix}", PluginControl.getPrefix()))));
                                             if (end != array.size()) {
                                                 hoverText.add(new TextComponent("\n"));
                                             }
@@ -1191,7 +1191,7 @@ public class SignInCommand
                                         placeholders.put("{maxPage}", String.valueOf(maxPage));
                                         MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), baseComponents, placeholders);
                                     } else {
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
+                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
                                                 .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                                 .replace("{total}", String.valueOf(queue.size()))
                                                 .replace("{date}", dateName)
@@ -1199,17 +1199,17 @@ public class SignInCommand
                                                 .replace("{time}", timeName)
                                                 .replace("{page}", String.valueOf(page))
                                                 .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                                .replace("{prefix}", PluginControl.getPrefix())));
                                     }
                                 } else {
-                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
+                                    sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
                                         .replace("{total}", String.valueOf(queue.size()))
                                         .replace("{date}", dateName)
                                         .replace("{ranking}", String.valueOf(rank))
                                         .replace("{time}", timeName)
                                         .replace("{page}", String.valueOf(page))
                                         .replace("{maxPage}", String.valueOf(maxPage))
-                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        .replace("{prefix}", PluginControl.getPrefix())));
                                 }
                             } else {
                                 for (SignInQueueElement user : userArray) {
@@ -1232,7 +1232,7 @@ public class SignInCommand
                                             List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
                                             for (String hover : array) {
                                                 end++;
-                                                hoverText.add(new TextComponent(hover
+                                                hoverText.add(new TextComponent(MessageUtil.toColor(hover
                                                     .replace("{player}", name)
                                                     .replace("{total}", String.valueOf(queue.size()))
                                                     .replace("{date}", dateName)
@@ -1240,7 +1240,7 @@ public class SignInCommand
                                                     .replace("{time}", timeName)
                                                     .replace("{page}", String.valueOf(page))
                                                     .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                    .replace("{prefix}", PluginControl.getPrefix()))));
                                                 if (end != array.size()) {
                                                     hoverText.add(new TextComponent("\n"));
                                                 }
@@ -1260,7 +1260,7 @@ public class SignInCommand
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
                                             MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), baseComponents, placeholders);
                                         } else {
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                                     .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                                     .replace("{total}", String.valueOf(queue.size()))
                                                     .replace("{date}", dateName)
@@ -1268,17 +1268,17 @@ public class SignInCommand
                                                     .replace("{time}", timeName)
                                                     .replace("{page}", String.valueOf(page))
                                                     .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                                    .replace("{prefix}", PluginControl.getPrefix())));
                                         }
                                     } else {
-                                        sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                             .replace("{total}", String.valueOf(queue.size()))
                                             .replace("{date}", dateName)
                                             .replace("{ranking}", String.valueOf(rank))
                                             .replace("{time}", timeName)
                                             .replace("{page}", String.valueOf(page))
                                             .replace("{maxPage}", String.valueOf(maxPage))
-                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                            .replace("{prefix}", PluginControl.getPrefix())));
                                     }
                                 }
                             }
@@ -1295,7 +1295,7 @@ public class SignInCommand
                                     List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
                                     for (String hover : array) {
                                         end++;
-                                        hoverText.add(new TextComponent(hover
+                                        hoverText.add(new TextComponent(MessageUtil.toColor(hover
                                             .replace("{player}", name)
                                             .replace("{total}", String.valueOf(queue.size()))
                                             .replace("{date}", dateName)
@@ -1303,7 +1303,7 @@ public class SignInCommand
                                             .replace("{time}", timeName)
                                             .replace("{page}", String.valueOf(page))
                                             .replace("{maxPage}", String.valueOf(maxPage))
-                                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                            .replace("{prefix}", PluginControl.getPrefix()))));
                                         if (end != array.size()) {
                                             hoverText.add(new TextComponent("\n"));
                                         }
@@ -1323,14 +1323,14 @@ public class SignInCommand
                                     placeholders.put("{maxPage}", String.valueOf(maxPage));
                                     MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self"), baseComponents, placeholders);
                                 } else {
-                                    sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self")
+                                    sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self")
                                         .replace("{total}", String.valueOf(queue.size()))
                                         .replace("{date}", dateName)
                                         .replace("{ranking}", String.valueOf(rank))
                                         .replace("{time}", timeName)
                                         .replace("{page}", String.valueOf(page))
                                         .replace("{maxPage}", String.valueOf(maxPage))
-                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                        .replace("{prefix}", PluginControl.getPrefix())));
                                 }
                             } else {
                                 for (SignInQueueElement user : userArray) {
@@ -1346,7 +1346,7 @@ public class SignInCommand
                                             List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
                                             for (String hover : array) {
                                                 end++;
-                                                hoverText.add(new TextComponent(hover
+                                                hoverText.add(new TextComponent(MessageUtil.toColor(hover
                                                     .replace("{player}", name)
                                                     .replace("{total}", String.valueOf(queue.size()))
                                                     .replace("{date}", dateName)
@@ -1354,7 +1354,7 @@ public class SignInCommand
                                                     .replace("{time}", timeName)
                                                     .replace("{page}", String.valueOf(page))
                                                     .replace("{maxPage}", String.valueOf(maxPage))
-                                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                    .replace("{prefix}", PluginControl.getPrefix()))));
                                                 if (end != array.size()) {
                                                     hoverText.add(new TextComponent("\n"));
                                                 }
@@ -1374,14 +1374,14 @@ public class SignInCommand
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
                                             MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self"), baseComponents, placeholders);
                                         } else {
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self")
+                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self")
                                                 .replace("{total}", String.valueOf(queue.size()))
                                                 .replace("{date}", dateName)
                                                 .replace("{ranking}", String.valueOf(rank))
                                                 .replace("{time}", timeName)
                                                 .replace("{page}", String.valueOf(page))
                                                 .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                                .replace("{prefix}", PluginControl.getPrefix())));
                                         }
                                     } else {
                                         SignInQueueElement element = user;
@@ -1403,7 +1403,7 @@ public class SignInCommand
                                                 List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
                                                 for (String hover : array) {
                                                     end++;
-                                                    hoverText.add(new TextComponent(hover
+                                                    hoverText.add(new TextComponent(MessageUtil.toColor(hover
                                                         .replace("{player}", name)
                                                         .replace("{total}", String.valueOf(queue.size()))
                                                         .replace("{date}", dateName)
@@ -1411,7 +1411,7 @@ public class SignInCommand
                                                         .replace("{time}", timeName)
                                                         .replace("{page}", String.valueOf(page))
                                                         .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                                                        .replace("{prefix}", PluginControl.getPrefix()))));
                                                     if (end != array.size()) {
                                                         hoverText.add(new TextComponent("\n"));
                                                     }
@@ -1430,7 +1430,7 @@ public class SignInCommand
                                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
                                                 MessageUtil.sendJsonMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), baseComponents, placeholders);
                                             } else {
-                                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                                sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                                         .replace("%player%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                                         .replace("{total}", String.valueOf(queue.size()))
                                                         .replace("{date}", dateName)
@@ -1438,17 +1438,17 @@ public class SignInCommand
                                                         .replace("{time}", timeName)
                                                         .replace("{page}", String.valueOf(page))
                                                         .replace("{maxPage}", String.valueOf(maxPage))
-                                                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                                        .replace("{prefix}", PluginControl.getPrefix())));
                                             }
                                         } else {
-                                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                                 .replace("{total}", String.valueOf(queue.size()))
                                                 .replace("{date}", dateName)
                                                 .replace("{ranking}", String.valueOf(rank))
                                                 .replace("{time}", timeName)
                                                 .replace("{page}", String.valueOf(page))
                                                 .replace("{maxPage}", String.valueOf(maxPage))
-                                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                                .replace("{prefix}", PluginControl.getPrefix())));
                                         }
                                     }
                                 }
@@ -1468,7 +1468,7 @@ public class SignInCommand
                                     name = offlineplayer.getName();
                                 }
                             }
-                            sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
+                            sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players")
                                 .replace("%player%", name != null ? MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                 .replace("{total}", String.valueOf(queue.size()))
                                 .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
@@ -1476,7 +1476,7 @@ public class SignInCommand
                                 .replace("{time}", element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time"))
                                 .replace("{page}", String.valueOf(page))
                                 .replace("{maxPage}", String.valueOf(maxPage))
-                                .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                .replace("{prefix}", PluginControl.getPrefix())));
                         } else {
                             for (SignInQueueElement element : userArray) {
                                 String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
@@ -1486,7 +1486,7 @@ public class SignInCommand
                                         name = offlineplayer.getName();
                                     }
                                 }
-                                sender.sendMessage(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
+                                sender.sendMessage(MessageUtil.toColor(MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players")
                                     .replace("%player%", name != null ? MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players").replace("{player}", name) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player").replace("{uuid}", element.getUUID().toString()))
                                     .replace("{total}", String.valueOf(queue.size()))
                                     .replace("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
@@ -1494,14 +1494,14 @@ public class SignInCommand
                                     .replace("{time}", element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time"))
                                     .replace("{page}", String.valueOf(page))
                                     .replace("{maxPage}", String.valueOf(maxPage))
-                                    .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                                    .replace("{prefix}", PluginControl.getPrefix())));
                             }
                         }
                     }
                 }
             } else {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(message
+                    sender.sendMessage(MessageUtil.toColor(message
                         .replace("%previousPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"))
                         .replace("%nextPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"))
                         .replace("{total}", String.valueOf(queue.size()))
@@ -1510,7 +1510,7 @@ public class SignInCommand
                         .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
                         .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
                         .replace("{maxPage}", String.valueOf(maxPage))
-                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        .replace("{prefix}", PluginControl.getPrefix())));
                     continue;
                 }
                 Map<String, BaseComponent> baseComponents = new HashMap();
@@ -1521,14 +1521,14 @@ public class SignInCommand
                     List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover");
                     for (String hover : array) {
                         end++;
-                        hoverText.add(new TextComponent(hover
+                        hoverText.add(new TextComponent(MessageUtil.toColor(hover
                             .replace("{total}", String.valueOf(queue.size()))
                             .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                             .replace("{page}", String.valueOf(page))
                             .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
                             .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
                             .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            .replace("{prefix}", PluginControl.getPrefix()))));
                         if (end != array.size()) {
                             hoverText.add(new TextComponent("\n"));
                         }
@@ -1546,14 +1546,14 @@ public class SignInCommand
                     List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover");
                     for (String hover : array) {
                         end++;
-                        hoverText.add(new TextComponent(hover
+                        hoverText.add(new TextComponent(MessageUtil.toColor(hover
                             .replace("{total}", String.valueOf(queue.size()))
                             .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                             .replace("{page}", String.valueOf(page))
                             .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
                             .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
                             .replace("{maxPage}", String.valueOf(maxPage))
-                            .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§")));
+                            .replace("{prefix}", PluginControl.getPrefix()))));
                         if (end != array.size()) {
                             hoverText.add(new TextComponent("\n"));
                         }
@@ -1565,14 +1565,14 @@ public class SignInCommand
                     baseComponents.put("%nextPage%", click);
                 }
                 if (baseComponents.isEmpty()) {
-                    sender.sendMessage(message
+                    sender.sendMessage(MessageUtil.toColor(message
                         .replace("{total}", String.valueOf(queue.size()))
                         .replace("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")))
                         .replace("{page}", String.valueOf(page))
                         .replace("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1))
                         .replace("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1))
                         .replace("{maxPage}", String.valueOf(maxPage))
-                        .replace("{prefix}", PluginControl.getPrefix()).replace("&", "§"));
+                        .replace("{prefix}", PluginControl.getPrefix())));
                 } else {
                     Map<String, String> placeholders = new HashMap();
                     placeholders.put("{total}", String.valueOf(queue.size()));

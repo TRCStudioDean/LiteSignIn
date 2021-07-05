@@ -30,6 +30,10 @@ Auto-Save:
 #Detailed: bstats.org
 Metrics: true
     
+#Wood signs script
+#After enabling, WoodSignSettings.yml file will be generated, please edit in the file according to the help of comments.
+Wood-Signs-Script: false
+    
 #Retroactive Card
 #Its role is to supplement the missing sign-in date.
 Retroactive-Card:

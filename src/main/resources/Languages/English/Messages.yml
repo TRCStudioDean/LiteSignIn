@@ -248,6 +248,10 @@ English:
         - '&6- &3Download link: %link%'
         - '&6- &3Update log: {description}'
         Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
+    Wood-Sign:
+        Successfully-Create: '{prefix}&aYou have successfully created a sign-in sign &b{sign}'
+        Unable-To-Create: '{prefix}&cUnable to create sign-in sign &b{sign}&c, you not have permission: &e{permission}'
+        Successfully-Remove: '{prefix}&cSign-in sign has been removed &b{sign}'
 Simplified-Chinese:
     No-Permission: '{prefix}&c你没有这么做的权限!'
     Unavailable-Command: '{prefix}&c控制台不能使用这个命令.'
@@ -501,6 +505,10 @@ Simplified-Chinese:
         - '&6- &3下载地址: %link%'
         - '&6- &3更新日志: {description}'
         Error: '{prefix}&c无法获取插件最新版本, 请检查你的网络是否正常! '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a你已成功创建了签到告示牌 &b{sign}'
+        Unable-To-Create: '{prefix}&c无法创建签到告示牌 &b{sign}&c，您缺少权限: &e{permission}'
+        Successfully-Remove: '{prefix}&c已移除签到告示牌 &b{sign}'
 Traditional-Chinese:
     No-Permission: '{prefix}&c你沒有這麼做的權限!'
     Unavailable-Command: '{prefix}&c控制台不能使用這個命令.'
@@ -754,6 +762,10 @@ Traditional-Chinese:
         - '&6- &3下載地址: %link%'
         - '&6- &3更新日誌: {description}'
         Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網絡是否正常! '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a你已成功創建了簽到告示牌 &b{sign}'
+        Unable-To-Create: '{prefix}&c無法創建簽到告示牌 &b{sign}&c，您缺少權限: &e{permission}'
+        Successfully-Remove: '{prefix}&c已移除簽到告示牌 &b{sign}'
 Japanese:
     No-Permission: '{prefix}&cこれを行う権限がありません！'
     Unavailable-Command: '{prefix}&cこのコマンドはコンソールでは使用できません。'
@@ -1009,3 +1021,7 @@ Japanese:
         - '&6- &3ダウンロードリンク: %link%'
         - '&6- &3更新ログ: {description}'
         Error: '{prefix}&cプラグインの最新バージョンを入手できません。ネットワークが正常かどうかを確認してください。 '
+    Wood-Sign:
+        Successfully-Create: '{prefix}&a木の看板＆b{sign}&aの作成か成功しました。'
+        Unable-To-Create: '{prefix}&c木の看板＆b{sign}&cの作成か失败しました。権限がありません: &e{permission}'
+        Successfully-Remove: '{prefix}&c木の看板＆b{sign}&cを削除しました。'

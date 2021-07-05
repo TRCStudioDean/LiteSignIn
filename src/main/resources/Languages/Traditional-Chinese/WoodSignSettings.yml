@@ -1,0 +1,37 @@
+Wood-Sign-Scripts:
+    #你可設置和創建多個不同功能的木牌
+    #請按照以下格式進行編輯
+    '[點擊簽到]':
+        #創建木牌的權限設置（參考Config.yml內的Permissions設置）
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.signin
+        #木牌的本文設置
+        #成功創建簽到木牌後，所使用的木牌將自動變為以下本文
+        Sign-Text:
+            Line-1: '&8&l[&b&l點擊簽到&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        #觸發命​​令的設置
+        #格式： "[執行類型]:[命令]"
+        #"執行類型" 可以是 "op" 、 "server"、 無
+        #分別對應 "玩家以OP權限執行命令"、 "執行控制台命令"、"玩家執行命令"
+        #示例：
+        # "server:say hello" 在控制台中執行"say hello"命令
+        # "op:gamemode creative" 玩家以OP權限執行"gamemode creative"命令
+        # "spawn" 玩家正常執行"spawn"命令
+        #支持PlaceholderAPI變量
+        Commands:
+        - 'litesignin click'
+    '[打開簽到界面]':
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.gui
+        Sign-Text:
+            Line-1: '&8&l[&a&l打開簽到界面&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        Commands:
+        - 'litesignin gui'

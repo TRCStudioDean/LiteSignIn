@@ -1,0 +1,37 @@
+Wood-Sign-Scripts:
+    #You can set up and create multiple wooden signs with different functions.
+    #Please edit in the following format:
+    '[ClickSignIn]':
+        #Permission settings for creating wooden signs (refer to Permissions settings in Config.yml)
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.signin
+        #Sign texts edit
+        #When you successfully create a sign-in wooden sign, the wooden sign used will automatically become the following text.
+        Sign-Text:
+            Line-1: '&8&l[&b&lClickSignIn&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        #Execute command when signing in.
+        #Format: "[Command type]:[command]"
+        #"Command type" can be "op" 、 "server"、 None
+        #Corresponding to "player execute command with OP permission", "execute console command", "player execute command normally".
+        #For example:
+        # "server:say hello" - Execute console command: "say hello"
+        # "op:gamemode creative" - Player execute command with OP permission: "gamemode creative"
+        # "spawn" - Player execute "spawn" command normally.
+        #Support PlaceholderAPI
+        Commands:
+        - 'litesignin click'
+    '[SignInGUI]':
+        Permission:
+            Default: false
+            Permission: signin.woodsignscript.gui
+        Sign-Text:
+            Line-1: '&8&l[&a&lSignInGUI&8&l]'
+            Line-2: ''
+            Line-3: ''
+            Line-4: ''
+        Commands:
+        - 'litesignin gui'

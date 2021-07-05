@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignEvent;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -115,5 +116,6 @@ public class Main
         pm.registerEvents(new Join(), Main.getInstance());
         pm.registerEvents(new Menu(), Main.getInstance());
         pm.registerEvents(new Quit(), Main.getInstance());
+        pm.registerEvents(new WoodSignEvent(), Main.getInstance());
     }
 }

@@ -243,14 +243,13 @@ Japanese:
             Failed: '{prefix}&cファイルが戻って失敗し、次のエラーが発生しました： &e{error}'
     Updater:
         Link:
-            Player-Text: '&d&l[クリック]'
-            Console-Text: '&d{link}'
+            Message: '&d&l[クリック]'
             Hover-Text:
             - '&5ダウンロードリンクを取得するにはクリックしてください'
         Checked: 
         - '{prefix}&aプラグインの最新バージョンが見つかりました： &bv{version}'
         - '&6- &3現在実行中のバージョン: &6v{nowVersion}'
-        - '&6- &3ダウンロードリンク: %link%'
+        - '&6- &3ダウンロードリンク: &d%link%'
         - '&6- &3更新ログ: {description}'
         Error: '{prefix}&cプラグインの最新バージョンを入手できません。ネットワークが正常かどうかを確認してください。 '
     Wood-Sign:
@@ -391,7 +390,7 @@ Simplified-Chinese:
             Date-Format: 'yyyy年MM月dd日'
             Time-Format: 'HH:mm:ss'
             Unknown-Player: '&3未知玩家&8(UUID:{uuid})'
-            Unknown-Time: '&e未知时间'
+            Unknown-Time: '&e补签'
             Player-Show:
                 Text:
                     Self: '&2{player}'
@@ -500,14 +499,13 @@ Simplified-Chinese:
             Failed: '{prefix}&c回档失败， 出现错误: &e{error}'
     Updater:
         Link:
-            Player-Text: '&d&l[点击查看]'
-            Console-Text: '&d{link}'
+            Message: '&d&l[点击查看]'
             Hover-Text:
             - '&5点击获取下载链接'
         Checked: 
         - '{prefix}&a发现插件存在最新版本: &bv{version}'
         - '&6- &3服务器运行版本: &6v{nowVersion}'
-        - '&6- &3下载地址: %link%'
+        - '&6- &3下载地址: &d%link%'
         - '&6- &3更新日志: {description}'
         Error: '{prefix}&c无法获取插件最新版本, 请检查你的网络是否正常! '
     Wood-Sign:
@@ -648,7 +646,7 @@ Traditional-Chinese:
             Date-Format: 'yyyy年MM月dd日'
             Time-Format: 'HH:mm:ss'
             Unknown-Player: '&3未知玩家&8(UUID:{uuid})'
-            Unknown-Time: '&e未知時間'
+            Unknown-Time: '&e補簽'
             Player-Show:
                 Text:
                     Self: '&2{player}'
@@ -757,14 +755,13 @@ Traditional-Chinese:
             Failed: '{prefix}&c回檔失敗， 出現錯誤: &e{error}'
     Updater:
         Link:
-            Player-Text: '&d&l[點擊查看]'
-            Console-Text: '&d{link}'
+            Message: '&d&l[點擊查看]'
             Hover-Text:
             - '&5點擊獲取下載鏈接'
         Checked:
         - '{prefix}&a發現插件存在最新版本: &bv{version}'
         - '&6- &3伺服器運行版本: &6v{nowVersion}'
-        - '&6- &3下載地址: %link%'
+        - '&6- &3下載地址: &d%link%'
         - '&6- &3更新日誌: {description}'
         Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網絡是否正常! '
     Wood-Sign:
@@ -1011,14 +1008,13 @@ English:
             Failed: '{prefix}&cRollback failed with error: &e{error}'
     Updater:
         Link:
-            Player-Text: '&d&l[ClickHere]'
-            Console-Text: '&d{link}'
+            Message: '&d&l[ClickHere]'
             Hover-Text:
             - '&5Click to get the downloads link.'
         Checked: 
         - '{prefix}&aA new version has been released: &bv{version}'
         - '&6- &3Now version: &6v{nowVersion}'
-        - '&6- &3Download link: %link%'
+        - '&6- &3Download link: &d%link%'
         - '&6- &3Update log: {description}'
         Error: '{prefix}&cUnable to check new version, please check whether network is normal!'
     Wood-Sign:

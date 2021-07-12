@@ -50,10 +50,10 @@ public class PluginControl
             if (!Placeholders.getInstance().isRegistered()) {
                 Placeholders.getInstance().register();
             }
-            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", true);
+            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", new HashMap());
         } catch (Error ex) {
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("Use-PlaceholderAPI", false);
-            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", true);
+            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", new HashMap());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();
@@ -71,15 +71,9 @@ public class PluginControl
     }
     
     public static void savePlayerData() {
-        YamlStorage.cache.values().stream().forEach(yaml -> {
-            yaml.saveData();
-        });
-        MySQLStorage.cache.values().stream().forEach(mysql -> {
-            mysql.saveData();
-        });
-        SQLiteStorage.cache.values().stream().forEach(sqlite -> {
-            sqlite.saveData();
-        });
+        YamlStorage.cache.values().stream().forEach(YamlStorage::saveData);
+        MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
+        SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
     }
     
     public static void hideEnchants(ItemMeta im) {
@@ -120,6 +114,14 @@ public class PluginControl
         }
     }
     
+    public static int getRetroactiveCardQuantityRequired() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("Retroactive-Card.Quantity-Required");
+    }
+    
+    public static double getRetroactiveCardIntervals() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Retroactive-Card.Intervals");
+    }
+    
     public static double getMySQLRefreshInterval() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("MySQL-Storage.Refresh-Interval");
     }
@@ -146,14 +148,6 @@ public class PluginControl
     
     public static boolean enableSignInRanking() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Sign-In-Ranking");
-    }
-    
-    public static int getRetroactiveCardQuantityRequired() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("Retroactive-Card.Quantity-Required");
-    }
-    
-    public static double getRetroactiveCardIntervals() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Retroactive-Card.Intervals");
     }
      
     public static boolean enableRetroactiveCard() {
@@ -206,7 +200,9 @@ public class PluginControl
                 return null;
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Head-Owner") != null) {
-                PluginControl.setHead(is, MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemName + ".Head-Owner"), player).replace("{player}", player.getName()));
+                Map<String, String> placeholders = new HashMap();
+                placeholders.put("{player}", player.getName());
+                PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemName + ".Head-Owner"), placeholders));
             }
             ItemMeta im = is.getItemMeta();
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {

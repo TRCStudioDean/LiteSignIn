@@ -59,7 +59,7 @@ public class Main
         getCommand("litesignin").setTabCompleter(new SignInCommand());
         registerEvent();
         JsonItemStack.reloadNMS();
-        SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", true);
+        SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", new HashMap());
         
         //It will run after the server is started.
         new BukkitRunnable() {

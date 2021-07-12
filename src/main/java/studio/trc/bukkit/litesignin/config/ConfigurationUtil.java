@@ -99,7 +99,7 @@ public class ConfigurationUtil
             saveResource(fileType);
             try (InputStreamReader newConfig = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
                 getFileConfiguration(fileType).load(newConfig);
-                SignInPluginProperties.sendOperationMessage("ConfigurationRepair", true);
+                SignInPluginProperties.sendOperationMessage("ConfigurationRepair", new HashMap());
             } catch (IOException | InvalidConfigurationException ex1) {
                 ex1.printStackTrace();
             }
@@ -125,7 +125,7 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/Config.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/Config.yml");
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/Config.yml");
                         try (OutputStream out = new FileOutputStream(configFile)) {
                             int b;
                             while ((b = is.read()) != -1) {
@@ -141,7 +141,7 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/Messages.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/Messages.yml");
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/Messages.yml");
                         try (OutputStream out = new FileOutputStream(configFile)) {
                             int b;
                             while ((b = is.read()) != -1) {
@@ -159,7 +159,7 @@ public class ConfigurationUtil
                         configFile.createNewFile();
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/GUISettings-OLDVERSION.yml");
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/GUISettings-OLDVERSION.yml");
                             try (OutputStream out = new FileOutputStream(configFile)) {
                                 int b;
                                 while ((b = is.read()) != -1) {
@@ -167,7 +167,7 @@ public class ConfigurationUtil
                                 }
                             }
                         } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/GUISettings-NEWVERSION.yml");
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/GUISettings-NEWVERSION.yml");
                             try (OutputStream out = new FileOutputStream(configFile)) {
                                 int b;
                                 while ((b = is.read()) != -1) {
@@ -186,7 +186,7 @@ public class ConfigurationUtil
                         configFile.createNewFile();
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8")) {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/RewardSettings-OLDVERSION.yml");
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/RewardSettings-OLDVERSION.yml");
                             try (OutputStream out = new FileOutputStream(configFile)) {
                                 int b;
                                 while ((b = is.read()) != -1) {
@@ -194,7 +194,7 @@ public class ConfigurationUtil
                                 }
                             }
                         } else {
-                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/RewardSettings-NEWVERSION.yml");
+                            InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/RewardSettings-NEWVERSION.yml");
                             try (OutputStream out = new FileOutputStream(configFile)) {
                                 int b;
                                 while ((b = is.read()) != -1) {
@@ -211,7 +211,7 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/CustomItems.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/CustomItems.yml");
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/CustomItems.yml");
                         try (OutputStream out = new FileOutputStream(configFile)) {
                             int b;
                             while ((b = is.read()) != -1) {
@@ -227,7 +227,7 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/WoodSignSettings.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + "/WoodSignSettings.yml");
+                        InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/WoodSignSettings.yml");
                         try (OutputStream out = new FileOutputStream(configFile)) {
                             int b;
                             while ((b = is.read()) != -1) {

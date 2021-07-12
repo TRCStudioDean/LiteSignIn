@@ -27,7 +27,7 @@ public class DefaultConfigurationFile
     }
     
     public static void loadDefaultConfigurationFile(ConfigurationType type) {
-        String jarPath = MessageUtil.Languages.getLocaleLanguage().getFileName();
+        String jarPath = MessageUtil.Language.getLocaleLanguage().getFolderName();
         String fileName = type.getFileName();
         if (type.equals(ConfigurationType.GUISETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];

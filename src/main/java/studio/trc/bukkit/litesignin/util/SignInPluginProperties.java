@@ -19,7 +19,7 @@ public class SignInPluginProperties
     
     public static void reloadProperties() {
         try {
-            propertiesFile.load(Main.class.getResourceAsStream("/Languages/" + MessageUtil.Languages.getLocaleLanguage().getFileName() + ".properties"));
+            propertiesFile.load(Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + ".properties"));
         } catch (IOException ex) {}
         sendOperationMessage("LanguageLoaded");
     }
@@ -31,17 +31,6 @@ public class SignInPluginProperties
         }
     }
     
-    public static void sendOperationMessage(String path, boolean replacePrefix) {
-        CommandSender sender = Bukkit.getConsoleSender();
-        if (propertiesFile.containsKey(path)) {
-            if (replacePrefix) {
-                sender.sendMessage(MessageUtil.toColor(propertiesFile.getProperty(path).replace("{prefix}", PluginControl.getPrefix())));
-            } else {
-                sender.sendMessage(MessageUtil.toColor(propertiesFile.getProperty(path)));
-            }
-        }
-    }
-    
     public static void sendOperationMessage(String path, Map<String, String> placeholders) {
         CommandSender sender = Bukkit.getConsoleSender();
         if (propertiesFile.containsKey(path)) {
@@ -49,7 +38,7 @@ public class SignInPluginProperties
             for (String placeholder : placeholders.keySet()) {
                 message = message.replace(placeholder, placeholders.get(placeholder));
             }
-            sender.sendMessage(MessageUtil.toColor(message.replace("{prefix}", PluginControl.getPrefix())));
+            sender.sendMessage(MessageUtil.toColor(MessageUtil.prefix(message)));
         }
     }
 }

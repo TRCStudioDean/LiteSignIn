@@ -10,8 +10,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,14 +53,16 @@ public class Join
             if (PluginControl.enableJoinReminderMessages() && !data.alreadySignIn()) {
                 SignInDate date = SignInDate.getInstance(new Date());
                 for (String text : MessageUtil.getMessageList("GUI-SignIn-Messages.Join-Messages")) {
-                    if (text.contains("%opengui%")) {
+                    if (text.toLowerCase().contains("%opengui%")) {
                         BaseComponent click = new TextComponent(MessageUtil.getMessage("GUI-SignIn-Messages.Open-GUI"));
                         List<BaseComponent> hoverText = new ArrayList();
                         int end = 0;
                         List<String> array = MessageUtil.getMessageList("GUI-SignIn-Messages.Hover-Text");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix()))));
+                            Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -73,7 +75,9 @@ public class Join
                         baseComponents.put("%opengui%", click);
                         MessageUtil.sendJsonMessage(player, text, baseComponents);
                     } else {
-                        player.sendMessage(MessageUtil.toColor(text.replace("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format"))).replace("{prefix}", PluginControl.getPrefix())));
+                        Map<String, String> placeholders = new HashMap();
+                        placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                        player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, text, placeholders)));
                     }
                 }
             }
@@ -82,14 +86,19 @@ public class Join
             if (PluginControl.hasPermission(player, "Permissions.Updater")) {
                 String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
-                    if (text.contains("%link%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Updater.Link.Player-Text"));
+                    if (text.toLowerCase().contains("%link%")) {
+                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Updater.Link.Message"));
                         List<BaseComponent> hoverText = new ArrayList();
                         int end = 0;
                         List<String> array = MessageUtil.getMessageList("Updater.Link.Hover-Text");
                         for (String hover : array) {
                             end++;
-                            hoverText.add(new TextComponent(MessageUtil.toColor(hover.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix()))));
+                            Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{nowVersion}", nowVersion);
+                            placeholders.put("{version}", CheckUpdater.getNewVersion());
+                            placeholders.put("{link}", CheckUpdater.getLink());
+                            placeholders.put("{description}", CheckUpdater.getDescription());
+                            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
@@ -102,7 +111,12 @@ public class Join
                         baseComponents.put("%link%", click);
                         MessageUtil.sendJsonMessage(player, text, baseComponents);
                     } else {
-                        player.sendMessage(MessageUtil.toColor(text.replace("{nowVersion}", nowVersion).replace("{version}", CheckUpdater.getNewVersion()).replace("{link}", CheckUpdater.getLink()).replace("{description}", CheckUpdater.getDescription()).replace("{prefix}", PluginControl.getPrefix())));
+                        Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{nowVersion}", nowVersion);
+                            placeholders.put("{version}", CheckUpdater.getNewVersion());
+                            placeholders.put("{link}", CheckUpdater.getLink());
+                            placeholders.put("{description}", CheckUpdater.getDescription());
+                        player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, text, placeholders)));
                     }
                 });
             }

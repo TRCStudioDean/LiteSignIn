@@ -36,7 +36,9 @@ public class BackupUtil
             }
             backingup = true;
             String fileName = ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Database-Management.Backup.Backup-File") + ".db";
-            fileName = fileName.replace("{time}", SignInDate.getInstance(new Date()).getName(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Database-Management.Backup.Time-Format")));
+            Map<String, String> time = new HashMap();
+            time.put("{time}", SignInDate.getInstance(new Date()).getName(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Database-Management.Backup.Time-Format")));
+            fileName = MessageUtil.replacePlaceholders(Bukkit.getConsoleSender(), fileName, time);
             String fileFolder = ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Database-Management.Backup.Backup-Folder-Path");
             File folder = new File(fileFolder);
             if (!folder.exists()) folder.mkdir();

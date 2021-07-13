@@ -56,7 +56,7 @@ public class CheckUpdater
                         description = description_;
                         Map<String, String> placeholders = new HashMap();
                         placeholders.put("{version}", version);
-                        placeholders.put("%link%", MessageUtil.getMessage("Updater.Link.Console-Text"));
+                        placeholders.put("%link%", downloadLink);
                         placeholders.put("{link}", downloadLink);
                         placeholders.put("{nowVersion}", nowVersion);
                         placeholders.put("{description}", description_);

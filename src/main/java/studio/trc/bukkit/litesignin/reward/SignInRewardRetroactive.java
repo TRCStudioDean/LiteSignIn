@@ -1,12 +1,12 @@
 package studio.trc.bukkit.litesignin.reward;
 
-public interface SignInRewardRetroactive
-    extends SignInReward
+public abstract class SignInRewardRetroactive
+    extends SignInRewardUtil
 {
     /**
      * 
      * @param module SignInReward module.
      * @return 
      */
-    public boolean isDisable(SignInRewardModule module);
+    public abstract boolean isDisable(SignInRewardModule module);
 }

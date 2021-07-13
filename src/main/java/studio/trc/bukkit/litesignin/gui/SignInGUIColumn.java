@@ -71,13 +71,13 @@ public class SignInGUIColumn
     
     public static enum KeyType {
         
-        Already_SignIn("Already-SignIn"),
+        ALREADY_SIGNIN("Already-SignIn"),
         
-        Comming_Soon("Comming-Soon"),
+        COMMING_SOON("Comming-Soon"),
         
-        Nothing_SignIn("Nothing-SignIn"),
+        NOTHING_SIGNIN("Nothing-SignIn"),
         
-        Missed_SignIn("Missed-SignIn");
+        MISSED_SIGNIN("Missed-SignIn");
         
         private final String sectionName;
         

@@ -23,7 +23,7 @@ import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
-import studio.trc.bukkit.litesignin.reward.SignInRewardQueue;
+import studio.trc.bukkit.litesignin.reward.SignInRewardSchedule;
 import studio.trc.bukkit.litesignin.reward.type.*;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 
@@ -165,7 +165,7 @@ public class SQLiteStorage
         int totalNumber = getCumulativeNumber();
         SignInDate today = SignInDate.getInstance(new Date());
         int week = today.getWeek();
-        SignInRewardQueue rewardQueue = new SignInRewardQueue(this);
+        SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
         rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
         rewardQueue.addReward(new SignInSpecialDateReward(group, today));
         rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));

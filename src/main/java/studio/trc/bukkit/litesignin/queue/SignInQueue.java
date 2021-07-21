@@ -204,7 +204,7 @@ public class SignInQueue
     
     public SignInQueueElement getElement(UUID uuid) {
         checkUpdate();
-        for (SignInQueueElement element : this) {
+        for (SignInQueueElement element : new ArrayList<>(this)) {
             UUID queueUUID = element.getUUID();
             if (queueUUID.equals(uuid)) {
                 return element;
@@ -248,7 +248,7 @@ public class SignInQueue
     
     public List<SignInQueueElement> getUnknownTimesElement() {
         List<SignInQueueElement> list = new ArrayList();
-        for (SignInQueueElement element : this) {
+        for (SignInQueueElement element : new ArrayList<>(this)) {
             if (!element.getSignInDate().hasTimePeriod()) {
                 list.add(element);
             }
@@ -277,7 +277,7 @@ public class SignInQueue
     public List<SignInQueueElement> getRankingUser(int ranking) {
         checkUpdate();
         List<SignInQueueElement> result = new ArrayList();
-        for (SignInQueueElement element : this) {
+        for (SignInQueueElement element : new ArrayList<>(this)) {
             if (getRank(element.getUUID()) == ranking) {
                 result.add(element);
             }

@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import studio.trc.bukkit.litesignin.reward.SignInRewardQueue;
+import studio.trc.bukkit.litesignin.reward.SignInRewardSchedule;
 
 public class SignInRewardEvent
     extends Event
@@ -14,16 +14,16 @@ public class SignInRewardEvent
     public static HandlerList handlers = new HandlerList();
     
     private final Player player;
-    private final SignInRewardQueue rewardQueue;
+    private final SignInRewardSchedule rewardQueue;
     
     private boolean cancelled = false;
     
-    public SignInRewardEvent(Player player, SignInRewardQueue rewardQueue) {
+    public SignInRewardEvent(Player player, SignInRewardSchedule rewardQueue) {
         this.player = player;
         this.rewardQueue = rewardQueue;
     }
     
-    public SignInRewardQueue getRewardQueue() {
+    public SignInRewardSchedule getRewardQueue() {
         return rewardQueue;
     }
     

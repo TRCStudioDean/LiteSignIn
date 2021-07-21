@@ -16,9 +16,10 @@ public class SignInGUIOpenEvent
 {
     public static HandlerList handlers = new HandlerList();
     
+    private final SignInDate time = SignInDate.getInstance(new Date());
     private boolean cancelled = false;
-    private int month = SignInDate.getInstance(new Date()).getMonth();
-    private int year = SignInDate.getInstance(new Date()).getYear();
+    private int month = time.getMonth();
+    private int year = time.getYear();
     
     private final Player player;
     private final SignInInventory inventory;
@@ -47,6 +48,10 @@ public class SignInGUIOpenEvent
     
     public SignInInventory getInventory() {
         return inventory;
+    }
+    
+    public SignInDate getTime() {
+        return time;
     }
     
     public int getMonth() {

@@ -132,7 +132,7 @@ public class YamlStorage
         int totalNumber = getCumulativeNumber();
         SignInDate today = SignInDate.getInstance(new Date());
         int week = today.getWeek();
-        SignInRewardQueue rewardQueue = new SignInRewardQueue(this);
+        SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
         rewardQueue.addReward(new SignInSpecialTimeReward(group, continuous));
         rewardQueue.addReward(new SignInSpecialDateReward(group, today));
         rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));

@@ -12,7 +12,6 @@ import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
 import studio.trc.bukkit.litesignin.reward.SignInRewardModule;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
-import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
 import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 import studio.trc.bukkit.litesignin.reward.util.SignInTimePeriod;
 import studio.trc.bukkit.litesignin.util.SignInDate;
@@ -68,20 +67,7 @@ public class SignInSpecialTimePeriodReward
 
     @Override
     public List<SignInRewardCommand> getCommands() {
-        if (!isAvailable()) return new ArrayList();
-        List<SignInRewardCommand> list = new ArrayList();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Commands")) {
-            for (String commands : ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Commands")) {
-                if (commands.toLowerCase().startsWith("server:")) {
-                    list.add(new SignInRewardCommand(SignInRewardCommandType.SERVER, commands.substring(7)));
-                } else if (commands.toLowerCase().startsWith("op:")) {
-                    list.add(new SignInRewardCommand(SignInRewardCommandType.OP, commands.substring(3)));
-                } else {
-                    list.add(new SignInRewardCommand(SignInRewardCommandType.PLAYER, commands));
-                }
-            }
-        }
-        return list;
+        return super.getCommands("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Commands");
     }
 
     @Override

@@ -20,12 +20,12 @@ import studio.trc.bukkit.litesignin.updater.CheckUpdater;
 import studio.trc.bukkit.litesignin.util.metrics.Metrics;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignEvent;
 
 /**
  * Do not resell the source code of this plug-in.

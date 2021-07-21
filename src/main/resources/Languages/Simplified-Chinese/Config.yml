@@ -12,7 +12,10 @@ Use-PlaceholderAPI: true
 Enable-Sign-In-Ranking: true
 
 #是否在玩家进入服务器的时候提醒玩家签到
-Join-Reminder-Messages: true
+Join-Event:
+    Enabled: true
+    #是否启用进服时自动签到（需要拥有权限）
+    Auto-SignIn: false
 
 #是否检查更新
 #仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
@@ -143,6 +146,10 @@ Permissions:
     Updater: 
         Permission: signin.updater
         Default: false
+    #登入服务器时自动签到的权限
+    Join-Auto-SignIn:
+        Default: false
+        Permission: signin.joinevent.autosignin
     #命令相关权限
     Commands:
         Help: 

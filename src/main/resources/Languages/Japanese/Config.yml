@@ -12,7 +12,10 @@ Use-PlaceholderAPI: true
 Enable-Sign-In-Ranking: true
 
 #サーバーに入るときにサインインするようにプレーヤーに通知するかどうか
-Join-Reminder-Messages: true
+Join-Event:
+    Enabled: true
+    #自動サインインを有効にするかどうか（許可が必要）
+    Auto-SignIn: false
 
 #更新を自動的にチェックするかどうか
 #サーバーが起動するたびに実行され、新しいバージョンが見つかったときに管理者に通知します。
@@ -143,6 +146,10 @@ Permissions:
     Updater: 
         Permission: signin.updater
         Default: false
+    #自動サインインの権限
+    Join-Auto-SignIn:
+        Default: false
+        Permission: signin.joinevent.autosignin
     #コマンド関連の権限
     Commands:
         Help: 

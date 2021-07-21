@@ -32,55 +32,56 @@ public class Join
     implements Listener
 {
     @EventHandler(ignoreCancelled = true)
-    public void join(PlayerJoinEvent e) {
+    public void onJoin(PlayerJoinEvent e) {
         if (BackupUtil.isBackingUp()) {
             return;
         }
         Player player = e.getPlayer();
         new Thread(() -> {
             Storage data = Storage.getPlayer(player);
+            boolean unableToHoldCards = false;
+            boolean autoSignIn = false;
             if (!PluginControl.hasPermission(player, "Permissions.Retroactive-Card.Hold")) {
-                if (data.getRetroactiveCard() > 0) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            data.takeRetroactiveCard(data.getRetroactiveCard());
-                            MessageUtil.sendMessage(player, "GUI-SignIn-Messages.Unable-To-Hold");
-                        }
-                    }.runTask(Main.getInstance());
-                }
+                unableToHoldCards = true;
             }
-            if (PluginControl.enableJoinReminderMessages() && !data.alreadySignIn()) {
-                SignInDate date = SignInDate.getInstance(new Date());
-                for (String text : MessageUtil.getMessageList("GUI-SignIn-Messages.Join-Messages")) {
-                    if (text.toLowerCase().contains("%opengui%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("GUI-SignIn-Messages.Open-GUI"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("GUI-SignIn-Messages.Hover-Text");
-                        for (String hover : array) {
-                            end++;
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
+            if (PluginControl.enableJoinEvent()) {
+                if (!data.alreadySignIn()) {
+                    if (PluginControl.autoSignIn() && PluginControl.hasPermission(player, "Permissions.Join-Auto-SignIn")) {
+                        autoSignIn = true;
+                    } else {
+                        SignInDate date = SignInDate.getInstance(new Date());
+                        for (String text : MessageUtil.getMessageList("Join-Event.Messages")) {
+                            if (text.toLowerCase().contains("%opengui%")) {
+                                BaseComponent click = new TextComponent(MessageUtil.getMessage("Join-Event.Open-GUI"));
+                                List<BaseComponent> hoverText = new ArrayList();
+                                int end = 0;
+                                List<String> array = MessageUtil.getMessageList("Join-Event.Hover-Text");
+                                for (String hover : array) {
+                                    end++;
+                                    Map<String, String> placeholders = new HashMap();
+                                    placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                    hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
+                                    if (end != array.size()) {
+                                        hoverText.add(new TextComponent("\n"));
+                                    }
+                                }
+                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
+                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin gui");
+                                click.setClickEvent(ce);
+                                click.setHoverEvent(he);
+                                Map<String, BaseComponent> baseComponents = new HashMap();
+                                baseComponents.put("%opengui%", click);
+                                MessageUtil.sendJsonMessage(player, text, baseComponents);
+                            } else {
+                                Map<String, String> placeholders = new HashMap();
+                                placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, text, placeholders)));
                             }
                         }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin gui");
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        Map<String, BaseComponent> baseComponents = new HashMap();
-                        baseComponents.put("%opengui%", click);
-                        MessageUtil.sendJsonMessage(player, text, baseComponents);
-                    } else {
-                        Map<String, String> placeholders = new HashMap();
-                        placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                        player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, text, placeholders)));
                     }
                 }
             }
+            schedule(data, player, unableToHoldCards, autoSignIn);
         }, "AsyncPlayerJoinThread").start();
         if (CheckUpdater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (PluginControl.hasPermission(player, "Permissions.Updater")) {
@@ -121,5 +122,22 @@ public class Join
                 });
             }
         }
+    }
+    
+    public void schedule(Storage data, Player player, boolean unableToHoldCards, boolean autoSignIn) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (unableToHoldCards) {
+                    if (data.getRetroactiveCard() > 0) {
+                        data.takeRetroactiveCard(data.getRetroactiveCard());
+                        MessageUtil.sendMessage(player, "GUI-SignIn-Messages.Unable-To-Hold");
+                    }
+                }
+                if (autoSignIn) {
+                    data.signIn();
+                }
+            }
+        }.runTask(Main.getInstance());
     }
 }

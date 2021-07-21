@@ -10,12 +10,12 @@ import studio.trc.bukkit.litesignin.reward.type.SignInNormalReward;
  * Sign in reward queue
  * @author Dean
  */
-public class SignInRewardQueue
+public class SignInRewardSchedule
 {
     private final List<SignInReward> queue = new LinkedList();
     private final Storage playerData;
     
-    public SignInRewardQueue(Storage playerData) {
+    public SignInRewardSchedule(Storage playerData) {
         this.playerData = playerData;
     }
     

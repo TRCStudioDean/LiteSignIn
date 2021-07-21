@@ -158,8 +158,12 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Retroactive-Card.Required-Item.Enabled");
     }
     
-    public static boolean enableJoinReminderMessages() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Join-Reminder-Messages");
+    public static boolean enableJoinEvent() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Join-Event.Enabled");
+    }
+    
+    public static boolean autoSignIn() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Join-Event.Auto-SignIn");
     }
     
     public static boolean enableUpdater() {

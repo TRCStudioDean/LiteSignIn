@@ -12,7 +12,10 @@ Enable-Sign-In-Ranking: true
 Use-PlaceholderAPI: true
 
 #Whether to remind players to remember to check in when they join server.
-Join-Reminder-Messages: true
+Join-Event:
+    Enabled: true
+    #Whether to enable auto sign-in (Need have permission)
+    Auto-SignIn: false
 
 #Whether to check update
 #Only running at server starting. 
@@ -130,6 +133,10 @@ Permissions:
     Updater: 
         Permission: signin.updater
         Default: false
+    #Auto sign-in permission
+    Join-Auto-SignIn:
+        Default: false
+        Permission: signin.joinevent.autosignin
     #About commands permissions
     Commands:
         Help: 

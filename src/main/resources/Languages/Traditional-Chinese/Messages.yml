@@ -10,13 +10,14 @@ Traditional-Chinese:
     Day: '天'
     Month: '月'
     Year: '年'
-    GUI-SignIn-Messages:
+    Join-Event:
         Open-GUI: '&c&l[點擊此處打開簽到界面]'
         Hover-Text:
         - '&5點擊打開簽到菜單'
         - '&7日期: &e{date}'
         Join-Messages:
         - '{prefix}&a&l你今天還沒有簽到! %opengui%'
+    GUI-SignIn-Messages:
         Retroactive-Card-Cooldown:
         - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用補簽卡!'
         Unable-To-Hold:
@@ -266,13 +267,14 @@ Simplified-Chinese:
     Day: '天'
     Month: '月'
     Year: '年'
-    GUI-SignIn-Messages:
+    Join-Event:
         Open-GUI: '&c&l[点击此处打开签到界面]'
         Hover-Text:
         - '&5点击打开签到菜单'
         - '&7日期: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&l你今天还没有签到! %opengui%'
+    GUI-SignIn-Messages:
         Retroactive-Card-Cooldown:
         - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
         Unable-To-Hold:
@@ -522,13 +524,14 @@ English:
     Day: 'day'
     Month: 'month'
     Year: 'year'
-    GUI-SignIn-Messages:
+    Join-Event:
         Open-GUI: '&c&l[Click Here!]'
         Hover-Text:
         - '&5Click here to open the sign-in menu.'
         - '&7Date: &e{date}'
         Join-Messages:
         - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
+    GUI-SignIn-Messages:
         Retroactive-Card-Cooldown:
         - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
         Unable-To-Hold:
@@ -775,13 +778,14 @@ Japanese:
     Day: '日'
     Month: '月'
     Year: '年'
-    GUI-SignIn-Messages:
+    Join-Event:
         Open-GUI: '&c&l[クリックボタン]'
         Hover-Text:
         - '&5ここにクリックは、メニューを開きます。'
         - '&7日付: &e{date}'
         Join-Messages:
         - '{prefix}&a&l今日はチェックインしていません！ %opengui%'
+    GUI-SignIn-Messages:
         Retroactive-Card-Cooldown:
         - '{prefix}&eこの操作を行う前に、&c{second}秒&eを待ってください！'
         Unable-To-Hold:

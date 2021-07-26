@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Menu
     implements Listener
@@ -34,33 +35,43 @@ public class Menu
     public static final Map<UUID, SignInInventory> menuOpening = new HashMap();
     
     public static void openGUI(Player player) {
-        SignInInventory inventory = SignInGUI.getGUI(player);
-        SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            player.openInventory(inventory.getInventory());
-            menuOpening.put(player.getUniqueId(), inventory);
-        }
+        Thread thread = new Thread(() -> {
+            SignInInventory inventory = SignInGUI.getGUI(player);
+            SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory);
+            callEvent(event, player, inventory);
+        }, "LiteSignIn-OpeningGUI");
+        thread.start();
     }
     
     public static void openGUI(Player player, int month) {
-        SignInInventory inventory = SignInGUI.getGUI(player, month);
-        SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            player.openInventory(inventory.getInventory());
-            menuOpening.put(player.getUniqueId(), inventory);
-        }
+        Thread thread = new Thread(() -> {
+            SignInInventory inventory = SignInGUI.getGUI(player, month);
+            SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month);
+            callEvent(event, player, inventory);
+        }, "LiteSignIn-OpeningGUI");
+        thread.start();
     }
     
     public static void openGUI(Player player, int month, int year) {
-        SignInInventory inventory = SignInGUI.getGUI(player, month, year);
-        SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month, year);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            player.openInventory(inventory.getInventory());
-            menuOpening.put(player.getUniqueId(), inventory);
-        }
+        Thread thread = new Thread(() -> {
+            SignInInventory inventory = SignInGUI.getGUI(player, month, year);
+            SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month, year);
+            callEvent(event, player, inventory);
+        }, "LiteSignIn-OpeningGUI");
+        thread.start();
+    }
+    
+    public static void callEvent(SignInGUIOpenEvent event, Player player, SignInInventory inventory) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    player.openInventory(inventory.getInventory());
+                    menuOpening.put(player.getUniqueId(), inventory);
+                }
+            }
+        }.runTask(Main.getInstance());
     }
     
     @EventHandler

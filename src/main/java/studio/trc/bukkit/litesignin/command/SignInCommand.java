@@ -2,6 +2,7 @@ package studio.trc.bukkit.litesignin.command;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,7 +25,7 @@ import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.nms.JsonItemStack;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.queue.SignInQueueElement;
-import studio.trc.bukkit.litesignin.updater.CheckUpdater;
+import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.CustomItem;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -49,11 +50,10 @@ public class SignInCommand
             return true;
         }
         if (PluginControl.enableUpdater()) {
-            SignInDate now = SignInDate.getInstance(new Date());
-            if (now.getYear() != CheckUpdater.getTimeOfLastCheckUpdate().getYear() ||
-                now.getMonth() != CheckUpdater.getTimeOfLastCheckUpdate().getMonth() ||
-                now.getDay() != CheckUpdater.getTimeOfLastCheckUpdate().getDay()) {
-                CheckUpdater.checkUpdate();
+            String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String checkUpdateTime = new SimpleDateFormat("yyyy-MM-dd").format(Updater.getTimeOfLastCheckUpdate());
+            if (!now.equals(checkUpdateTime)) {
+                Updater.checkUpdate();
             }
         }
         if (args.length == 0) {
@@ -567,7 +567,7 @@ public class SignInCommand
                         for (String message : MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm")) {
                             MessageUtil.sendJsonMessage(sender, MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, message, new HashMap())), baseComponents);
                         }
-                        confirmCache.put(sender, Confirm.Backup);
+                        confirmCache.put(sender, Confirm.BACKUP);
                     } else if (args[1].equalsIgnoreCase("rollback")) {
                         if (!PluginControl.hasPermission(sender, "Permissions.Commands.Database.Rollback")) {
                             MessageUtil.sendMessage(sender, "No-Permission");
@@ -607,13 +607,13 @@ public class SignInCommand
                         for (String message : MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm")) {
                             MessageUtil.sendJsonMessage(sender, MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, message, new HashMap())), baseComponents);
                         }
-                        Confirm confirm = Confirm.Rollback;
+                        Confirm confirm = Confirm.ROLLBACK;
                         confirm.setTargetFile(file);
                         confirmCache.put(sender, confirm);
                     } else if (args[1].equalsIgnoreCase("confirm")) {
                         if (confirmCache.containsKey(sender)) {
                             switch (confirmCache.get(sender)) {
-                                case Backup: {
+                                case BACKUP: {
                                     MessageUtil.sendMessage(sender, "Command-Messages.Database.Backup");
                                     confirmCache.remove(sender);
                                     if (sender instanceof Player) {
@@ -623,7 +623,7 @@ public class SignInCommand
                                     }
                                     break;
                                 }
-                                case Rollback: {
+                                case ROLLBACK: {
                                     Map<String, String> placeholders = new HashMap();
                                     placeholders.put("{file}", confirmCache.get(sender).getTargetFile().getPath());
                                     MessageUtil.sendMessage(sender, "Command-Messages.Database.Rollback.Start-Rollback", placeholders);
@@ -1040,35 +1040,41 @@ public class SignInCommand
         }
         return true;
     }
+    
+    private List<String> getCommands(String args) {
+        List<String> commands = Arrays.asList("help", "reload", "gui", "click", "save", "info", "leaderboard", "itemcollection", "retroactivecard", "database");
+        if (args != null) {
+            List<String> names = new ArrayList();
+            for (String command : commands) {
+                if (command.startsWith(args.toLowerCase())) {
+                    names.add(command);
+                }
+            }
+            return names;
+        }
+        return commands;
+    }
+    
+    private List<String> getPlayers(String args) {
+        List<String> players = new ArrayList();
+        for (Player ps : Bukkit.getOnlinePlayers()) {
+            if (ps.getName().toLowerCase().startsWith(args.toLowerCase())) {
+                players.add(ps.getName());
+            }
+        }
+        return players;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 1) {
-            List<String> list = new ArrayList();
-            for (String text : new String[] {"help", "reload", "gui", "click", "save", "info", "leaderboard", "itemcollection", "retroactivecard", "database"}) {
-                if (text.toLowerCase().startsWith(args[0])) {
-                    list.add(text);
-                }
-            }
-            return list;
+            return getCommands(args[0]);
         } else if (args.length >= 2) {
             if (args[0].equalsIgnoreCase("click") && PluginControl.hasPermission(sender, "Permissions.Commands.Click-Others")) {
-                List<String> players = new ArrayList();
-                for (Player ps : Bukkit.getOnlinePlayers()) {
-                    if (ps.getName().toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
-                        players.add(ps.getName());
-                    }
-                }
-                return players;
+                return getPlayers(args[1]);
             }
             if (args[0].equalsIgnoreCase("info") && PluginControl.hasPermission(sender, "Permissions.Commands.Info")) {
-                List<String> players = new ArrayList();
-                for (Player ps : Bukkit.getOnlinePlayers()) {
-                    if (ps.getName().toLowerCase().startsWith(args[1].toLowerCase())) {
-                        players.add(ps.getName());
-                    }
-                }
-                return players;
+                return getPlayers(args[1]);
             }
             if (args[0].equalsIgnoreCase("retroactivecard") && PluginControl.hasPermission(sender, "Permissions.Commands.RetroactiveCard")) {
                 if (args.length == 2) {
@@ -1080,13 +1086,7 @@ public class SignInCommand
                     }
                     return list;
                 } else if (args.length == 4) {
-                    List<String> players = new ArrayList();
-                    for (Player ps : Bukkit.getOnlinePlayers()) {
-                        if (ps.getName().toLowerCase().startsWith(args[3].toLowerCase())) {
-                            players.add(ps.getName());
-                        }
-                    }
-                    return players;
+                    return getPlayers(args[3]);
                 }
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("gui") && PluginControl.hasPermission(sender, "Permissions.Commands.Designated-GUI")) {
@@ -1122,13 +1122,7 @@ public class SignInCommand
                     return list;
                 }
                 if (args.length == 4 && args[1].equalsIgnoreCase("give")) {
-                    List<String> players = new ArrayList();
-                    for (Player ps : Bukkit.getOnlinePlayers()) {
-                        if (ps.getName().toLowerCase().startsWith(args[3].toLowerCase())) {
-                            players.add(ps.getName());
-                        }
-                    }
-                    return players;
+                    return getPlayers(args[3]);
                 }
                 if (args.length == 2) {
                     List<String> list = new ArrayList();
@@ -1669,9 +1663,9 @@ public class SignInCommand
     
     private enum Confirm {
         
-        Backup,
+        BACKUP,
         
-        Rollback;
+        ROLLBACK;
         
         private File file = null;
         

@@ -14,6 +14,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import lombok.Getter;
+
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
@@ -38,17 +40,26 @@ public class SQLiteStorage
 {
     public static final Map<UUID, SQLiteStorage> cache = new HashMap();
     
-    private final UUID uuid;
+    @Getter
     private int continuous = 0;
+    @Getter
     private int year = 1970;
+    @Getter
     private int month = 1;
+    @Getter
     private int day = 1;
+    @Getter
     private int hour = 0;
+    @Getter
     private int minute = 0;
+    @Getter
     private int second = 0;
-    private int retroactiveCard = 0; 
+    @Getter
     private String name = null;
+    @Getter
     private List<SignInDate> history = new ArrayList();
+    private final UUID uuid;
+    private int retroactiveCard = 0; 
     
     public SQLiteStorage(Player player) {
         uuid = player.getUniqueId();
@@ -204,41 +215,6 @@ public class SQLiteStorage
     }
     
     @Override
-    public String getName() {
-        return name;
-    }
-    
-    @Override
-    public int getYear() {
-        return year;
-    }
-    
-    @Override
-    public int getMonth() {
-        return month;
-    }
-    
-    @Override
-    public int getDay() {
-        return day;
-    }
-    
-    @Override
-    public int getHour() {
-        return hour;
-    }
-    
-    @Override
-    public int getMinute() {
-        return minute;
-    }
-    
-    @Override
-    public int getSecond() {
-        return second;
-    }
-    
-    @Override
     public int getContinuousSignIn() {
         return continuous;
     }
@@ -277,11 +253,6 @@ public class SQLiteStorage
     @Override
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
-    }
-
-    @Override
-    public List<SignInDate> getHistory() {
-        return history;
     }
     
     @Override

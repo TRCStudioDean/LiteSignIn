@@ -24,7 +24,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
-import studio.trc.bukkit.litesignin.updater.CheckUpdater;
+import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
@@ -83,7 +83,7 @@ public class Join
             }
             schedule(data, player, unableToHoldCards, autoSignIn);
         }, "AsyncPlayerJoinThread").start();
-        if (CheckUpdater.isFoundANewVersion() && PluginControl.enableUpdater()) {
+        if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (PluginControl.hasPermission(player, "Permissions.Updater")) {
                 String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
@@ -96,16 +96,16 @@ public class Join
                             end++;
                             Map<String, String> placeholders = new HashMap();
                             placeholders.put("{nowVersion}", nowVersion);
-                            placeholders.put("{version}", CheckUpdater.getNewVersion());
-                            placeholders.put("{link}", CheckUpdater.getLink());
-                            placeholders.put("{description}", CheckUpdater.getDescription());
+                            placeholders.put("{version}", Updater.getNewVersion());
+                            placeholders.put("{link}", Updater.getLink());
+                            placeholders.put("{description}", Updater.getDescription());
                             hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }
                         }
                         HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.OPEN_URL, CheckUpdater.getLink());
+                        ClickEvent ce = new ClickEvent(ClickEvent.Action.OPEN_URL, Updater.getLink());
                         click.setClickEvent(ce);
                         click.setHoverEvent(he);
                         Map<String, BaseComponent> baseComponents = new HashMap();
@@ -114,9 +114,9 @@ public class Join
                     } else {
                         Map<String, String> placeholders = new HashMap();
                             placeholders.put("{nowVersion}", nowVersion);
-                            placeholders.put("{version}", CheckUpdater.getNewVersion());
-                            placeholders.put("{link}", CheckUpdater.getLink());
-                            placeholders.put("{description}", CheckUpdater.getDescription());
+                            placeholders.put("{version}", Updater.getNewVersion());
+                            placeholders.put("{link}", Updater.getLink());
+                            placeholders.put("{description}", Updater.getDescription());
                         player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, text, placeholders)));
                     }
                 });

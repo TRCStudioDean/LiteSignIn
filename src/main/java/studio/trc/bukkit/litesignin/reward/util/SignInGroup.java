@@ -1,14 +1,13 @@
 package studio.trc.bukkit.litesignin.reward.util;
 
+import lombok.Getter;
+
 public class SignInGroup
 {
-    private final String groupname;
+    @Getter
+    private final String groupName;
     
-    public SignInGroup(String groupname) {
-        this.groupname = groupname;
-    }
-    
-    public String getGroupName() {
-        return groupname;
+    public SignInGroup(String groupName) {
+        this.groupName = groupName;
     }
 }

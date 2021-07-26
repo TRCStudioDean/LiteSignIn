@@ -35,10 +35,7 @@ public class SignInPluginProperties
         CommandSender sender = Bukkit.getConsoleSender();
         if (propertiesFile.containsKey(path)) {
             String message = propertiesFile.getProperty(path);
-            for (String placeholder : placeholders.keySet()) {
-                message = message.replace(placeholder, placeholders.get(placeholder));
-            }
-            sender.sendMessage(MessageUtil.toColor(MessageUtil.prefix(message)));
+            sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, message, placeholders)));
         }
     }
 }

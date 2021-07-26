@@ -45,9 +45,9 @@ public class DefaultConfigurationFile
                 fileName = "RewardSettings-NEWVERSION.yml";
             }
         }
-        try (Reader Config = new InputStreamReader(Main.getInstance().getClass().getResource("/Languages/" + jarPath + "/" + fileName).openStream(), "UTF-8")) {
+        try (Reader config = new InputStreamReader(Main.getInstance().getClass().getResource("/Languages/" + jarPath + "/" + fileName).openStream(), "UTF-8")) {
             FileConfiguration configFile = new YamlConfiguration();
-            configFile.load(Config);
+            configFile.load(config);
             cacheDefaultConfig.put(type, configFile);
         } catch (IOException | InvalidConfigurationException ex) {
             ex.printStackTrace();

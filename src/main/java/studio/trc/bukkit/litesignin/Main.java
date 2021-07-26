@@ -16,7 +16,7 @@ import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.event.Quit;
 import studio.trc.bukkit.litesignin.event.Join;
 import studio.trc.bukkit.litesignin.nms.JsonItemStack;
-import studio.trc.bukkit.litesignin.updater.CheckUpdater;
+import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.metrics.Metrics;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
@@ -66,7 +66,7 @@ public class Main
             @Override
             public void run() {
                 if (PluginControl.enableUpdater()) {
-                    CheckUpdater.checkUpdate();
+                    Updater.checkUpdate();
                 }
             }
         }.runTask(main);

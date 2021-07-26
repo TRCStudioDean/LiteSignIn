@@ -1,4 +1,4 @@
-package studio.trc.bukkit.litesignin.updater;
+package studio.trc.bukkit.litesignin.util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,16 +14,15 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import studio.trc.bukkit.litesignin.config.MessageUtil;
-import studio.trc.bukkit.litesignin.util.SignInDate;
 
-public class CheckUpdater
+public class Updater
 {
     private static boolean foundANewVersion = false;
     private static String newVersion;
     private static String link;
     private static String description;
     private static Thread checkUpdateThread;
-    private static SignInDate date = SignInDate.getInstance(new Date());
+    private static Date date = new Date();
     
     /**
      * Initialize programs.
@@ -68,7 +67,7 @@ public class CheckUpdater
             } catch (MalformedURLException ex) {
                 MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Error");
             }
-            date = SignInDate.getInstance(new Date());
+            date = new Date();
         });
     }
     
@@ -116,7 +115,7 @@ public class CheckUpdater
      * Get the time of last check update.
      * @return 
      */
-    public static SignInDate getTimeOfLastCheckUpdate() {
+    public static Date getTimeOfLastCheckUpdate() {
         return date;
     }
 }

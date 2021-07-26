@@ -3,6 +3,8 @@ package studio.trc.bukkit.litesignin.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,20 +13,14 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 
 public class CustomItem
 {
-    private final ItemStack is;
+    @Getter
+    private final ItemStack itemStack;
+    @Getter
     private final String name;
     
-    public CustomItem(ItemStack is, String name) {
-        this.is = is;
+    public CustomItem(ItemStack itemStack, String name) {
+        this.itemStack = itemStack;
         this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public ItemStack getItemStack() {
-        return is;
     }
     
     public void delete() {
@@ -33,12 +29,7 @@ public class CustomItem
     }
     
     public void give(Player player) {
-        player.getInventory().addItem(is);
-    }
-    
-    @Override
-    public String toString() {
-        return "[CustomItem] -> [" + is.toString() + "], [Name:" + name + "]";
+        player.getInventory().addItem(itemStack);
     }
     
     public static List<CustomItem> getItemStackCollection() {

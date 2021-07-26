@@ -5,15 +5,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import lombok.Getter;
 
 public class SignInDate
     implements Serializable
 {
+    @Getter
     private final int year;
+    @Getter
     private final int month;
+    @Getter
     private final int day;
+    @Getter
     private final int hour;
+    @Getter
     private final int minute;
+    @Getter
     private final int second;
     
     private boolean timePeriodFound = false;
@@ -172,30 +179,6 @@ public class SignInDate
         Calendar cal = Calendar.getInstance();
         cal.set(year, month - 1, day);
         return weekDays[cal.get(Calendar.DAY_OF_WEEK) - 1];
-    }
-    
-    public int getYear() {
-        return year;
-    }
-    
-    public int getMonth() {
-        return month;
-    }
-    
-    public int getDay() {
-        return day;
-    }
-    
-    public int getHour() {
-        return hour;
-    }
-    
-    public int getMinute() {
-        return minute;
-    }
-    
-    public int getSecond() {
-        return second;
     }
     
     public String getYearAsString() {

@@ -763,7 +763,7 @@ Traditional-Chinese:
         - '&6- &3伺服器運行版本: &6v{nowVersion}'
         - '&6- &3下載地址: &d%link%'
         - '&6- &3更新日誌: {description}'
-        Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網絡是否正常! '
+        Error: '{prefix}&c無法獲取插件最新版本, 請檢查你的網路是否正常! '
     Wood-Sign:
         Successfully-Create: '{prefix}&a你已成功創建了簽到告示牌 &b{sign}'
         Unable-To-Create: '{prefix}&c無法創建簽到告示牌 &b{sign}&c，您缺少權限: &e{permission}'

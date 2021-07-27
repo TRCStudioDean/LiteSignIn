@@ -20,6 +20,7 @@ import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
+import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -98,10 +99,14 @@ public class SignInGUI
         SignInDate today = SignInDate.getInstance(new Date());
         
         /**
-         * If month = specified month or year = specified year, return basic gui.
+         * If month = specified month and year = specified year, return basic gui.
          */
-        if (month == today.getMonth() && year == today.getYear()) {
-            gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.GUI-Name"), "{date}", new SimpleDateFormat(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")).format(new Date()))));
+        if (year == today.getYear()) {
+            if (month == today.getMonth()) {
+                gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.GUI-Name"), "{date}", new SimpleDateFormat(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")).format(new Date()))));
+            } else {
+                gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
+            }
         } else {
             Map<String, String> placeholders = new HashMap();
             placeholders.put("{month}", String.valueOf(month));
@@ -136,9 +141,8 @@ public class SignInGUI
      */
     public static Set<SignInGUIColumn> getKey(Player player, int month, int year) {
         Set<SignInGUIColumn> set = new LinkedHashSet();
-        Date date = new Date();
-        String[] times = new SimpleDateFormat("yyyy-MM-dd").format(date).split("-");
-        if (Integer.valueOf(times[1]) == month && Integer.valueOf(times[0]) == year) return getKey(player);
+        SignInDate today = SignInDate.getInstance(new Date());
+        if (today.getMonth() == month && today.getYear() == year) return getKey(player);
         Storage playerdata = Storage.getPlayer(player);
         String queue = String.valueOf(SignInQueue.getInstance().getRank(playerdata.getUserUUID()));
         String continuous = String.valueOf(playerdata.getContinuousSignIn());
@@ -153,7 +157,7 @@ public class SignInGUI
             days[1] = 29;
         }
         SignInDate specifiedDate = SignInDate.getInstance(year, month, 1);
-        if (specifiedDate.compareTo(SignInDate.getInstance(date)) <= -1) {
+        if (specifiedDate.compareTo(today) == -1) {
             List<ItemStack> items = new LinkedList();
             List<KeyType> keys = new LinkedList();
             for (int i = 0;i < days[month - 1];i++) {
@@ -176,38 +180,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Already_SignIn;
+                    keyType = KeyType.ALREADY_SIGNIN;
                 } else {
                     try {
                         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
@@ -224,38 +209,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Missed_SignIn;
+                    keyType = KeyType.MISSED_SIGNIN;
                 }
                 items.add(key);
                 keys.add(keyType);
@@ -292,38 +258,20 @@ public class SignInGUI
                 ItemMeta im = key.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
                     List<String> lore = new ArrayList();
+                    Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, null);
                     for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore")) {
-                        Map<String, String> placeholders = new HashMap();
-                        placeholders.put("{day}", String.valueOf(i + 1));
-                        placeholders.put("{continuous}", continuous);
-                        placeholders.put("{queue}", queue);
-                        placeholders.put("{total-number}", totalNumber);
-                        placeholders.put("{cards}", cards);
-                        placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                        placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                        placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                        placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                         lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                     }
                     im.setLore(lore);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment") != null) {
-                    for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment")) {
-                        String[] data = name.split(":");
-                        for (Enchantment enchant : Enchantment.values()) {
-                            if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                try {
-                                    im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                } catch (Exception ex) {}
-                            }
-                        }
-                    }
+                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
                 key.setItemMeta(im);
                 items.add(key);
-                keys.add(KeyType.Comming_Soon);
+                keys.add(KeyType.COMMING_SOON);
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots") != null) {
                 int i = 0;
@@ -347,208 +295,9 @@ public class SignInGUI
      * @return 
      */
     public static Set<SignInGUIColumn> getKey(Player player, int month) {
-        Set<SignInGUIColumn> set = new LinkedHashSet();
-        String[] times = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).split("-");
-        if (Integer.valueOf(times[1]) == month) return getKey(player);
-        Storage playerdata = Storage.getPlayer(player);
-        String queue = String.valueOf(SignInQueue.getInstance().getRank(playerdata.getUserUUID()));
-        String continuous = String.valueOf(playerdata.getContinuousSignIn());
-        String totalNumber = String.valueOf(playerdata.getCumulativeNumber());
-        String cards = String.valueOf(playerdata.getRetroactiveCard());
-        int year = Integer.valueOf(times[0]);
-        int nextPageMonth = getNextPageMonth(month);
-        int nextPageYear = getNextPageYear(month, year);
-        int previousPageMonth = getPreviousPageMonth(month);
-        int previousPageYear = getPreviousPageYear(month, year);
-        int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-            days[1] = 29;
-        }
-        if (month < Integer.valueOf(times[1])) {
-            List<ItemStack> items = new LinkedList();
-            List<KeyType> keys = new LinkedList();
-            for (int i = 0;i < days[month - 1];i++) {
-                SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
-                ItemStack key;
-                KeyType keyType;
-                if (playerdata.alreadySignIn(historicalDate)) {
-                    try {
-                        if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
-                        for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                            lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
-                        }
-                        im.setLore(lore);
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
-                    keyType = KeyType.Already_SignIn;
-                } else {
-                    try {
-                        if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
-                        for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                            lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
-                        }
-                        im.setLore(lore);
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
-                    }
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
-                    keyType = KeyType.Missed_SignIn;
-                }
-                items.add(key);
-                keys.add(keyType);
-            }
-            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots") != null) {
-                int i = 0;
-                for (String slots : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots")) {
-                    try {
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(year, month - 1, i + 1);
-                        set.add(new SignInGUIColumn(items.get(i), Integer.valueOf(slots), SignInDate.getInstance(cal.getTime()), keys.get(i)));
-                    } catch (IndexOutOfBoundsException ex) {}
-                    i++;
-                }
-            }
-            return set;
-        } else {
-            List<ItemStack> items = new LinkedList();
-            List<KeyType> keys = new LinkedList();
-            for (int i = 0;i < days[month - 1];i++) {
-                ItemStack key;
-                try {
-                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Data"));
-                    } else {
-                        key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Item").toUpperCase()), i + 1);
-                    }
-                } catch (IllegalArgumentException ex) {
-                    key = new ItemStack(Material.BARRIER, i + 1);
-                }
-                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner") != null) {
-                    PluginControl.setHead(key, replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Owner"), "{player}", player.getName()));
-                }
-                ItemMeta im = key.getItemMeta();
-                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
-                    List<String> lore = new ArrayList();
-                    for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore")) {
-                        Map<String, String> placeholders = new HashMap();
-                        placeholders.put("{day}", String.valueOf(i + 1));
-                        placeholders.put("{continuous}", continuous);
-                        placeholders.put("{queue}", queue);
-                        placeholders.put("{total-number}", totalNumber);
-                        placeholders.put("{cards}", cards);
-                        placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                        placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                        placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                        placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                        lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
-                    }
-                    im.setLore(lore);
-                }
-                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment") != null) {
-                    for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment")) {
-                        String[] data = name.split(":");
-                        for (Enchantment enchant : Enchantment.values()) {
-                            if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                try {
-                                    im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                } catch (Exception ex) {}
-                            }
-                        }
-                    }
-                }
-                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
-                key.setItemMeta(im);
-                items.add(key);
-                keys.add(KeyType.Comming_Soon);
-            }
-            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots") != null) {
-                int i = 0;
-                for (String slots : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots")) {
-                    try {
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(year, month - 1, i + 1);
-                        set.add(new SignInGUIColumn(items.get(i), Integer.valueOf(slots), SignInDate.getInstance(cal.getTime()), keys.get(i)));
-                    } catch (IndexOutOfBoundsException ex) {}
-                    i++;
-                }
-            }
-            return set;
-        }
+        SignInDate today = SignInDate.getInstance(new Date());
+        if (today.getMonth() == month) return getKey(player);
+        else return getKey(player, month, today.getYear());
     }
     
     /**
@@ -598,38 +347,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Already_SignIn;
+                    keyType = KeyType.ALREADY_SIGNIN;
                 } else {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data") != null) {
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Data"));
@@ -642,38 +372,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Missed_SignIn;
+                    keyType = KeyType.MISSED_SIGNIN;
                 }
                 items.add(key);
                 keys.add(keyType);
@@ -696,38 +407,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore") != null)  {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Already_SignIn;
+                    keyType = KeyType.ALREADY_SIGNIN;
                 } else {
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data") != null) {
                         key = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Item").toUpperCase()), i + 1, (short) ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getInt(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Data"));
@@ -740,38 +432,19 @@ public class SignInGUI
                     ItemMeta im = key.getItemMeta();
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Lore") != null) {
                         List<String> lore = new ArrayList();
+                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Lore")) {
-                            Map<String, String> placeholders = new HashMap();
-                            placeholders.put("{day}", String.valueOf(i + 1));
-                            placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                            placeholders.put("{continuous}", continuous);
-                            placeholders.put("{queue}", queue);
-                            placeholders.put("{total-number}", totalNumber);
-                            placeholders.put("{cards}", cards);
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                         }
                         im.setLore(lore);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Enchantment") != null) {
-                        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Enchantment")) {
-                            String[] data = name.split(":");
-                            for (Enchantment enchant : Enchantment.values()) {
-                                if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                    try {
-                                        im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                    } catch (Exception ex) {}
-                                }
-                            }
-                        }
+                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Enchantment", im);
                     }
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                     if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
-                    keyType = KeyType.Nothing_SignIn;
+                    keyType = KeyType.NOTHING_SIGNIN;
                 }
                 items.add(key);
                 keys.add(keyType);
@@ -792,39 +465,20 @@ public class SignInGUI
                 ItemMeta im = key.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore") != null) {
                     List<String> lore = new ArrayList();
+                    Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                     for (String lores : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Lore")) {
-                        Map<String, String> placeholders = new HashMap();
-                        placeholders.put("{day}", String.valueOf(i + 1));
-                        placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                        placeholders.put("{continuous}", continuous);
-                        placeholders.put("{queue}", queue);
-                        placeholders.put("{total-number}", totalNumber);
-                        placeholders.put("{cards}", cards);
-                        placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                        placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                        placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                        placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                         lore.add(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, lores, placeholders)));
                     }
                     im.setLore(lore);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment") != null) {
-                    for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment")) {
-                        String[] data = name.split(":");
-                        for (Enchantment enchant : Enchantment.values()) {
-                            if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                try {
-                                    im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                } catch (Exception ex) {}
-                            }
-                        }
-                    }
+                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
                 key.setItemMeta(im);
                 items.add(key);
-                keys.add(KeyType.Comming_Soon);
+                keys.add(KeyType.COMMING_SOON);
             }
         }
         if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Slots") != null) {
@@ -902,16 +556,7 @@ public class SignInGUI
                     im.setLore(lore);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment") != null) {
-                    for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment")) {
-                        String[] data = name.split(":");
-                        for (Enchantment enchant : Enchantment.values()) {
-                            if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                try {
-                                    im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                } catch (Exception ex) {}
-                            }
-                        }
-                    }
+                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment", im);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Display-Name"), player)));
@@ -960,9 +605,66 @@ public class SignInGUI
         return year - 1;
     }
     
-    public static String replace(Player player, String text, String target, String replacement) {
+    private static Map<String, String> getPlaceholdersOfItemLore(
+            int day,
+            String continuous,
+            String queue,
+            String totalNumber,
+            String cards,
+            int nextPageMonth,
+            int nextPageYear,
+            int previousPageMonth,
+            int previousPageYear,
+            SignInDate historicalDate) {
+        Map<String, String> placeholders = new HashMap();
+        if (historicalDate != null) placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+        placeholders.put("{day}", String.valueOf(day + 1));
+        placeholders.put("{continuous}", continuous);
+        placeholders.put("{queue}", queue);
+        placeholders.put("{total-number}", totalNumber);
+        placeholders.put("{cards}", cards);
+        placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
+        placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
+        placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
+        placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
+        return placeholders;
+    }
+    
+    private static String replace(Player player, String text, String target, String replacement) {
         Map<String, String> placeholders = new HashMap();
         placeholders.put(target, replacement);
         return MessageUtil.replacePlaceholders(player, text, placeholders);
+    }
+    
+    private static void setEnchantments(String configPath, ItemMeta im) {
+        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(configPath)) {
+            try {
+                String[] data = name.split(":");
+                boolean invalid = true;
+                for (Enchantment enchant : Enchantment.values()) {
+                    if (enchant.getName().equalsIgnoreCase(data[0])) {
+                        try {
+                            im.addEnchant(enchant, Integer.valueOf(data[1]), true);
+                            invalid = false;
+                            break;
+                        } catch (Exception ex) {
+                            Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{path}", configPath + "." + name);
+                            SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                        }
+                    }
+                }
+                if (invalid) {
+                    Map<String, String> placeholders = new HashMap();
+                    placeholders.put("{enchantment}", data[0]);
+                    placeholders.put("{path}", configPath + "." + name);
+                    SignInPluginProperties.sendOperationMessage("InvalidEnchantment", placeholders);
+                }
+            } catch (Exception ex) {
+                Map<String, String> placeholders = new HashMap();
+                placeholders.put("{path}", configPath + "." + name);
+                SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+            }
+        }
     }
 }

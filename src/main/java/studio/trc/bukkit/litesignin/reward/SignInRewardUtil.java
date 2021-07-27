@@ -144,16 +144,7 @@ public abstract class SignInRewardUtil
                     im.setLore(lore);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Enchantment")) {
-                    for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemdata[0] + ".Enchantment")) {
-                        String[] data = name.split(":");
-                        for (Enchantment enchant : Enchantment.values()) {
-                            if (enchant.getName().equalsIgnoreCase(data[0])) {
-                                try {
-                                    im.addEnchant(enchant, Integer.valueOf(data[1]), true);
-                                } catch (NumberFormatException ex) {}
-                            }
-                        }
-                    }
+                    setEnchantments("Manual-Settings." + itemdata[0] + ".Enchantment", im);
                 }
                 if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
                 if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemdata[0] + ".Display-Name"), player)));
@@ -201,6 +192,7 @@ public abstract class SignInRewardUtil
                 } catch (IllegalArgumentException ex) {
                     Map<String, String> placeholders = new HashMap();
                     placeholders.put("{sound}", args[0]);
+                    placeholders.put("{path}", configPath + "." + value);
                     SignInPluginProperties.sendOperationMessage("InvalidSound", placeholders);
                 } catch (Exception ex) {
                     Map<String, String> placeholders = new HashMap();
@@ -210,5 +202,37 @@ public abstract class SignInRewardUtil
             } 
         }
         return sounds;
+    }
+    
+    private void setEnchantments(String configPath, ItemMeta im) {
+        for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList(configPath)) {
+            try {
+                String[] data = name.split(":");
+                boolean invalid = true;
+                for (Enchantment enchant : Enchantment.values()) {
+                    if (enchant.getName().equalsIgnoreCase(data[0])) {
+                        try {
+                            im.addEnchant(enchant, Integer.valueOf(data[1]), true);
+                            invalid = false;
+                            break;
+                        } catch (Exception ex) {
+                            Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{path}", configPath + "." + name);
+                            SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                        }
+                    }
+                }
+                if (invalid) {
+                    Map<String, String> placeholders = new HashMap();
+                    placeholders.put("{enchantment}", data[0]);
+                    placeholders.put("{path}", configPath + "." + name);
+                    SignInPluginProperties.sendOperationMessage("InvalidEnchantment", placeholders);
+                }
+            } catch (Exception ex) {
+                Map<String, String> placeholders = new HashMap();
+                placeholders.put("{path}", configPath + "." + name);
+                SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+            }
+        }
     }
 }

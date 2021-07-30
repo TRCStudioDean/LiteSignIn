@@ -498,7 +498,7 @@ public class SignInCommand
                                 data.takeRetroactiveCard(number);
                                 Map<String, String> placeholders = new HashMap();
                                 placeholders.put("{player}", player.getName());
-                                placeholders.put("{number}", String.valueOf(number));
+                                placeholders.put("{amount}", String.valueOf(number));
                                 MessageUtil.sendMessage(sender, "Command-Messages.RetroactiveCard.Take", placeholders);
                             } else {
                                 if (PluginControl.enableRetroactiveCardRequiredItem()) {

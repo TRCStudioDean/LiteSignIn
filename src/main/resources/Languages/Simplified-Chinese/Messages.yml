@@ -18,6 +18,8 @@ Simplified-Chinese:
         Messages:
         - '{prefix}&a&l你今天还没有签到! %opengui%'
     GUI-SignIn-Messages:
+        Unavailable-Feature: '{prefix}&c本服务器未启用签到菜单'
+        Minimum-GUI-Date: '{prefix}&c你不可以打开&e{year}&c年&e{month}&c月之前的签到菜单！'
         Retroactive-Card-Cooldown:
         - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用补签卡!'
         Unable-To-Hold:
@@ -276,6 +278,8 @@ Traditional-Chinese:
         Join-Messages:
         - '{prefix}&a&l你今天還沒有簽到! %opengui%'
     GUI-SignIn-Messages:
+        Unavailable-Feature: '{prefix}&c本伺服器未啟用簽到菜單'
+        Minimum-GUI-Date: '{prefix}&c你不可以打開&e{year}&c年&e{month}&c月之前的簽到菜單！'
         Retroactive-Card-Cooldown:
         - '{prefix}&e你需要等待 &c{second} &e秒才可以再次使用補簽卡!'
         Unable-To-Hold:
@@ -534,6 +538,8 @@ English:
         Join-Messages:
         - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
     GUI-SignIn-Messages:
+        Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
+        Minimum-GUI-Date: '{prefix}&cYou can''t open the sign-in menu before &e{year} &cyear &e{month}&c month!'
         Retroactive-Card-Cooldown:
         - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
         Unable-To-Hold:
@@ -789,6 +795,8 @@ Japanese:
         Join-Messages:
         - '{prefix}&a&l今日はチェックインしていません！ %opengui%'
     GUI-SignIn-Messages:
+        Unavailable-Feature: '{prefix}&cこのサーバーはこの機能を有効にしません。'
+        Minimum-GUI-Date: '{prefix}＆e{year}&c年&e{month}＆c月の前にサインインメニューを開くことができません。'
         Retroactive-Card-Cooldown:
         - '{prefix}&eこの操作を行う前に、&c{second}秒&eを待ってください！'
         Unable-To-Hold:

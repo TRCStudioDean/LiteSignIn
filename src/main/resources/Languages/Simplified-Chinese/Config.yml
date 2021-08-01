@@ -17,6 +17,21 @@ Join-Event:
     #是否启用进服时自动签到（需要拥有权限）
     Auto-SignIn: false
 
+#签到菜单相关设置
+GUI-Settings:
+    #是否启用箱子GUI作为签到菜单
+    #启用后可使用/signin gui打开菜单
+    Enabled: true
+    #下限日期，用于限制能打开的签到菜单的最低日期
+    #PS: 2019年11月15日是本插件初代版本完工之日
+    Limit-Date:
+        #是否启用
+        Enabled: false
+        #最低年份
+        Minimum-Year: 2019
+        #最低月份
+        Minimum-Month: 11
+
 #是否检查更新
 #仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
 #此功能并不会造成服务器产生过多流量（每次检测产生约不到1kb网络流量）
@@ -32,7 +47,7 @@ Auto-Save:
     Delay: 10
     
 #是否启用Metrics
-#详见bStats.org
+#详见https://bstats.org/plugin/bukkit/LiteSignIn/11849
 Metrics: true
 
 #木牌签到脚本

@@ -5,24 +5,32 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import lombok.Getter;
+import lombok.Setter;
 
 public class SignInDate
     implements Serializable
 {
     @Getter
-    private final int year;
+    @Setter
+    private int year;
     @Getter
-    private final int month;
+    @Setter
+    private int month;
     @Getter
-    private final int day;
+    @Setter
+    private int day;
     @Getter
-    private final int hour;
+    @Setter
+    private int hour;
     @Getter
-    private final int minute;
+    @Setter
+    private int minute;
     @Getter
-    private final int second;
-    
+    @Setter
+    private int second;
+    @Setter
     private boolean timePeriodFound = false;
     
     public SignInDate(Date d) throws Exception {

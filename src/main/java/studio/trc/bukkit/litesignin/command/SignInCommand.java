@@ -77,8 +77,13 @@ public class SignInCommand
                     MessageUtil.sendMessage(sender, "No-Permission");
                     return true;
                 }
+                if (!PluginControl.enableSignInGUI()) {
+                    MessageUtil.sendMessage(sender, "GUI-SignIn-Messages.Unavailable-Feature");
+                    return true;
+                }
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
+                    SignInDate target = SignInDate.getInstance(new Date());
                     if (args.length == 1) {
                         Menu.openGUI(player);
                         MessageUtil.sendMessage(player, "Command-Messages.GUI.Normal");
@@ -87,11 +92,19 @@ public class SignInCommand
                             MessageUtil.sendMessage(sender, "No-Permission");
                             return true;
                         }
-                        for (int i = 1;i <= 12;i++) {
-                            if (args[1].equals(String.valueOf(i))) {
-                                Menu.openGUI(player, i);
+                        for (int month = 1;month <= 12;month++) {
+                            if (args[1].equals(String.valueOf(month))) {
+                                target.setMonth(month);
+                                if (PluginControl.enableGUILimitDate() && target.compareTo(PluginControl.getGUILimitedDate()) < 0) {
+                                    Map<String, String> placeholders = new HashMap();
+                                    placeholders.put("{year}", String.valueOf(PluginControl.getGUILimitedDateYear()));
+                                    placeholders.put("{month}", String.valueOf(PluginControl.getGUILimitedDateMonth()));
+                                    MessageUtil.sendMessage(sender, "GUI-SignIn-Messages.Minimum-GUI-Date", placeholders);
+                                    return true;
+                                }
+                                Menu.openGUI(player, month);
                                 Map<String, String> placeholders = new HashMap();
-                                placeholders.put("{month}", String.valueOf(i));
+                                placeholders.put("{month}", String.valueOf(month));
                                 MessageUtil.sendMessage(player, "Command-Messages.GUI.Normal", placeholders);
                                 return true;
                             }
@@ -104,7 +117,7 @@ public class SignInCommand
                             MessageUtil.sendMessage(sender, "No-Permission");
                             return true;
                         }
-                        int month = SignInDate.getInstance(new Date()).getMonth();
+                        int month = 0;
                         boolean invalidMonth = true;
                         for (int i = 1;i <= 12;i++) {
                             if (args[1].equals(String.valueOf(i))) {
@@ -131,6 +144,15 @@ public class SignInCommand
                             Map<String, String> placeholders = new HashMap();
                             placeholders.put("{year}", args[2]);
                             MessageUtil.sendMessage(player, "Command-Messages.GUI.Invalid-Year", placeholders);
+                            return true;
+                        }
+                        target.setMonth(month);
+                        target.setYear(year);
+                        if (PluginControl.enableGUILimitDate() && target.compareTo(PluginControl.getGUILimitedDate()) < 0) {
+                            Map<String, String> placeholders = new HashMap();
+                            placeholders.put("{year}", String.valueOf(PluginControl.getGUILimitedDateYear()));
+                            placeholders.put("{month}", String.valueOf(PluginControl.getGUILimitedDateMonth()));
+                            MessageUtil.sendMessage(sender, "GUI-SignIn-Messages.Minimum-GUI-Date", placeholders);
                             return true;
                         }
                         Menu.openGUI(player, month, year);

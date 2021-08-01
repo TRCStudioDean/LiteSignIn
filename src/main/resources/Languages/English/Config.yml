@@ -17,6 +17,21 @@ Join-Event:
     #Whether to enable auto sign-in (Need have permission)
     Auto-SignIn: false
 
+#About GUI settings
+GUI-Settings:
+    #Whether use chest GUI to display sign-in menu.
+    #If true, you can use command /signin gui to open sign-in menu.
+    Enabled: true
+    #The lower limit date
+    #PS: 2019/11/15 is the day the first version of this plugin is completed.
+    Limit-Date:
+        #Whether to enable
+        Enabled: false
+        #Minimum year
+        Minimum-Year: 2019
+        #Minimum month
+        Minimum-Month: 11
+
 #Whether to check update
 #Only running at server starting. 
 #It will check the latest version of the plugin, and report to the console and authorized players.
@@ -30,7 +45,7 @@ Auto-Save:
     Delay: 10
     
 #Whether enable Metrics
-#Detailed: bstats.org
+#Detailed: https://bstats.org/plugin/bukkit/LiteSignIn/11849
 Metrics: true
     
 #Wood signs script

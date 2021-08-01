@@ -17,6 +17,19 @@ Join-Event:
     #自動サインインを有効にするかどうか（許可が必要）
     Auto-SignIn: false
 
+#メニュー関連設定
+GUI-Settings:
+    #GUIをメニューとして有効にするかどうか
+    Enabled: true
+    #下限の日。これより前の日付は無効になります。
+    #PS: 2019/11/15/ は最初のバージョンがリリースされた日です
+    Limit-Date:
+        Enabled: false
+        #最小年
+        Minimum-Year: 2019
+        #最大年
+        Minimum-Month: 11
+
 #更新を自動的にチェックするかどうか
 #サーバーが起動するたびに実行され、新しいバージョンが見つかったときに管理者に通知します。
 #この機能により、サーバーが生成するトラフィックが多すぎることはありません（毎回約1kb）
@@ -32,7 +45,7 @@ Auto-Save:
     Delay: 10
     
 #Metricsを有効にするかどうか
-#詳細については、bstats.orgを参照してください。
+#詳細については、https://bstats.org/plugin/bukkit/LiteSignIn/11849 を参照してください。
 Metrics: true
     
 #木の看板サインインスクリプト

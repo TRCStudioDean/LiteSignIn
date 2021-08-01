@@ -118,6 +118,14 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("Retroactive-Card.Quantity-Required");
     }
     
+    public static int getGUILimitedDateYear() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("GUI-Settings.Limit-Date.Minimum-Year");
+    }
+    
+    public static int getGUILimitedDateMonth() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("GUI-Settings.Limit-Date.Minimum-Month");
+    }
+    
     public static double getRetroactiveCardIntervals() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Retroactive-Card.Intervals");
     }
@@ -148,6 +156,14 @@ public class PluginControl
     
     public static boolean enableSignInRanking() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Sign-In-Ranking");
+    }
+    
+    public static boolean enableSignInGUI() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("GUI-Settings.Enabled");
+    }
+    
+    public static boolean enableGUILimitDate() {
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("GUI-Settings.Limit-Date.Enabled");
     }
      
     public static boolean enableRetroactiveCard() {
@@ -180,6 +196,10 @@ public class PluginControl
     
     public static SignInDate getRetroactiveCardMinimumDate() {
         return SignInDate.getInstance(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Minimum-Date"));
+    }
+    
+    public static SignInDate getGUILimitedDate() {
+        return SignInDate.getInstance(getGUILimitedDateYear(), getGUILimitedDateMonth(), 1);
     }
     
     public static String getPrefix() {

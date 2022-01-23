@@ -52,7 +52,7 @@ public class PluginControl
             }
             SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", new HashMap());
         } catch (Error ex) {
-            ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("Use-PlaceholderAPI", false);
+            ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("PlaceholderAPI.Enabled", false);
             SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", new HashMap());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
@@ -139,7 +139,7 @@ public class PluginControl
     }
     
     public static boolean usePlaceholderAPI() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Use-PlaceholderAPI");
+        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("PlaceholderAPI.Enabled");
     }
     
     public static boolean useMySQLStorage() {

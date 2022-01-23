@@ -4,8 +4,17 @@ Prefix: '&bLite&3SignIn &f&l>>> '
 #プラグインの言語
 Language: Japanese
 
-#PlaceholderAPIを使用するかどうか
-Use-PlaceholderAPI: true
+#PlaceholderAPI 設定
+PlaceholderAPI:
+    #PlaceholderAPIを使用するかどうか
+    Enabled: true
+    #プレースホルダーキャッシュの更新のレイテンシー（秒）
+    #一部のプレースホルダーはデータベースのデータを継続的に読み取る必要があるため、
+    #このオプションは、PAPIプレースホルダーへの頻繁な呼び出しによって引き起こされるデータベースIOの大きな負担を防ぐために使用されます。
+    Cache-Update-Delay: 10
+    #例外のプレースホルダー（キャッシュされません）
+    #例: 'queue' は %litesignin_queue% 
+    Exceptions: [] 
 
 #サインインランキング機能を有効にするかどうか
 #この機能は、毎日サインインするプレイヤーの順番を登録するために使用されます。

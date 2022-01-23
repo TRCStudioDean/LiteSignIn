@@ -10,6 +10,8 @@ English:
     Day: 'day'
     Month: 'month'
     Year: 'year'
+    'Yes': '&a&lYes'
+    'No': '&c&lNo'
     Join-Event:
         Open-GUI: '&c&l[Click Here!]'
         Hover-Text:

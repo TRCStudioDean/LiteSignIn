@@ -10,6 +10,8 @@ Japanese:
     Day: '日'
     Month: '月'
     Year: '年'
+    'Yes': '&a&lはい'
+    'No': '&c&lいいえ'
     Join-Event:
         Open-GUI: '&c&l[クリックボタン]'
         Hover-Text:

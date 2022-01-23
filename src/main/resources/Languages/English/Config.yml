@@ -8,8 +8,17 @@ Language: English
 #This function is used to record the order in which players sign in daily.
 Enable-Sign-In-Ranking: true
 
-#Whether to use the PlaceholderAPI
-Use-PlaceholderAPI: true
+#PlaceholderAPI Settings
+PlaceholderAPI:
+    #Whether to use the PlaceholderAPI
+    Enabled: true
+    #Latency (seconds) for placeholder cache updates
+    #Since some placeholders need to continuously read the data of the database,
+    #this option is used to prevent the huge burden on database IO caused by frequent calls to PAPI placeholders.
+    Cache-Update-Delay: 10
+    #Placeholder for exception (not cached)
+    #Example: 'queue' which is %litesignin_queue% 
+    Exceptions: [] 
 
 #Whether to remind players to remember to check in when they join server.
 Join-Event:

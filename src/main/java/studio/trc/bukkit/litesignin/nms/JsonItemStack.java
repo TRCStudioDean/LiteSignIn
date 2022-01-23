@@ -1,7 +1,9 @@
 package studio.trc.bukkit.litesignin.nms;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +43,7 @@ public class JsonItemStack
         
         //net.minecraft.server
         try {
-            if (PluginControl.nmsVersion.startsWith("v1_17")) {
+            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
             } else {
@@ -97,7 +99,12 @@ public class JsonItemStack
         try {
             Object mcStack = craftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, is);
             Object NBTTagCompound = nbtTagCompound.newInstance();
-            itemStack.getDeclaredMethod("save", nbtTagCompound).invoke(mcStack, NBTTagCompound);
+            Method saveMethod = Arrays.stream(itemStack.getDeclaredMethods()).filter(method -> method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(nbtTagCompound) && method.getReturnType().equals(nbtTagCompound)).findFirst().orElse(null);
+            if (saveMethod != null) {
+                saveMethod.invoke(mcStack, NBTTagCompound);
+            } else {
+                return null;
+            }
             return NBTTagCompound.toString();
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
             Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);

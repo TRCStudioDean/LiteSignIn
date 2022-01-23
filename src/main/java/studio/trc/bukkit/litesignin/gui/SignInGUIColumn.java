@@ -5,7 +5,7 @@ import studio.trc.bukkit.litesignin.util.SignInDate;
 
 /**
  * Buttons in gui.
- * @author TRCRedstoner
+ * @author TRCStudioDean
  */
 public class SignInGUIColumn
 {

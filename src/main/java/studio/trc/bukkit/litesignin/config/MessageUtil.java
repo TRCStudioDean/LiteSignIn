@@ -207,7 +207,7 @@ public class MessageUtil
                 String message_lowerCase = textParagraphs.getComponent().toPlainText().toLowerCase();
                 String placeholder_lowerCase = placeholder.toLowerCase();
                 if (message_lowerCase.contains(placeholder_lowerCase)) {
-                    String[] splitText = message_lowerCase.split(placeholder_lowerCase, -1);
+                    String[] splitText = message_lowerCase.split(escape(placeholder_lowerCase), -1);
                     int last = textParagraphs.start();
                     for (String paragraph : splitText) {
                         int next = last + paragraph.length();

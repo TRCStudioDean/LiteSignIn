@@ -830,7 +830,7 @@ public class SignInCommand
                         if (itemList.isEmpty()) {
                             MessageUtil.sendMessage(sender, "Command-Messages.ItemCollection.List.Empty");
                         } else {
-                            for (String text :  MessageUtil.getMessageList("Command-Messages.ItemCollection.List.Messages")) {
+                            for (String text : MessageUtil.getMessageList("Command-Messages.ItemCollection.List.Messages")) {
                                 if (text.toLowerCase().contains("%list%")) {
                                     if (!(sender instanceof Player)) {
                                         StringBuilder list = new StringBuilder();

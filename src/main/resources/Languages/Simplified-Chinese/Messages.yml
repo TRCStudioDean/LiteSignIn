@@ -10,6 +10,8 @@ Simplified-Chinese:
     Day: '天'
     Month: '月'
     Year: '年'
+    'Yes': '&a&l是'
+    'No': '&c&l否'
     Join-Event:
         Open-GUI: '&c&l[点击此处打开签到界面]'
         Hover-Text:

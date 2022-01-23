@@ -4,8 +4,17 @@ Prefix: '&bLite&3SignIn &f&l>>> '
 #插件语言
 Language: Simplified-Chinese
 
-#是否使用PlaceholderAPI
-Use-PlaceholderAPI: true
+#PlaceholderAPI设置
+PlaceholderAPI:
+    #是否使用
+    Enabled: true
+    #占位符缓存更新的延迟（秒）
+    #由于部分占位符需要不断地读取数据库的数据，
+    #此选项用于防止频繁调用PAPI占位符对数据库IO造成的巨大负担
+    Cache-Update-Delay: 10
+    #例外的占位符（不进行缓存的）
+    #示例: 'queue' 即 %litesignin_queue% 
+    Exceptions: [] 
 
 #是否启用签到排名榜功能
 #此功能用于登记每日签到玩家的先后顺序

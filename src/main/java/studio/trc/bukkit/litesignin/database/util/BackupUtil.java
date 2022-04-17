@@ -58,18 +58,18 @@ public class BackupUtil
             }
             for (CommandSender sender : BackupUtil.backupUsers) {
                 if (sender != null) {
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{file}",  fileName);
-                    MessageUtil.sendMessage(sender, "Database-Management.Backup.Successfully", placeholders);
+                    MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.Successfully", placeholders);
                 }
             }
             backingup = false;
         } catch (Throwable t) {
             for (CommandSender sender : BackupUtil.backupUsers) {
                 if (sender != null) {
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{error}",  t.getLocalizedMessage() != null ? t.getLocalizedMessage() : "null");
-                    MessageUtil.sendMessage(sender, "Database-Management.Backup.Failed", placeholders);
+                    MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.Failed", placeholders);
                 }
             }
             t.printStackTrace();

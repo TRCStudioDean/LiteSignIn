@@ -87,7 +87,7 @@ public class WoodSignUtil
                 }
                 scripts.add(new WoodSign(woodSignTitle, woodSignText, woodSignCommand, permission));
             } catch (Exception ex) {
-                Map<String, String> placeholders = new HashMap();
+                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{signs}", sections);
                 SignInPluginProperties.sendOperationMessage("WoodSignScriptLoadFailed", placeholders);
             }
@@ -178,7 +178,7 @@ public class WoodSignUtil
             }
         }
         if (number > 0) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{signs}", String.valueOf(number));
             SignInPluginProperties.sendOperationMessage("WoodSignScriptCleared", placeholders);
         }

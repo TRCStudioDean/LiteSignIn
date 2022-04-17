@@ -4,6 +4,8 @@ Traditional-Chinese:
     Auto-Save: '{prefix}&a玩家數據已保存!'
     Unable-To-Re-SignIn: '{prefix}&c本伺服器未啟用補簽功能。 '
     Repaired-Config-Section: '{prefix}&c插件無法獲取配置文件 &e{config} &c路徑 &7{path}&c, 已通過獲取默認配置文件進行修復.'
+    Player-Only: '{prefix}&c操作台不能使用這個命令.'
+    Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在！ '
     Second: '秒'
     Minute: '分鐘'
     Hour: '小時'
@@ -51,6 +53,7 @@ Traditional-Chinese:
         - ' &6/signin click &8[日期/玩家] [玩家] &c直接簽到或對某一日期進行補簽&7（日期格式: [年-月-日] 例: /signin click ''2015-8-11 ''）'
         - ' &6/signin retroactivecard &8[give/set/take] [數量] [玩家] &c給予/設置/取走玩家身上的補簽卡'
         - ' &6/signin save &c保存所有在線玩家的數據'
+        - ' &6/signin reward [玩家名字] [權限組名] [獎勵類型]&7:[對應值] &c直接給予玩家簽到獎勵'
         - ' &6/signin info [玩家] &c查看玩家的信息'
         - ' &6/signin leaderboard &8[日期] [頁數] &c列出今日或指定日期的簽到排行榜'
         - ' &6/signin itemcollection &c管理收藏品'
@@ -132,6 +135,40 @@ Traditional-Chinese:
             Specified-Year: '{prefix}&b你打開了 &e{year}年{month}月&b 的簽到菜單。 '
             Invalid-Year: '{prefix}&c年份 &e{year} &c不存在，請輸入正確的年份'
         Save: '{prefix}&a成功保存所有玩家的數據!'
+        Reward:
+            Help:
+            - '{prefix}&a使用幫助 &f&l>>> '
+            - '  &c/signin reward [玩家名字] &d[權限組名] &b[獎勵類型]&7:[對應值]'
+            - '  &e&l說明: &7這個功能用於直接給予玩家特定的簽到獎勵， 包括給予哪個組的簽到獎勵。 '
+            - '  &d[權限組名] &6指的是&aRewardSettings.yml&6中設置的各個權限組'
+            - '  &b[獎勵類型] &6如下: '
+            - '  &3- &a&lNORMAL_TIME: &e默認獎勵'
+            - '  &3- &a&lRETROACTIVE_TIME: &e補簽獎勵'
+            - '  &3- &a&lSPECIAL_TIMES&7:[次數]&a: &e連續簽到獎勵'
+            - '  &3- &a&lSPECIAL_WEEKS&7:[星期]&a: &e特別週簽到獎勵'
+            - '  &3- &a&lSPECIAL_DATES&7:[日期]&a: &e特殊日期簽到獎勵'
+            - '  &3- &a&lSPECIAL_RANKING&7:[名次]&a: &e特殊名次簽到獎勵'
+            - '  &3- &a&lSPECIAL_TIME_PERIODS&7:[時間]&a: &e特殊時間段簽到獎勵'
+            - '  &3- &a&lSTATISTICS&7:[次數]&a: &e簽到總次數獎勵'
+            Nothing: '無'
+            Successfully-Reward: '{prefix}&a成功給予玩家 &c{player} &a簽到獎勵。組名: &e{group}， &a獎勵類型: &b{rewardType}， &a對應值: &d{value} &a。 '
+            Unknown-Type: '{prefix}&c未知的獎勵類型: &e{rewardType} &c請使用&6/signin reward help&c查看使用幫助。 '
+            Unknown-Group: '{prefix}&c未知的權限組: &e{group} &c請檢查你在&aRewardSettings.yml&c中的設置。 '
+            Invalid-Reward: '{prefix}&c無效的獎勵， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &a在 &e{rewardtype} &a的簽到獎勵'
+            Wrong-Parameters:
+                SPECIAL_TIMES: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSPECIAL_TIMES&7:[這裡輸入一個有效的數字] &c例如: &9SPECIAL_TIMES:3 &c即連續簽到第三次'
+                SPECIAL_WEEKS: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSPECIAL_WEEKS&7:[這裡輸入一個有效的星期] &c例如: &9SPECIAL_WEEKS:6 &c即星期六簽到'
+                SPECIAL_DATES: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSPECIAL_DATES&7:[這裡輸入一個有效的日期] &c例如: &9SPECIAL_DATES:12-25 &c即12月25日簽到'
+                SPECIAL_RANKING: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSPECIAL_RANKING&7:[這裡輸入一個有效的數字] &c例如: &9SPECIAL_RANKING:1 &c即簽到第一名'
+                SPECIAL_TIME_PERIODS: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSPECIAL_TIME_PERIODS&7:[這裡輸入一個有效的時間] &c例如: &9SPECIAL_TIME_PERIODS:22:30:00 &c即22:30:00簽到'
+                STATISTICS: '{prefix}&c參數有誤 &e{value}&c， 請在 &a&lSTATISTICS&7:[這裡輸入一個有效的數字] &c例如: &9STATISTICS:100 &c即簽到累計100次'
+            Invalid-Parameters:
+                SPECIAL_TIMES: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aSpecial-Times&c中的連續簽到 &b&l{value} &c次的獎勵。 '
+                SPECIAL_WEEKS: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aSpecial-Weeks&c中的在星期 &b&l{value} &c簽到時的獎勵。 '
+                SPECIAL_DATES: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aSpecial-Dates&c中的在日期 &b&l{value} &c簽到時的獎勵。 '
+                SPECIAL_RANKING: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aSpecial-Ranking&c中的簽到第 &b&l{value} &c名的獎勵。 '
+                SPECIAL_TIME_PERIODS: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aSpecial-Time-periods&c中的在時間段 &b&l{value} &c時簽到的獎勵。 '
+                STATISTICS: '{prefix}&c參數無效， 請檢查&aRewardSettings.yml&c文件中是否設置了關於權限組 &e{group} &c在&aStatistics-Times&c中的總計簽到次數 &b&l{value} &c次的獎勵。 '
         LeaderBoard:
             #每一頁顯示多少個玩家
             Number-Of-Single-Page: 10
@@ -266,12 +303,16 @@ Simplified-Chinese:
     Auto-Save: '{prefix}&a玩家数据已保存!'
     Unable-To-Re-SignIn: '{prefix}&c本服务器未启用补签功能。'
     Repaired-Config-Section: '{prefix}&c插件无法获取配置文件 &e{config} &c路径 &7{path}&c, 已通过获取默认配置文件进行修复.'
+    Player-Only: '{prefix}&c控制台不能使用这个命令.'
+    Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在！'
     Second: '秒'
     Minute: '分钟'
     Hour: '小时'
     Day: '天'
     Month: '月'
     Year: '年'
+    'Yes': '&a&l是'
+    'No': '&c&l否'
     Join-Event:
         Open-GUI: '&c&l[点击此处打开签到界面]'
         Hover-Text:
@@ -311,6 +352,7 @@ Simplified-Chinese:
         - ' &6/signin click &8[日期/玩家] [玩家] &c直接签到或对某一日期进行补签&7（日期格式: [年-月-日] 例: /signin click ''2015-8-11''）'
         - ' &6/signin retroactivecard &8[give/set/take] [数量] [玩家] &c给予/设置/取走玩家身上的补签卡'
         - ' &6/signin save &c保存所有在线玩家的数据'
+        - ' &6/signin reward [玩家名字] [权限组名] [奖励类型]&7:[对应值] &c直接给予玩家签到奖励'
         - ' &6/signin info [玩家] &c查看玩家的信息'
         - ' &6/signin leaderboard &8[日期] [页数] &c列出今日或指定日期的签到排行榜'
         - ' &6/signin itemcollection &c管理收藏品'
@@ -392,6 +434,40 @@ Simplified-Chinese:
             Specified-Year: '{prefix}&b你打开了 &e{year}年{month}月&b 的签到菜单。'
             Invalid-Year: '{prefix}&c年份 &e{year} &c不存在，请输入正确的年份'
         Save: '{prefix}&a成功保存所有玩家的数据!'
+        Reward:
+            Help:
+            - '{prefix}&a使用帮助 &f&l>>> '
+            - '  &c/signin reward [玩家名字] &d[权限组名] &b[奖励类型]&7:[对应值]'
+            - '  &e&l说明: &7这个功能用于直接给予玩家特定的签到奖励， 包括给予哪个组的签到奖励。'
+            - '  &d[权限组名] &6指的是&aRewardSettings.yml&6中设置的各个权限组'
+            - '  &b[奖励类型] &6如下: '
+            - '  &3- &a&lNORMAL_TIME: &e默认奖励'
+            - '  &3- &a&lRETROACTIVE_TIME: &e补签奖励'
+            - '  &3- &a&lSPECIAL_TIMES&7:[次数]&a: &e连续签到奖励'
+            - '  &3- &a&lSPECIAL_WEEKS&7:[星期]&a: &e特别周签到奖励'
+            - '  &3- &a&lSPECIAL_DATES&7:[日期]&a: &e特殊日期签到奖励'
+            - '  &3- &a&lSPECIAL_RANKING&7:[名次]&a: &e特殊名次签到奖励'
+            - '  &3- &a&lSPECIAL_TIME_PERIODS&7:[时间]&a: &e特殊时间段签到奖励'
+            - '  &3- &a&lSTATISTICS&7:[次数]&a: &e签到总次数奖励'
+            Nothing: '无'
+            Successfully-Reward: '{prefix}&a成功给予玩家 &c{player} &a签到奖励。 组名: &e{group}， &a奖励类型: &b{rewardType}， &a对应值: &d{value} &a。'
+            Unknown-Type: '{prefix}&c未知的奖励类型: &e{rewardType} &c请使用&6/signin reward help&c查看使用帮助。'
+            Unknown-Group: '{prefix}&c未知的权限组: &e{group} &c请检查你在&aRewardSettings.yml&c中的设置。'
+            Invalid-Reward: '{prefix}&c无效的奖励， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &a在 &e{rewardtype} &a的签到奖励'
+            Wrong-Parameters:
+                SPECIAL_TIMES: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSPECIAL_TIMES&7:[这里输入一个有效的数字] &c例如: &9SPECIAL_TIMES:3 &c即连续签到第三次'
+                SPECIAL_WEEKS: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSPECIAL_WEEKS&7:[这里输入一个有效的星期] &c例如: &9SPECIAL_WEEKS:6 &c即星期六签到'
+                SPECIAL_DATES: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSPECIAL_DATES&7:[这里输入一个有效的日期] &c例如: &9SPECIAL_DATES:12-25 &c即12月25日签到'
+                SPECIAL_RANKING: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSPECIAL_RANKING&7:[这里输入一个有效的数字] &c例如: &9SPECIAL_RANKING:1 &c即签到第一名'
+                SPECIAL_TIME_PERIODS: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSPECIAL_TIME_PERIODS&7:[这里输入一个有效的时间] &c例如: &9SPECIAL_TIME_PERIODS:22:30:00 &c即22:30:00签到'
+                STATISTICS: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSTATISTICS&7:[这里输入一个有效的数字] &c例如: &9STATISTICS:100 &c即签到累计100次'
+            Invalid-Parameters:
+                SPECIAL_TIMES: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Times&c中的连续签到 &b&l{value} &c次的奖励。'
+                SPECIAL_WEEKS: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Weeks&c中的在星期 &b&l{value} &c签到时的奖励。'
+                SPECIAL_DATES: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Dates&c中的在日期 &b&l{value} &c签到时的奖励。'
+                SPECIAL_RANKING: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Ranking&c中的签到第 &b&l{value} &c名的奖励。'
+                SPECIAL_TIME_PERIODS: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Time-periods&c中的在时间段 &b&l{value} &c时签到的奖励。'
+                STATISTICS: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aStatistics-Times&c中的总计签到次数 &b&l{value} &c次的奖励。'
         LeaderBoard:
             #每一页显示多少个玩家
             Number-Of-Single-Page: 10
@@ -526,12 +602,16 @@ English:
     Auto-Save: '{prefix}&aAll Player''s data has been saved!'
     Unable-To-Re-SignIn: '{prefix}&cThis server has not enabled the re sign-in function.'
     Repaired-Config-Section: '{prefix}&cPlugin cannot obtain the configuration file &e{config} &c path &7{path}&c, which has been fixed by obtaining the default configuration file.'
+    Player-Only: '{prefix}&cThe console cannot use this command.'
+    Player-Not-Exist: '{prefix}&cPlayer &e{player} &cdoes not exist! '
     Second: 'second'
     Minute: 'minute'
     Hour: 'hour'
     Day: 'day'
     Month: 'month'
     Year: 'year'
+    'Yes': '&a&lYES'
+    'No': '&c&lNO'
     Join-Event:
         Open-GUI: '&c&l[Click Here!]'
         Hover-Text:
@@ -571,6 +651,7 @@ English:
         - ' &6/signin click &8[Date or playerName] [playerName] &cSign in now, or sign in for historical date. &7(Date format: [y-m-d] Example: /signin click ''2015-8-11'' playerName)'
         - ' &6/signin retroactivecard &8[give/set/take] [Amount] [Player] &cGive, Set or Take retroactive cards from player.'
         - ' &6/signin save &cSave data for all online players.'
+        - ' &6/signin reward [playerName] [groupName] [rewardType]&7:[value] &cdirectly give the player a sign-in reward.'
         - ' &6/signin info [playerName] &cView player''s information.'
         - ' &6/signin leaderboard &8[Date] [Page] &cView the sign-in leaderboard for today or a specified date.'
         - ' &6/signin itemcollection &cCollection of management items.'
@@ -650,6 +731,40 @@ English:
             Specified-Year: '{prefix}&bYou opened the sign in record menu for: &e{year}-{month}'
             Invalid-Year: '{prefix}&cInvalid year {year}, Please enter the correct year.'
         Save: '{prefix}&aAll Player''s data has been saved!'
+        Reward:
+            Help:
+            - '{prefix}&aUsage &f&l>>> '
+            - '  &c/signin reward [Player] &d[Group Name] &b[Reward Type]&7:[value]'
+            - '  &e&lDescription: &7 This function is used to directly give players specific sign-in rewards, including which group of sign-in rewards to give.'
+            - '  &d[Group Name] &6Refers to each permission group set in &aRewardSettings.yml&6.'
+            - '  &b[Reward Type] &6as follows: '
+            - '  &3- &a&lNORMAL_TIME: &eNormal time sign-in reward.'
+            - '  &3- &a&lRETROACTIVE_TIME: &eRetroactive card sign-in reward.'
+            - '  &3- &a&lSPECIAL_TIMES&7:[Number]&a: &eContinuous sign-in reward.'
+            - '  &3- &a&lSPECIAL_WEEKS&7:[Week Number]&a: &eSpecial weeks reward.'
+            - '  &3- &a&lSPECIAL_DATES&7:[Date]&a: &eSpecial dates reward.'
+            - '  &3- &a&lSPECIAL_RANKING&7:[Ranking]&a: &eSpecial ranking reward.'
+            - '  &3- &a&lSPECIAL_TIME_PERIODS&7:[Time periods]&a: &eSpecial time periods reward.'
+            - '  &3- &a&lSTATISTICS&7:[Number]&a: &eStatistics reward.'
+            Nothing: 'Nothing'
+            Successfully-Reward: '{prefix}&aSuccessfully gave the player &c{player} &asign-in reward. Group Name: &e{group}, &aReward Type: &b{rewardType}, &a Corresponding Value: &d{value} &a.'
+            Unknown-Type: '{prefix}&cUnknown reward type: &e{rewardType} &cPlease use &6/signin reward help&c for help.'
+            Unknown-Group: '{prefix}&cUnknown permission group: &e{group} &cPlease check your settings in &aRewardSettings.yml&c.'
+            Invalid-Reward: '{prefix}&cInvalid reward, please check if the &aRewardSettings.yml&c file has set the sign-in reward for permission group &e{group} &a in &e{rewardtype} &a.'
+            Wrong-Parameters:
+                SPECIAL_TIMES: '{prefix}&cWrong parameter &e{value}&c, please enter a valid number in &a&lSPECIAL_TIMES&7:[HERE] &cExample: &9SPECIAL_TIMES:3 &cthat the third consecutive sign-in.'
+                SPECIAL_WEEKS: '{prefix}&cWrong parameter &e{value}&c, please enter a valid week number in &a&lSPECIAL_WEEKS&7:[HERE] &cExample: &9SPECIAL_WEEKS:6 &cthat sign-in in saturday.'
+                SPECIAL_DATES: '{prefix}&cWrong parameter &e{value}&c, please enter a valid date in &a&lSPECIAL_DATES&7:[HERE] &cExample: &9SPECIAL_DATES:12-25 &cthat sign-in in December 25th.'
+                SPECIAL_RANKING: '{prefix}&cWrong parameter &e{value}&c, please enter a valid ranking number in &a&lSPECIAL_RANKING&7:[HERE] &cExample: &9SPECIAL_RANKING:1 &cthat sign-in first ranking.'
+                SPECIAL_TIME_PERIODS: '{prefix}&cWrong parameter &e{value}&c, please enter a valid time periods in &a&lSPECIAL_TIME_PERIODS&7:[HERE] &cExample: &9SPECIAL_TIME_PERIODS:22:30:00 &cthat sign-in on 22:30:00'
+                STATISTICS: '{prefix}&cWrong parameter &e{value}&c, please enter a valid number in &a&lSPECIAL_STATISTICS7:[HERE] &cExample: &9STATISTICS:100 &cthat total of 100 sign-in times'
+            Invalid-Parameters:
+                SPECIAL_TIMES: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for consecutive sign-in &b&l{value} &ctimes in the &aSpecial-Times&c of the permission group &e{group}&c.'
+                SPECIAL_WEEKS: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for the permission group &e{group} &cin &aSpecial-Weeks&c at the time of sign-in of the week &b&l{value}&c.'
+                SPECIAL_DATES: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for the permission group &e{group} &cin &aSpecial-Dates&c when signing-in on the date &b&l{value}&c.'
+                SPECIAL_RANKING: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for the sign-in &b&l{value} &cof the permission group &e{group} &c in &aSpecial-Ranking&c.'
+                SPECIAL_TIME_PERIODS: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for sign-in in the time period, &b&l{value} &cin the &aSpecial-Time-periods&c of the permission group &e{group}&c.'
+                STATISTICS: '{prefix}&cThe parameter is invalid. Please check whether the &aRewardSettings.yml&cfile has set the reward for the total number of sign-ins &b&l{value} &cof the permission group &e{group} &cin &aStatistics times&c.'
         LeaderBoard:
             Number-Of-Single-Page: 10
             Date-Format: 'yyyy/MM/dd/'
@@ -783,12 +898,16 @@ Japanese:
     Auto-Save: '{prefix}&aプレーヤーデータが保存されます。'
     Unable-To-Re-SignIn: '{prefix}&cこのサーバーはこの機能を有効にしません。'
     Repaired-Config-Section: '{prefix}&cプラグインは構成ファイル&e{config}&cのパス&e{path}&cを取得できません。この問題は解決されました。（デフォルトの構成ファイルから）'
+    Player-Only: '{prefix}&cコンソールはこのコマンドを使用できません。'
+    Player-Not-Exist: '{prefix}&cプレーヤー &e{player} &c存在しない！'
     Second: '秒'
     Minute: '分'
     Hour: '時'
     Day: '日'
     Month: '月'
     Year: '年'
+    'Yes': '&a&lはい'
+    'No': '&c&lいいえ'
     Join-Event:
         Open-GUI: '&c&l[クリックボタン]'
         Hover-Text:
@@ -798,7 +917,7 @@ Japanese:
         - '{prefix}&a&l今日はチェックインしていません！ %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&cこのサーバーはこの機能を有効にしません。'
-        Minimum-GUI-Date: '{prefix}＆e{year}&c年&e{month}＆c月の前にサインインメニューを開くことができません。'
+        Minimum-GUI-Date: '{prefix}&e{year}&c年&e{month}&c月の前にサインインメニューを開くことができません。'
         Retroactive-Card-Cooldown:
         - '{prefix}&eこの操作を行う前に、&c{second}秒&eを待ってください！'
         Unable-To-Hold:
@@ -828,6 +947,7 @@ Japanese:
         - ' &6/signin click &8[日付/プレーヤー] [プレーヤー] &c直接サインインするか、それと特定の日付でサインインする&7（書式: [年-月-日] 例: /signin click ''2015-8-11''）'
         - ' &6/signin retroactivecard &8[give/set/take] [量] [プレーヤー] &c与える/セットアップ/取り除く'
         - ' &6/signin save &c保データを保存する'
+        - ' &6/signin reward [プレイヤー] [権限グループ名] [報酬タイプ]&7:[対応する値] &cはプレイヤーに直接サインイン報酬を与えます。'
         - ' &6/signin info [プレーヤー] &cプレーヤーの情報を表示する'
         - ' &6/signin leaderboard &8[日付] [ページ] &c特定の日のリーダーボードを表示する'
         - ' &6/signin itemcollection &cコレクションを管理する'
@@ -909,6 +1029,39 @@ Japanese:
             Specified-Year: '{prefix}&e{year}年{month}月&bのメニューを開きました。'
             Invalid-Year: '{prefix}&c年&e{year}&cが存在しません。正しい年を入力してください。'
         Save: '{prefix}&aすべてのデータが正常に保存されました！'
+        Reward:
+            Help:
+            - '{prefix}&aヘルプの使用 &f&l>>> &c/signin reward [プレイヤー名] &d[権限グループ名] &b[サインインタイプ]&7:[対応する値] '
+            - '  &e&l説明する: &7この機能は、どのグループのサインインアワードが与えられるかなど、プレーヤーに特定のサインインアワードを直接与えるために使用されます。'
+            - '  &d[権限グループ名] &6参照&aRewardSettings.yml&6で設定された各権限グループ'
+            - '  &b[報酬タイプ] &6次のように: '
+            - '  &3- &a&lNORMAL_TIME: &eデフォルトアワード'
+            - '  &3- &a&lRETROACTIVE_TIME: &eを追加アワード'
+            - '  &3- &a&lSPECIAL_TIMES&7:[回数]&a: &e連続サインインアワード'
+            - '  &3- &a&lSPECIAL_WEEKS&7:[週]&a: &e特別週サインインアワード'
+            - '  &3- &a&lSPECIAL_DATES&7:[日にち]&a: &e特別日にちサインインアワード'
+            - '  &3- &a&lSPECIAL_RANKING&7:[ランキング]&a: &e特別ランキングサインインアワード'
+            - '  &3- &a&lSPECIAL_TIME_PERIODS&7:[時間]&a: &e特別时间帯サインインアワード'
+            - '  &3- &a&lSTATISTICS&7:[回数]&a: &eサインイン合計アワード'
+            Nothing: '無し'
+            Successfully-Reward: '{prefix}&aプレーヤーに正常に与えられた &c{player} &aサインインアワード。 グループ名: &e{group}， &aアワードタイプ: &b{rewardType}， &a対応する値: &d{value} &a。'
+            Unknown-Type: '{prefix}&c不明なアワードタイプ: &e{rewardType} &cお願いします使用する&6/signin reward help&c使用法のヘルプを表示。'
+            Unknown-Group: '{prefix}&c不明な権利グループ: &e{group} &cお願いします検査する&aRewardSettings.yml&cの設定。'
+            Invalid-Reward: '{prefix}&c無効のアワード， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &aは &e{rewardType} &aのサインインアワード'
+            Wrong-Parameters:
+                SPECIAL_TIMES: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSPECIAL_TIMES&7:[ここに有効な番号を入力してください] &c例えば: &9SPECIAL_TIMES:3 &c即ち連続サインイン3回目'
+                SPECIAL_WEEKS: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSPECIAL_WEEKS&7:[ここに有効な週を入力してください] &c例えば: &9SPECIAL_WEEKS:6 &c即ち土曜日サインイン'
+                SPECIAL_DATES: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSPECIAL_DATES&7:[ここに有効な日付を入力してください] &c例えば: &9SPECIAL_DATES:12-25 &c即ち12月25日サインイン'
+                SPECIAL_RANKING: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSPECIAL_RANKING&7:[ここに有効な番号を入力してください] &c例えば: &9SPECIAL_RANKING:1 &c即ちサインインナンバーワン'
+                SPECIAL_TIME_PERIODS: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSPECIAL_TIME_PERIODS&7:[ここに有効な時間を入力してください] &c例えば: &9SPECIAL_TIME_PERIODS:22:30:00 &c即ち22:30:00サインイン'
+                STATISTICS: '{prefix}&c間違ったパラメータ &e{value}&c， でお願いします &a&lSTATISTICS&7:[ここに有効な番号を入力してください] &c例えば: &9STATISTICS:100 &c即ちサインイン100回累積'
+            Invalid-Parameters:
+                SPECIAL_TIMES: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aSpecial-Times&cにあります連続サインイン &b&l{value} &c回のアワード。'
+                SPECIAL_WEEKS: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aSpecial-Weeks&cにあります週 &b&l{value} &cサインインのアワード。'
+                SPECIAL_DATES: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aSpecial-Dates&cにあります日にち &b&l{value} &cサインインのアワード。'
+                SPECIAL_RANKING: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aSpecial-Ranking&cにありますサインイン&b&l{value} &c番目のアワード。'
+                SPECIAL_TIME_PERIODS: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aSpecial-Time-periods&cにあります时间帯 &b&l{value} &cサインインのアワード。'
+                STATISTICS: '{prefix}&c無効パラメータ， お願いします検査する&aRewardSettings.yml&cファイルに権限グループが設定されているかどうか &e{group} &cは&aStatistics-Times&cにあります合計サインイン回数 &b&l{value} &c回のアワード。'
         LeaderBoard:
             #各ページに表示されるプレーヤーの数
             Number-Of-Single-Page: 10
@@ -975,13 +1128,13 @@ Japanese:
                 - ' &6/signin itemcollection add [名] &c手持ちのアイテムをコレクションリストに追加します'
                 - ' &6/signin itemcollection delete [名] &c指定したコレクションを削除します'
                 - ' &6/signin itemcollection give [名] &8[プレーヤー] &c指定されたコレクションを自分または他のプレイヤーに渡す'
-                - '&c&l説明：&dコレクション関数は、複雑なNBTを含むいくつかのアイテムをシリアル化し、それらを&aCustomItems.yml&bファイルに追加できます。'
+                - '&c&l説明:&dコレクション関数は、複雑なNBTを含むいくつかのアイテムをシリアル化し、それらを&aCustomItems.yml&bファイルに追加できます。'
                 - '&d&aRewardSettings.yml&dファイルの&bReward-Items&dオプションにコレクションアイテムの名前を追加して、サインイン報酬によって提供されるアイテムを設定できます。'
                 - '&d詳細については、構成ファイルの注記を参照してください。'
             List:
                 Empty: '{prefix}&aコレクションリストは空です。'
                 Messages:
-                - '{prefix}&a現在、&e{amount}&aコレクションがあります。 リストは次のとおり： &c%list%'
+                - '{prefix}&a現在、&e{amount}&aコレクションがあります。 リストは次のとおり: &c%list%'
                 - '&d&aRewardSettings.yml&dファイルの&bReward-Items&dオプションにコレクションアイテムの名前を追加して、サインイン報酬によって提供されるアイテムを設定できます。'
                 - '&d詳細については、構成ファイルの注記を参照してください。'
             Add:
@@ -1018,24 +1171,24 @@ Japanese:
     Database-Management:
         Backup:
             Successfully: '{prefix}&aバックアップデータを&e{file}&aファイルに保存は成功しました。'
-            Failed: '{prefix}&cバックアップは次のエラーで失敗しました： &e{error}'
+            Failed: '{prefix}&cバックアップは次のエラーで失敗しました: &e{error}'
             BackingUp: '{prefix}&eデータはバックアップ中です。この操作は後でもう一度実行してください。'
             Auto-Backup: '{prefix}&aデータのバックアップを開始します。これには時間がかかる場合があります...'
         RollBack:
             Successfully: '{prefix}&aデータを&e{file}&aファイルに正常にアーカイブします。'
-            Failed: '{prefix}&cファイルが戻って失敗し、次のエラーが発生しました： &e{error}'
+            Failed: '{prefix}&cファイルが戻って失敗し、次のエラーが発生しました: &e{error}'
     Updater:
         Link:
             Message: '&d&l[クリック]'
             Hover-Text:
             - '&5ダウンロードリンクを取得するにはクリックしてください'
         Checked: 
-        - '{prefix}&aプラグインの最新バージョンが見つかりました： &bv{version}'
+        - '{prefix}&aプラグインの最新バージョンが見つかりました: &bv{version}'
         - '&6- &3現在実行中のバージョン: &6v{nowVersion}'
         - '&6- &3ダウンロードリンク: &d%link%'
         - '&6- &3更新ログ: {description}'
         Error: '{prefix}&cプラグインの最新バージョンを入手できません。ネットワークが正常かどうかを確認してください。 '
     Wood-Sign:
-        Successfully-Create: '{prefix}&a木の看板＆b{sign}&aの作成か成功しました。'
-        Unable-To-Create: '{prefix}&c木の看板＆b{sign}&cの作成か失败しました。権限がありません: &e{permission}'
-        Successfully-Remove: '{prefix}&c木の看板＆b{sign}&cを削除しました。'
+        Successfully-Create: '{prefix}&a木の看板&b{sign}&aの作成か成功しました。'
+        Unable-To-Create: '{prefix}&c木の看板&b{sign}&cの作成か失败しました。権限がありません: &e{permission}'
+        Successfully-Remove: '{prefix}&c木の看板&b{sign}&cを削除しました。'

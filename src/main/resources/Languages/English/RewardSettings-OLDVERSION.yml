@@ -12,7 +12,7 @@ Reward-Settings:
                 #Support PlaceholderAPI
                 Messages: 
                 - '{prefix}&aReceive the sign in reward successfully.'
-                #Reward items at check-in
+                #Reward items at sign-in
                 #In this option, you can directly fill in the name of the original item,
                 #or the item in RewardSettings.yml (including manually set, added by command).
                 #Format: "[Item name|Collection name]:[Amount]"

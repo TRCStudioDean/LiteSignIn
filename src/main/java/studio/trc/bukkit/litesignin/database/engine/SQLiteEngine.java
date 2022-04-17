@@ -7,11 +7,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class SQLiteEngine
@@ -41,7 +41,7 @@ public class SQLiteEngine
             connectToDatabase();
         } else try {
             SQLReloading = true;
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             SignInPluginProperties.sendOperationMessage("Reconnect", placeholders);
             Thread closing = new Thread(() -> {
@@ -69,7 +69,7 @@ public class SQLiteEngine
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + filePath + fileName);
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             SignInPluginProperties.sendOperationMessage("SuccessfulConnection", placeholders);
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + table + "("
@@ -86,12 +86,12 @@ public class SQLiteEngine
                     + " History LONGTEXT,"
                     + " PRIMARY KEY (UUID))").executeUpdate();
         } catch (ClassNotFoundException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             SignInPluginProperties.sendOperationMessage("NoDriverFound", placeholders);
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("SQLite-Storage.Enabled", false);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             placeholders.put("{error}", ex.getLocalizedMessage());
             SignInPluginProperties.sendOperationMessage("ConnectionError", placeholders);
@@ -105,19 +105,19 @@ public class SQLiteEngine
             while (true) {
                 try {
                     connection = DriverManager.getConnection("jdbc:sqlite:" + filePath + fileName);
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{database}", "SQLite");
                     SignInPluginProperties.sendOperationMessage("ConnectionRepair", placeholders);
                     break;
                 } catch (SQLException ex) {
                     number++;
                     if (number == ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("SQLite-Storage.Automatic-Repair")) {
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{database}", "SQLite");
                         placeholders.put("{number}", String.valueOf(number));
                         SignInPluginProperties.sendOperationMessage("ConnectionRepairFailure", placeholders);
                     } else {
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{database}", "SQLite");
                         SignInPluginProperties.sendOperationMessage("BeyondRepair", placeholders);
                         break;
@@ -136,7 +136,7 @@ public class SQLiteEngine
         try {
             statement.executeUpdate();
         }  catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
@@ -151,7 +151,7 @@ public class SQLiteEngine
         try {
             return statement.executeQuery();
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);
@@ -168,7 +168,7 @@ public class SQLiteEngine
         try {
             connection.createStatement().executeUpdate(sql);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
@@ -184,7 +184,7 @@ public class SQLiteEngine
         try {
             return connection.createStatement().executeQuery(sql);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "SQLite");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);

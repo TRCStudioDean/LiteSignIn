@@ -16,6 +16,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.database.MySQLStorage;
@@ -175,16 +177,16 @@ public class RollBackUtil
                     }
                     for (CommandSender sender : rollBackUsers) {
                         if (sender != null) {
-                            Map<String, String> placeholders = new HashMap();
+                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                             placeholders.put("{file}", rollBackFile.getName());
-                            MessageUtil.sendMessage(sender, "Database-Management.RollBack.Successfully", placeholders);
+                            MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.RollBack.Successfully", placeholders);
                         }
                     }
                 } catch (Throwable t) {
                     for (CommandSender sender : rollBackUsers) {
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{error}", t.getLocalizedMessage() != null ? t.getLocalizedMessage() : "null");
-                        MessageUtil.sendMessage(sender, "Database-Management.RollBack.Failed", placeholders);
+                        MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.RollBack.Failed", placeholders);
                     }
                     if (PluginControl.useMySQLStorage()) {
                         MySQLStorage.cache.clear();
@@ -203,7 +205,7 @@ public class RollBackUtil
         public void rollBack(boolean backup) {
             if (backup) {
                 for (CommandSender sender : rollBackUsers) {
-                    MessageUtil.sendMessage(sender, "Database-Management.Backup.Auto-Backup");
+                    MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.Auto-Backup");
                 }
                 BackupUtil.startBackup(rollBackUsers);
             }

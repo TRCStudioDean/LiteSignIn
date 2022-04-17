@@ -89,7 +89,7 @@ public class ConfigurationUtil
         } catch (IOException | InvalidConfigurationException ex) {
             File oldFile = new File("plugins/LiteSignIn/" + fileType.getFileName() + ".old");
             File file = new File("plugins/LiteSignIn/" + fileType.getFileName());
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{file}", fileType.getFileName());
             SignInPluginProperties.sendOperationMessage("ConfigurationLoadingError", placeholders);
             if (oldFile.exists()) {

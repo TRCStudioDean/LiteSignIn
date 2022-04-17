@@ -257,23 +257,12 @@ public class MySQLStorage
     
     @Override
     public boolean alreadySignIn() {
-        SignInDate today = SignInDate.getInstance(new Date());
-        for (SignInDate date : getHistory()) {
-            if (date.equals(today)) {
-                return true;
-            }
-        }
-        return false;
+        return getHistory().stream().anyMatch(date -> date.equals(SignInDate.getInstance(new Date())));
     }
 
     @Override
     public boolean alreadySignIn(SignInDate date) {
-        for (SignInDate dates : getHistory()) {
-            if (dates.equals(date)) {
-                return true;
-            }
-        }
-        return false;
+        return getHistory().stream().anyMatch(dates -> dates.equals(date));
     }
 
     @Override
@@ -281,13 +270,12 @@ public class MySQLStorage
         if (dates.size() == 1) return dates;
         List<SignInDate> result = new ArrayList();
         List<String> record = new ArrayList();
-        for (SignInDate date : dates) {
-            if (record.contains(date.getYear() + "-" + date.getMonth() + "-" + date.getDay())) {
-                continue;
-            }
+        dates.stream().filter(date -> !record.contains(date.getYear() + "-" + date.getMonth() + "-" + date.getDay())).map(date -> {
             result.add(date);
+            return date;
+        }).forEach(date -> {
             record.add(date.getYear() + "-" + date.getMonth() + "-" + date.getDay());
-        }
+        });
         return result;
     }
     

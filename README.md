@@ -1,0 +1,2 @@
+# LiteSignIn
+Spigot plugin: LiteSignIn

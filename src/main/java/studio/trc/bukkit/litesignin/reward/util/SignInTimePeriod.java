@@ -1,7 +1,5 @@
 package studio.trc.bukkit.litesignin.reward.util;
 
-import java.util.Date;
-
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
@@ -21,28 +19,27 @@ public class SignInTimePeriod
             if (timePeriodType == null) {
                 return null;
             }
-            SignInDate now = SignInDate.getInstance(new Date());
             switch (timePeriodType) {
                 case ON_TIME: {
                     String[] section = value.split(":");
                     switch (section.length) {
                         case 1: {
-                            if (now.getHour() == timePeriod.getHour()) {
+                            if (time.getHour() == timePeriod.getHour()) {
                                 return value;
                             }
                             break;
                         }
                         case 2: {
-                            if (now.getHour() == timePeriod.getHour() &&
-                                now.getMinute() == timePeriod.getMinute()) {
+                            if (time.getHour() == timePeriod.getHour() &&
+                                time.getMinute() == timePeriod.getMinute()) {
                                 return value;
                             }
                             break;
                         }
                         case 3: {
-                            if (now.getHour() == timePeriod.getHour() &&
-                                now.getMinute() == timePeriod.getMinute() &&
-                                now.getSecond() == timePeriod.getSecond()) {
+                            if (time.getHour() == timePeriod.getHour() &&
+                                time.getMinute() == timePeriod.getMinute() &&
+                                time.getSecond() == timePeriod.getSecond()) {
                                 return value;
                             }
                             break;
@@ -60,7 +57,7 @@ public class SignInTimePeriod
                     if (limit == null) {
                         continue;
                     }
-                    if (now.compareTo(timePeriod) >= 0 && now.compareTo(limit) <= 0) {
+                    if (time.compareTo(timePeriod) >= 0 && time.compareTo(limit) <= 0) {
                         return value;
                     }
                     break;
@@ -75,7 +72,7 @@ public class SignInTimePeriod
                     if (limit == null) {
                         continue;
                     }
-                    if (now.compareTo(timePeriod) <= 0 && now.compareTo(limit) >= 0) {
+                    if (time.compareTo(timePeriod) <= 0 && time.compareTo(limit) >= 0) {
                         return value;
                     }
                     break;

@@ -22,7 +22,6 @@ import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -36,6 +35,7 @@ public class PluginControl
     
     public static void reload() {
         ConfigurationUtil.reloadConfig();
+        MessageUtil.loadPlaceholders();
         YamlStorage.cache.clear();
         SQLiteStorage.cache.clear();
         MySQLStorage.cache.clear();
@@ -50,10 +50,10 @@ public class PluginControl
             if (!Placeholders.getInstance().isRegistered()) {
                 Placeholders.getInstance().register();
             }
-            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", new HashMap());
+            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
         } catch (Error ex) {
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("PlaceholderAPI.Enabled", false);
-            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", new HashMap());
+            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
         AutoSave.stopThread();
@@ -63,7 +63,7 @@ public class PluginControl
             WoodSignUtil.loadScripts();
             WoodSignUtil.loadSigns();
             WoodSignUtil.scan();
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{scripts}", String.valueOf(WoodSignUtil.getWoodSignScripts().size()));
             placeholders.put("{signs}", String.valueOf(WoodSignUtil.getAllScriptedSign().size()));
             SignInPluginProperties.sendOperationMessage("WoodSignScriptLoaded", placeholders);
@@ -224,7 +224,7 @@ public class PluginControl
                 return null;
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Head-Owner") != null) {
-                Map<String, String> placeholders = new HashMap();
+                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{player}", player.getName());
                 PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemName + ".Head-Owner"), placeholders));
             }
@@ -286,11 +286,6 @@ public class PluginControl
             }
         } catch (NumberFormatException ex) {}
         return 0;
-    }
-    
-    public static boolean hasPermission(CommandSender sender, String path) {
-        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean(path + ".Default")) return true;
-        return sender.hasPermission(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString(path + ".Permission"));
     }
 
     private static long backupFilesAcquisitionTime = 0;

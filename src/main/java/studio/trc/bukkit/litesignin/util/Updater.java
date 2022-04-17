@@ -6,13 +6,14 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.MessageUtil;
 
 public class Updater
@@ -53,22 +54,22 @@ public class Updater
                         foundANewVersion = true;
                         link = downloadLink;
                         description = description_;
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{version}", version);
                         placeholders.put("%link%", downloadLink);
                         placeholders.put("{link}", downloadLink);
                         placeholders.put("{nowVersion}", nowVersion);
                         placeholders.put("{description}", description_);
-                        MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Checked", placeholders);
+                        MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Updater.Checked", placeholders);
                     }
                 } catch (InvalidConfigurationException | IOException ex) {
-                    MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Error");
+                    MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Updater.Error");
                 }
             } catch (MalformedURLException ex) {
-                MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Updater.Error");
+                MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Updater.Error");
             }
             date = new Date();
-        });
+        }, "LiteSignIn-Updater");
     }
     
     /**

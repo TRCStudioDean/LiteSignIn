@@ -60,6 +60,11 @@ Metrics: true
 #Wood signs script
 #After enabling, WoodSignSettings.yml file will be generated, please edit in the file according to the help of comments.
 Wood-Signs-Script: false
+
+#Asynchronous mode leaderboard
+#If MySQL database mode is enabled and MySQL is on an external server,
+#It is recommended to enable this function to prevent server crashes caused by IO congestion.
+Leaderboard-Async: false
     
 #Retroactive Card
 #Its role is to supplement the missing sign-in date.
@@ -184,18 +189,51 @@ Permissions:
         RetroactiveCard:
             Permission: signin.command.retroactivecard
             Default: false
+            Give:
+                Permission: signin.command.retroactivecard.give
+                Default: false
+            Set:
+                Permission: signin.command.retroactivecard.set
+                Default: false
+            Take:
+                Permission: signin.command.retroactivecard.take
+                Default: false
         Info: 
             Permission: signin.command.info
             Default: false
         ItemCollection: 
             Permission: signin.command.itemcollection
             Default: false
+            List:
+                Permission: signin.command.itemcollection.list
+                Default: false
+            Add:
+                Permission: signin.command.itemcollection.add
+                Default: false
+            Delete:
+                Permission: signin.command.itemcollection.delete
+                Default: false
+            Give:
+                Permission: signin.command.itemcollection.give
+                Default: false
         Save: 
             Permission: signin.command.save
             Default: false
+        Database:
+            Permission: signin.command.database
+            Default: false
+            Backup:
+                Permission: signin.command.database.backup
+                Default: false
+            Rollback:
+                Permission: signin.command.database.rollback
+                Default: false
         LeaderBoard:
             Permission: signin.command.leaderboard
             Default: true
             Designated-Date:
                 Permission: signin.command.leaderboard.designateddate
                 Default: false
+        Reward:
+            Permission: signin.command.reward
+            Default: false

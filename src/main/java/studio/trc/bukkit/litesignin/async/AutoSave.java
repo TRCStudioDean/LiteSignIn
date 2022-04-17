@@ -26,7 +26,7 @@ public class AutoSave
                         SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
                     }
                     MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
-                    MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Auto-Save");
+                    MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Auto-Save");
                 }
             } catch (Exception e) {}
             try {

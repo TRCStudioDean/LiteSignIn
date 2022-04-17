@@ -60,6 +60,11 @@ Metrics: true
 #木の看板サインインスクリプト
 #有効にすると、WoodSignSettings.ymlファイルが生成されます。中のこの記事のメモに従って編集してください。
 Wood-Signs-Script: false
+
+#非同期モードリーダーボード
+#MySQLデータベースモードが有効で、MySQLが外部サーバー上にある場合、
+#IOの輻輳によって引き起こされるサーバーのクラッシュを防ぐために、この機能を有効にすることをお勧めします
+Leaderboard-Async: false
     
 #遡及カード
 #過去の日を補うためにそれを使用してす
@@ -198,13 +203,36 @@ Permissions:
         RetroactiveCard:
             Permission: signin.command.retroactivecard
             Default: false
+            Give:
+                Permission: signin.command.retroactivecard.give
+                Default: false
+            Set:
+                Permission: signin.command.retroactivecard.set
+                Default: false
+            Take:
+                Permission: signin.command.retroactivecard.take
+                Default: false
         ItemCollection: 
             Permission: signin.command.itemcollection
             Default: false
+            List:
+                Permission: signin.command.itemcollection.list
+                Default: false
+            Add:
+                Permission: signin.command.itemcollection.add
+                Default: false
+            Delete:
+                Permission: signin.command.itemcollection.delete
+                Default: false
+            Give:
+                Permission: signin.command.itemcollection.give
+                Default: false
         Save: 
             Permission: signin.command.save
             Default: false
         Database:
+            Permission: signin.command.database
+            Default: false
             Backup:
                 Permission: signin.command.database.backup
                 Default: false
@@ -217,3 +245,6 @@ Permissions:
             Designated-Date:
                 Permission: signin.command.leaderboard.designateddate
                 Default: false
+        Reward:
+            Permission: signin.command.reward
+            Default: false

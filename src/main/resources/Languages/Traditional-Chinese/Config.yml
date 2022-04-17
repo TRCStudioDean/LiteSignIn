@@ -62,6 +62,11 @@ Metrics: true
 #木牌簽到腳本
 #啟用後將生成WoodSignSettings.yml文件，請在該文件中按照註釋的幫助進行編輯。
 Wood-Signs-Script: false
+
+#異步模式排行榜
+#如果啟用了MySQL數據庫模式，並且MySQL處於外部服務器，
+#建議啟用該功能，以防止IO堵塞造成的服務器崩潰
+Leaderboard-Async: false
     
 #補簽卡
 Retroactive-Card:
@@ -200,13 +205,36 @@ Permissions:
         RetroactiveCard:
             Permission: signin.command.retroactivecard
             Default: false
+            Give:
+                Permission: signin.command.retroactivecard.give
+                Default: false
+            Set:
+                Permission: signin.command.retroactivecard.set
+                Default: false
+            Take:
+                Permission: signin.command.retroactivecard.take
+                Default: false
         ItemCollection: 
             Permission: signin.command.itemcollection
             Default: false
+            List:
+                Permission: signin.command.itemcollection.list
+                Default: false
+            Add:
+                Permission: signin.command.itemcollection.add
+                Default: false
+            Delete:
+                Permission: signin.command.itemcollection.delete
+                Default: false
+            Give:
+                Permission: signin.command.itemcollection.give
+                Default: false
         Save: 
             Permission: signin.command.save
             Default: false
         Database:
+            Permission: signin.command.database
+            Default: false
             Backup:
                 Permission: signin.command.database.backup
                 Default: false
@@ -219,3 +247,6 @@ Permissions:
             Designated-Date:
                 Permission: signin.command.leaderboard.designateddate
                 Default: false
+        Reward:
+            Permission: signin.command.reward
+            Default: false

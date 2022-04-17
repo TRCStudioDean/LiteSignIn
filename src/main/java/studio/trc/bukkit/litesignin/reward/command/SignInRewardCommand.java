@@ -28,7 +28,7 @@ public class SignInRewardCommand
     }
 
     public void runWithThePlayer(Player player) {
-        Map<String, String> placeholders = new HashMap();
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{player}", player.getName());
         String command_replaced = MessageUtil.replacePlaceholders(player, command, placeholders);
         switch (type) {

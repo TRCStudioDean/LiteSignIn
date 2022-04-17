@@ -5,11 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class MySQLEngine
@@ -45,7 +45,7 @@ public class MySQLEngine
             connectToDatabase();
         } else try {
             SQLReloading = true;
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             SignInPluginProperties.sendOperationMessage("Reconnect", placeholders);
             Thread closing = new Thread(() -> {
@@ -73,7 +73,7 @@ public class MySQLEngine
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + parameter, username, password);
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             SignInPluginProperties.sendOperationMessage("SuccessfulConnection", placeholders);
             connection.prepareStatement("CREATE DATABASE IF NOT EXISTS " + database + ";"
@@ -91,12 +91,12 @@ public class MySQLEngine
                     + " History LONGTEXT,"
                     + " PRIMARY KEY (UUID))").executeUpdate();
         } catch (ClassNotFoundException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             SignInPluginProperties.sendOperationMessage("NoDriverFound", placeholders);
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("MySQL-Storage.Enabled", false);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             placeholders.put("{error}", ex.getLocalizedMessage());
             SignInPluginProperties.sendOperationMessage("ConnectionError", placeholders);
@@ -119,19 +119,19 @@ public class MySQLEngine
             while (true) {
                 try {
                     connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database + parameter, username, password);
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{database}", "MySQL");
                     SignInPluginProperties.sendOperationMessage("ConnectionRepair", placeholders);
                     break;
                 } catch (SQLException ex) {
                     number++;
                     if (number == ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getInt("MySQL-Storage.Automatic-Repair")) {
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{database}", "MySQL");
                         placeholders.put("{number}", String.valueOf(number));
                         SignInPluginProperties.sendOperationMessage("ConnectionRepairFailure", placeholders);
                     } else {
-                        Map<String, String> placeholders = new HashMap();
+                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{database}", "MySQL");
                         SignInPluginProperties.sendOperationMessage("BeyondRepair", placeholders);
                         break;
@@ -151,7 +151,7 @@ public class MySQLEngine
             while (!databaseExist()) {}
             statement.executeUpdate();
         }  catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
@@ -167,7 +167,7 @@ public class MySQLEngine
             while (!databaseExist()) {}
             return statement.executeQuery();
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);
@@ -185,7 +185,7 @@ public class MySQLEngine
             while (!databaseExist()) {}
             connection.createStatement().executeUpdate(sql);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataSavingError", placeholders);
@@ -202,7 +202,7 @@ public class MySQLEngine
             while (!databaseExist()) {}
             return connection.createStatement().executeQuery(sql);
         } catch (SQLException ex) {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
             placeholders.put("{error}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");
             SignInPluginProperties.sendOperationMessage("DataReadingError", placeholders);

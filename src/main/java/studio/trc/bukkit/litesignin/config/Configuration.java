@@ -1,6 +1,5 @@
 package studio.trc.bukkit.litesignin.config;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -28,10 +27,10 @@ public class Configuration
         FileConfiguration defaultFile = DefaultConfigurationFile.getDefaultConfig(type);
         config.set(path, defaultFile.get(path) != null ? defaultFile.get(path) : "null");
         saveConfig();
-        Map<String, String> placeholders = new HashMap();
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{config}", type.getFileName());
         placeholders.put("{path}", path);
-        MessageUtil.sendMessage(Bukkit.getConsoleSender(), "Repaired-Config-Section", placeholders);
+        MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Repaired-Config-Section", placeholders);
     }
     
     public Object get(String path) {

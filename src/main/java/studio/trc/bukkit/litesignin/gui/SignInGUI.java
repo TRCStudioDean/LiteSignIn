@@ -108,7 +108,7 @@ public class SignInGUI
                 gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
             }
         } else {
-            Map<String, String> placeholders = new HashMap();
+            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{month}", String.valueOf(month));
             placeholders.put("{year}", String.valueOf(year));
             gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Specified-Year-GUI-Name"), placeholders)));
@@ -539,7 +539,7 @@ public class SignInGUI
                 ItemMeta im = other.getItemMeta();
                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).get(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Lore") != null) {
                     List<String> lore = new ArrayList();
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{continuous}", continuous);
                     placeholders.put("{queue}", queue);
                     placeholders.put("{total-number}", totalNumber);
@@ -616,7 +616,7 @@ public class SignInGUI
             int previousPageMonth,
             int previousPageYear,
             SignInDate historicalDate) {
-        Map<String, String> placeholders = new HashMap();
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         if (historicalDate != null) placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
         placeholders.put("{day}", String.valueOf(day + 1));
         placeholders.put("{continuous}", continuous);
@@ -631,7 +631,7 @@ public class SignInGUI
     }
     
     private static String replace(Player player, String text, String target, String replacement) {
-        Map<String, String> placeholders = new HashMap();
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put(target, replacement);
         return MessageUtil.replacePlaceholders(player, text, placeholders);
     }
@@ -648,20 +648,20 @@ public class SignInGUI
                             invalid = false;
                             break;
                         } catch (Exception ex) {
-                            Map<String, String> placeholders = new HashMap();
+                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                             placeholders.put("{path}", configPath + "." + name);
                             SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
                         }
                     }
                 }
                 if (invalid) {
-                    Map<String, String> placeholders = new HashMap();
+                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{enchantment}", data[0]);
                     placeholders.put("{path}", configPath + "." + name);
                     SignInPluginProperties.sendOperationMessage("InvalidEnchantment", placeholders);
                 }
             } catch (Exception ex) {
-                Map<String, String> placeholders = new HashMap();
+                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{path}", configPath + "." + name);
                 SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
             }

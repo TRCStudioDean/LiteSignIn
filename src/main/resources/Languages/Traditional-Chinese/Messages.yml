@@ -617,7 +617,7 @@ English:
         Hover-Text:
         - '&5Click here to open the sign-in menu.'
         - '&7Date: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
@@ -913,7 +913,7 @@ Japanese:
         Hover-Text:
         - '&5ここにクリックは、メニューを開きます。'
         - '&7日付: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&l今日はチェックインしていません！ %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&cこのサーバーはこの機能を有効にしません。'

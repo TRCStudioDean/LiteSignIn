@@ -617,7 +617,7 @@ English:
         Hover-Text:
         - '&5Click here to open the sign-in menu.'
         - '&7Date: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&lYou haven''t sign-in today! %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
@@ -688,6 +688,7 @@ English:
                 Start-Rollback: '{prefix}&aStarting to rollback data to backup &e{file}&a, it may take a long time...'
         Click:
             Player-Not-Exist: '{prefix}&cThe player &e{player} &cis not exist!'
+            Date-Format: 'yyyy/MM/dd/'
             Invalid-Date: '{prefix}&cInvalid date &e{date} &c! Example: /signin click 2015-8-11.'
             To-Self:
                 Today-has-been-Signed-In: '{prefix}&cYou have signed in today. Please don''t sign in again.'
@@ -913,7 +914,7 @@ Japanese:
         Hover-Text:
         - '&5ここにクリックは、メニューを開きます。'
         - '&7日付: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&l今日はチェックインしていません！ %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&cこのサーバーはこの機能を有効にしません。'

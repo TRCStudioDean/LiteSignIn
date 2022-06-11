@@ -43,7 +43,7 @@ public class JsonItemStack
         
         //net.minecraft.server
         try {
-            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18")) {
+            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18") || PluginControl.nmsVersion.startsWith("v1_19")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
             } else {

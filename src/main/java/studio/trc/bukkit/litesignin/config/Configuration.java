@@ -1,5 +1,6 @@
 package studio.trc.bukkit.litesignin.config;
 
+import studio.trc.bukkit.litesignin.util.MessageUtil;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;

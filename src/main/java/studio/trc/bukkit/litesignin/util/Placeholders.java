@@ -11,7 +11,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 
 import org.bukkit.entity.Player;

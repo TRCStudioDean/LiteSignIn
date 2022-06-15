@@ -1,4 +1,4 @@
-package studio.trc.bukkit.litesignin.config;
+package studio.trc.bukkit.litesignin.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +21,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.Main;
+import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class MessageUtil
@@ -158,7 +161,11 @@ public class MessageUtil
         if (sender instanceof Player) {
             ((Player) sender).spigot().sendMessage(components.toArray(new BaseComponent[] {}));
         } else {
-            sendMessage(sender, components.stream().map(component -> component.toPlainText()).collect(Collectors.toList()));
+            StringBuilder builder = new StringBuilder();
+            components.stream().map(component -> component.toPlainText()).forEach(message -> {
+                builder.append(message);
+            });
+            sender.sendMessage(builder.toString());
         }
     }
     

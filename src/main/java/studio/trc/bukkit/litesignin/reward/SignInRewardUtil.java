@@ -16,7 +16,7 @@ import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.MessageUtil;
+import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;

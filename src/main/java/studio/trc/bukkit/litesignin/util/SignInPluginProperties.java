@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.config.MessageUtil;
 
 public class SignInPluginProperties
 {

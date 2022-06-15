@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.MessageUtil;
+import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.YamlStorage;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;

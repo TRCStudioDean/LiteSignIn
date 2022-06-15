@@ -19,7 +19,7 @@ import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.MessageUtil;
+import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.reward.SignInReward;
 import studio.trc.bukkit.litesignin.reward.type.*;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;

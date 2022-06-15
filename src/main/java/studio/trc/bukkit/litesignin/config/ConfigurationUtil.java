@@ -1,5 +1,6 @@
 package studio.trc.bukkit.litesignin.config;
 
+import studio.trc.bukkit.litesignin.util.MessageUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

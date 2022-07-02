@@ -98,6 +98,12 @@ public interface Storage
     public SignInGroup getGroup();
     
     /**
+     * Get the player's all matched groups.
+     * @return 
+     */
+    public List<SignInGroup> getAllGroup();
+    
+    /**
      * Obtaining historical records.
      * @return 
      */

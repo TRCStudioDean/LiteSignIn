@@ -20,6 +20,11 @@ PlaceholderAPI:
     #Example: 'queue' which is %litesignin_queue% 
     Exceptions: [] 
 
+#Multi-group reward mode
+#When players have multiple reward groups' permission at the same time, they will receive their rewards at the same time when sign-in.
+#For example, a player who has both Group1 and Group2 group permissions will receive rewards from both groups after signing in.
+Enable-Multi-Group-Reward: false
+
 #Whether to remind players to remember to check in when they join server.
 Join-Event:
     Enabled: true

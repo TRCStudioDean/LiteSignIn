@@ -40,7 +40,7 @@ public abstract class SignInRewardUtil
                             break;
                         }
                         case COMMANDS_EXECUTION: {
-                            getCommands().stream().forEach(commands -> {commands.runWithThePlayer(player);});
+                            getCommands().stream().forEach(commands -> commands.runWithThePlayer(player));
                             break;
                         }
                         case MESSAGES_SENDING: {

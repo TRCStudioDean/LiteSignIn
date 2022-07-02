@@ -27,7 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Menu
@@ -79,7 +79,7 @@ public class Menu
     public void click(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player player = (Player) e.getWhoClicked();
-            if (menuOpening.get(player.getUniqueId()) != null) {
+            if (menuOpening.get(player.getUniqueId()) != null && e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
                 if (BackupUtil.isBackingUp()) {
                     MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
                     player.closeInventory();
@@ -92,9 +92,9 @@ public class Menu
                 int nextPageYear = inv.getNextPageYear();
                 int previousPageMonth = inv.getPreviousPageMonth();
                 int previousPageYear = inv.getPreviousPageYear();
-                ItemStack item = e.getCurrentItem();
+                int slot = e.getSlot();
                 for (SignInGUIColumn columns : inv.getButtons()) {
-                    if (columns.getItemStack().equals(item)) {
+                    if (columns.getKeyPostion() == slot) {
                         if (columns.isKey()) {
                             SignInDate today = SignInDate.getInstance(new Date());
                             if (columns.getDate().equals(today) && !data.alreadySignIn()) {
@@ -152,14 +152,14 @@ public class Menu
                             placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                             placeholders.put("{player}", player.getName());
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
-                                for (String commands : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
+                                ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands").stream().forEach(commands -> {
                                     runCommand(player, commands, placeholders);
-                                }
+                                });
                             }
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
-                                for (String message : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
+                                ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> {
                                     player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
-                                }
+                                });
                             }
                         } else {
                             if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName())) {
@@ -173,14 +173,14 @@ public class Menu
                                 placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                                 placeholders.put("{player}", player.getName());
                                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
-                                    for (String commands : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
+                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands").stream().forEach(commands -> {
                                         runCommand(player, commands, placeholders);
-                                    }
+                                    });
                                 }
                                 if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
-                                    for (String message : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
+                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> {
                                         player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
-                                    }
+                                    });
                                 }
                             }
                         }

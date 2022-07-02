@@ -6,7 +6,8 @@ Traditional-Chinese:
         Date-Format: 'yyyy年MM月dd日'
         Key:
             Already-SignIn:
-                Item: LIME_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
                 Display-Name: '&a日期 &6{day}號 &a已簽到'
                 Lore:
                 - ''
@@ -17,11 +18,13 @@ Traditional-Chinese:
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
-                Item: CYAN_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
                 Display-Name: '&7日期 &6{day}號 &7未到達'
                 Lore: []
             Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
@@ -32,7 +35,8 @@ Traditional-Chinese:
                 - ''
                 - '&e點擊簽到'
             Missed-SignIn:
-                Item: RED_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
                 Display-Name: '&7日期 &6{day}號 &7漏簽'
                 Lore:
                 - ''
@@ -143,7 +147,7 @@ Traditional-Chinese:
                 - 47
                 - 51
                 - 52
-Simplifed-Chinese:
+Simplified-Chinese:
     SignIn-GUI-Settings:
         GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
         Specified-Month-GUI-Name: '&3&l历史月份 &8{month}月'
@@ -151,7 +155,8 @@ Simplifed-Chinese:
         Date-Format: 'yyyy年MM月dd日'
         Key:
             Already-SignIn:
-                Item: LIME_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
                 Display-Name: '&a日期 &6{day}号 &a已签到'
                 Lore: 
                 - ''
@@ -162,11 +167,13 @@ Simplifed-Chinese:
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
-                Item: CYAN_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
                 Display-Name: '&7日期 &6{day}号 &7未到达'
                 Lore: []
             Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
@@ -177,7 +184,8 @@ Simplifed-Chinese:
                 - ''
                 - '&e点击签到'
             Missed-SignIn:
-                Item: RED_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
                 Display-Name: '&7日期 &6{day}号 &7漏签'
                 Lore:
                 - ''
@@ -296,7 +304,8 @@ English:
         Date-Format: 'yyyy/MM/dd'
         Key:
             Already-SignIn:
-                Item: LIME_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
                 Display-Name: '&6{day}th &aAlready signed in'
                 Lore: 
                 - ''
@@ -308,11 +317,13 @@ English:
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
-                Item: CYAN_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
                 Display-Name: '&6{day}th &7Coming soon.'
                 Lore: []
             Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
@@ -323,7 +334,8 @@ English:
                 - ''
                 - '&eRight click to sign-in!'
             Missed-SignIn:
-                Item: RED_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
                 Display-Name: '&7Absent on &6{day}th'
                 Lore: 
                 - ''
@@ -442,7 +454,8 @@ Japanese:
         Date-Format: 'yyyy年MM月dd日'
         Key:
             Already-SignIn:
-                Item: LIME_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
                 Display-Name: '&6{day}日 &aをサインインしました'
                 Lore: 
                 - ''
@@ -454,11 +467,13 @@ Japanese:
                 Commands:
                 - 'litesignin leaderboard {dateText}'
             Comming-Soon:
-                Item: CYAN_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
                 Display-Name: '&6{day}日&7はまだ到着していません'
                 Lore: []
             Nothing-SignIn:
-                Item: YELLOW_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
                 Hide-Enchants: true
                 Enchantment:
                 - DURABILITY:10
@@ -469,7 +484,8 @@ Japanese:
                 - ''
                 - '&eここをクリックしてサインインする。'
             Missed-SignIn:
-                Item: RED_TERRACOTTA
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
                 Display-Name: '&6{day}日&7をサインインしません'
                 Lore:
                 - ''

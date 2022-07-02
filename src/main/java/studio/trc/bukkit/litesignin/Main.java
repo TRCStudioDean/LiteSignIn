@@ -1,6 +1,5 @@
 package studio.trc.bukkit.litesignin;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,7 +95,7 @@ public class Main
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             }
         }

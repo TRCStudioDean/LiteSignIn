@@ -19,6 +19,7 @@ import lombok.Getter;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.event.custom.PlayerSignInEvent;
 import studio.trc.bukkit.litesignin.event.custom.SignInRewardEvent;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
@@ -35,7 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class MySQLStorage
+public final class MySQLStorage
     implements Storage
 {
     public static final Map<UUID, MySQLStorage> cache = new HashMap();
@@ -169,28 +170,52 @@ public class MySQLStorage
     public void giveReward(boolean retroactive) {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
-        SignInGroup group = getGroup();
-        if (group == null) return;
-        int queue = SignInQueue.getInstance().getRank(uuid);
-        int continuousSignIn = getContinuousSignIn();
-        int totalNumber = getCumulativeNumber();
-        SignInDate today = SignInDate.getInstance(new Date());
-        int week = today.getWeek();
-        SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
-        rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
-        rewardQueue.addReward(new SignInSpecialDateReward(group, today));
-        rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
-        rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-        if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
-        else {
-            rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
-            rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
-            rewardQueue.addReward(new SignInNormalReward(group));
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Multi-Group-Reward")) {
+            getAllGroup().stream().forEach(group -> {
+                int queue = SignInQueue.getInstance().getRank(uuid);
+                int continuousSignIn = getContinuousSignIn();
+                int totalNumber = getCumulativeNumber();
+                SignInDate today = SignInDate.getInstance(new Date());
+                int week = today.getWeek();
+                SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
+                rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                rewardQueue.addReward(new SignInSpecialDateReward(group, today));
+                rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+                rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
+                else {
+                    rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
+                    rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
+                    rewardQueue.addReward(new SignInNormalReward(group));
+                }
+                SignInRewardEvent event = new SignInRewardEvent(player, rewardQueue);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) rewardQueue.run(retroactive);
+            });
+        } else {
+            SignInGroup group = getGroup();
+            if (group == null) return;
+            int queue = SignInQueue.getInstance().getRank(uuid);
+            int continuousSignIn = getContinuousSignIn();
+            int totalNumber = getCumulativeNumber();
+            SignInDate today = SignInDate.getInstance(new Date());
+            int week = today.getWeek();
+            SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
+            rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+            rewardQueue.addReward(new SignInSpecialDateReward(group, today));
+            rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+            rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+            if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
+            else {
+                rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
+                rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
+                rewardQueue.addReward(new SignInNormalReward(group));
+            }
+            SignInRewardEvent event = new SignInRewardEvent(player, rewardQueue);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) return;
+            rewardQueue.run(retroactive);
         }
-        SignInRewardEvent event = new SignInRewardEvent(player, rewardQueue);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) return;
-        rewardQueue.run(retroactive);
     }
     
     @Override
@@ -198,20 +223,34 @@ public class MySQLStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         SignInGroup group = null;
-        for (String groups : ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Groups-Priority")) {
-            if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
-                if (player.hasPermission(ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
+        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        for (String groups : config.getStringList("Reward-Settings.Groups-Priority")) {
+            if (config.get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
+                if (player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
                     group = new SignInGroup(groups);
                     break;
                 }
             }
         }
-        if (group == null) {
-            if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).get("Reward-Settings.Permission-Groups.Default") != null)
-                group = new SignInGroup("Default");
-            else return null;
+        if (group == null && config.get("Reward-Settings.Permission-Groups.Default") != null) {
+            group = new SignInGroup("Default");
         }
         return group;
+    }
+
+    @Override
+    public List<SignInGroup> getAllGroup() {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return null;
+        List<SignInGroup> groups = new ArrayList();
+        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        config.getStringList("Reward-Settings.Groups-Priority").stream()
+            .filter(group -> config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission")))
+            .forEach(group -> groups.add(new SignInGroup(group)));
+        if (groups.isEmpty() && config.get("Reward-Settings.Permission-Groups.Default") != null) {
+            groups.add(new SignInGroup("Default"));
+        }
+        return groups;
     }
     
     @Override

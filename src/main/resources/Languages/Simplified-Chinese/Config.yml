@@ -20,6 +20,11 @@ PlaceholderAPI:
 #此功能用于登记每日签到玩家的先后顺序
 Enable-Sign-In-Ranking: true
 
+#是否启用多组奖励模式
+#当玩家同时拥有多个奖励组的权限时，将在签到时同时获得它们的奖励
+#例如玩家同时拥有Group1和Group2的组权限，签到后将同时获得这两个组的奖励
+Enable-Multi-Group-Reward: false
+
 #是否在玩家进入服务器的时候提醒玩家签到
 Join-Event:
     Enabled: true

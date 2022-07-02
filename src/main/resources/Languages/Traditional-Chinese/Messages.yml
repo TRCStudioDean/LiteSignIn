@@ -19,7 +19,7 @@ Traditional-Chinese:
         Hover-Text:
         - '&5點擊打開簽到菜單'
         - '&7日期: &e{date}'
-        Join-Messages:
+        Messages:
         - '{prefix}&a&l你今天還沒有簽到! %opengui%'
     GUI-SignIn-Messages:
         Unavailable-Feature: '{prefix}&c本伺服器未啟用簽到菜單'
@@ -57,7 +57,7 @@ Traditional-Chinese:
         - ' &6/signin info [玩家] &c查看玩家的信息'
         - ' &6/signin leaderboard &8[日期] [頁數] &c列出今日或指定日期的簽到排行榜'
         - ' &6/signin itemcollection &c管理收藏品'
-        - ' &6/signin database 數據庫/數據管理'
+        - ' &6/signin database 資料庫/數據管理'
         Reload: '{prefix}&a已重載配置文件.'
         RetroactiveCard:
             Help: '{prefix}&a使用幫助: &6/signin retroactivecard &c[give/set/take] &d[數量] &7[玩家] &a給予/設置/取走玩家身上的補簽卡'
@@ -623,7 +623,7 @@ English:
         Unavailable-Feature: '{prefix}&cThis feature is not enabled on this server.'
         Minimum-GUI-Date: '{prefix}&cYou can''t open the sign-in menu before &e{year} &cyear &e{month}&c month!'
         Retroactive-Card-Cooldown:
-        - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
+        - '{prefix}&eYou need to wait &c{second} &eseconds before using the retro card again!'
         Unable-To-Hold:
         - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
         Minimum-Date:
@@ -707,7 +707,7 @@ English:
                 Unable-To-Hold:
                 - '{prefix}&cYou do not have permission to hold the retroactive card, Your cards has been confiscated by the system.'
                 Retroactive-Card-Cooldown:
-                - '{prefix}&eYou need to wait &c{second} &cseconds before using the retro card again!'
+                - '{prefix}&eYou need to wait &c{second} &eseconds before using the retro card again!'
                 Need-More-Retroactive-Cards:
                 - '{prefix}&cYou still need &e{cards} &cretrospective &acards &cto sign-in!'
                 Successfully-Retroactive-Signed-In:

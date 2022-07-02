@@ -9,8 +9,8 @@ PlaceholderAPI:
     #是否使用
     Enabled: true
     #變数緩存更新的延遲（秒）
-    #由於部分變数需要不斷地讀取數據庫的數據，
-    #此選項用於防止頻繁調用PAPI變数對數據庫IO造成的巨大負擔
+    #由於部分變数需要不斷地讀取資料庫的數據，
+    #此選項用於防止頻繁調用PAPI變数對資料庫IO造成的巨大負擔
     Cache-Update-Delay: 10
     #例外的佔位符（不進行緩存的）
     #示例: 'queue' 即 %litesignin_queue% 
@@ -64,7 +64,7 @@ Metrics: true
 Wood-Signs-Script: false
 
 #異步模式排行榜
-#如果啟用了MySQL數據庫模式，並且MySQL處於外部服務器，
+#如果啟用了MySQL資料庫模式，並且MySQL處於外部服務器，
 #建議啟用該功能，以防止IO堵塞造成的服務器崩潰
 Leaderboard-Async: false
     
@@ -88,7 +88,7 @@ Retroactive-Card:
         #你可以在CustomItems.yml文件中編輯它。
         CustomItem: 'RetroactiveCard'
 
-#MySQL 數據庫設置
+#MySQL 資料庫設置
 MySQL-Storage:
     Enabled: false
     #主機名
@@ -99,27 +99,27 @@ MySQL-Storage:
     Username: 'root'
     #密碼
     Password: 'password'
-    #數據庫名稱
+    #資料庫名稱
     Database: 'signin'
     #更多連接參數，如果你不是一名開發者，並且不熟知JDBC，請不要修改它
     Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
-    #當數據庫連接丟失時，自動修復的次數， 填-1即為無數次
+    #當資料庫連接丟失時，自動修復的次數， 填-1即為無數次
     Automatic-Repair: -1
     #玩家數據刷新間隔時間（秒）。 -1為無，僅在進入伺服器時刷新數據（建議在單服務端使用MySQL的情況下才這麼做）
     Refresh-Interval: 5
     #數據表名稱
     Table-Name: playerdata
     
-#SQLite 數據庫設置
+#SQLite 資料庫設置
 #儲存模式優先級: Yaml < SQLite < MySQL
 SQLite-Storage:
     #默認為啟用，若關閉則轉為Yaml儲存格式
     Enabled: true
-    #數據庫文件名
+    #資料庫文件名
     Database-File: 'Database.db'
-    #數據庫文件夾路徑
+    #資料庫文件夾路徑
     Database-Path: 'plugins/LiteSignIn/'
-    #當數據庫連接丟失時，自動修復的次數， 填-1即為無數次
+    #當資料庫連接丟失時，自動修復的次數， 填-1即為無數次
     Automatic-Repair: -1
     #玩家數據刷新間隔時間（秒）。 -1為無，僅在進入伺服器時刷新數據
     Refresh-Interval: 5

@@ -79,112 +79,114 @@ public class Menu
     public void click(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player player = (Player) e.getWhoClicked();
-            if (menuOpening.get(player.getUniqueId()) != null && e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
-                if (BackupUtil.isBackingUp()) {
-                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
-                    player.closeInventory();
-                    return;
-                }
+            if (menuOpening.get(player.getUniqueId()) != null) {
                 e.setCancelled(true);
-                Storage data = Storage.getPlayer(player);
-                SignInInventory inv = menuOpening.get(player.getUniqueId());
-                int nextPageMonth = inv.getNextPageMonth();
-                int nextPageYear = inv.getNextPageYear();
-                int previousPageMonth = inv.getPreviousPageMonth();
-                int previousPageYear = inv.getPreviousPageYear();
-                int slot = e.getSlot();
-                for (SignInGUIColumn columns : inv.getButtons()) {
-                    if (columns.getKeyPostion() == slot) {
-                        if (columns.isKey()) {
-                            SignInDate today = SignInDate.getInstance(new Date());
-                            if (columns.getDate().equals(today) && !data.alreadySignIn()) {
-                                data.signIn();
-                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                                placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                                placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                                placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                                placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
-                                placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
-                                MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.SignIn-Messages", placeholders);
-                                openGUI(player);
-                            } else if (PluginControl.enableRetroactiveCard()) {
-                                if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Hold") && data.getRetroactiveCard() > 0) {
-                                    data.takeRetroactiveCard(data.getRetroactiveCard());
-                                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Unable-To-Hold");
-                                } else if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Use")) {
-                                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.No-Permission");
-                                } else if (today.compareTo(columns.getDate()) >= 0 && !data.alreadySignIn(columns.getDate())) {
-                                    if (PluginControl.getRetroactiveCardMinimumDate() != null && columns.getDate().compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{date}", PluginControl.getRetroactiveCardMinimumDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Minimum-Date", placeholders);
-                                    } else if (data.isRetroactiveCardCooldown()) {
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{second}", String.valueOf(data.getRetroactiveCardCooldown()));
-                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Retroactive-Card-Cooldown", placeholders);
-                                    } else if (data.getRetroactiveCard() >= PluginControl.getRetroactiveCardQuantityRequired()) {
-                                        data.takeRetroactiveCard(PluginControl.getRetroactiveCardQuantityRequired());
-                                        data.signIn(columns.getDate());
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{date}", columns.getDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                                        placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
-                                        placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
-                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Retroactive-SignIn-Messages", placeholders);
-                                        openGUI(player, columns.getDate().getMonth(), columns.getDate().getYear());
-                                    } else {
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{cards}", String.valueOf(PluginControl.getRetroactiveCardQuantityRequired() - data.getRetroactiveCard()));
-                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Need-More-Retroactive-Cards", placeholders);
+                if (e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
+                    if (BackupUtil.isBackingUp()) {
+                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
+                        player.closeInventory();
+                        return;
+                    }
+                    Storage data = Storage.getPlayer(player);
+                    SignInInventory inv = menuOpening.get(player.getUniqueId());
+                    int nextPageMonth = inv.getNextPageMonth();
+                    int nextPageYear = inv.getNextPageYear();
+                    int previousPageMonth = inv.getPreviousPageMonth();
+                    int previousPageYear = inv.getPreviousPageYear();
+                    int slot = e.getSlot();
+                    for (SignInGUIColumn columns : inv.getButtons()) {
+                        if (columns.getKeyPostion() == slot) {
+                            if (columns.isKey()) {
+                                SignInDate today = SignInDate.getInstance(new Date());
+                                if (columns.getDate().equals(today) && !data.alreadySignIn()) {
+                                    data.signIn();
+                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                    placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
+                                    placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
+                                    placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
+                                    placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
+                                    placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
+                                    placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
+                                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.SignIn-Messages", placeholders);
+                                    openGUI(player);
+                                } else if (PluginControl.enableRetroactiveCard()) {
+                                    if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Hold") && data.getRetroactiveCard() > 0) {
+                                        data.takeRetroactiveCard(data.getRetroactiveCard());
+                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Unable-To-Hold");
+                                    } else if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Use")) {
+                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.No-Permission");
+                                    } else if (today.compareTo(columns.getDate()) >= 0 && !data.alreadySignIn(columns.getDate())) {
+                                        if (PluginControl.getRetroactiveCardMinimumDate() != null && columns.getDate().compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
+                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                            placeholders.put("{date}", PluginControl.getRetroactiveCardMinimumDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                            MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Minimum-Date", placeholders);
+                                        } else if (data.isRetroactiveCardCooldown()) {
+                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                            placeholders.put("{second}", String.valueOf(data.getRetroactiveCardCooldown()));
+                                            MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Retroactive-Card-Cooldown", placeholders);
+                                        } else if (data.getRetroactiveCard() >= PluginControl.getRetroactiveCardQuantityRequired()) {
+                                            data.takeRetroactiveCard(PluginControl.getRetroactiveCardQuantityRequired());
+                                            data.signIn(columns.getDate());
+                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                            placeholders.put("{date}", columns.getDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                            placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
+                                            placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
+                                            MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Retroactive-SignIn-Messages", placeholders);
+                                            openGUI(player, columns.getDate().getMonth(), columns.getDate().getYear());
+                                        } else {
+                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                            placeholders.put("{cards}", String.valueOf(PluginControl.getRetroactiveCardQuantityRequired() - data.getRetroactiveCard()));
+                                            MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Need-More-Retroactive-Cards", placeholders);
+                                        }
                                     }
+                                } else {
+                                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-Re-SignIn");
                                 }
-                            } else {
-                                MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-Re-SignIn");
-                            }
-                            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Close-GUI")) {
-                                player.closeInventory();
-                            }
-                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                            placeholders.put("{dateText}", columns.getDate().getDataText(false));
-                            placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                            placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                            placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                            placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                            placeholders.put("{player}", player.getName());
-                            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
-                                ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands").stream().forEach(commands -> {
-                                    runCommand(player, commands, placeholders);
-                                });
-                            }
-                            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
-                                ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> {
-                                    player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
-                                });
-                            }
-                        } else {
-                            if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName())) {
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Close-GUI")) {
+                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Close-GUI")) {
                                     player.closeInventory();
                                 }
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                placeholders.put("{dateText}", columns.getDate().getDataText(false));
                                 placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
                                 placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
                                 placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
                                 placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                                 placeholders.put("{player}", player.getName());
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
-                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands").stream().forEach(commands -> {
+                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
+                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands").stream().forEach(commands -> {
                                         runCommand(player, commands, placeholders);
                                     });
                                 }
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
-                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> {
+                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
+                                    ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> {
                                         player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
                                     });
                                 }
+                            } else {
+                                if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName())) {
+                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Close-GUI")) {
+                                        player.closeInventory();
+                                    }
+                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                    placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
+                                    placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
+                                    placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
+                                    placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
+                                    placeholders.put("{player}", player.getName());
+                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
+                                        ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands").stream().forEach(commands -> {
+                                            runCommand(player, commands, placeholders);
+                                        });
+                                    }
+                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
+                                        ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> {
+                                            player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
+                                        });
+                                    }
+                                }
                             }
+                            break;
                         }
-                        break;
                     }
                 }
             }

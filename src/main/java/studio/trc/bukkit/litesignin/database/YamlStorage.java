@@ -448,6 +448,7 @@ public final class YamlStorage
             }
             retroactiveCard.setAmount(amount);
             player.getInventory().addItem(retroactiveCard);
+            if (saveData) saveData();
         } else {
             config.set("RetroactiveCard", amount >= 0 ? amount : 0);
             if (saveData) saveData();

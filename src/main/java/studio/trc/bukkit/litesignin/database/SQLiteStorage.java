@@ -460,6 +460,7 @@ public final class SQLiteStorage
             }
             card.setAmount(amount);
             player.getInventory().addItem(card);
+            if (saveData) saveData();
         } else {
             retroactiveCard = amount >= 0 ? amount : 0;
             if (saveData) saveData();
@@ -468,7 +469,6 @@ public final class SQLiteStorage
     
     @Override
     public void saveData() {
-        if (year == 1970 && month == 1 && day == 1 && hour == 0 && minute == 0 && second == 0 && retroactiveCard == 0) return;
         try {
             PreparedStatement statement;
             if (Bukkit.getPlayer(uuid) == null && Bukkit.getOfflinePlayer(uuid) != null && Bukkit.getOfflinePlayer(uuid).getName() == null) {

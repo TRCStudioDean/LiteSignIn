@@ -257,6 +257,9 @@ public class SignInQueue
     }
     
     public void checkUpdate() {
+        if (!PluginControl.enableSignInRanking()) {
+            return;
+        }
         if (PluginControl.useMySQLStorage()) {
             if (!lastUpdateTime.containsKey(date)) {
                 loadQueue();

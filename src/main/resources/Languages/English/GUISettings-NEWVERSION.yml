@@ -573,7 +573,7 @@ Japanese:
                 - '&7コマンド&a/signingui [月] [年]&7を使用して、'
                 - '&7関連するレコードを表示することもできます。'
                 - ''
-                - '&eここをクリックして、&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
+                - '&eここをクリックして、&b{nextPageYear}年{nextPageMonth}月&eのサインインメニューを開きます。'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'

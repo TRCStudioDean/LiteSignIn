@@ -2,6 +2,7 @@
 Prefix: '&bLite&3SignIn &f&l>>> '
 
 #プラグインの言語
+#使用可能: Japanese, English, Simplified-Chinese, Traditional-Chinese
 Language: Japanese
 
 #PlaceholderAPI 設定
@@ -106,7 +107,7 @@ MySQL-Storage:
     #データベースの名
     Database: 'signin'
     #その他の接続パラメータ。 もし君は開発者ではなく、またはJDBCに精通していない、このオプションを変更しないでください。
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
     #データベース接続が失われたときの自動修復の数。 -1を入力すると、数え切れないほどの回数を意味します
     Automatic-Repair: -1
     #更新の冷却時間

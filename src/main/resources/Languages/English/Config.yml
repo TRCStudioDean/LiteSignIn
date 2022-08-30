@@ -2,7 +2,7 @@
 Prefix: '&bLite&3SignIn &f&l>>> '
 
 #Plugin language
-#Provide Chinese and English by default
+#Provide English, Simplified-Chinese, Traditional-Chinese and Japanese by default
 Language: English
 
 #This function is used to record the order in which players sign in daily.
@@ -101,7 +101,7 @@ MySQL-Storage:
     #Database's name
     Database: 'signin'
     #More connection parameters. If you are not a developer and are not familiar with JDBC, please do not modify it.
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
     #The number of times the system automatically repairs the connection when the database connection is disconnected (-1 is infinite)
     Automatic-Repair: -1
     #Player data refresh interval (seconds). -1 is none, only refresh the data when entering the server (it is recommended to do this when using MySQL on a single server)

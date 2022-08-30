@@ -2,6 +2,7 @@
 Prefix: '&bLite&3SignIn &f&l>>> '
 
 #插件语言
+#可用: Simplified-Chinese, Traditional-Chinese, Japanese, English
 Language: Simplified-Chinese
 
 #PlaceholderAPI设置
@@ -107,7 +108,7 @@ MySQL-Storage:
     #数据库名称
     Database: 'signin'
     #更多连接参数，如果你不是一名开发者，并且不熟知JDBC，请不要修改它
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false'
+    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
     #当数据库连接丢失时，自动修复的次数， 填-1即为无数次
     Automatic-Repair: -1
     #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据（建议在单服务端使用MySQL的情况下才这么做）

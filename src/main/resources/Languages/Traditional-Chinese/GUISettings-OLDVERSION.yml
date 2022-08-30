@@ -150,7 +150,7 @@ Traditional-Chinese:
                 - 47
                 - 51
                 - 52
-Simplifed-Chinese:
+Simplified-Chinese:
     SignIn-GUI-Settings:
         GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
         Specified-Month-GUI-Name: '&3&l历史月份 &8{month}月'
@@ -431,7 +431,7 @@ English:
                 - '&7You can use the command: &a/signin gui [Month] [Year]'
                 - '&7to switch the sign-in menu to specify the month and year.'
                 - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                - '&eClick to open &b{nextPageYear}/{nextPageMonth}''s &eSign-in menu.'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'
@@ -587,7 +587,7 @@ Japanese:
                 - '&7関連するレコードを表示することもできます。'
                 - ''
                 - '&eここをクリックして、'
-                - '&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
+                - '&b{nextPageYear}年{nextPageMonth}月&eのサインインメニューを開きます。'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'

@@ -11,7 +11,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -87,7 +86,7 @@ public class Join
         }, "AsyncPlayerJoinThread").start();
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (SignInPluginUtils.hasPermission(player, "Updater")) {
-                String nowVersion = Bukkit.getPluginManager().getPlugin("LiteSignIn").getDescription().getVersion();
+                String nowVersion = Main.getInstance().getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
                     if (text.toLowerCase().contains("%link%")) {
                         BaseComponent click = new TextComponent(MessageUtil.getMessage("Updater.Link.Message"));
@@ -123,6 +122,11 @@ public class Join
                         MessageUtil.sendMessage(player, text, placeholders);
                     }
                 });
+                if (!Updater.getExtraMessages().isEmpty()) {
+                    Updater.getExtraMessages().forEach(message -> {
+                        MessageUtil.sendMessage(player, message);
+                    });
+                }
             }
         }
     }

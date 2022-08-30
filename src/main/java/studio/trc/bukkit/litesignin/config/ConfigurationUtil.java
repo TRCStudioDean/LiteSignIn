@@ -127,11 +127,10 @@ public class ConfigurationUtil
                     if (!configFile.exists()) {
                         configFile.createNewFile();
                         InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/Config.yml");
+                        byte[] bytes = new byte[is.available()];
+                        for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                         try (OutputStream out = new FileOutputStream(configFile)) {
-                            int b;
-                            while ((b = is.read()) != -1) {
-                                out.write((char) b);
-                            }
+                            out.write(bytes);
                         }
                     }
                 } catch (IOException ex) {}
@@ -143,11 +142,10 @@ public class ConfigurationUtil
                     if (!configFile.exists()) {
                         configFile.createNewFile();
                         InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/Messages.yml");
+                        byte[] bytes = new byte[is.available()];
+                        for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                         try (OutputStream out = new FileOutputStream(configFile)) {
-                            int b;
-                            while ((b = is.read()) != -1) {
-                                out.write((char) b);
-                            }
+                            out.write(bytes);
                         }
                     }
                 } catch (IOException ex) {}
@@ -161,19 +159,17 @@ public class ConfigurationUtil
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/GUISettings-OLDVERSION.yml");
+                            byte[] bytes = new byte[is.available()];
+                            for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                             try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                                out.write(bytes);
                             }
                         } else {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/GUISettings-NEWVERSION.yml");
+                            byte[] bytes = new byte[is.available()];
+                            for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                             try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                                out.write(bytes);
                             }
                         }
                     }
@@ -188,19 +184,17 @@ public class ConfigurationUtil
                         String version = PluginControl.nmsVersion;
                         if (version.startsWith("v1_7") || version.startsWith("v1_8")) {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/RewardSettings-OLDVERSION.yml");
+                            byte[] bytes = new byte[is.available()];
+                            for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                             try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                                out.write(bytes);
                             }
                         } else {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/RewardSettings-NEWVERSION.yml");
+                            byte[] bytes = new byte[is.available()];
+                            for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                             try (OutputStream out = new FileOutputStream(configFile)) {
-                                int b;
-                                while ((b = is.read()) != -1) {
-                                    out.write((char) b);
-                                }
+                                out.write(bytes);
                             }
                         }
                     }
@@ -213,11 +207,10 @@ public class ConfigurationUtil
                     if (!configFile.exists()) {
                         configFile.createNewFile();
                         InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/CustomItems.yml");
+                        byte[] bytes = new byte[is.available()];
+                        for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                         try (OutputStream out = new FileOutputStream(configFile)) {
-                            int b;
-                            while ((b = is.read()) != -1) {
-                                out.write((char) b);
-                            }
+                            out.write(bytes);
                         }
                     }
                 } catch (IOException ex) {}
@@ -229,11 +222,10 @@ public class ConfigurationUtil
                     if (!configFile.exists()) {
                         configFile.createNewFile();
                         InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/WoodSignSettings.yml");
+                        byte[] bytes = new byte[is.available()];
+                        for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
                         try (OutputStream out = new FileOutputStream(configFile)) {
-                            int b;
-                            while ((b = is.read()) != -1) {
-                                out.write((char) b);
-                            }
+                            out.write(bytes);
                         }
                     }
                 } catch (IOException ex) {}

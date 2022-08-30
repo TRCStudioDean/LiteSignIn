@@ -127,7 +127,7 @@ English:
                 - '&7You can use the command: &a/signin gui [Month] [Year]'
                 - '&7to switch the sign-in menu to specify the month and year.'
                 - ''
-                - '&eClick to open &b{previousPageYear}/{previousPageMonth}''s &eSign-in menu.'
+                - '&eClick to open &b{nextPageYear}/{nextPageMonth}''s &eSign-in menu.'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'
@@ -587,7 +587,7 @@ Japanese:
                 - '&7関連するレコードを表示することもできます。'
                 - ''
                 - '&eここをクリックして、'
-                - '&b{previousPageYear}年{previousPageMonth}月&eのサインインメニューを開きます。'
+                - '&b{nextPageYear}年{nextPageMonth}月&eのサインインメニューを開きます。'
                 Slot: 50
                 Commands:
                 - 'signin gui {nextPageMonth} {nextPageYear}'

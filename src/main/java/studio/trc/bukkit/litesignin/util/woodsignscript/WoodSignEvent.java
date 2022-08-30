@@ -1,6 +1,5 @@
 package studio.trc.bukkit.litesignin.util.woodsignscript;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.block.Block;
@@ -14,6 +13,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;

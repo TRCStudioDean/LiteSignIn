@@ -36,7 +36,13 @@ public abstract class SignInRewardUtil
                 try {
                     switch (SignInRewardTask.valueOf(taskName.toUpperCase())) {
                         case ITEMS_REWARD: {
-                            player.getInventory().addItem(getRewardItems(player).toArray(new ItemStack[0]));
+                            getRewardItems(player).stream().forEach(item -> {
+                                if (player.getInventory().firstEmpty() != -1) {
+                                    player.getInventory().addItem(item);
+                                } else {
+                                    player.getWorld().dropItem(player.getLocation(), item);
+                                }
+                            });
                             break;
                         }
                         case COMMANDS_EXECUTION: {

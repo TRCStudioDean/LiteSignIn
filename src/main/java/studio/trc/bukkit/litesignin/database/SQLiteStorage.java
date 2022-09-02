@@ -405,7 +405,11 @@ public final class SQLiteStorage
             ItemStack card = PluginControl.getRetroactiveCardRequiredItem(player);
             if (card == null) return;
             card.setAmount(amount);
-            player.getInventory().addItem(card);
+            if (player.getInventory().firstEmpty() != -1) {
+                player.getInventory().addItem(card);
+            } else {
+                player.getWorld().dropItem(player.getLocation(), card);
+            }
         } else {
             setRetroactiveCard(getRetroactiveCard() + amount, true);
         }
@@ -459,7 +463,11 @@ public final class SQLiteStorage
                 }
             }
             card.setAmount(amount);
-            player.getInventory().addItem(card);
+            if (player.getInventory().firstEmpty() != -1) {
+                player.getInventory().addItem(card);
+            } else {
+                player.getWorld().dropItem(player.getLocation(), card);
+            }
             if (saveData) saveData();
         } else {
             retroactiveCard = amount >= 0 ? amount : 0;

@@ -393,7 +393,11 @@ public final class YamlStorage
             ItemStack retroactiveCard = PluginControl.getRetroactiveCardRequiredItem(player);
             if (retroactiveCard == null) return;
             retroactiveCard.setAmount(amount);
-            player.getInventory().addItem(retroactiveCard);
+            if (player.getInventory().firstEmpty() != -1) {
+                player.getInventory().addItem(retroactiveCard);
+            } else {
+                player.getWorld().dropItem(player.getLocation(), retroactiveCard);
+            }
         } else {
             setRetroactiveCard(getRetroactiveCard() + amount, true);
         }
@@ -447,7 +451,11 @@ public final class YamlStorage
                 }
             }
             retroactiveCard.setAmount(amount);
-            player.getInventory().addItem(retroactiveCard);
+            if (player.getInventory().firstEmpty() != -1) {
+                player.getInventory().addItem(retroactiveCard);
+            } else {
+                player.getWorld().dropItem(player.getLocation(), retroactiveCard);
+            }
             if (saveData) saveData();
         } else {
             config.set("RetroactiveCard", amount >= 0 ? amount : 0);

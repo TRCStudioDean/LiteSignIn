@@ -29,7 +29,11 @@ public class CustomItem
     }
     
     public void give(Player player) {
-        player.getInventory().addItem(itemStack);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(itemStack);
+        } else {
+            player.getWorld().dropItem(player.getLocation(), itemStack);
+        }
     }
     
     public static List<CustomItem> getItemStackCollection() {

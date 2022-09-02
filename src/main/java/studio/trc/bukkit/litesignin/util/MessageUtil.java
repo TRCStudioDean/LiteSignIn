@@ -6,7 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,12 +26,12 @@ import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class MessageUtil
 {
     private static final Map<String, String> defaultPlaceholders = new HashMap();
     private static final Map<String, BaseComponent> defaultJsonComponents = new HashMap();
+    private static final Pattern hexColorPattern = Pattern.compile("#[a-fA-F0-9]{6}");
     
     @Getter
     @Setter
@@ -366,6 +368,18 @@ public class MessageUtil
     }
     
     public static String toColor(String text) {
+        String nmsVersion = PluginControl.nmsVersion;
+        if (!nmsVersion.startsWith("v1_7") && !nmsVersion.startsWith("v1_8") && !nmsVersion.startsWith("v1_9") && !nmsVersion.startsWith("v1_10") &&
+            !nmsVersion.startsWith("v1_11") && !nmsVersion.startsWith("v1_12") && !nmsVersion.startsWith("v1_13") && !nmsVersion.startsWith("v1_14") && !nmsVersion.startsWith("v1_15")) {
+            try {
+                Matcher matcher = hexColorPattern.matcher(text);
+                while (matcher.find()) {
+                    String color = text.substring(matcher.start(), matcher.end());
+                    text = text.replace(color, net.md_5.bungee.api.ChatColor.of(color).toString());
+                    matcher = hexColorPattern.matcher(text);
+                }
+            } catch (Throwable t) {}
+        }
         return ChatColor.translateAlternateColorCodes('&', text);
     }
     

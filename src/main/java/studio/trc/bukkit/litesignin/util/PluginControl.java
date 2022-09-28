@@ -16,6 +16,7 @@ import studio.trc.bukkit.litesignin.database.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.event.Menu;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignUtil;
 
@@ -55,6 +56,7 @@ public class PluginControl
             SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
+        LiteSignInThread.initialize();
         AutoSave.stopThread();
         AutoSave.startThread();
         headCacheData.clear();

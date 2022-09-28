@@ -18,6 +18,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
+import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
 import studio.trc.bukkit.litesignin.util.Updater;
@@ -33,6 +34,10 @@ public class SignInCommand
         checkUpdate();
         if (BackupUtil.isBackingUp()) {
             MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
+            return true;
+        }
+        if (RollBackUtil.isRollingback()) {
+            MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Rollback.RollingBack");
             return true;
         }
         if (args.length == 0) {

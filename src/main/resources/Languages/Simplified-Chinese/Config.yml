@@ -69,10 +69,21 @@ Metrics: true
 #启用后将生成WoodSignSettings.yml文件，请在该文件中按照注释的帮助进行编辑。
 Wood-Signs-Script: false
 
-#异步模式排行榜
-#如果启用了MySQL数据库模式，并且MySQL处于外部服务器，
-#建议启用该功能，以防止IO堵塞造成的服务器崩溃
-Leaderboard-Async: false
+#异步线程的设置
+#若不清楚这什么是异步线程，请不要修改这个选项！
+Async-Thread-Settings: 
+    #任务执行器的执行延迟（单位是秒，可以有小数）
+    #主要处理提交的新任务（主要是命令、事件、数据库IO操作等任务）
+    Task-Thread-Delay: 0.1
+    #异步任务设置
+    #你可以选择将某些任务归类为异步任务
+    Async-Task-Settings:
+        #排行榜查看
+        Leaderboard-View: false
+        #加载玩家数据
+        Load-Data: true
+        #打开GUI（由于加载头颅可能造成卡顿，故默认启用此选项）
+        Open-GUI: true
     
 #补签卡
 Retroactive-Card:

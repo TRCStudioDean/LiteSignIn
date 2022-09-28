@@ -280,6 +280,7 @@ Traditional-Chinese:
             BackingUp: '{prefix}&e插件正在備份數據中， 請稍後再執行此操作.'
             Auto-Backup: '{prefix}&a開始備份數據， 這可能需要較長的時間...'
         RollBack:
+            RollingBack: '{prefix}&e插件正在回滾數據中， 請稍後再執行此操作.'
             Successfully: '{prefix}&a成功將數據回檔到 &b{file} &a.'
             Failed: '{prefix}&c回檔失敗， 出現錯誤: &e{error}'
     Updater:
@@ -579,6 +580,7 @@ Simplified-Chinese:
             BackingUp: '{prefix}&e插件正在备份数据中， 请稍后再执行此操作.'
             Auto-Backup: '{prefix}&a开始备份数据， 这可能需要较长的时间...'
         RollBack:
+            RollingBack: '{prefix}&e插件正在回滚数据中， 请稍后再执行此操作.'
             Successfully: '{prefix}&a成功将数据回档到 &b{file} &a.'
             Failed: '{prefix}&c回档失败， 出现错误: &e{error}'
     Updater:
@@ -876,6 +878,7 @@ English:
             BackingUp: '{prefix}&eThe plug-in is backing up data. Please perform this operation later.'
             Auto-Backup: '{prefix}&aStart backing up data, this may take a long time...'
         RollBack:
+            RollingBack: '{prefix}&eThe plug-in is rolling back data. Please perform this operation later.'
             Successfully: '{prefix}&aSuccessfully rolled back data to &b{file} &a.'
             Failed: '{prefix}&cRollback failed with error: &e{error}'
     Updater:
@@ -1176,6 +1179,7 @@ Japanese:
             BackingUp: '{prefix}&eデータはバックアップ中です。この操作は後でもう一度実行してください。'
             Auto-Backup: '{prefix}&aデータのバックアップを開始します。これには時間がかかる場合があります...'
         RollBack:
+            RollingBack: '{prefix}&eデータはロールバック中です。この操作は後でもう一度実行してください。'
             Successfully: '{prefix}&aデータを&e{file}&aファイルに正常にアーカイブします。'
             Failed: '{prefix}&cファイルが戻って失敗し、次のエラーが発生しました: &e{error}'
     Updater:

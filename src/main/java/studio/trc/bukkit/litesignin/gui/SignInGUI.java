@@ -201,7 +201,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
                     if (section.get("Already-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
@@ -236,7 +236,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Missed-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
                     }
                     if (section.get("Missed-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Custom-Model-Data", key);
@@ -291,7 +291,7 @@ public class SignInGUI
                     PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));
                 }
                 if (section.get("Comming-Soon.Head-Textures") != null) {
-                    setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
+                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
                 }
                 if (section.get("Comming-Soon.Custom-Model-Data") != null) {
                     setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Custom-Model-Data", key);
@@ -387,7 +387,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
                     if (section.get("Already-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
@@ -418,7 +418,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Missed-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
                     }
                     if (section.get("Missed-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Custom-Model-Data", key);
@@ -459,7 +459,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
                     if (section.get("Already-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
@@ -490,7 +490,7 @@ public class SignInGUI
                         PluginControl.setHead(key, replace(player, section.getString("Nothing-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
                     if (section.get("Nothing-SignIn.Head-Textures") != null) {
-                        setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Head-Textures", key);
+                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Head-Textures", key);
                     }
                     if (section.get("Nothing-SignIn.Custom-Model-Data") != null) {
                         setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Custom-Model-Data", key);
@@ -529,7 +529,7 @@ public class SignInGUI
                     PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));
                 }
                 if (section.get("Comming-Soon.Head-Textures") != null) {
-                    setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
+                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
                 }
                 if (section.get("Comming-Soon.Custom-Model-Data") != null) {
                     setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Custom-Model-Data", key);
@@ -610,7 +610,7 @@ public class SignInGUI
                     PluginControl.setHead(other, replace(player, section.getString(items + ".Head-Owner"), "{player}", player.getName()));
                 }
                 if (section.get(items + ".Head-Textures") != null) {
-                    setHeadTextures(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Textures", other);
+                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Textures", other);
                 }
                 if (section.get(items + ".Custom-Model-Data") != null) {
                     setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Custom-Model-Data", other);
@@ -771,42 +771,25 @@ public class SignInGUI
         is.setItemMeta(im);
     }
     
-    private static void setHeadTextures(String configPath, ItemStack is) {
+    private static void setHeadTextures(Player player, String configPath, ItemStack is) {
         String nmsVersion = PluginControl.nmsVersion;
         if (nmsVersion.startsWith("v1_7")) return;
         ItemMeta im = is.getItemMeta();
-        String textures = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath);
+        String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath), player);
         if (im == null || textures == null) return;
-        if (nmsVersion.startsWith("v1_8") || nmsVersion.startsWith("v1_9") || nmsVersion.startsWith("v1_10") || nmsVersion.startsWith("v1_11") || nmsVersion.startsWith("v1_12")) {
-            if (is.getType().equals(Material.valueOf("SKULL_ITEM")) && is.getData().getData() == 3) {
-                SkullMeta skull = (SkullMeta) im;
-                GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
-                profile.getProperties().put("textures", new Property("textures", textures));
-                Field profileField;
-                try {
-                    profileField = skull.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(skull, profile);
-                } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                    e.printStackTrace();
-                }
-                is.setItemMeta(skull);
+        if (is.getItemMeta() instanceof SkullMeta) {
+            SkullMeta skull = (SkullMeta) im;
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
+            profile.getProperties().put("textures", new Property("textures", textures));
+            Field profileField;
+            try {
+                profileField = skull.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                profileField.set(skull, profile);
+            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
             }
-        } else {
-            if (is.getType().equals(Material.PLAYER_HEAD)) {
-                SkullMeta skull = (SkullMeta) im;
-                GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
-                profile.getProperties().put("textures", new Property("textures", textures));
-                Field profileField;
-                try {
-                    profileField = skull.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(skull, profile);
-                } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                    e.printStackTrace();
-                }
-                is.setItemMeta(skull);
-            }
+            is.setItemMeta(skull);
         }
     }
 }

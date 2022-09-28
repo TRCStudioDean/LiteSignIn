@@ -67,10 +67,20 @@ Metrics: true
 #有効にすると、WoodSignSettings.ymlファイルが生成されます。中のこの記事のメモに従って編集してください。
 Wood-Signs-Script: false
 
-#非同期モードリーダーボード
-#MySQLデータベースモードが有効で、MySQLが外部サーバー上にある場合、
-#IOの輻輳によって引き起こされるサーバーのクラッシュを防ぐために、この機能を有効にすることをお勧めします
-Leaderboard-Async: false
+#非同期スレッドの設定
+#非同期スレッドが何であるかわからない場合は、このオプションを変更しないでください!
+Async-Thread-Settings: 
+    #タスク スレッドの遅延、主に提出された新しいタスクを処理します
+    Task-Thread-Delay: 0.1
+    #非同期タスクの設定
+    #特定のタスクを非同期タスクとして設定することを選択できます。
+    Async-Task-Settings:
+        #リーダーボード ビュー (コマンド /litesignin leaderboard)
+        Leaderboard-View: false
+        #プレイヤーのデータを読み込む
+        Load-Data: true
+        #GUI を開く (ヘッドをロードすると遅延が発生する可能性があるため、このオプションはデフォルトで有効になっています)
+        Open-GUI: true
     
 #遡及カード
 #過去の日を補うためにそれを使用してす

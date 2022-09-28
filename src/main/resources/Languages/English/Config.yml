@@ -66,10 +66,20 @@ Metrics: true
 #After enabling, WoodSignSettings.yml file will be generated, please edit in the file according to the help of comments.
 Wood-Signs-Script: false
 
-#Asynchronous mode leaderboard
-#If MySQL database mode is enabled and MySQL is on an external server,
-#It is recommended to enable this function to prevent server crashes caused by IO congestion.
-Leaderboard-Async: false
+#Async thread settings
+#If you don't know what an asynchronous thread is, please don't modify this option!
+Async-Thread-Settings: 
+    #Task thread delay, which mainly handles new tasks submitted
+    Task-Thread-Delay: 0.1
+    #Async task settings
+    #You can choose to set certain tasks as asynchronous tasks.
+    Async-Task-Settings:
+        #Leaderboard view (command /litesignin leaderboard)
+        Leaderboard-View: false
+        #Load player's data
+        Load-Data: true
+        #Open GUI (this option is enabled by default because loading heads may cause lag)
+        Open-GUI: true
     
 #Retroactive Card
 #Its role is to supplement the missing sign-in date.

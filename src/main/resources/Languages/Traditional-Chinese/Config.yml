@@ -69,10 +69,20 @@ Metrics: true
 #啟用後將生成WoodSignSettings.yml文件，請在該文件中按照註釋的幫助進行編輯。
 Wood-Signs-Script: false
 
-#異步模式排行榜
-#如果啟用了MySQL資料庫模式，並且MySQL處於外部服務器，
-#建議啟用該功能，以防止IO堵塞造成的服務器崩潰
-Leaderboard-Async: false
+#異步線程的設置
+#若不清楚這什麼是異步線程，請不要修改這個選項！
+Async-Thread-Settings: 
+    #任務執行器的執行延遲（單位是秒，可以有小數）
+    Task-Thread-Delay: 0.1
+    #異步任務設置
+    #你可以選擇將某些任務歸類為異步任務
+    Async-Task-Settings:
+        #排行榜查看
+        Leaderboard-View: false
+        #加載玩家數據
+        Load-Data: true
+        #打開GUI（由於加載頭顱可能造成卡頓，故默認啟用此選項）
+        Open-GUI: true
     
 #補簽卡
 Retroactive-Card:
@@ -181,7 +191,7 @@ Permissions:
     Updater:
         Permission: signin.updater
         Default: false
-    #登入服務器時自動簽到的權限
+    #登入伺服器時自動簽到的權限
     Join-Auto-SignIn:
         Default: false
         Permission: signin.joinevent.autosignin

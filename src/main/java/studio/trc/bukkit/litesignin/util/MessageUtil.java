@@ -352,7 +352,7 @@ public class MessageUtil
     }
     
     public static String toPlaceholderAPIResult(String text, CommandSender sender) {
-        return PluginControl.usePlaceholderAPI() && sender instanceof Player ? PlaceholderAPI.setPlaceholders((Player) sender, text) : text;
+        return text != null && PluginControl.usePlaceholderAPI() && sender instanceof Player ? PlaceholderAPI.setPlaceholders((Player) sender, text) : text;
     }
     
     public static String getMessage(String path) {

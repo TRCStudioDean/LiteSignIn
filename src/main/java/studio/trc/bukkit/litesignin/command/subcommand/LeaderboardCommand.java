@@ -23,6 +23,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.queue.SignInQueueElement;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
@@ -127,8 +128,8 @@ public class LeaderboardCommand
                 return;
             }
         }
-        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Leaderboard-Async")) {
-            new Thread(task, "LiteSignIn-Leaderboard").start();
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Leaderboard-View")) {
+            LiteSignInThread.runTask(task);
         } else {
             task.run();
         }

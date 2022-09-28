@@ -11,6 +11,8 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
+import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.event.custom.SignInGUICloseEvent;
 import studio.trc.bukkit.litesignin.event.custom.SignInGUIOpenEvent;
 import studio.trc.bukkit.litesignin.gui.SignInGUIColumn;
@@ -36,30 +38,42 @@ public class Menu
     public static final Map<UUID, SignInInventory> menuOpening = new HashMap();
     
     public static void openGUI(Player player) {
-        Thread thread = new Thread(() -> {
+        Runnable task = () -> {
             SignInInventory inventory = SignInGUI.getGUI(player);
             SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory);
             callEvent(event, player, inventory);
-        }, "LiteSignIn-OpeningGUI");
-        thread.start();
+        };
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Open-GUI")) {
+            LiteSignInThread.runTask(task);
+        } else {
+            task.run();
+        }
     }
     
     public static void openGUI(Player player, int month) {
-        Thread thread = new Thread(() -> {
+        Runnable task = () -> {
             SignInInventory inventory = SignInGUI.getGUI(player, month);
             SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month);
             callEvent(event, player, inventory);
-        }, "LiteSignIn-OpeningGUI");
-        thread.start();
+        };
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Open-GUI")) {
+            LiteSignInThread.runTask(task);
+        } else {
+            task.run();
+        }
     }
     
     public static void openGUI(Player player, int month, int year) {
-        Thread thread = new Thread(() -> {
+        Runnable task = () -> {
             SignInInventory inventory = SignInGUI.getGUI(player, month, year);
             SignInGUIOpenEvent event = new SignInGUIOpenEvent(player, inventory, month, year);
             callEvent(event, player, inventory);
-        }, "LiteSignIn-OpeningGUI");
-        thread.start();
+        };
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Open-GUI")) {
+            LiteSignInThread.runTask(task);
+        } else {
+            task.run();
+        }
     }
     
     public static void callEvent(SignInGUIOpenEvent event, Player player, SignInInventory inventory) {
@@ -84,6 +98,11 @@ public class Menu
                 if (e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
                     if (BackupUtil.isBackingUp()) {
                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
+                        player.closeInventory();
+                        return;
+                    }
+                    if (RollBackUtil.isRollingback()) {
+                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Rollback.RollingBack");
                         player.closeInventory();
                         return;
                     }

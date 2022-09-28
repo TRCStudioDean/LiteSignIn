@@ -23,6 +23,8 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
+import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -33,11 +35,11 @@ public class Join
 {
     @EventHandler(ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent e) {
-        if (BackupUtil.isBackingUp()) {
+        if (BackupUtil.isBackingUp() || RollBackUtil.isRollingback()) {
             return;
         }
         Player player = e.getPlayer();
-        new Thread(() -> {
+        Runnable task = () -> {
             Storage data = Storage.getPlayer(player);
             boolean unableToHoldCards = false;
             boolean autoSignIn = false;
@@ -83,7 +85,12 @@ public class Join
                 }
             }
             schedule(data, player, unableToHoldCards, autoSignIn);
-        }, "AsyncPlayerJoinThread").start();
+        };
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Load-Data")) {
+            LiteSignInThread.runTask(task);
+        } else {
+            task.run();
+        }
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (SignInPluginUtils.hasPermission(player, "Updater")) {
                 String nowVersion = Main.getInstance().getDescription().getVersion();

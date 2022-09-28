@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import studio.trc.bukkit.litesignin.command.SignInCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -77,6 +78,8 @@ public class Main
     
     @Override
     public void onDisable() {
+        LiteSignInThread.getTaskThread().setRunning(false);
+        SignInPluginProperties.sendOperationMessage("AsyncThreadStopped", MessageUtil.getDefaultPlaceholders());
         if (PluginControl.useMySQLStorage()) {
             MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();

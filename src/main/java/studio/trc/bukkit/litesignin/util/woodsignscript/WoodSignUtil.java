@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -53,8 +54,14 @@ public class WoodSignUtil
         if (database.get("Database") != null) {
             for (String sections : database.getConfigurationSection("Database").getKeys(false)) {
                 try {
+                    World world = Bukkit.getWorld(database.getString("Database." + sections + ".Location.World"));
+                    if (world == null) {
+                        database.set("Database." + sections, null);
+                        saveScriptedSigns();
+                        continue;
+                    }
                     Location location = new Location(
-                            Bukkit.getWorld(database.getString("Database." + sections + ".Location.World")),
+                            world,
                             database.getDouble("Database." + sections + ".Location.X"),
                             database.getDouble("Database." + sections + ".Location.Y"),
                             database.getDouble("Database." + sections + ".Location.Z"));
@@ -72,7 +79,7 @@ public class WoodSignUtil
         scripts.clear();
         ConfigurationUtil.reloadConfig(ConfigurationType.WOODSIGNSETTINGS);
         Configuration config = ConfigurationUtil.getConfig(ConfigurationType.WOODSIGNSETTINGS);
-        for (String sections : config.getConfigurationSection("Wood-Sign-Scripts").getKeys(false)) {
+        config.getConfigurationSection("Wood-Sign-Scripts").getKeys(false).stream().forEach(sections -> {
             try {
                 String woodSignTitle = sections;
                 WoodSignLine woodSignText = WoodSignLine.create()
@@ -91,7 +98,7 @@ public class WoodSignUtil
                 placeholders.put("{signs}", sections);
                 SignInPluginProperties.sendOperationMessage("WoodSignScriptLoadFailed", placeholders);
             }
-        }
+        });
     }
     
     public static WoodSign getWoodSign(String titleText) {
@@ -141,7 +148,7 @@ public class WoodSignUtil
     }
     
     public static boolean removeWoodSignScript(Location location) {
-        if (database.get("Database") == null) return false;
+        if (database.get("Database") == null || location.getWorld() == null) return false;
         for (String sections : database.getConfigurationSection("Database").getKeys(false)) {
             if (location.getWorld().getName().equalsIgnoreCase(database.getString("Database." + sections + ".Location.World")) 
                     && location.getBlockX() == database.getInt("Database." + sections + ".Location.X")
@@ -172,11 +179,7 @@ public class WoodSignUtil
     
     public static void scan() {
         int number = 0;
-        for (Location location : new ArrayList<>(scriptedSigns.keySet())) {
-            if (location.getBlock() == null || !(location.getBlock().getState() instanceof Sign)) {
-                if (removeWoodSignScript(location)) number++;
-            }
-        }
+        number = new ArrayList<>(scriptedSigns.keySet()).stream().filter(location -> location.getBlock() == null || !(location.getBlock().getState() instanceof Sign)).filter(location -> removeWoodSignScript(location)).map(m -> 1).reduce(number, Integer::sum);
         if (number > 0) {
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{signs}", String.valueOf(number));

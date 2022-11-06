@@ -26,10 +26,12 @@ import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Menu
@@ -89,7 +91,7 @@ public class Menu
         }.runTask(Main.getInstance());
     }
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void click(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player player = (Player) e.getWhoClicked();
@@ -218,6 +220,11 @@ public class Menu
             Player player = (Player) e.getPlayer();
             if (menuOpening.get(player.getUniqueId()) != null) {
                 menuOpening.remove(player.getUniqueId());
+                Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+                    if (player.getOpenInventory().equals(e.getView())) {
+                        player.closeInventory();
+                    }
+                });
                 Bukkit.getPluginManager().callEvent(new SignInGUICloseEvent(player));
             }
         }

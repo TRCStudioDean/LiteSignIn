@@ -115,15 +115,21 @@ MySQL-Storage:
     #パスワード
     Password: 'password'
     #データベースの名
-    Database: 'signin'
-    #その他の接続パラメータ。 もし君は開発者ではなく、またはJDBCに精通していない、このオプションを変更しないでください。
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
-    #データベース接続が失われたときの自動修復の数。 -1を入力すると、数え切れないほどの回数を意味します
-    Automatic-Repair: -1
+    Database: 'litesignin'
     #更新の冷却時間
     Refresh-Interval: 5
+    #接続タイムアウト時間
+    Wait-Timeout: 18000
     #データシート名
     Table-Name: playerdata
+    #その他の接続パラメータ。 もし君は開発者ではなく、またはJDBCに精通していない、このオプションを変更しないでください。
+    Options:
+        useSSL: false
+        useUnicode: true
+        allowMultiQueries: true
+        allowPublicKeyRetrieval: true
+        characterEncoding: 'utf8'
+        autoReconnect: true
     
 #SQLite データベース設定
 #ストレージモードの優先度: Yaml < SQLite < MySQL
@@ -134,8 +140,6 @@ SQLite-Storage:
     Database-File: 'Database.db'
     #フォルダパス
     Database-Path: 'plugins/LiteSignIn/'
-    #データベース接続が失われたときの自動修復の数。 -1を入力すると、数え切れないほどの回数を意味します
-    Automatic-Repair: -1
     #更新の冷却時間
     Refresh-Interval: 5
     #データシート名

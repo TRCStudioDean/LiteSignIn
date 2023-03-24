@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
-import studio.trc.bukkit.litesignin.database.YamlStorage;
-import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
-import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
@@ -50,9 +50,9 @@ public class BackupUtil
                 file.createNewFile();
             }
             if (PluginControl.useMySQLStorage()) {
-                MySQLEngine.backup(fileFolder + fileName);
+                MySQLStorage.backup(fileFolder + fileName);
             } else if (PluginControl.useSQLiteStorage()) {
-                SQLiteEngine.backup(fileFolder + fileName);
+                SQLiteStorage.backup(fileFolder + fileName);
             } else {
                 YamlStorage.backup(fileFolder + fileName);
             }
@@ -82,5 +82,10 @@ public class BackupUtil
         Thread thread = new Thread(backupMethod);
         thread.start();
         return thread;
+    }
+    
+    public static void startSyncBackup(CommandSender... users) {
+        backupUsers = users;
+        backupMethod.run();
     }
 }

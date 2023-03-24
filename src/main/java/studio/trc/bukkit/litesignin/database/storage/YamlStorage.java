@@ -1,4 +1,4 @@
-package studio.trc.bukkit.litesignin.database;
+package studio.trc.bukkit.litesignin.database.storage;
 
 import java.io.File;
 import java.io.FileInputStream;

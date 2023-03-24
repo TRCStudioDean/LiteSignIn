@@ -1,15 +1,14 @@
 package studio.trc.bukkit.litesignin;
 
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.command.SignInCommand;
+import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.event.Quit;
 import studio.trc.bukkit.litesignin.event.Join;
@@ -25,13 +24,10 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import studio.trc.bukkit.litesignin.command.SignInCommand;
-import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 
 /**
  * Do not resell the source code of this plug-in.
- * @author TRCRedstoner
+ * @author TRCStudioDean
  */
 public class Main
     extends JavaPlugin
@@ -82,14 +78,8 @@ public class Main
         SignInPluginProperties.sendOperationMessage("AsyncThreadStopped", MessageUtil.getDefaultPlaceholders());
         if (PluginControl.useMySQLStorage()) {
             MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
-            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-            placeholders.put("{database}", "MySQL");
-            SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);
         } else if (PluginControl.useSQLiteStorage()) {
             SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
-            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-            placeholders.put("{database}", "SQLite");
-            SignInPluginProperties.sendOperationMessage("DatabaseSave", placeholders);
         }
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Database-Management.Backup.Auto-Backup")) {
             MessageUtil.sendMessage(getServer().getConsoleSender(), "Database-Management.Backup.Auto-Backup");

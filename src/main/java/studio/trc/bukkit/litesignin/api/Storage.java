@@ -1,16 +1,16 @@
 package studio.trc.bukkit.litesignin.api;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.YamlStorage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
+import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
@@ -185,9 +185,7 @@ public interface Storage
             }
             UUID uuid = null;
             try {
-                PreparedStatement statement = MySQLEngine.getConnection().prepareStatement("SELECT UUID FROM " + MySQLEngine.getDatabase() + "." + MySQLEngine.getTable() + " WHERE Name = ?");
-                statement.setString(1, playername);
-                ResultSet rs = MySQLEngine.executeQuery(statement);
+                ResultSet rs = MySQLEngine.getInstance().executeQuery("SELECT UUID FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername);
                 if (rs.next()) {
                     uuid = UUID.fromString(rs.getString("UUID"));
                 }
@@ -201,9 +199,7 @@ public interface Storage
             }
             UUID uuid = null;
             try {
-                PreparedStatement statement = SQLiteEngine.getConnection().prepareStatement("SELECT UUID FROM " + SQLiteEngine.getTable() + " WHERE Name = ?");
-                statement.setString(1, playername);
-                ResultSet rs = SQLiteEngine.executeQuery(statement);
+                ResultSet rs = SQLiteEngine.getInstance().executeQuery("SELECT UUID FROM " + SQLiteEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername);
                 if (rs.next()) {
                     uuid = UUID.fromString(rs.getString("UUID"));
                 }

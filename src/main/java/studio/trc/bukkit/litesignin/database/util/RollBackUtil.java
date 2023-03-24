@@ -3,9 +3,7 @@ package studio.trc.bukkit.litesignin.database.util;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +18,11 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
-import studio.trc.bukkit.litesignin.database.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.event.Menu;
@@ -41,37 +40,10 @@ public class RollBackUtil
      * @param users State information recipient
      * @return 
      */
-//    public static void startRollBack(File rollBackFile, boolean backup, CommandSender... rollBackUsers) {
-//        new RollBackMethod(rollBackFile, rollBackUsers).rollBack(backup);
-//    }
-    
     public static Thread startRollBack(File rollBackFile, boolean backup, CommandSender... users) {
         Thread thread = new Thread(new RollBackMethod(rollBackFile, users).rollBack(backup), "LiteSignIn-RollBack");
         thread.start();
         return thread;
-    }
-    
-    /**
-     * Reset the database
-     * @param databaseConnection DB connection
-     * @param databasePath 
-     * @throws java.sql.SQLException 
-     */
-    public static void resetDatabase(Connection databaseConnection, String databasePath) throws SQLException {
-        databaseConnection.prepareStatement("DROP TABLE IF EXISTS " + databasePath).executeUpdate();
-        databaseConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + databasePath + "("
-            + "UUID VARCHAR(36) NOT NULL,"
-            + " Name VARCHAR(16),"
-            + " Year INT,"
-            + " Month INT,"
-            + " Day INT,"
-            + " Hour INT,"
-            + " Minute INT,"
-            + " Second INT,"
-            + " Continuous INT,"
-            + " RetroactiveCard INT,"
-            + " History LONGTEXT,"
-            + " PRIMARY KEY (UUID))").executeUpdate();
     }
     
     /**
@@ -87,22 +59,27 @@ public class RollBackUtil
             this.rollBackUsers = rollBackUsers;
         }
         
-        //SQLite mode only.
-        private Connection tempConnection;
-        
-        public Runnable execute() {
+        public Runnable rollBack(boolean backup) {
             return () -> {
+                if (backup) {
+                    for (CommandSender sender : rollBackUsers) {
+                        MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.Auto-Backup");
+                    }
+                    BackupUtil.startSyncBackup(rollBackUsers);
+                }
                 Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
                 if (rollBackFile.exists()) {
                     rollingback = true;
                     try (Connection sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + rollBackFile.getPath())) {
                         ResultSet rs = sqlConnection.prepareStatement("SELECT * FROM PlayerData").executeQuery();
                         if (PluginControl.useMySQLStorage()) {
-                            resetDatabase(MySQLEngine.getConnection(), MySQLEngine.getDatabase() + "." + MySQLEngine.getTable());
+                            MySQLEngine mysql = MySQLEngine.getInstance();
+                            mysql.executeUpdate("DROP TABLE IF EXISTS " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA));
+                            mysql.initialize();
                         } else if (PluginControl.useSQLiteStorage()) {
-                            SQLiteEngine.getConnection().close();
-                            tempConnection = DriverManager.getConnection("jdbc:sqlite:" + SQLiteEngine.getFilePath() + SQLiteEngine.getFileName());
-                            resetDatabase(tempConnection, SQLiteEngine.getTable());
+                            SQLiteEngine sqlite = SQLiteEngine.getInstance();
+                            sqlite.executeUpdate("DROP TABLE IF EXISTS " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA));
+                            sqlite.initialize();
                         } else {
                             File playerFolder = new File("plugins/LiteSignIn/Players/");
                             if (!playerFolder.exists()) {
@@ -132,35 +109,15 @@ public class RollBackUtil
                                 history = "";
                             }
                             if (PluginControl.useMySQLStorage()) {
-                                PreparedStatement statement = MySQLEngine.getConnection().prepareStatement("INSERT INTO " + MySQLEngine.getDatabase() + "." + MySQLEngine.getTable() + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
-                                        + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                                statement.setString(1, uuid);
-                                statement.setString(2, name);
-                                statement.setInt(3, year);
-                                statement.setInt(4, month);
-                                statement.setInt(5, day);
-                                statement.setInt(6, hour);
-                                statement.setInt(7, minute);
-                                statement.setInt(8, second);
-                                statement.setInt(9, continuous);
-                                statement.setInt(10, retroactivecard);
-                                statement.setString(11, history);
-                                statement.executeUpdate();
+                                MySQLEngine mysql = MySQLEngine.getInstance();
+                                mysql.executeUpdate("INSERT INTO " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA)
+                                        + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
+                                        + " VALUES(?, ?, " + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", " + second + ", " + continuous + ", " + retroactivecard + ", ?)", uuid, name, history);
                             } else if (PluginControl.useSQLiteStorage()) {
-                                PreparedStatement statement = tempConnection.prepareStatement("INSERT INTO " + SQLiteEngine.getTable() + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
-                                        + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                                statement.setString(1, uuid);
-                                statement.setString(2, name);
-                                statement.setInt(3, year);
-                                statement.setInt(4, month);
-                                statement.setInt(5, day);
-                                statement.setInt(6, hour);
-                                statement.setInt(7, minute);
-                                statement.setInt(8, second);
-                                statement.setInt(9, continuous);
-                                statement.setInt(10, retroactivecard);
-                                statement.setString(11, history);
-                                statement.executeUpdate();
+                                SQLiteEngine sqlite = SQLiteEngine.getInstance();
+                                sqlite.executeUpdate("INSERT INTO " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA)
+                                        + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
+                                        + " VALUES(?, ?, " + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", " + second + ", " + continuous + ", " + retroactivecard + ", ?)", uuid, name, history);
                             } else {
                                 File file = new File("plugins/LiteSignIn/Players/" + uuid + ".yml");
                                 file.createNewFile();
@@ -181,10 +138,10 @@ public class RollBackUtil
                         }
                         if (PluginControl.useMySQLStorage()) {
                             MySQLStorage.cache.clear();
-                            MySQLEngine.reloadConnectionParameters();
+                            PluginControl.reloadMySQL();
                         } else if (PluginControl.useSQLiteStorage()) {
                             SQLiteStorage.cache.clear();
-                            SQLiteEngine.reloadConnectionParameters();
+                            PluginControl.reloadSQLite();
                         } else {
                             YamlStorage.cache.clear();
                         }
@@ -203,10 +160,10 @@ public class RollBackUtil
                         }
                         if (PluginControl.useMySQLStorage()) {
                             MySQLStorage.cache.clear();
-                            MySQLEngine.reloadConnectionParameters();
+                            PluginControl.reloadMySQL();
                         } else if (PluginControl.useSQLiteStorage()) {
                             SQLiteStorage.cache.clear();
-                            SQLiteEngine.reloadConnectionParameters();
+                            PluginControl.reloadSQLite();
                         } else {
                             YamlStorage.cache.clear();
                         }
@@ -215,16 +172,6 @@ public class RollBackUtil
                     rollingback = false;
                 }
             };
-        }
-        
-        public Runnable rollBack(boolean backup) {
-            if (backup) {
-                for (CommandSender sender : rollBackUsers) {
-                    MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.Auto-Backup");
-                }
-                BackupUtil.startBackup(rollBackUsers);
-            }
-            return execute();
         }
     }
 }

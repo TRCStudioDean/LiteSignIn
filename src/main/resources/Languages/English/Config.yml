@@ -109,14 +109,19 @@ MySQL-Storage:
     Username: 'root'
     Password: 'password'
     #Database's name
-    Database: 'signin'
-    #More connection parameters. If you are not a developer and are not familiar with JDBC, please do not modify it.
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
-    #The number of times the system automatically repairs the connection when the database connection is disconnected (-1 is infinite)
-    Automatic-Repair: -1
+    Database: 'litesignin'
     #Player data refresh interval (seconds). -1 is none, only refresh the data when entering the server (it is recommended to do this when using MySQL on a single server)
     Refresh-Interval: 5
+    Wait-Timeout: 18000
     Table-Name: playerdata
+    #More connection parameters. If you are not a developer and are not familiar with JDBC, please do not modify it.
+    Options:
+        useSSL: false
+        useUnicode: true
+        allowMultiQueries: true
+        allowPublicKeyRetrieval: true
+        characterEncoding: 'utf8'
+        autoReconnect: true
     
 #SQLite Database settings
 #Storage priority: Yaml < SQLite < MySQL
@@ -127,8 +132,6 @@ SQLite-Storage:
     Database-File: 'Database.db'
     #File path.
     Database-Path: 'plugins/LiteSignIn/'
-    #The number of times the system automatically repairs the connection when the database connection is disconnected (-1 is infinite)
-    Automatic-Repair: -1
     #Player data refresh interval (seconds). -1 is none, only refresh the data when entering the server
     Refresh-Interval: 5
     Table-Name: playerdata

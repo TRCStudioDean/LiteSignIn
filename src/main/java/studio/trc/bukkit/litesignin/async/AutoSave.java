@@ -5,9 +5,9 @@ import org.bukkit.Bukkit;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
-import studio.trc.bukkit.litesignin.database.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class AutoSave

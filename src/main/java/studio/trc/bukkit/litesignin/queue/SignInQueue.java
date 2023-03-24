@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import studio.trc.bukkit.litesignin.database.DatabaseTable;
 
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
@@ -82,8 +83,10 @@ public class SignInQueue
             return;
         }
         try {
-            if (PluginControl.useMySQLStorage() && !MySQLEngine.getConnection().isClosed()) {
-                ResultSet rs = MySQLEngine.executeQuery(MySQLEngine.getConnection().prepareStatement("SELECT * FROM " + MySQLEngine.getDatabase() + "." + MySQLEngine.getTable() + " WHERE History LIKE '%" + date.getDataText(false) + "%'"));
+            if (PluginControl.useMySQLStorage()) {
+                MySQLEngine mysql = MySQLEngine.getInstance();
+                mysql.checkConnection();
+                ResultSet rs = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'");
                 clear();
                 while (rs.next()) {
                     try {
@@ -116,8 +119,10 @@ public class SignInQueue
                     }
                 }
                 lastUpdateTime.put(date, System.currentTimeMillis());
-            } else if (PluginControl.useSQLiteStorage() && !SQLiteEngine.getConnection().isClosed()) {
-                ResultSet rs = SQLiteEngine.executeQuery(SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE History LIKE '%" + date.getDataText(false) + "%'"));
+            } else if (PluginControl.useSQLiteStorage()) {
+                SQLiteEngine sqlite = SQLiteEngine.getInstance();
+                sqlite.checkConnection();
+                ResultSet rs = sqlite.executeQuery("SELECT * FROM " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'");
                 clear();
                 while (rs.next()) {
                     try {

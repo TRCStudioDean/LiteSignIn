@@ -1,5 +1,7 @@
-package studio.trc.bukkit.litesignin.database;
+package studio.trc.bukkit.litesignin.database.storage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import lombok.Getter;
 
@@ -25,7 +25,7 @@ import studio.trc.bukkit.litesignin.event.custom.SignInRewardEvent;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
+import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.reward.SignInRewardSchedule;
 import studio.trc.bukkit.litesignin.reward.type.*;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
@@ -35,11 +35,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import studio.trc.bukkit.litesignin.database.DatabaseTable;
 
-public final class SQLiteStorage
+public final class MySQLStorage
     implements Storage
 {
-    public static final Map<UUID, SQLiteStorage> cache = new HashMap();
+    public static final Map<UUID, MySQLStorage> cache = new HashMap();
     
     @Getter
     private int continuous = 0;
@@ -62,56 +63,23 @@ public final class SQLiteStorage
     private final UUID uuid;
     private int retroactiveCard = 0; 
     
-    public SQLiteStorage(Player player) {
+    public MySQLStorage(Player player) {
         uuid = player.getUniqueId();
-        
-        try {
-            if (SQLiteEngine.getConnection().isClosed()) {
-                return;
-            }
-        } catch (SQLException ex) {}
-        
-        register(uuid);
-        try {
-            ResultSet rs = SQLiteEngine.executeQuery(SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE UUID = '" + uuid + "'"));
-            if (rs.next()) {
-                continuous = rs.getObject("Continuous") != null ? rs.getInt("Continuous") : 0;
-                name = rs.getObject("Name") != null ? rs.getString("Name") : null;
-                year = rs.getObject("Year") != null ? rs.getInt("Year") : 1970;
-                month = rs.getObject("Month") != null ? rs.getInt("Month") : 1;
-                day = rs.getObject("Day") != null ? rs.getInt("Day") : 1;
-                hour = rs.getObject("Hour") != null ? rs.getInt("Hour") : 0;
-                minute = rs.getObject("Minute") != null ? rs.getInt("Minute") : 0;
-                second = rs.getObject("Second") != null ? rs.getInt("Second") : 0;
-                retroactiveCard = rs.getObject("RetroactiveCard") != null ? rs.getInt("RetroactiveCard") : 0;
-                if (rs.getObject("History") != null && !rs.getString("History").equals("")) {
-                    List<SignInDate> list = new ArrayList();
-                    for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                        list.add(SignInDate.getInstance(data));
-                    }
-                    history = list;
-                } else {
-                    history = new ArrayList();
-                }
-            }
-            checkContinuousSignIn();
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteStorage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        reloadData();
+        cache.put(uuid, MySQLStorage.this);
     }
     
-    public SQLiteStorage(UUID uuid) {
+    public MySQLStorage(UUID uuid) {
         this.uuid = uuid;
-        
+        reloadData();
+        cache.put(uuid, MySQLStorage.this);
+    }
+    
+    public void reloadData() {
         try {
-            if (SQLiteEngine.getConnection().isClosed()) {
-                return;
-            }
-        } catch (SQLException ex) {}
-        
-        register(uuid);
-        try {
-            ResultSet rs = SQLiteEngine.executeQuery(SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE UUID = '" + uuid + "'"));
+            MySQLEngine mysql = MySQLEngine.getInstance();
+            mysql.checkConnection();
+            ResultSet rs = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE UUID = ?", uuid.toString());
             if (rs.next()) {
                 continuous = rs.getObject("Continuous") != null ? rs.getInt("Continuous") : 0;
                 name = rs.getObject("Name") != null ? rs.getString("Name") : null;
@@ -131,10 +99,15 @@ public final class SQLiteStorage
                 } else {
                     history = new ArrayList();
                 }
+            } else {
+                String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
+                mysql.executeUpdate("INSERT INTO " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA)
+                        + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous)"
+                        + " VALUES(?, ?, 1970, 1, 1, 0, 0, 0, 0)", uuid.toString(), playerName);
             }
             checkContinuousSignIn();
         } catch (SQLException ex) {
-            Logger.getLogger(SQLiteStorage.class.getName()).log(Level.SEVERE, null, ex);
+            MySQLEngine.getInstance().throwSQLException(ex, "ExecuteQueryFailed", true);
         }
     }
     
@@ -478,36 +451,19 @@ public final class SQLiteStorage
     @Override
     public void saveData() {
         try {
-            PreparedStatement statement;
-            if (Bukkit.getPlayer(uuid) == null && Bukkit.getOfflinePlayer(uuid) != null && Bukkit.getOfflinePlayer(uuid).getName() == null) {
-                statement = SQLiteEngine.getConnection().prepareStatement("UPDATE " + SQLiteEngine.getTable() + " SET "
-                        + "Year = ?, Month = ?, Day = ?, Hour = ?, Minute = ?, Second = ?, Continuous = ?, RetroactiveCard = ?, History = ?"
-                        + " WHERE UUID = '" + uuid + "'");
-                statement.setInt(1, year);
-                statement.setInt(2, month);
-                statement.setInt(3, day);
-                statement.setInt(4, hour);
-                statement.setInt(5, minute);
-                statement.setInt(6, second);
-                statement.setInt(7, continuous);
-                statement.setInt(8, retroactiveCard);
-                statement.setString(9, history.toString().substring(1, history.toString().length() - 1));
-            } else {
-                statement = SQLiteEngine.getConnection().prepareStatement("UPDATE " + SQLiteEngine.getTable() + " SET "
-                        + "Name = ?, Year = ?, Month = ?, Day = ?, Hour = ?, Minute = ?, Second = ?, Continuous = ?, RetroactiveCard = ?, History = ?"
-                        + " WHERE UUID = '" + uuid + "'");
-                statement.setString(1, Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : null);
-                statement.setInt(2, year);
-                statement.setInt(3, month);
-                statement.setInt(4, day);
-                statement.setInt(5, hour);
-                statement.setInt(6, minute);
-                statement.setInt(7, second);
-                statement.setInt(8, continuous);
-                statement.setInt(9, retroactiveCard);
-                statement.setString(10, history.toString().substring(1, history.toString().length() - 1));
-            }
-            SQLiteEngine.executeUpdate(statement);
+            MySQLEngine mysql = MySQLEngine.getInstance();
+            mysql.checkConnection();
+            String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
+            mysql.executeUpdate("UPDATE " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " SET Name = ?,"
+                + "Year = " + year + ", "
+                + "Month = " + month + ", "
+                + "Day = " + day + ", "
+                + "Hour = " + hour + ", "
+                + "Minute = " + minute + ", "
+                + "Second = " + second + ", "
+                + "Continuous = " + continuous + ", "
+                + "RetroactiveCard = " + retroactiveCard + ", History = ? WHERE UUID = ?",
+                playerName, history.toString().substring(1, history.toString().length() - 1), uuid.toString());
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -515,62 +471,79 @@ public final class SQLiteStorage
     
     private static long lastUpdateTime = System.currentTimeMillis();
     
-    public static SQLiteStorage getPlayerData(Player player) {
-        if (PluginControl.getSQLiteRefreshInterval() <= 0) {
-            return new SQLiteStorage(player.getUniqueId());
+    public static MySQLStorage getPlayerData(Player player) {
+        if (PluginControl.getMySQLRefreshInterval() <= 0) {
+            return new MySQLStorage(player.getUniqueId());
         }
-        SQLiteStorage data = cache.get(player.getUniqueId());
-        if (data != null && (PluginControl.getSQLiteRefreshInterval() == 0 || System.currentTimeMillis() - lastUpdateTime >= PluginControl.getSQLiteRefreshInterval() * 1000)) {
+        MySQLStorage data = cache.get(player.getUniqueId());
+        if (data != null && (PluginControl.getMySQLRefreshInterval() == 0 || System.currentTimeMillis() - lastUpdateTime >= PluginControl.getMySQLRefreshInterval() * 1000)) {
             return data;
         }
-        data = new SQLiteStorage(player.getUniqueId());
+        data = new MySQLStorage(player);
         cache.clear();
         cache.put(player.getUniqueId(), data);
         lastUpdateTime = System.currentTimeMillis();
         return data;
     }
     
-    public static SQLiteStorage getPlayerData(UUID uuid) {
-        if (PluginControl.getSQLiteRefreshInterval() <= 0) {
-            return new SQLiteStorage(uuid);
+    public static MySQLStorage getPlayerData(UUID uuid) {
+        if (PluginControl.getMySQLRefreshInterval() <= 0) {
+            return new MySQLStorage(uuid);
         }
-        SQLiteStorage data = cache.get(uuid);
-        if (data != null && (PluginControl.getSQLiteRefreshInterval() == 0 || System.currentTimeMillis() - lastUpdateTime >= PluginControl.getSQLiteRefreshInterval() * 1000)) {
+        MySQLStorage data = cache.get(uuid);
+        if (data != null && (PluginControl.getMySQLRefreshInterval() == 0 || System.currentTimeMillis() - lastUpdateTime >= PluginControl.getMySQLRefreshInterval() * 1000)) {
             return data;
         }
-        data = new SQLiteStorage(uuid);
+        data = new MySQLStorage(uuid);
         cache.clear();
         cache.put(uuid, data);
         lastUpdateTime = System.currentTimeMillis();
         return data;
     }
-
-    public static boolean isExist(UUID uuid) {
-        try {
-            PreparedStatement statement = SQLiteEngine.getConnection().prepareStatement("SELECT * FROM " + SQLiteEngine.getTable() + " WHERE UUID = '" + uuid +"'");
-            ResultSet rs = SQLiteEngine.executeQuery(statement);
-            return rs.next();
-        } catch (SQLException ex) {
-            return false;
-        }
-    }
     
-    public static void register(UUID uuid) {
-        if (isExist(uuid)) return;
-        try {
-            PreparedStatement statement = SQLiteEngine.getConnection().prepareStatement("INSERT INTO " + SQLiteEngine.getTable()
-                    + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous)"
-                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            statement.setString(1, uuid.toString());
-            statement.setString(2, Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null");
-            statement.setInt(3, 1970);
-            statement.setInt(4, 1);
-            statement.setInt(5, 1);
-            statement.setInt(6, 0);
-            statement.setInt(7, 0);
-            statement.setInt(8, 0);
-            statement.setInt(9, 0);
-            SQLiteEngine.executeUpdate(statement);
-        } catch (SQLException ex) {}
+    /**
+     * Back up all player data.
+     * @param filePath Backup file path. 
+     * @throws java.sql.SQLException 
+     */
+    public static void backup(String filePath) throws SQLException {
+        try (Connection sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + filePath)) {
+            sqlConnection.prepareStatement(DatabaseTable.PLAYER_DATA.getDefaultCreateTableSyntax()).executeUpdate();
+            MySQLEngine mysql = MySQLEngine.getInstance();
+            ResultSet rs = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA));
+            PreparedStatement statement = sqlConnection.prepareStatement("INSERT INTO PlayerData(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            while (rs.next()) {
+                String uuid = rs.getString("UUID");
+                String name = rs.getString("Name");
+                int year = rs.getInt("Year");
+                int month = rs.getInt("Month");
+                int day = rs.getInt("Day");
+                int hour = rs.getInt("Hour");
+                int minute = rs.getInt("Minute");
+                int second = rs.getInt("Second");
+                int continuous = rs.getInt("Continuous");
+                int retroactivecard = rs.getInt("RetroactiveCard");
+                String history = rs.getString("History");
+                if (name == null) {
+                    name = "null";
+                }
+                if (history == null) {
+                    history = "";
+                }
+                statement.setString(1, uuid);
+                statement.setString(2, name);
+                statement.setInt(3, year);
+                statement.setInt(4, month);
+                statement.setInt(5, day);
+                statement.setInt(6, hour);
+                statement.setInt(7, minute);
+                statement.setInt(8, second);
+                statement.setInt(9, continuous);
+                statement.setInt(10, retroactivecard);
+                statement.setString(11, history);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        }
     }
 }

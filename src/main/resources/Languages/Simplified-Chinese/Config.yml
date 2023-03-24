@@ -117,15 +117,21 @@ MySQL-Storage:
     #密码
     Password: 'password'
     #数据库名称
-    Database: 'signin'
-    #更多连接参数，如果你不是一名开发者，并且不熟知JDBC，请不要修改它
-    Parameter: '?useUnicode=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&autoReconnect=true'
-    #当数据库连接丢失时，自动修复的次数， 填-1即为无数次
-    Automatic-Repair: -1
-    #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据（建议在单服务端使用MySQL的情况下才这么做）
-    Refresh-Interval: 5
+    Database: 'litesignin'
     #数据表名称
     Table-Name: playerdata
+    #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据（建议在单服务端使用MySQL的情况下才这么做）
+    Refresh-Interval: 5
+    #连接超时时间
+    Wait-Timeout: 18000
+    #连接参数，如果你不是一名开发者，并且不熟知JDBC，请不要修改它
+    Options:
+        useSSL: false
+        useUnicode: true
+        allowMultiQueries: true
+        allowPublicKeyRetrieval: true
+        characterEncoding: 'utf8'
+        autoReconnect: true
     
 #SQLite 数据库设置
 #储存模式优先级: Yaml < SQLite < MySQL
@@ -136,8 +142,6 @@ SQLite-Storage:
     Database-File: 'Database.db'
     #数据库文件夹路径
     Database-Path: 'plugins/LiteSignIn/'
-    #当数据库连接丢失时，自动修复的次数， 填-1即为无数次
-    Automatic-Repair: -1
     #玩家数据刷新间隔时间（秒）。-1为无，仅在进入服务器时刷新数据
     Refresh-Interval: 5
     #数据表名称

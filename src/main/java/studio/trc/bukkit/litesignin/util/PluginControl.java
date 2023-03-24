@@ -8,11 +8,12 @@ import java.util.Map;
 import java.util.Random;
 
 import studio.trc.bukkit.litesignin.async.AutoSave;
+import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.YamlStorage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.event.Menu;
@@ -40,9 +41,9 @@ public class PluginControl
         SQLiteStorage.cache.clear();
         MySQLStorage.cache.clear();
         if (useMySQLStorage()) {
-            MySQLEngine.reloadConnectionParameters();
+            reloadMySQL();
         } else if (useSQLiteStorage()) {
-            SQLiteEngine.reloadConnectionParameters();
+            reloadSQLite();
         } else {
             SignInQueue.getInstance().loadQueue();
         }
@@ -69,6 +70,31 @@ public class PluginControl
             placeholders.put("{signs}", String.valueOf(WoodSignUtil.getAllScriptedSign().size()));
             SignInPluginProperties.sendOperationMessage("WoodSignScriptLoaded", placeholders);
         }
+    }
+    
+    public static void reloadMySQL() {
+        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        Map<String, String> jdbcOptions = new HashMap();
+        config.getConfigurationSection("MySQL-Storage.Options").getKeys(false).stream().forEach(option -> {
+            jdbcOptions.put(option, config.getString("MySQL-Storage.Options." + option));
+        });
+        if (MySQLEngine.getInstance() != null) {
+            MySQLEngine.getInstance().disconnect();
+        }
+        MySQLEngine.setInstance(new MySQLEngine(
+            config.getString("MySQL-Storage.Hostname"),
+            config.getInt("MySQL-Storage.Port"),
+            config.getString("MySQL-Storage.Username"),
+            config.getString("MySQL-Storage.Password"),
+            jdbcOptions)
+        );
+        MySQLEngine.getInstance().connect();
+    }
+    
+    public static void reloadSQLite() {
+        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        SQLiteEngine.setInstance(new SQLiteEngine(config.getString("SQLite-Storage.Database-Path"), config.getString("SQLite-Storage.Database-File")));
+        SQLiteEngine.getInstance().connect();
     }
     
     public static void savePlayerData() {

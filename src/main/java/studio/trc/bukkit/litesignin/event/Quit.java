@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.database.SQLiteStorage;
-import studio.trc.bukkit.litesignin.database.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class Quit

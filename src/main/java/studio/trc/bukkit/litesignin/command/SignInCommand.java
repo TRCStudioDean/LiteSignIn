@@ -37,7 +37,7 @@ public class SignInCommand
             return true;
         }
         if (RollBackUtil.isRollingback()) {
-            MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Rollback.RollingBack");
+            MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.RollBack.RollingBack");
             return true;
         }
         if (args.length == 0) {

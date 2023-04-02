@@ -85,10 +85,14 @@ public class Placeholders
                 result = String.valueOf(data.getRetroactiveCard());
             } else if (identifier.equalsIgnoreCase("group")) {
                 result = data.getGroup().getGroupName();
-            } else if (identifier.equalsIgnoreCase("total")) {
+            } else if (identifier.equalsIgnoreCase("statistics")) {
                 result = String.valueOf(data.getCumulativeNumber());
-            } else if (identifier.equalsIgnoreCase("continuity")) {
+            } else if (identifier.equalsIgnoreCase("statistics_of_month")) {
+                result = String.valueOf(data.getCumulativeNumberOfMonth());
+            } else if (identifier.equalsIgnoreCase("continuous")) {
                 result = String.valueOf(data.getContinuousSignIn());
+            } else if (identifier.equalsIgnoreCase("continuous_of_month")) {
+                result = String.valueOf(data.getContinuousSignInOfMonth());
             } else if (identifier.equalsIgnoreCase("last_year")) {
                 result = String.valueOf(data.getYear());
             } else if (identifier.equalsIgnoreCase("last_month")) {

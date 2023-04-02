@@ -49,8 +49,8 @@ Reward-Settings:
                     #建议开启， 以防止玩家直接获得某些特殊日期的专属奖励
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
                     Statistics-Times: false
+                    Statistics-Times-Of-Month: false
                 Play-Sounds: 
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
@@ -94,7 +94,7 @@ Reward-Settings:
                     - '{prefix}&a今天是周末，额外奖励一个金苹果！'
                     Reward-Items:
                     - 'golden_apple:1'
-            #签到总计达到一定次数时触发
+            #签到累计达到一定次数时触发
             Statistics-Times:
                 100:
                     Messages: 
@@ -152,6 +152,32 @@ Reward-Settings:
                     - 'diamond:1'
                     - 'gold_ingot:3'
                     - 'iron_ingot:6'
+            #每月连续签到一定次数时触发
+            Special-Times-Of-Month:
+                #十五次
+                15:
+                    #生效的月份，请填入月份对应的数字
+                    Valid-Months: [1, 2, 3] #即为每年一月、二月、三月生效
+                    #是否覆盖正常签到下的奖励
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a本月连续签到达到了15天，签到奖励&e翻倍&a！'
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+            #每月签到累计达到一定次数时触发
+            Statistics-Times-Of-Month:
+                #十五次
+                15:
+                    #生效的月份，请填入月份对应的数字
+                    Valid-Months: [1, 2, 3] #即为每年一月、二月、三月生效
+                    #是否覆盖正常签到下的奖励
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a本月签到次数总计达到15次，获得&e1000&a游戏硬币。'
+                    Commands:
+                    - 'server:eco give {player} 1000'
         #这个是自定义的组，以示范
         VIP:
             #使用权限
@@ -171,7 +197,7 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
+                    Special-Times: true
                     Statistics-Times: false
                 Reward-Items:
                 - 'diamond:2'

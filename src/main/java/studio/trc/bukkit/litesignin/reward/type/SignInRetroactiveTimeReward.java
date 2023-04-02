@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,24 +21,21 @@ import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 public class SignInRetroactiveTimeReward
     extends SignInRewardRetroactive
 {
+    @Getter
     private final SignInGroup group;
+    @Getter
     private final Map<SignInRewardModule, Boolean> collection;
     
     public SignInRetroactiveTimeReward(SignInGroup group) {
         this.group = group;
         Map<SignInRewardModule, Boolean> map = new HashMap();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules")) {
-            map.put(SignInRewardModule.SPECIALDATE, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
-            map.put(SignInRewardModule.SPECIALWEEK, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
-            map.put(SignInRewardModule.SPECIALTIME, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Times"));
-            map.put(SignInRewardModule.STATISTICSTIME, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
+            map.put(SignInRewardModule.SPECIAL_DATE, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
+            map.put(SignInRewardModule.SPECIAL_WEEK, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
+            map.put(SignInRewardModule.STATISTICS_TIME, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
+            map.put(SignInRewardModule.STATISTICS_TIME_OF_MONTH, ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Month"));
         }
         collection = map;
-    }
-    
-    @Override
-    public SignInGroup getGroup() {
-        return group;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class SignInRetroactiveTimeReward
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.RETROACTIVETIME;
+        return SignInRewardModule.RETROACTIVE_TIME;
     }
 
     @Override

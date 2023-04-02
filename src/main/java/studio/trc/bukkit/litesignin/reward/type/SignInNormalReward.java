@@ -3,6 +3,8 @@ package studio.trc.bukkit.litesignin.reward.type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,15 +19,11 @@ import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 public class SignInNormalReward
     extends SignInRewardUtil
 {
+    @Getter
     private final SignInGroup group;
     
     public SignInNormalReward(SignInGroup group) {
         this.group = group;
-    }
-    
-    @Override
-    public SignInGroup getGroup() {
-        return group;
     }
 
     @Override

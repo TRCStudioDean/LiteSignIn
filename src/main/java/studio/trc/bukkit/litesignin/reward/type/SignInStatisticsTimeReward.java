@@ -3,6 +3,8 @@ package studio.trc.bukkit.litesignin.reward.type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,26 +19,19 @@ import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 public class SignInStatisticsTimeReward
     extends SignInRewardColumn
 {
+    @Getter
     private final SignInGroup group;
+    @Getter
     private final int time;
     
     public SignInStatisticsTimeReward(SignInGroup group, int time) {
         this.group = group;
         this.time = time;
     }
-    
-    @Override
-    public SignInGroup getGroup() {
-        return group;
-    }
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.STATISTICSTIME;
-    }
-    
-    public int getTime() {
-        return time;
+        return SignInRewardModule.STATISTICS_TIME;
     }
     
     @Override

@@ -52,6 +52,12 @@ public interface Statistics
     public int getCumulativeNumber();
     
     /**
+     * Get the cumulative numbers of this month by user sign-in.
+     * @return 
+     */
+    public int getCumulativeNumberOfMonth();
+    
+    /**
      * Clean up duplicate sign in records.
      * @param history
      * @return 

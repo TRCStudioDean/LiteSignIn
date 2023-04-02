@@ -74,6 +74,12 @@ public interface Storage
     public int getContinuousSignIn();
     
     /**
+     * Get the number of consecutive sign in of this month for users.
+     * @return 
+     */
+    public int getContinuousSignInOfMonth();
+    
+    /**
      * Get the number of retroactive cards.
      * @return 
      */

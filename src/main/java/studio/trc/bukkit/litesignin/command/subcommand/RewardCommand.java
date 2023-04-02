@@ -232,6 +232,58 @@ public class RewardCommand
                     }
                     break;
                 }
+                case SPECIAL_TIMES_OF_MONTH: {
+                    try {
+                        placeholders.put("{group}", group.getGroupName());
+                        placeholders.put("{rewardType}", rewardType.getConfigName());
+                        String value = args[3].substring(args[3].indexOf(":") + 1);
+                        placeholders.put("{value}", value);
+                        String[] elements = value.split(":");
+                        if (!SignInPluginUtils.isInteger(elements[0]) || !SignInPluginUtils.isInteger(elements[1])) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_OF_MONTH", placeholders);
+                            return;
+                        }
+                        int month = Integer.valueOf(elements[1]);
+                        int time = Integer.valueOf(elements[0]);
+                        if (time < 1 || config.get("Reward-Settings.Permission-Groups." + group.getGroupName() + "." + rewardType.getConfigName() + "." + time) == null) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.SPECIAL_TIMES_OF_MONTH", placeholders);
+                            return;
+                        }
+                        SignInReward reward = new SignInSpecialTimeOfMonthReward(group, month, time);
+                        reward.giveReward(playerdata);
+                        MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
+                    } catch (Exception ex) {
+                        placeholders.put("{value}", args.length >= 3 ? args[3].substring(args[3].indexOf(":") + 1) : MessageUtil.getMessage("Command-Messages.Reward.Nothing"));
+                        MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_OF_MONTH", placeholders);
+                    }
+                    break;
+                }
+                case STATISTICS_OF_MONTH: {
+                    try {
+                        placeholders.put("{group}", group.getGroupName());
+                        placeholders.put("{rewardType}", rewardType.getConfigName());
+                        String value = args[3].substring(args[3].indexOf(":") + 1);
+                        placeholders.put("{value}", value);
+                        String[] elements = value.split(":");
+                        if (!SignInPluginUtils.isInteger(elements[0]) || !SignInPluginUtils.isInteger(elements[1])) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_OF_MONTH", placeholders);
+                            return;
+                        }
+                        int month = Integer.valueOf(elements[1]);
+                        int number = Integer.valueOf(elements[0]);
+                        if (number < 1 || config.get("Reward-Settings.Permission-Groups." + group.getGroupName() + "." + rewardType.getConfigName() + "." + number) == null) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.STATISTICS_OF_MONTH", placeholders);
+                            return;
+                        }
+                        SignInReward reward = new SignInStatisticsTimeOfMonthReward(group, month, number);
+                        reward.giveReward(playerdata);
+                        MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
+                    } catch (Exception ex) {
+                        placeholders.put("{value}", args.length >= 3 ? args[3].substring(args[3].indexOf(":") + 1) : MessageUtil.getMessage("Command-Messages.Reward.Nothing"));
+                        MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_OF_MONTH", placeholders);
+                    }
+                    break;
+                }
             }
         }
     }
@@ -248,80 +300,78 @@ public class RewardCommand
         }
         Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
         if (args.length == 3) {
-            List<String> names = new ArrayList();
-            List<String> groups = config.getStringList("Reward-Settings.Groups-Priority");
-            groups.stream().filter(group -> group.toLowerCase().startsWith(args[2].toLowerCase())).forEach(group -> {
-                names.add(group);
-            });
-            return names;
+            return getTabElements(args, args.length, config.getStringList("Reward-Settings.Groups-Priority"));
         }
         if (args.length == 4) {
-            List<String> names = new ArrayList();
             if (config.get("Reward-Settings.Permission-Groups." + args[2]) == null) {
-                return names;
+                return new ArrayList();
             }
-            if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_DATES.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.SPECIAL_DATES.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.SPECIAL_DATES.name() + ":" + value);
-                });
-                return names;
-            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_RANKING.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.SPECIAL_RANKING.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.SPECIAL_RANKING.name() + ":" + value);
-                });
-                return names;
-            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.SPECIAL_TIMES.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.SPECIAL_TIMES.name() + ":" + value);
-                });
-                return names;
-            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIME_PERIODS.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.SPECIAL_TIME_PERIODS.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.SPECIAL_TIME_PERIODS.name() + ":" + value);
-                });
-                return names;
-            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_WEEKS.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.SPECIAL_WEEKS.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.SPECIAL_WEEKS.name() + ":" + value);
-                });
-                return names;
-            } else if (args[3].toUpperCase().startsWith(RewardType.STATISTICS.name())) {
-                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times") == null) {
-                    return names;
-                }
-                List<String> values = config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times").getKeys(false).stream().collect(Collectors.toList());
-                values.stream().filter(value -> (RewardType.STATISTICS.name() + ":" + value).toLowerCase().startsWith(args[3].toLowerCase())).forEach(value -> {
-                    names.add(RewardType.STATISTICS.name() + ":" + value);
-                });
-                return names;
-            } else {
+            if (!args[3].contains(":")) {
                 List<String> types = Arrays.stream(RewardType.values())
                         .map(type -> type.name())
                         .collect(Collectors.toList());
-                types.stream().filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase())).forEach(type -> {
-                    names.add(type);
+                return getTabElements(args, args.length, types);
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_DATES.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates").getKeys(false).stream().map(value -> RewardType.SPECIAL_DATES.name() + ":" + value).collect(Collectors.toList()));
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_RANKING.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking").getKeys(false).stream().map(value -> RewardType.SPECIAL_RANKING.name() + ":" + value).collect(Collectors.toList()));
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES_OF_MONTH.name())) {
+                System.out.println(1);
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month") == null) {
+                    return new ArrayList();
+                }
+                List<String> values = new ArrayList();
+                config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month").getKeys(false).stream().forEach(value -> {
+                    if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month." + value + ".Valid-Months") != null) {
+                        config.getIntegerList("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month." + value + ".Valid-Months").stream().forEach(month -> {
+                            values.add(RewardType.SPECIAL_TIMES_OF_MONTH.name() + ":" + value + ":" + month);
+                        });
+                    } else {
+                        values.add(RewardType.SPECIAL_TIMES_OF_MONTH.name() + ":" + value);
+                    }
                 });
-                return names;
+                return getTabElements(args, args.length, values);
+            } else if (args[3].toUpperCase().startsWith(RewardType.STATISTICS_OF_MONTH.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month") == null) {
+                    return new ArrayList();
+                }
+                List<String> values = new ArrayList();
+                config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month").getKeys(false).stream().forEach(value -> {
+                    if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month." + value + ".Valid-Months") != null) {
+                        config.getIntegerList("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month." + value + ".Valid-Months").stream().forEach(month -> {
+                            values.add(RewardType.STATISTICS_OF_MONTH.name() + ":" + value + ":" + month);
+                        });
+                    } else {
+                        values.add(RewardType.STATISTICS_OF_MONTH.name() + ":" + value);
+                    }
+                });
+                return getTabElements(args, args.length, values);
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times").getKeys(false).stream().map(value -> RewardType.SPECIAL_TIMES.name() + ":" + value).collect(Collectors.toList()));
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIME_PERIODS.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods").getKeys(false).stream().map(value -> RewardType.SPECIAL_TIME_PERIODS.name() + ":" + value).collect(Collectors.toList()));
+            } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_WEEKS.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks").getKeys(false).stream().map(value -> RewardType.SPECIAL_WEEKS.name() + ":" + value).collect(Collectors.toList()));
+            } else if (args[3].toUpperCase().startsWith(RewardType.STATISTICS.name())) {
+                if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times") == null) {
+                    return new ArrayList();
+                }
+                return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times").getKeys(false).stream().map(value -> RewardType.STATISTICS.name() + ":" + value).collect(Collectors.toList()));
             }
         }
         return new ArrayList();
@@ -371,7 +421,17 @@ public class RewardCommand
         /**
          * Statistics
          */
-        STATISTICS("Statistics-Times");
+        STATISTICS("Statistics-Times"),
+        
+        /**
+         * Special times of month
+         */
+        SPECIAL_TIMES_OF_MONTH("Special-Times-Of-Month"),
+        
+        /**
+         * Statistics of month
+         */
+        STATISTICS_OF_MONTH("Statistics-Times-Of-Month");
         
         @Getter
         private final String configName;

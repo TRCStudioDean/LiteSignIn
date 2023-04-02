@@ -3,6 +3,8 @@ package studio.trc.bukkit.litesignin.reward.type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,8 +21,11 @@ import studio.trc.bukkit.litesignin.util.SignInDate;
 public class SignInSpecialTimePeriodReward
     extends SignInRewardColumn
 {
+    @Getter
     private final SignInGroup group;
+    @Getter
     private final SignInDate now;
+    @Getter
     private final String setting;
     
     public SignInSpecialTimePeriodReward(SignInGroup group, SignInDate now) {
@@ -29,22 +34,13 @@ public class SignInSpecialTimePeriodReward
         setting = SignInTimePeriod.getSetting(group, now);
     }
     
-    public SignInDate getTime() {
-        return now;
-    }
-    
     public boolean isAvailable() {
         return setting != null;
-    }
-    
-    @Override
-    public SignInGroup getGroup() {
-        return group;
     }
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.SPECIALTIMEPERIOD;
+        return SignInRewardModule.SPECIAL_TIME_PERIOD;
     }
     
     @Override
@@ -67,6 +63,7 @@ public class SignInSpecialTimePeriodReward
 
     @Override
     public List<SignInRewardCommand> getCommands() {
+        if (!isAvailable()) return new ArrayList();
         return super.getCommands("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Commands");
     }
 
@@ -77,6 +74,7 @@ public class SignInSpecialTimePeriodReward
 
     @Override
     public List<String> getBroadcastMessages() {
+        if (!isAvailable()) return new ArrayList();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Broadcast-Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Broadcast-Messages");
         }
@@ -85,6 +83,7 @@ public class SignInSpecialTimePeriodReward
 
     @Override
     public List<SignInSound> getSounds() {
+        if (!isAvailable()) return new ArrayList();
         return super.getSounds("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Play-Sounds");
     }
 }

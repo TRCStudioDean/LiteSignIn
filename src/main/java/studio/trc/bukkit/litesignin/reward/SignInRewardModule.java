@@ -10,35 +10,45 @@ public enum SignInRewardModule
     /**
      * Using retroactive card's reward.
      */
-    RETROACTIVETIME,
+    RETROACTIVE_TIME,
     
     /**
      * Special date's reward.
      */
-    SPECIALDATE,
+    SPECIAL_DATE,
     
     /**
      * Special time's reward.
      */
-    SPECIALTIME,
+    SPECIAL_TIME,
     
     /**
      * Special time period's reward.
      */
-    SPECIALTIMEPERIOD,
+    SPECIAL_TIME_PERIOD,
     
     /**
      * Special weeks's reward.
      */
-    SPECIALWEEK,
+    SPECIAL_WEEK,
     
     /**
      * Special sign-in ranking's reward.
      */
-    SPECIALRANKING,
+    SPECIAL_RANKING,
     
     /**
      * Statistics time's reward.
      */
-    STATISTICSTIME;
+    STATISTICS_TIME,
+    
+    /**
+     * Special time of month's reward.
+     */
+    SPECIAL_TIME_OF_MONTH,
+    
+    /**
+     * Statistics time of month's reward.
+     */
+    STATISTICS_TIME_OF_MONTH;
 }

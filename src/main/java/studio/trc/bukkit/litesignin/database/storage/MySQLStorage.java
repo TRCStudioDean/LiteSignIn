@@ -150,13 +150,16 @@ public final class MySQLStorage
                 int totalNumber = getCumulativeNumber();
                 SignInDate today = SignInDate.getInstance(new Date());
                 int week = today.getWeek();
+                int thisMonth = today.getMonth();
                 SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
-                rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
                 rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
                 if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
                 else {
+                    rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                    rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                     rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                     rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
                     rewardQueue.addReward(new SignInNormalReward(group));
@@ -173,13 +176,16 @@ public final class MySQLStorage
             int totalNumber = getCumulativeNumber();
             SignInDate today = SignInDate.getInstance(new Date());
             int week = today.getWeek();
+            int thisMonth = today.getMonth();
             SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
-            rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
             rewardQueue.addReward(new SignInSpecialDateReward(group, today));
             rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
             rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+            rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
             if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
             else {
+                rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                 rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                 rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
                 rewardQueue.addReward(new SignInNormalReward(group));
@@ -234,6 +240,16 @@ public final class MySQLStorage
     @Override
     public int getCumulativeNumber() {
         return clearUselessData(getHistory()).size();
+    }
+    
+    @Override
+    public int getContinuousSignInOfMonth() {
+        return SignInDate.getContinuousOfMonth(history);
+    }
+    
+    @Override
+    public int getCumulativeNumberOfMonth() {
+        return SignInDate.getCumulativeNumberOfMonth(clearUselessData(getHistory()));
     }
     
     @Override

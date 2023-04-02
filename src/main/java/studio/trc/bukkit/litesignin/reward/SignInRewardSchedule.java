@@ -42,7 +42,7 @@ public class SignInRewardSchedule
                 }
             }
             for (SignInReward reward : queue) {
-                if (!retroactiveTime.isDisable(reward.getModule()) && !reward.getModule().equals(SignInRewardModule.RETROACTIVETIME)) {
+                if (!retroactiveTime.isDisable(reward.getModule()) && !reward.getModule().equals(SignInRewardModule.RETROACTIVE_TIME)) {
                     reward.giveReward(playerData);
                 }
             }

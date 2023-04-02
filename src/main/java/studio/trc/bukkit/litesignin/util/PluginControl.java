@@ -93,6 +93,9 @@ public class PluginControl
     
     public static void reloadSQLite() {
         Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        if (SQLiteEngine.getInstance() != null) {
+            SQLiteEngine.getInstance().disconnect();
+        }
         SQLiteEngine.setInstance(new SQLiteEngine(config.getString("SQLite-Storage.Database-Path"), config.getString("SQLite-Storage.Database-File")));
         SQLiteEngine.getInstance().connect();
     }

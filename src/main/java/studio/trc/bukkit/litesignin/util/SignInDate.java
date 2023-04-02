@@ -248,50 +248,6 @@ public class SignInDate
         return timePeriod ? year + "-" + month + "-" + day + "-" + hour + "-" + minute + "-" + second : year + "-" + month + "-" + day;
     }
     
-    public static List<SignInDate> sort(List<SignInDate> dates) {
-        dates.sort(SignInDate::compareTo);
-        return dates;
-    }
-    
-    public static int getContinuous(List<SignInDate> dates) {
-        int continuous = 0;
-        if (dates.isEmpty()) {
-            return continuous;
-        }
-        int year = dates.get(0).getYear();
-        int month = dates.get(0).getMonth();
-        int day = dates.get(0).getDay();
-        for (SignInDate date : dates) {
-            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-            boolean breakSign = true;
-            if (year == date.getYear()) {
-                int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-                if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-                    days[1] = 29;
-                }
-                if (days[month - 1] == day && month + 1 == date.getMonth()) {
-                    continuous++;
-                    breakSign = false;
-                } else if (day + 1 == date.getDay()) {
-                    continuous++;
-                    breakSign = false;
-                }
-            } else if (year + 1 == date.getYear()) {
-                if (month == 12 && date.getMonth() == 1 && day == 31 && date.getDay() == 1) {
-                    continuous++;
-                    breakSign = false;
-                }
-            }
-            if (breakSign) {
-                continuous = 1;
-            }
-            year = date.getYear();
-            month = date.getMonth();
-            day = date.getDay();
-        }
-        return continuous;
-    }
-    
     public String getName(String format) {
         if (hour == -1 || minute == -1 || second == -1) {
             Calendar cal = Calendar.getInstance();
@@ -398,5 +354,99 @@ public class SignInDate
         } catch (Exception ex) {
             return null;
         }
+    }
+    
+    public static List<SignInDate> sort(List<SignInDate> dates) {
+        dates.sort(SignInDate::compareTo);
+        return dates;
+    }
+    
+    public static int getContinuous(List<SignInDate> records) {
+        int continuous = 0;
+        if (records.isEmpty()) {
+            return continuous;
+        }
+        int year = records.get(0).getYear();
+        int month = records.get(0).getMonth();
+        int day = records.get(0).getDay();
+        for (SignInDate date : records) {
+            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+            boolean breakSign = true;
+            if (year == date.getYear()) {
+                int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+                if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                    days[1] = 29;
+                }
+                if (days[month - 1] == day && month + 1 == date.getMonth()) {
+                    continuous++;
+                    breakSign = false;
+                } else if (day + 1 == date.getDay()) {
+                    continuous++;
+                    breakSign = false;
+                }
+            } else if (year + 1 == date.getYear()) {
+                if (month == 12 && date.getMonth() == 1 && day == 31 && date.getDay() == 1) {
+                    continuous++;
+                    breakSign = false;
+                }
+            }
+            if (breakSign) {
+                continuous = 1;
+            }
+            year = date.getYear();
+            month = date.getMonth();
+            day = date.getDay();
+        }
+        return continuous;
+    }
+    
+    public static int getContinuousOfMonth(List<SignInDate> dates) {
+        int continuous = 0;
+        if (dates.isEmpty()) {
+            return continuous;
+        }
+        int year = dates.get(0).getYear();
+        int month = dates.get(0).getMonth();
+        int day = dates.get(0).getDay();
+        for (SignInDate date : dates) {
+            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+            boolean breakSign = true;
+            if (year == date.getYear() && month == date.getMonth()) {
+                if (day + 1 == date.getDay()) {
+                    continuous++;
+                    breakSign = false;
+                }
+            }
+            if (breakSign) {
+                continuous = 1;
+            }
+            year = date.getYear();
+            month = date.getMonth();
+            day = date.getDay();
+        }
+        return continuous;
+    }
+    
+    public static int getCumulativeNumberOfMonth(List<SignInDate> records) {
+        int total = 0;
+        if (records.isEmpty()) {
+            return total;
+        }
+        int year = records.get(0).getYear();
+        int month = records.get(0).getMonth();
+        for (SignInDate date : records) {
+            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+            boolean breakSign = true;
+            if (year == date.getYear() && month == date.getMonth()) {
+                total++;
+                breakSign = false;
+            }
+            if (breakSign) {
+                total = 0;
+            }
+            year = date.getYear();
+            month = date.getMonth();
+        }
+        return total;
     }
 }

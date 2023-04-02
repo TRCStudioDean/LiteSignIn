@@ -3,6 +3,8 @@ package studio.trc.bukkit.litesignin.reward.type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,26 +20,19 @@ import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 public class SignInSpecialDateReward
     extends SignInRewardColumn
 {
+    @Getter
     private final SignInGroup group;
+    @Getter
     private final SignInDate date;
     
     public SignInSpecialDateReward(SignInGroup group, SignInDate date) {
         this.group = group;
         this.date = date;
     }
-    
-    @Override
-    public SignInGroup getGroup() {
-        return group;
-    }
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.SPECIALDATE;
-    }
-    
-    public SignInDate getDate() {
-        return date;
+        return SignInRewardModule.SPECIAL_DATE;
     }
     
     @Override

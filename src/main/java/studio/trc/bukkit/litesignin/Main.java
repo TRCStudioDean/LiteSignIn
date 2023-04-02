@@ -24,6 +24,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
+import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -91,6 +93,12 @@ public class Main
                     ex.printStackTrace();
                 }
             }
+        }
+        if (SQLiteEngine.getInstance() != null) {
+            SQLiteEngine.getInstance().disconnect();
+        }
+        if (MySQLEngine.getInstance() != null) {
+            MySQLEngine.getInstance().disconnect();
         }
     }
     

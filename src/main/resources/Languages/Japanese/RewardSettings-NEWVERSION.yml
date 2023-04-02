@@ -48,15 +48,15 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
                     Statistics-Times: false
+                    Statistics-Times-Of-Month: false
                 Play-Sounds: 
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
                 - 'diamond:1'
                 - 'gold_ingot:3'
                 - 'iron_ingot:6'
-            #特別な時間
+            #特別な時間（連続して一定回数に達した後）
             Special-Times:
                 #3回
                 3:
@@ -93,7 +93,7 @@ Reward-Settings:
                     - '{prefix}&a今は日曜日、これは追加の報酬です。'
                     Reward-Items:
                     - 'golden_apple:1'
-            #サインインの総数が一定数に達したときに得られる報酬
+            #合計回数（サインインの総数が一定数に達したときに得られる報酬）
             Statistics-Times:
                 100:
                     Messages: 
@@ -147,6 +147,31 @@ Reward-Settings:
                     - 'diamond:1'
                     - 'gold_ingot:3'
                     - 'iron_ingot:6'
+            #毎月の特別な時間（連続して一定回数に達した後）
+            Special-Times-Of-Month:
+                #15回
+                15:
+                    #有効な月（月に対応する数字を記入してください）
+                    Valid-Months: [1, 2, 3] #毎年1月、2月、3月に発効する
+                    #デフォルトの報酬を上書きする
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a今月、3日連続でサインインしました！ 報酬が&e2倍&aになりました！'
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+            #毎月の合計回数（毎月のサインインの総数が一定数に達したときに得られる報酬）
+            Statistics-Times-Of-Month:
+                15:
+                    #有効な月（月に対応する数字を記入してください）
+                    Valid-Months: [1, 2, 3] #毎年1月、2月、3月に発効する
+                    #デフォルトの報酬を上書きする
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a今月のサインインの総数は15回に達し、&e1000&aゲームコインを獲得します。'
+                    Commands:
+                    - 'server:eco give {player} 1000'
         #カスタムグループ、のために使用される
         VIP:
             #権限
@@ -165,7 +190,7 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
+                    Special-Times: true
                     Statistics-Times: false
                 Reward-Items:
                 - 'diamond:2'

@@ -49,8 +49,8 @@ Reward-Settings:
                     #建議開啟， 以防止玩家直接獲得某些特殊日期的專屬獎勵
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
                     Statistics-Times: false
+                    Statistics-Times-Of-Month: false
                 Play-Sounds:
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
@@ -151,6 +151,32 @@ Reward-Settings:
                     - 'diamond:1'
                     - 'gold_ingot:3'
                     - 'iron_ingot:6'
+            #每月連續簽到一定次數時觸發
+            Special-Times-Of-Month:
+                #十五次
+                15:
+                    #生效的月份，請填入月份對應的數字
+                    Valid-Months: [1, 2, 3] #即為每年一月、二月、三月生效
+                    #是否覆蓋正常簽到下的獎勵
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a本月連續簽到達到了15天，簽到獎勵&e翻倍&a！ '
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+            #每月簽到累計達到一定次數時觸發
+            Statistics-Times-Of-Month:
+                #十五次
+                15:
+                    #生效的月份，請填入月份對應的數字
+                    Valid-Months: [1, 2, 3] #即為每年一月、二月、三月生效
+                    #是否覆蓋正常簽到下的獎勵
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&a本月簽到次數總計達到15次，獲得&e1000&a遊戲硬幣。 '
+                    Commands:
+                    - 'server:eco give {player} 1000'
         #這個是自定義的組，以示範
         VIP:
             #使用權限
@@ -170,7 +196,7 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
+                    Special-Times: true
                     Statistics-Times: false
                 Reward-Items:
                 - 'diamond:2'

@@ -47,8 +47,8 @@ Reward-Settings:
                     #It is recommended to enable it to prevent players from directly receiving special rewards on certain special dates.
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
                     Statistics-Times: false
+                    Statistics-Times-Of-Month: false
                 Play-Sounds: 
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
@@ -146,6 +146,28 @@ Reward-Settings:
                     - 'diamond:2'
                     - 'gold_ingot:6'
                     - 'iron_ingot:12'
+            #Triggered when sign-in in for a certain number of every months consecutive times of every months.
+            Special-Times-Of-Month:
+                15:
+                    #The effective month, please fill in the corresponding number of the month.
+                    Valid-Months: [1, 2, 3] #means January, February, March
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&aThis month you signed in three days in a row, The reward has &edoubled&a.'
+                    Reward-Items:
+                    - 'diamond:1'
+                    - 'gold_ingot:3'
+                    - 'iron_ingot:6'
+            #Triggered when the sign-in total reaches a certain number of times of every months.
+            Statistics-Times-Of-Month:
+                15:
+                    #The effective month, please fill in the corresponding number of the month.
+                    Valid-Months: [1, 2, 3] #means January, February, March
+                    Override-default-rewards: true
+                    Messages: 
+                    - '{prefix}&aThis month you signed in for 100 days in a row, you got 1K coins reward.'
+                    Commands:
+                    - 'server:eco give {player} 1000'
         #Custom group, for example
         VIP:
             #Group permission.
@@ -165,7 +187,7 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: false
+                    Special-Times: true
                     Statistics-Times: false
                 Reward-Items:
                 - 'diamond:2'

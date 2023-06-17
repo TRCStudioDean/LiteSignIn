@@ -43,7 +43,7 @@ public class JsonItemStack
         
         //net.minecraft.server
         try {
-            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18") || PluginControl.nmsVersion.startsWith("v1_19")) {
+            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18") || PluginControl.nmsVersion.startsWith("v1_19") || PluginControl.nmsVersion.startsWith("v1_20")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
             } else {
@@ -101,7 +101,13 @@ public class JsonItemStack
             Object NBTTagCompound = nbtTagCompound.newInstance();
             Method saveMethod = Arrays.stream(itemStack.getDeclaredMethods()).filter(method -> method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(nbtTagCompound) && method.getReturnType().equals(nbtTagCompound)).findFirst().orElse(null);
             if (saveMethod != null) {
-                saveMethod.invoke(mcStack, NBTTagCompound);
+                if (saveMethod.isAccessible()) {
+                    saveMethod.invoke(mcStack, NBTTagCompound);
+                } else {
+                    saveMethod.setAccessible(true);
+                    saveMethod.invoke(mcStack, NBTTagCompound);
+                    saveMethod.setAccessible(false);
+                }
             } else {
                 return null;
             }

@@ -55,12 +55,12 @@ Reward-Settings:
                 - 'diamond:1'
                 - 'gold_ingot:3'
                 - 'iron_ingot:6'
-            #Triggered when sign-in in for a certain number of consecutive times
+            #Triggered when sign-in in for a certain number of consecutive times.
             Special-Times:
                 3:
                     Override-default-rewards: true
                     Messages: 
-                    - '{prefix}&aYou signed in three days in a row, The reward has &edoubled&a.'
+                    - '{prefix}&aYou consecutive signed in three days, the reward has &edoubled&a.'
                     Broadcast-Messages:
                     - '{prefix}&aPlayer &e{player} &a signed in for three consecutive days!'
                     Play-Sounds: 
@@ -72,13 +72,22 @@ Reward-Settings:
                 7:
                     Override-default-rewards: false
                     Messages: 
-                    - '{prefix}&aYou signed in for a week in a row, Get extra rewards: &e&lSuper Diamond Sword &aand &eGolden Apple x1'
+                    - '{prefix}&aYou consecutive signed in a week, get extra rewards: &e&lSuper Diamond Sword &aand &eGolden Apple x1'
                     Broadcast-Messages:
                     - '{prefix}&aPlayer &e{player} &a signed in for a week!'
                     Play-Sounds: 
                     - 'LEVELUP-1-0-TRUE'
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
+                    - 'golden_apple:1'
+            #Triggered when sign-in in for a certain number of every consecutive times.
+            Special-Times-Cycle:
+                #Every three consecutive days
+                3:
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&aYou periodically consecutive signed in three days, get extra reward: &bGolden Apple x1'
+                    Reward-Items:
                     - 'golden_apple:1'
             #Triggered when sign-in in on a speical week.
             Special-Weeks:
@@ -96,6 +105,14 @@ Reward-Settings:
                     - '{prefix}&aYou signed in for 100 days in a row and got 10K coins reward.'
                     Commands:
                     - 'server:eco give {player} 10000'
+            #Triggered when the sign-in total reaches a certain number of times.
+            Statistics-Times-Cycle:
+                #Reward for every 100 cumulative sign-in times
+                100:
+                    Messages: 
+                    - '{prefix}&aYou periodically signed in for 100 days in a row and got 5K coins reward.'
+                    Commands:
+                    - 'server:eco give {player} 5000'
             #Triggered when signing in on a special date.
             Special-Dates:
                 #Format: Month-Day (Be careful not to correspond to "1-1" on January 1, it should be "01-01")

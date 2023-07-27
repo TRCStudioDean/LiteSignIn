@@ -17,6 +17,18 @@ PlaceholderAPI:
     #示例: 'queue' 即 %litesignin_queue% 
     Exceptions: [] 
 
+#今日在线时长条件（在线达到一定时间后才可签到）
+#注意：今日在线时长统计会因服务器重启或插件卸载而重置
+Online-Duration-Condition:
+    #是否启用
+    Enabled: false
+    #需要的时间
+    #格式： 时:分:秒， 从左往右
+    #最小值: 00:00:00 ,最大值: 23:59:59
+    Time: 00:03:00
+    #今日在线时长累计（启用后，即便玩家中途掉线，今日在线时长也会保留）
+    Statistics: true
+
 #是否启用签到排名榜功能
 #此功能用于登记每日签到玩家的先后顺序
 Enable-Sign-In-Ranking: true
@@ -31,6 +43,8 @@ Join-Event:
     Enabled: true
     #是否启用进服时自动签到（需要拥有权限）
     Auto-SignIn: false
+    #延迟（单位：秒）
+    Delay: 0
 
 #签到菜单相关设置
 GUI-Settings:
@@ -124,6 +138,11 @@ MySQL-Storage:
     Refresh-Interval: 5
     #连接超时时间
     Wait-Timeout: 18000
+    #自动部署模式
+    #该模式下在连接到MySQL后会自动定位/创建目标数据库
+    #适合只会部署但是不会操作MySQL的人使用
+    #PS：若服务器无法定位到目标数据库，则需要关闭此选项手动创建数据库！
+    Automatic-Deploy-Mode: true
     #连接参数，如果你不是一名开发者，并且不熟知JDBC，请不要修改它
     Options:
         useSSL: false

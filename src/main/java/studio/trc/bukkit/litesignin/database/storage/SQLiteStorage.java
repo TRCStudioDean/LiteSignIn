@@ -79,33 +79,34 @@ public final class SQLiteStorage
         try {
             SQLiteEngine sqlite = SQLiteEngine.getInstance();
             sqlite.checkConnection();
-            ResultSet rs = sqlite.executeQuery("SELECT * FROM " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE UUID = ?", uuid.toString());
-            if (rs.next()) {
-                continuous = rs.getObject("Continuous") != null ? rs.getInt("Continuous") : 0;
-                name = rs.getObject("Name") != null ? rs.getString("Name") : null;
-                year = rs.getObject("Year") != null ? rs.getInt("Year") : 1970;
-                month = rs.getObject("Month") != null ? rs.getInt("Month") : 1;
-                day = rs.getObject("Day") != null ? rs.getInt("Day") : 1;
-                hour = rs.getObject("Hour") != null ? rs.getInt("Hour") : 0;
-                minute = rs.getObject("Minute") != null ? rs.getInt("Minute") : 0;
-                second = rs.getObject("Second") != null ? rs.getInt("Second") : 0;
-                retroactiveCard = rs.getObject("RetroactiveCard") != null ? rs.getInt("RetroactiveCard") : 0;
-                if (rs.getObject("History") != null && !rs.getString("History").equals("")) {
-                    List<SignInDate> list = new ArrayList();
-                    for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                        list.add(SignInDate.getInstance(data));
+            try (ResultSet rs = sqlite.executeQuery("SELECT * FROM " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE UUID = ?", uuid.toString())) {
+                if (rs.next()) {
+                    continuous = rs.getObject("Continuous") != null ? rs.getInt("Continuous") : 0;
+                    name = rs.getObject("Name") != null ? rs.getString("Name") : null;
+                    year = rs.getObject("Year") != null ? rs.getInt("Year") : 1970;
+                    month = rs.getObject("Month") != null ? rs.getInt("Month") : 1;
+                    day = rs.getObject("Day") != null ? rs.getInt("Day") : 1;
+                    hour = rs.getObject("Hour") != null ? rs.getInt("Hour") : 0;
+                    minute = rs.getObject("Minute") != null ? rs.getInt("Minute") : 0;
+                    second = rs.getObject("Second") != null ? rs.getInt("Second") : 0;
+                    retroactiveCard = rs.getObject("RetroactiveCard") != null ? rs.getInt("RetroactiveCard") : 0;
+                    if (rs.getObject("History") != null && !rs.getString("History").equals("")) {
+                        List<SignInDate> list = new ArrayList();
+                        for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                            list.add(SignInDate.getInstance(data));
+                        }
+                        history = list;
+                    } else {
+                        history = new ArrayList();
                     }
-                    history = list;
                 } else {
-                    history = new ArrayList();
+                    String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
+                    sqlite.executeUpdate("INSERT INTO " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA)
+                            + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous)"
+                            + " VALUES(?, ?, 1970, 1, 1, 0, 0, 0, 0)", uuid.toString(), playerName);
                 }
-            } else {
-                String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
-                sqlite.executeUpdate("INSERT INTO " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA)
-                        + "(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous)"
-                        + " VALUES(?, ?, 1970, 1, 1, 0, 0, 0, 0)", uuid.toString(), playerName);
+                checkContinuousSignIn();
             }
-            checkContinuousSignIn();
         } catch (SQLException ex) {
             SQLiteEngine.getInstance().throwSQLException(ex, "ExecuteQueryFailed", true);
         }
@@ -154,11 +155,13 @@ public final class SQLiteStorage
                 SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
                 rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+                rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
                 rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
                 rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
                 if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
                 else {
                     rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                    rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                     rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                     rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                     rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
@@ -181,7 +184,9 @@ public final class SQLiteStorage
             rewardQueue.addReward(new SignInSpecialDateReward(group, today));
             rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
             rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+            rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
             rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
+                rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
             if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
             else {
                 rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));

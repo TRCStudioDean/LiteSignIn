@@ -2,7 +2,6 @@ package studio.trc.bukkit.litesignin.command.subcommand;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
+import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
@@ -37,10 +37,16 @@ public class ClickCommand
                     placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
                     MessageUtil.sendCommandMessage(player, "Click.To-Self.Today-has-been-Signed-In", placeholders);
                 } else {
-                    data.signIn();
-                    placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
-                    placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
-                    MessageUtil.sendCommandMessage(player, "Click.To-Self.Successfully-Signed-In", placeholders);
+                    long requirement = OnlineTimeRecord.signInRequirement(player);
+                    if (requirement == -1) {
+                        data.signIn();
+                        placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
+                        placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
+                        MessageUtil.sendCommandMessage(player, "Click.To-Self.Successfully-Signed-In", placeholders);
+                    } else {
+                        placeholders.put("{minute}", String.valueOf(requirement / 60000 + 1));
+                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Insufficient-Online-Time", placeholders);
+                    }
                 }
             }
         } else if (args.length == 2) {
@@ -106,7 +112,7 @@ public class ClickCommand
                         return;
                     }
                     if (!SignInPluginUtils.hasCommandPermission(sender, "Click", false) || !SignInPluginUtils.hasPermission(sender, "Retroactive-Card.Use")) {
-                        MessageUtil.sendMessage(sender, "No-Permission");
+                        MessageUtil.sendCommandMessage(sender, "No-Permission");
                         return;
                     }
                     if (!PluginControl.enableRetroactiveCard()) {
@@ -144,7 +150,7 @@ public class ClickCommand
             }
         } else if (args.length >= 3) {
             if (!SignInPluginUtils.hasCommandPermission(sender, "Click-Others", false)) {
-                MessageUtil.sendMessage(sender, "No-Permission");
+                MessageUtil.sendCommandMessage(sender, "No-Permission");
                 return;
             }
             SignInDate date = SignInDate.getInstance(args[1]);

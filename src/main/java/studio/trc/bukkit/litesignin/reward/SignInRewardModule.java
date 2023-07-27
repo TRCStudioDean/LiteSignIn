@@ -50,5 +50,15 @@ public enum SignInRewardModule
     /**
      * Statistics time of month's reward.
      */
-    STATISTICS_TIME_OF_MONTH;
+    STATISTICS_TIME_OF_MONTH,
+    
+    /**
+     * Special time's cycle reward.
+     */
+    SPECIAL_TIME_CYCLE,
+    
+    /**
+     * Statistics time's cycle reward.
+     */
+    STATISTICS_TIME_CYCLE;
 }

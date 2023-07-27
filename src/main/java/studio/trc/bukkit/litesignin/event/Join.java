@@ -11,11 +11,11 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.api.Storage;
@@ -25,6 +25,7 @@ import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
+import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -34,11 +35,12 @@ public class Join
     implements Listener
 {
     @EventHandler(ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent e) {
+    public void onJoin(PlayerJoinEvent event) {
         if (BackupUtil.isBackingUp() || RollBackUtil.isRollingback()) {
             return;
         }
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
+        OnlineTimeRecord.getJoinTimeRecord().put(player.getUniqueId(), System.currentTimeMillis());
         Runnable task = () -> {
             Storage data = Storage.getPlayer(player);
             boolean unableToHoldCards = false;
@@ -50,7 +52,7 @@ public class Join
                 if (!data.alreadySignIn()) {
                     if (PluginControl.autoSignIn() && SignInPluginUtils.hasPermission(player, "Join-Auto-SignIn")) {
                         autoSignIn = true;
-                    } else {
+                    } else if (OnlineTimeRecord.signInRequirement(player) == -1) {
                         SignInDate date = SignInDate.getInstance(new Date());
                         MessageUtil.getMessageList("Join-Event.Messages").stream().forEach(text -> {
                             if (text.toLowerCase().contains("%opengui%")) {
@@ -87,9 +89,9 @@ public class Join
             schedule(data, player, unableToHoldCards, autoSignIn);
         };
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Load-Data")) {
-            LiteSignInThread.runTask(task);
+            LiteSignInThread.runTask(task, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay"));
         } else {
-            task.run();
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20));
         }
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (SignInPluginUtils.hasPermission(player, "Updater")) {
@@ -139,19 +141,18 @@ public class Join
     }
     
     public void schedule(Storage data, Player player, boolean unableToHoldCards, boolean autoSignIn) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (unableToHoldCards) {
-                    if (data.getRetroactiveCard() > 0) {
-                        data.takeRetroactiveCard(data.getRetroactiveCard());
-                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Unable-To-Hold");
-                    }
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            if (unableToHoldCards) {
+                if (data.getRetroactiveCard() > 0) {
+                    data.takeRetroactiveCard(data.getRetroactiveCard());
+                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Unable-To-Hold");
                 }
-                if (autoSignIn) {
+            }
+            if (autoSignIn) {
+                if (OnlineTimeRecord.signInRequirement(player) == -1) {
                     data.signIn();
                 }
             }
-        }.runTask(Main.getInstance());
+        });
     }
 }

@@ -84,6 +84,15 @@ Reward-Settings:
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
                     - 'golden_apple:1'
+            #特別な時間（周期性連続して一定回数に達した後）
+            Special-Times-Cycle:
+                #每3回連続の報酬
+                3:
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&a周期性3日連続でサインインしました！これは追加の報酬です。'
+                    Reward-Items:
+                    - 'golden_apple:1'
             #特別な曜日
             Special-Weeks:
                 #日曜日
@@ -100,6 +109,14 @@ Reward-Settings:
                     - '{prefix}&aサインインの総数は100回に達し、&e10000&aゲームコインを獲得します。'
                     Commands:
                     - 'server:eco give {player} 10000'
+            #周期性サインインの総数が一定数に達したときに得られる報酬
+            Statistics-Times-Cycle:
+                #每100回の報酬
+                100:
+                    Messages: 
+                    - '{prefix}&aサインインは100回に達し、&e5000&aゲームコインを獲得します。'
+                    Commands:
+                    - 'server:eco give {player} 5000'
             #特別な日
             Special-Dates:
                 #書式: MM-dd （月-日）注意！ 1月1日は「1-1」ではなく「01-01」と書いてください。

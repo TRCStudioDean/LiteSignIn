@@ -229,12 +229,12 @@ public class SignInDate
     }
     
     public int compareTo(SignInDate date){
-        long thisTime = getMillionTime();
-        long anotherTime = date.getMillionTime();
+        long thisTime = getMillisecond();
+        long anotherTime = date.getMillisecond();
         return thisTime < anotherTime ? -1 : (thisTime == anotherTime ? 0 : 1);
     }
     
-    public long getMillionTime() {
+    public long getMillisecond() {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month - 1, day, hour, minute, second);
         return cal.getTimeInMillis();

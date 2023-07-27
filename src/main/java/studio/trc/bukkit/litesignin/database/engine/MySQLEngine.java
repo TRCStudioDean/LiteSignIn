@@ -180,13 +180,12 @@ public class MySQLEngine
             try {
                 checkConnection();
                 Statement statement = mysqlConnection.createStatement();
-                if (statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + getDatabaseName()) > 0) {
-                    statement = mysqlConnection.createStatement();
-                    for (DatabaseTable table : DatabaseTable.values()) {
-                        statement.addBatch(table.getCreateTableSyntax(DatabaseType.MYSQL));
-                    }
-                    statement.executeBatch();
+                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + getDatabaseName());
+                statement = mysqlConnection.createStatement();
+                for (DatabaseTable table : DatabaseTable.values()) {
+                    statement.addBatch(table.getCreateTableSyntax(DatabaseType.MYSQL));
                 }
+                statement.executeBatch();
             } catch (SQLException ex) {
                 throwSQLException(ex, "InitializationFailed", true);
             }
@@ -198,12 +197,19 @@ public class MySQLEngine
     }
     
     public String getTableSyntax(DatabaseTable table) {
-        return getDatabaseName() + "." + table.getDisplayName();
+        if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("MySQL-Storage.Automatic-Deploy-Mode")) {
+            return getDatabaseName() + "." + table.getDisplayName();
+        } else {
+            return table.getDisplayName();
+        }
     }
     
     private StringBuilder getConnectionURI() {
         StringBuilder builder = new StringBuilder();
         if (jdbcOptions.isEmpty()) return builder;
+        if (!ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("MySQL-Storage.Automatic-Deploy-Mode")) {
+            builder.append(getDatabaseName());
+        }
         builder.append("?");
         int length = 0;
         for (String option : jdbcOptions.keySet()) {

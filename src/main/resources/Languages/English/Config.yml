@@ -18,7 +18,18 @@ PlaceholderAPI:
     Cache-Update-Delay: 10
     #Placeholder for exception (not cached)
     #Example: 'queue' which is %litesignin_queue% 
-    Exceptions: [] 
+    Exceptions: []
+
+#Conditions for today's online duration (players can only sign in when they are online for a certain period of time)
+#Note: Today's online duration statistics will be reset due to server restart or plugin uninstallation
+Online-Duration-Condition:
+    Enabled: false
+    #Time requirement
+    #Format: Hour:Minute:Second
+    #Minimum: 00:00:00 , Maximum: 23:59:59
+    Time: 00:03:00
+    #Enable statistics (after enabling, even if the player disconnects midway, today's online duration will be retained)
+    Statistics: true
 
 #Multi-group reward mode
 #When players have multiple reward groups' permission at the same time, they will receive their rewards at the same time when sign-in.
@@ -30,6 +41,8 @@ Join-Event:
     Enabled: true
     #Whether to enable auto sign-in (Need have permission)
     Auto-SignIn: false
+    #Delay (Unit: second)
+    Delay: 0
 
 #About GUI settings
 GUI-Settings:
@@ -114,6 +127,10 @@ MySQL-Storage:
     Refresh-Interval: 5
     Wait-Timeout: 18000
     Table-Name: playerdata
+    #In this mode, the target database will be automatically located/created after connecting to MySQL.
+    #Suitable for people who only know how to deploy but cannot operate MySQL to use.
+    #PS: If the server cannot locate the target database, you need to set off this option to manually create the database!
+    Automatic-Deploy-Mode: true
     #More connection parameters. If you are not a developer and are not familiar with JDBC, please do not modify it.
     Options:
         useSSL: false

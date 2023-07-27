@@ -85,6 +85,15 @@ Reward-Settings:
                     Reward-Items:
                     - 'Super_Diamond_Sword:1'
                     - 'golden_apple:1'
+            #周期性连续签到一定次数时触发
+            Special-Times-Cycle:
+                #每连续签到三天的奖励
+                3:
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&a你周期性连续签到了三天，额外奖励一个金苹果！'
+                    Reward-Items:
+                    - 'golden_apple:1'
             #特别周签到时触发
             Special-Weeks:
                 #周日
@@ -101,6 +110,14 @@ Reward-Settings:
                     - '{prefix}&a签到次数总计达到100次，获得&e10000&a游戏硬币。'
                     Commands:
                     - 'server:eco give {player} 10000'
+            #周期性签到累计达到一定次数时触发
+            Statistics-Times-Cycle:
+                #总计签到次数每100次的奖励
+                100:
+                    Messages: 
+                    - '{prefix}&a签到次数100次，获得&e5000&a游戏硬币。'
+                    Commands:
+                    - 'server:eco give {player} 5000'
             #在特殊日期进行签到时触发
             Special-Dates:
                 #格式: MM-dd （月-日）注意不要把如一月一号写成“1-1”，而是“01-01”

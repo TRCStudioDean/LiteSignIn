@@ -1,9 +1,11 @@
 package studio.trc.bukkit.litesignin.util;
 
 import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;

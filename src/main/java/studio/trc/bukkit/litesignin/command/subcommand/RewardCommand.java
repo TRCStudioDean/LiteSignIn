@@ -284,6 +284,54 @@ public class RewardCommand
                     }
                     break;
                 }
+                case SPECIAL_TIME_CYCLE: {
+                    try {
+                        placeholders.put("{group}", group.getGroupName());
+                        placeholders.put("{rewardType}", rewardType.getConfigName());
+                        String value = args[3].substring(args[3].indexOf(":") + 1);
+                        placeholders.put("{value}", value);
+                        if (!SignInPluginUtils.isInteger(value)) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_CYCLE", placeholders);
+                            return;
+                        }
+                        int time = Integer.valueOf(value);
+                        if (time < 1 || config.get("Reward-Settings.Permission-Groups." + group.getGroupName() + "." + rewardType.getConfigName() + "." + time) == null) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.SPECIAL_TIMES_CYCLE", placeholders);
+                            return;
+                        }
+                        SignInReward reward = new SignInSpecialTimeReward(group, time);
+                        reward.giveReward(playerdata);
+                        MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
+                    } catch (Exception ex) {
+                        placeholders.put("{value}", args.length >= 3 ? args[3].substring(args[3].indexOf(":") + 1) : MessageUtil.getMessage("Command-Messages.Reward.Nothing"));
+                        MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_CYCLE", placeholders);
+                    }
+                    break;
+                }
+                case STATISTICS_CYCLE: {
+                    try {
+                        placeholders.put("{group}", group.getGroupName());
+                        placeholders.put("{rewardType}", rewardType.getConfigName());
+                        String value = args[3].substring(args[3].indexOf(":") + 1);
+                        placeholders.put("{value}", value);
+                        if (!SignInPluginUtils.isInteger(value)) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_CYCLE", placeholders);
+                            return;
+                        }
+                        int number = Integer.valueOf(value);
+                        if (number < 1 || config.get("Reward-Settings.Permission-Groups." + group.getGroupName() + "." + rewardType.getConfigName() + "." + number) == null) {
+                            MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.STATISTICS_CYCLE", placeholders);
+                            return;
+                        }
+                        SignInReward reward = new SignInStatisticsTimeReward(group, number);
+                        reward.giveReward(playerdata);
+                        MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
+                    } catch (Exception ex) {
+                        placeholders.put("{value}", args.length >= 3 ? args[3].substring(args[3].indexOf(":") + 1) : MessageUtil.getMessage("Command-Messages.Reward.Nothing"));
+                        MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_CYCLE", placeholders);
+                    }
+                    break;
+                }
             }
         }
     }
@@ -431,7 +479,17 @@ public class RewardCommand
         /**
          * Statistics of month
          */
-        STATISTICS_OF_MONTH("Statistics-Times-Of-Month");
+        STATISTICS_OF_MONTH("Statistics-Times-Of-Month"),
+        
+        /**
+         * Special time cycle
+         */
+        SPECIAL_TIME_CYCLE("Special-Times-Cycle"),
+        
+        /**
+         * Statistics cycle
+         */
+        STATISTICS_CYCLE("Statistics-Times-Cycle");
         
         @Getter
         private final String configName;

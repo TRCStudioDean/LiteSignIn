@@ -137,11 +137,13 @@ public final class YamlStorage
                 SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
                 rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
+                rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
                 rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
                 rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
                 if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
                 else {
                     rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                    rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                     rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                     rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                     rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));
@@ -164,10 +166,12 @@ public final class YamlStorage
             rewardQueue.addReward(new SignInSpecialDateReward(group, today));
             rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
             rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+            rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
             rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
             if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
             else {
                 rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                 rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                 rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));

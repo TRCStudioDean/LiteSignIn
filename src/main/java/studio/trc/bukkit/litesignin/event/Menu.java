@@ -18,6 +18,7 @@ import studio.trc.bukkit.litesignin.event.custom.SignInGUIOpenEvent;
 import studio.trc.bukkit.litesignin.gui.SignInGUIColumn;
 import studio.trc.bukkit.litesignin.gui.SignInGUI;
 import studio.trc.bukkit.litesignin.gui.SignInInventory;
+import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
@@ -31,7 +32,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Menu
@@ -120,16 +120,23 @@ public class Menu
                             if (columns.isKey()) {
                                 SignInDate today = SignInDate.getInstance(new Date());
                                 if (columns.getDate().equals(today) && !data.alreadySignIn()) {
-                                    data.signIn();
-                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                                    placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                                    placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                                    placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                                    placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
-                                    placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
-                                    MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.SignIn-Messages", placeholders);
-                                    openGUI(player);
+                                    long requirement = OnlineTimeRecord.signInRequirement(player);
+                                    if (requirement == -1) {
+                                        data.signIn();
+                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                        placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
+                                        placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
+                                        placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
+                                        placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
+                                        placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
+                                        placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
+                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.SignIn-Messages", placeholders);
+                                        openGUI(player);
+                                    } else {
+                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                        placeholders.put("{minute}", String.valueOf(requirement / 60000 + 1));
+                                        MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Insufficient-Online-Time", placeholders);
+                                    }
                                 } else if (PluginControl.enableRetroactiveCard()) {
                                     if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Hold") && data.getRetroactiveCard() > 0) {
                                         data.takeRetroactiveCard(data.getRetroactiveCard());

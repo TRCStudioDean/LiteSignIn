@@ -34,23 +34,29 @@ public class LiteSignInThread
     private final double delay;
     
     public LiteSignInThread(double delay) {
+        super("LiteSignIn-Pool");
         this.delay = delay;
     }
 
     @Override
     public void run() {
         running = true;
+        List<LiteSignInTask> cache = new LinkedList();
         while (running) {
             try {
                 long usedTime = System.currentTimeMillis();
                 if (!BackupUtil.isBackingUp() && !RollBackUtil.isRollingback()) {
-                    new LinkedList<>(tasks).stream().filter(task -> {
-                        if (task.getTotalExecuteTimes() != -1 && task.getExecuteTimes() >= task.getTotalExecuteTimes()) {
-                            tasks.remove(task);
-                            return false;
-                        }
-                        return !(task.isOnlyPlayersOnline() && Bukkit.getOnlinePlayers().isEmpty());
-                    }).forEach(LiteSignInTask::run);
+                    synchronized (tasks) {
+                        cache.clear();
+                        cache.addAll(tasks);
+                        cache.stream().filter(task -> {
+                            if (task.getTotalExecuteTimes() != -1 && task.getExecuteTimes() >= task.getTotalExecuteTimes()) {
+                                tasks.remove(task);
+                                return false;
+                            }
+                            return !(task.isOnlyPlayersOnline() && Bukkit.getOnlinePlayers().isEmpty());
+                        }).forEach(LiteSignInTask::run);
+                    }
                 }
                 long speed = ((long) (delay * 1000)) - (System.currentTimeMillis() - usedTime);
                 if (speed >= 0) sleep(speed);
@@ -77,6 +83,14 @@ public class LiteSignInThread
     }
     
     public static void runTask(Runnable task) {
-        taskThread.tasks.add(new LiteSignInTask(task, 1,0));
+        synchronized (taskThread.tasks) {
+            taskThread.tasks.add(new LiteSignInTask(task, 1, 0));
+        }
+    }
+    
+    public static void runTask(Runnable task, double second) {
+        synchronized (taskThread.tasks) {
+            taskThread.tasks.add(new LiteSignInTask(task, 1, (long) (1D / ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay") * second)));
+        }
     }
 }

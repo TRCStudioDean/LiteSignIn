@@ -14,6 +14,8 @@ public class LiteSignInTask
     private final boolean onlyPlayersOnline;
     @Getter
     private long executeTimes = 0;
+    @Getter
+    private long tickedTimes = 0;
 
     public LiteSignInTask(Runnable task, long totalExecuteTimes, long tickInterval) {
         this.task = task;
@@ -30,10 +32,11 @@ public class LiteSignInTask
     }
     
     public void run() {
-        if (tickInterval <= 0 || executeTimes % tickInterval == 0) {
-            task.run();
-        }
         if (totalExecuteTimes != -1 || tickInterval > 0) {
+            tickedTimes++;
+        }
+        if (tickInterval <= 0 || tickedTimes % tickInterval == 0) {
+            task.run();
             executeTimes++;
         }
     }

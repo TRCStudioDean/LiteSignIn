@@ -299,7 +299,7 @@ public class RewardCommand
                             MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.SPECIAL_TIMES_CYCLE", placeholders);
                             return;
                         }
-                        SignInReward reward = new SignInSpecialTimeReward(group, time);
+                        SignInReward reward = new SignInSpecialTimeCycleReward(group, time);
                         reward.giveReward(playerdata);
                         MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
                     } catch (Exception ex) {
@@ -323,7 +323,7 @@ public class RewardCommand
                             MessageUtil.sendCommandMessage(sender, "Reward.Invalid-Parameters.STATISTICS_CYCLE", placeholders);
                             return;
                         }
-                        SignInReward reward = new SignInStatisticsTimeReward(group, number);
+                        SignInReward reward = new SignInStatisticsTimeCycleReward(group, number);
                         reward.giveReward(playerdata);
                         MessageUtil.sendCommandMessage(sender, "Reward.Successfully-Reward", placeholders);
                     } catch (Exception ex) {

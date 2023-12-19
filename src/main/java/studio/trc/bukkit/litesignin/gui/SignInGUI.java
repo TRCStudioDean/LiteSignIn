@@ -4,8 +4,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -25,6 +27,7 @@ import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.nms.NMSManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -38,39 +41,34 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class SignInGUI
 {
-    
     public static SignInInventory getGUI(Player player) {
         ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
         /**
-         * Chest GUI Create
+         * Create chest GUI
          */
         Inventory gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(new Date()))));
         
         /**
-         * elements
+         * Elements
          */
         List<SignInGUIColumn> columns = new ArrayList();
         
-        getKey(player).stream().map((items) -> {
+        getKey(player).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach((items) -> {
-            columns.add(items);
-        });
+        }).forEach(items -> columns.add(items));
         
-        getOthers(player).stream().map((items) -> {
+        getOthers(player).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach((items) -> {
-            columns.add(items);
-        });
+        }).forEach(items -> columns.add(items));
         
         return new SignInInventory(gui, columns);
     }
     
     public static SignInInventory getGUI(Player player, int month) {
         /**
-         * Chest GUI Create
+         * Chest GUI
          */
         Inventory gui;
         
@@ -87,30 +85,26 @@ public class SignInGUI
         }
         
         /**
-         * elements
+         * Elements
          */
         List<SignInGUIColumn> columns = new ArrayList();
         
         getKey(player, month).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach(items -> {
-            columns.add(items);
-        });
+        }).forEach(items -> columns.add(items));
         
         getOthers(player, month).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach((items) -> {
-            columns.add(items);
-        });
+        }).forEach((items) -> columns.add(items));
         
         return new SignInInventory(gui, columns, month);
     }
     
     public static SignInInventory getGUI(Player player, int month, int year) {
         /**
-         * Chest GUI Create
+         * Chest GUI
          */
         Inventory gui;
         SignInDate today = SignInDate.getInstance(new Date());
@@ -133,23 +127,19 @@ public class SignInGUI
         }
         
         /**
-         * elements
+         * Elements
          */
         List<SignInGUIColumn> columns = new ArrayList();
         
         getKey(player, month, year).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach((items) -> {
-            columns.add(items);
-        });
+        }).forEach(items -> columns.add(items));
         
         getOthers(player, month, year).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
             return items;
-        }).forEach((items) -> {
-            columns.add(items);
-        });
+        }).forEach(items -> columns.add(items));
         
         return new SignInInventory(gui, columns, month, year);
     }
@@ -773,7 +763,7 @@ public class SignInGUI
     
     private static void setHeadTextures(Player player, String configPath, ItemStack is) {
         String nmsVersion = PluginControl.nmsVersion;
-        if (nmsVersion.startsWith("v1_7")) return;
+        if (nmsVersion == null || nmsVersion.startsWith("v1_7")) return;
         ItemMeta im = is.getItemMeta();
         String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath), player);
         if (im == null || textures == null) return;
@@ -781,12 +771,21 @@ public class SignInGUI
             SkullMeta skull = (SkullMeta) im;
             GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
             profile.getProperties().put("textures", new Property("textures", textures));
-            Field profileField;
             try {
-                profileField = skull.getClass().getDeclaredField("profile");
+                Field profileField = skull.getClass().getDeclaredField("profile");
                 profileField.setAccessible(true);
                 profileField.set(skull, profile);
-            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+                profileField.setAccessible(false);
+                if (nmsVersion.startsWith("v1_20")) {
+                    Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");
+                    Method writeGameProfile = Arrays.stream(NMSManager.gameProfileSerializer.getMethods()).filter(method -> method.getParameterTypes().length == 2 && method.getParameterTypes()[0].equals(NMSManager.nbtTagCompound) && method.getParameterTypes()[1].equals(profile.getClass()) && method.getReturnType().equals(NMSManager.nbtTagCompound)).findFirst().orElse(null);
+                    if (writeGameProfile != null) {
+                        serializedProfileField.setAccessible(true);
+                        serializedProfileField.set(skull, writeGameProfile.invoke(null, NMSManager.nbtTagCompound.getConstructor().newInstance(), profile));
+                        serializedProfileField.setAccessible(false);
+                    }
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             is.setItemMeta(skull);

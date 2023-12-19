@@ -19,15 +19,11 @@ import org.bukkit.inventory.ItemStack;
 import studio.trc.bukkit.litesignin.util.CustomItem;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
-/**
- * Used by /signin itemcollection.
- * Allows the player to display the item’s parameters while moving the mouse pointer over the text.
- * @author Dean
- */
-public class JsonItemStack
+public class NMSManager
 {
     public static Class<?> craftItemStack;
     public static Class<?> nbtTagCompound;
+    public static Class<?> gameProfileSerializer;
     public static Class<?> itemStack;
     public static boolean nmsFound;
     
@@ -37,7 +33,7 @@ public class JsonItemStack
         try {
             craftItemStack = Class.forName("org.bukkit.craftbukkit." + PluginControl.nmsVersion + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
             nmsFound = false;
         }
         
@@ -45,13 +41,15 @@ public class JsonItemStack
         try {
             if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18") || PluginControl.nmsVersion.startsWith("v1_19") || PluginControl.nmsVersion.startsWith("v1_20")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
+                gameProfileSerializer = Class.forName("net.minecraft.nbt.GameProfileSerializer");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
             } else {
                 nbtTagCompound = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".NBTTagCompound");
+                gameProfileSerializer = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".GameProfileSerializer");
                 itemStack = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".ItemStack"); 
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
             nmsFound = false;
         }
     }
@@ -113,7 +111,7 @@ public class JsonItemStack
             }
             return NBTTagCompound.toString();
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
-            Logger.getLogger(JsonItemStack.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

@@ -1205,7 +1205,7 @@ English:
             Give:
                 Help: '{prefix}&cUsage: &6/signin itemcollection give [name] [player]'
                 Player-Offline: '{prefix}&cPlayer &e{player} &cis not online!'
-                Give-Yourself: '{prefix}&aThe item &r%item% &a name: &e{name} &ahas been given to yourself.'
+                Give-Yourself: '{prefix}&aThe item &r%item% &aname: &e{name} &ahas been given to yourself.'
                 Give-Others: '{prefix}&aItem &r%item% &aname: &e{name} &ahas been given to players &c{player} &a.'
                 Not-Exist: '{prefix}&cCollectible name &e{name} &c''s item does not exist! Please use &a/signin itemcollection list &c to list all collectibles!'
         Info:

@@ -9,10 +9,12 @@ import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
 import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
+import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.event.Quit;
 import studio.trc.bukkit.litesignin.event.Join;
-import studio.trc.bukkit.litesignin.nms.JsonItemStack;
+import studio.trc.bukkit.litesignin.nms.NMSManager;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.metrics.Metrics;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -23,9 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
-import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -55,18 +54,15 @@ public class Main
         registerCommandExecutor();
         registerEvent();
         PluginControl.reload();
-        JsonItemStack.reloadNMS();
+        NMSManager.reloadNMS();
         SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", MessageUtil.getDefaultPlaceholders());
         
         //It will run after the server is started.
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (PluginControl.enableUpdater()) {
-                    Updater.checkUpdate();
-                }
+        Bukkit.getScheduler().runTask(this, () -> {
+            if (PluginControl.enableUpdater()) {
+                Updater.checkUpdate();
             }
-        }.runTask(main);
+        });
         
         //Metrics
         if (PluginControl.enableMetrics()) {

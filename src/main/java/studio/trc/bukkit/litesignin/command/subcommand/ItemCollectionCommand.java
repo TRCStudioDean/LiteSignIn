@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
-import studio.trc.bukkit.litesignin.nms.JsonItemStack;
+import studio.trc.bukkit.litesignin.nms.NMSManager;
 import studio.trc.bukkit.litesignin.util.CustomItem;
 import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
 
@@ -115,7 +115,7 @@ public class ItemCollectionCommand
                         placeholders.put("{amount}", String.valueOf(itemList.size()));
                         bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
                         if (i < splitMessage.length - 1 || text.endsWith("%list%")) {
-                            bc.addAll(Arrays.asList(JsonItemStack.getJsonItemStackArray(itemList)));
+                            bc.addAll(Arrays.asList(NMSManager.getJsonItemStackArray(itemList)));
                         }
                     }
                     MessageUtil.sendJsonMessage(sender, bc);
@@ -162,7 +162,7 @@ public class ItemCollectionCommand
                         placeholders.put("{name}", args[2]);
                         bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").endsWith("%item%")) {
-                            bc.add(JsonItemStack.getJsonItemStack(is));
+                            bc.add(NMSManager.getJsonItemStack(is));
                         }
                     }
                     MessageUtil.sendJsonMessage(sender, bc);
@@ -206,7 +206,7 @@ public class ItemCollectionCommand
                         placeholders.put("{name}", args[2]);
                         bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").endsWith("%item%")) {
-                            bc.add(JsonItemStack.getJsonItemStack(item.getItemStack()));
+                            bc.add(NMSManager.getJsonItemStack(item.getItemStack()));
                         }
                     }
                     MessageUtil.sendJsonMessage(sender, bc);
@@ -258,7 +258,7 @@ public class ItemCollectionCommand
                         placeholders.put("{name}", args[2]);
                         bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").endsWith("%item%")) {
-                            bc.add(JsonItemStack.getJsonItemStack(ci.getItemStack()));
+                            bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }
                     }
                     MessageUtil.sendJsonMessage(sender, bc);
@@ -301,7 +301,7 @@ public class ItemCollectionCommand
                         placeholders.put("{name}", args[2]);
                         bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, splitMessage[i], placeholders))));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").endsWith("%item%")) {
-                            bc.add(JsonItemStack.getJsonItemStack(ci.getItemStack()));
+                            bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }
                     }
                     MessageUtil.sendJsonMessage(sender, bc);

@@ -74,7 +74,7 @@ public abstract class SignInRewardUtil
                             break;
                         }
                         case PLAYSOUNDS: {
-                            getSounds().stream().forEach(sounds -> {sounds.playSound(player);});
+                            getSounds().stream().forEach(sounds -> sounds.playSound(player));
                             break;
                         }
                     }

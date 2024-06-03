@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -156,8 +157,8 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/GUISettings.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        String version = PluginControl.nmsVersion;
-                        if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+                        String version = Bukkit.getBukkitVersion();
+                        if (version.startsWith("1.7") || version.startsWith("1.8") || version.startsWith("1.9") || version.startsWith("1.10") || version.startsWith("1.11") || version.startsWith("1.12")) {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/GUISettings-OLDVERSION.yml");
                             byte[] bytes = new byte[is.available()];
                             for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));
@@ -181,8 +182,8 @@ public class ConfigurationUtil
                     File configFile = new File("plugins/LiteSignIn/RewardSettings.yml");
                     if (!configFile.exists()) {
                         configFile.createNewFile();
-                        String version = PluginControl.nmsVersion;
-                        if (version.startsWith("v1_7") || version.startsWith("v1_8")) {
+                        String version = Bukkit.getBukkitVersion();
+                        if (version.startsWith("1.7") || version.startsWith("1.8")) {
                             InputStream is = Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + "/RewardSettings-OLDVERSION.yml");
                             byte[] bytes = new byte[is.available()];
                             for (int len = 0; len != bytes.length; len += is.read(bytes, len, bytes.length - len));

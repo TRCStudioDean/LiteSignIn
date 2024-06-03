@@ -91,7 +91,7 @@ public class Join
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Load-Data")) {
             LiteSignInThread.runTask(task, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay"));
         } else {
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20));
+            PluginControl.runBukkitTask(task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20));
         }
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (SignInPluginUtils.hasPermission(player, "Updater")) {
@@ -141,7 +141,7 @@ public class Join
     }
     
     public void schedule(Storage data, Player player, boolean unableToHoldCards, boolean autoSignIn) {
-        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+        PluginControl.runBukkitTask(() -> {
             if (unableToHoldCards) {
                 if (data.getRetroactiveCard() > 0) {
                     data.takeRetroactiveCard(data.getRetroactiveCard());
@@ -153,6 +153,6 @@ public class Join
                     data.signIn();
                 }
             }
-        });
+        }, 0);
     }
 }

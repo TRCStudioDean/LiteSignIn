@@ -32,7 +32,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Menu
     implements Listener
@@ -79,16 +78,13 @@ public class Menu
     }
     
     public static void callEvent(SignInGUIOpenEvent event, Player player, SignInInventory inventory) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    player.openInventory(inventory.getInventory());
-                    menuOpening.put(player.getUniqueId(), inventory);
-                }
+        PluginControl.runBukkitTask(() -> {
+            Bukkit.getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                player.openInventory(inventory.getInventory());
+                menuOpening.put(player.getUniqueId(), inventory);
             }
-        }.runTask(Main.getInstance());
+        }, 0);
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -227,11 +223,11 @@ public class Menu
             Player player = (Player) e.getPlayer();
             if (menuOpening.get(player.getUniqueId()) != null) {
                 menuOpening.remove(player.getUniqueId());
-                Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+                PluginControl.runBukkitTask(() -> {
                     if (player.getOpenInventory().equals(e.getView())) {
                         player.closeInventory();
                     }
-                });
+                }, 0);
                 Bukkit.getPluginManager().callEvent(new SignInGUICloseEvent(player));
             }
         }

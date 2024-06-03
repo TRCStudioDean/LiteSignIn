@@ -13,11 +13,11 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.util.CustomItem;
-import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class NMSManager
 {
@@ -27,26 +27,35 @@ public class NMSManager
     public static Class<?> itemStack;
     public static boolean nmsFound;
     
+    public static String getPackageName() {
+        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    }
+    
     public static void reloadNMS() {
         
         //craftbukkit
         try {
-            craftItemStack = Class.forName("org.bukkit.craftbukkit." + PluginControl.nmsVersion + ".inventory.CraftItemStack");
+            craftItemStack = Class.forName("org.bukkit.craftbukkit." + getPackageName() + ".inventory.CraftItemStack");
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            try {
+                craftItemStack = Class.forName("org.bukkit.craftbukkit.inventory.CraftItemStack");
+            } catch (ClassNotFoundException ex1) {
+                nmsFound = false;
+            }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
             nmsFound = false;
         }
         
         //net.minecraft.server
         try {
-            if (PluginControl.nmsVersion.startsWith("v1_17") || PluginControl.nmsVersion.startsWith("v1_18") || PluginControl.nmsVersion.startsWith("v1_19") || PluginControl.nmsVersion.startsWith("v1_20")) {
+            if (Bukkit.getBukkitVersion().startsWith("1.17") || Bukkit.getBukkitVersion().startsWith("1.18") || Bukkit.getBukkitVersion().startsWith("1.19") || Bukkit.getBukkitVersion().startsWith("1.20")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
                 gameProfileSerializer = Class.forName("net.minecraft.nbt.GameProfileSerializer");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
             } else {
-                nbtTagCompound = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".NBTTagCompound");
-                gameProfileSerializer = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".GameProfileSerializer");
-                itemStack = Class.forName("net.minecraft.server." + PluginControl.nmsVersion + ".ItemStack"); 
+                nbtTagCompound = Class.forName("net.minecraft.server." + getPackageName() + ".NBTTagCompound");
+                gameProfileSerializer = Class.forName("net.minecraft.server." + getPackageName() + ".GameProfileSerializer");
+                itemStack = Class.forName("net.minecraft.server." + getPackageName() + ".ItemStack"); 
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);

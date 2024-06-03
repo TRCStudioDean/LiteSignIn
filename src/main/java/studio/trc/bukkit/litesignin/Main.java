@@ -58,11 +58,11 @@ public class Main
         SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", MessageUtil.getDefaultPlaceholders());
         
         //It will run after the server is started.
-        Bukkit.getScheduler().runTask(this, () -> {
+        PluginControl.runBukkitTask(() -> {
             if (PluginControl.enableUpdater()) {
                 Updater.checkUpdate();
             }
-        });
+        }, 0);
         
         //Metrics
         if (PluginControl.enableMetrics()) {

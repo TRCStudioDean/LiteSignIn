@@ -41,7 +41,7 @@ Reward-Settings:
                 #Support PlaceholderAPI
                 Commands: []
             #Triggered when retrospective sign-in.
-            Retroactive-Times:
+            Retroactive-Time:
                 #Used to prohibit players from obtaining the rewards of the following modules through retrospective sign-in.
                 Disabled-Modules:
                     #It is recommended to enable it to prevent players from directly receiving special rewards on certain special dates.

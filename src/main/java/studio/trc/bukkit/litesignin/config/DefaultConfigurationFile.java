@@ -32,7 +32,7 @@ public class DefaultConfigurationFile
         String fileName = type.getFileName();
         if (type.equals(ConfigurationType.GUISETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+            if (version.startsWith("1.7") || version.startsWith("1.8") || version.startsWith("1.9") || version.startsWith("1.10") || version.startsWith("1.11") || version.startsWith("1.12")) {
                 fileName = "GUISettings-OLDVERSION.yml";
             } else {
                 fileName = "GUISettings-NEWVERSION.yml";
@@ -40,7 +40,7 @@ public class DefaultConfigurationFile
         }
         if (type.equals(ConfigurationType.REWARDSETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-            if (version.startsWith("v1_7") || version.startsWith("v1_8") || version.startsWith("v1_9") || version.startsWith("v1_10") || version.startsWith("v1_11") || version.startsWith("v1_12")) {
+            if (version.startsWith("1.7") || version.startsWith("1.8") || version.startsWith("1.9") || version.startsWith("1.10") || version.startsWith("1.11") || version.startsWith("1.12")) {
                 fileName = "RewardSettings-OLDVERSION.yml";
             } else {
                 fileName = "RewardSettings-NEWVERSION.yml";

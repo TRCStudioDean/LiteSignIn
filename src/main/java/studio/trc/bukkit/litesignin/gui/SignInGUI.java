@@ -738,14 +738,14 @@ public class SignInGUI
     }
     
     private static void setCustomModelData(String configPath, ItemStack is) {
-        String nmsVersion = PluginControl.nmsVersion;
-        if (nmsVersion.startsWith("v1_7") ||
-            nmsVersion.startsWith("v1_8") ||
-            nmsVersion.startsWith("v1_9") ||
-            nmsVersion.startsWith("v1_10") ||
-            nmsVersion.startsWith("v1_11") ||
-            nmsVersion.startsWith("v1_12") || 
-            nmsVersion.startsWith("v1_13")) return;
+        String version = Bukkit.getBukkitVersion();
+        if (version.startsWith("1.7") ||
+            version.startsWith("1.8") ||
+            version.startsWith("1.9") ||
+            version.startsWith("1.10") ||
+            version.startsWith("1.11") ||
+            version.startsWith("1.12") || 
+            version.startsWith("1.13")) return;
         if (is.getItemMeta() == null) return;
         ItemMeta im = is.getItemMeta();
         String name = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath);
@@ -762,8 +762,8 @@ public class SignInGUI
     }
     
     private static void setHeadTextures(Player player, String configPath, ItemStack is) {
-        String nmsVersion = PluginControl.nmsVersion;
-        if (nmsVersion == null || nmsVersion.startsWith("v1_7")) return;
+        String version = Bukkit.getBukkitVersion();
+        if (version == null || version.startsWith("1.7")) return;
         ItemMeta im = is.getItemMeta();
         String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath), player);
         if (im == null || textures == null) return;
@@ -776,7 +776,7 @@ public class SignInGUI
                 profileField.setAccessible(true);
                 profileField.set(skull, profile);
                 profileField.setAccessible(false);
-                if (nmsVersion.startsWith("v1_20")) {
+                if (version.startsWith("1.20")) {
                     Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");
                     Method writeGameProfile = Arrays.stream(NMSManager.gameProfileSerializer.getMethods()).filter(method -> method.getParameterTypes().length == 2 && method.getParameterTypes()[0].equals(NMSManager.nbtTagCompound) && method.getParameterTypes()[1].equals(profile.getClass()) && method.getReturnType().equals(NMSManager.nbtTagCompound)).findFirst().orElse(null);
                     if (writeGameProfile != null) {
@@ -785,9 +785,7 @@ public class SignInGUI
                         serializedProfileField.setAccessible(false);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) {}
             is.setItemMeta(skull);
         }
     }

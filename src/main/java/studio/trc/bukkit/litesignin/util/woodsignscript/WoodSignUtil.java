@@ -21,15 +21,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
+import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
 
 public class WoodSignUtil
@@ -134,17 +133,14 @@ public class WoodSignUtil
         database.set("Database." + number + ".Script", woodSign.getWoodSignTitle());
         saveScriptedSigns();
         if (reloadFile) loadSigns();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Sign sign = (Sign) block.getState();
-                sign.setLine(0, MessageUtil.toColor(woodSign.getWoodSignText().getLine1()));
-                sign.setLine(1, MessageUtil.toColor(woodSign.getWoodSignText().getLine2()));
-                sign.setLine(2, MessageUtil.toColor(woodSign.getWoodSignText().getLine3()));
-                sign.setLine(3, MessageUtil.toColor(woodSign.getWoodSignText().getLine4()));
-                sign.update();
-            }
-        }.runTaskLater(Main.getInstance(), 1);
+        PluginControl.runBukkitTask(() -> {
+            Sign sign = (Sign) block.getState();
+            sign.setLine(0, MessageUtil.toColor(woodSign.getWoodSignText().getLine1()));
+            sign.setLine(1, MessageUtil.toColor(woodSign.getWoodSignText().getLine2()));
+            sign.setLine(2, MessageUtil.toColor(woodSign.getWoodSignText().getLine3()));
+            sign.setLine(3, MessageUtil.toColor(woodSign.getWoodSignText().getLine4()));
+            sign.update();
+        }, 1);
     }
     
     public static boolean removeWoodSignScript(Location location) {

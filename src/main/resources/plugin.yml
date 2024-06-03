@@ -1,7 +1,8 @@
 name: LiteSignIn
-version: 1.8.0.1
+version: 1.8.1.2
 main: studio.trc.bukkit.litesignin.Main
 author: TRCStudioDean
+folia-supported: true
 api-version: 1.13
 softdepend: [PlaceholderAPI]
 commands:

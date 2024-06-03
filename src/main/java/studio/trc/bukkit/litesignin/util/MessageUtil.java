@@ -76,7 +76,7 @@ public class MessageUtil
         if (jsonComponents.isEmpty()) {
             sender.sendMessage(message);
         } else {
-            sendJsonMessage(sender, createJsonMessage(sender, message, jsonComponents));
+            sendJSONMessage(sender, createJsonMessage(sender, message, jsonComponents));
         }
     }
     
@@ -159,7 +159,7 @@ public class MessageUtil
      * @param sender Command sender.
      * @param components JSON components
      */
-    public static void sendJsonMessage(CommandSender sender, List<BaseComponent> components) {
+    public static void sendJSONMessage(CommandSender sender, List<BaseComponent> components) {
         if (sender instanceof Player) {
             ((Player) sender).spigot().sendMessage(components.toArray(new BaseComponent[] {}));
         } else {
@@ -368,9 +368,9 @@ public class MessageUtil
     }
     
     public static String toColor(String text) {
-        String nmsVersion = PluginControl.nmsVersion;
-        if (!nmsVersion.startsWith("v1_7") && !nmsVersion.startsWith("v1_8") && !nmsVersion.startsWith("v1_9") && !nmsVersion.startsWith("v1_10") &&
-            !nmsVersion.startsWith("v1_11") && !nmsVersion.startsWith("v1_12") && !nmsVersion.startsWith("v1_13") && !nmsVersion.startsWith("v1_14") && !nmsVersion.startsWith("v1_15")) {
+        String version = Bukkit.getBukkitVersion();
+        if (!version.startsWith("1.7") && !version.startsWith("1.8") && !version.startsWith("1.9") && !version.startsWith("1.10") &&
+            !version.startsWith("1.11") && !version.startsWith("1.12") && !version.startsWith("1.13") && !version.startsWith("1.14") && !version.startsWith("1.15")) {
             try {
                 Matcher matcher = hexColorPattern.matcher(text);
                 while (matcher.find()) {

@@ -118,7 +118,7 @@ public class ItemCollectionCommand
                             bc.addAll(Arrays.asList(NMSManager.getJsonItemStackArray(itemList)));
                         }
                     }
-                    MessageUtil.sendJsonMessage(sender, bc);
+                    MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{amount}", String.valueOf(itemList.size()));
                     sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, text, placeholders)));
@@ -165,7 +165,7 @@ public class ItemCollectionCommand
                             bc.add(NMSManager.getJsonItemStack(is));
                         }
                     }
-                    MessageUtil.sendJsonMessage(sender, bc);
+                    MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{name}", args[2]);
                     MessageUtil.sendCommandMessage(sender, "ItemCollection.Add.Successfully", placeholders);
@@ -209,7 +209,7 @@ public class ItemCollectionCommand
                             bc.add(NMSManager.getJsonItemStack(item.getItemStack()));
                         }
                     }
-                    MessageUtil.sendJsonMessage(sender, bc);
+                    MessageUtil.sendJSONMessage(sender, bc);
                     item.delete();
                 } else {
                     placeholders.put("{name}", args[2]);
@@ -261,7 +261,7 @@ public class ItemCollectionCommand
                             bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }
                     }
-                    MessageUtil.sendJsonMessage(sender, bc);
+                    MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{name}", args[2]);
                     MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Give-Yourself", placeholders);
@@ -304,7 +304,7 @@ public class ItemCollectionCommand
                             bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }
                     }
-                    MessageUtil.sendJsonMessage(sender, bc);
+                    MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{player}", player.getName());
                     placeholders.put("{name}", args[2]);

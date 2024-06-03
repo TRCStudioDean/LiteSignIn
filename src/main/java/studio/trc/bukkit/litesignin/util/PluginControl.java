@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 
+import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.async.AutoSave;
 import studio.trc.bukkit.litesignin.config.Configuration;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
@@ -29,11 +31,10 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 
 public class PluginControl
 {
-    public static String nmsVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-    
     public static void reload() {
         ConfigurationUtil.reloadConfig();
         MessageUtil.loadPlaceholders();
@@ -107,7 +108,7 @@ public class PluginControl
     }
     
     public static void hideEnchants(ItemMeta im) {
-        if (getNMSVersion().startsWith("v1_7")) {
+        if (Bukkit.getBukkitVersion().startsWith("1.7")) {
             return;
         }
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -119,7 +120,7 @@ public class PluginControl
     private static final Map<String, ItemMeta> headCacheData = new HashMap();
     
     public static void setHead(ItemStack is, String name) {
-        if (getNMSVersion().startsWith("v1_7") || getNMSVersion().startsWith("v1_8") || getNMSVersion().startsWith("v1_9") || getNMSVersion().startsWith("v1_10") || getNMSVersion().startsWith("v1_11") || getNMSVersion().startsWith("v1_12")) {
+        if (Bukkit.getBukkitVersion().startsWith("1.7") || Bukkit.getBukkitVersion().startsWith("1.8") || Bukkit.getBukkitVersion().startsWith("1.9") || Bukkit.getBukkitVersion().startsWith("1.10") || Bukkit.getBukkitVersion().startsWith("1.11") || Bukkit.getBukkitVersion().startsWith("1.12")) {
             if (is.getType().equals(Material.valueOf("SKULL_ITEM")) && is.getData().getData() == 3) {
                 if (headCacheData.containsKey(name)) {
                     is.setItemMeta(headCacheData.get(name));
@@ -236,10 +237,6 @@ public class PluginControl
         return MessageUtil.toColor(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix"));
     }
     
-    public static String getNMSVersion() {
-        return PluginControl.nmsVersion;
-    }
-    
     public static ItemStack getRetroactiveCardRequiredItem(Player player) {
         String itemName = ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Required-Item.CustomItem");
         if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Item") != null) {
@@ -335,5 +332,29 @@ public class PluginControl
         backupFiles = list;
         backupFilesAcquisitionTime = System.currentTimeMillis();
         return list;
+    }
+    
+    public static void runBukkitTask(Runnable task, long delay) {
+        try {
+            if (delay == 0) {
+                Bukkit.getScheduler().runTask(Main.getInstance(), task);
+            } else {
+                Bukkit.getScheduler().runTaskLater(Main.getInstance(), task, delay);
+            }
+        } catch (UnsupportedOperationException ex) {
+            //Folia suppport (test)
+            Consumer runnable = run -> task.run();
+            try {
+                Object globalRegionScheduler = Bukkit.class.getMethod("getGlobalRegionScheduler").invoke(null);
+                if (delay == 0) {
+                    globalRegionScheduler.getClass().getMethod("run", Plugin.class, Consumer.class).invoke(globalRegionScheduler, Main.getInstance(), runnable);
+                } else {
+                    globalRegionScheduler.getClass().getMethod("runDelayed", Plugin.class, Consumer.class, long.class).invoke(globalRegionScheduler, Main.getInstance(), runnable, delay);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                task.run();
+            }
+        }
     }
 }

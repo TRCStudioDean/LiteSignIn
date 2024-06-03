@@ -186,10 +186,10 @@ public final class SQLiteStorage
             rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
             rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
             rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
-                rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
             if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
             else {
                 rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
+                rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
                 rewardQueue.addReward(new SignInSpecialTimePeriodReward(group, today));
                 rewardQueue.addReward(new SignInSpecialRankingReward(group, queue));

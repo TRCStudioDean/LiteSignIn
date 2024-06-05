@@ -377,7 +377,8 @@ public class SignInDate
                 if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
                     days[1] = 29;
                 }
-                if (days[month - 1] == day && month + 1 == date.getMonth()) {
+                //Continuous sign-in is considered when the following conditions are met:
+                if (days[month - 1] == day && month + 1 == date.getMonth() && date.getDay() == 1) {
                     continuous++;
                     breakSign = false;
                 } else if (day + 1 == date.getDay()) {

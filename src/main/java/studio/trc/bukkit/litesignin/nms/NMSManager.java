@@ -48,7 +48,7 @@ public class NMSManager
         
         //net.minecraft.server
         try {
-            if (Bukkit.getBukkitVersion().startsWith("1.17") || Bukkit.getBukkitVersion().startsWith("1.18") || Bukkit.getBukkitVersion().startsWith("1.19") || Bukkit.getBukkitVersion().startsWith("1.20")) {
+            if (Bukkit.getBukkitVersion().startsWith("1.17") || Bukkit.getBukkitVersion().startsWith("1.18") || Bukkit.getBukkitVersion().startsWith("1.19") || Bukkit.getBukkitVersion().startsWith("1.20") || Bukkit.getBukkitVersion().startsWith("1.21")) {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
                 gameProfileSerializer = Class.forName("net.minecraft.nbt.GameProfileSerializer");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
@@ -116,12 +116,12 @@ public class NMSManager
                     saveMethod.setAccessible(false);
                 }
             } else {
-                return null;
+                nbtTagCompound.getMethod("putString", String.class, String.class).invoke(NBTTagCompound, "id", is.getType().getKey().getNamespace() + ":" + is.getType().getKey().getKey());
+                nbtTagCompound.getMethod("putByte", String.class, byte.class).invoke(NBTTagCompound, "Count", (byte) is.getAmount());
             }
             return NBTTagCompound.toString();
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
-            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        } catch (Exception ex) {
+            return is.getType().name();
         }
     }
 }

@@ -161,7 +161,13 @@ public class MessageUtil
      */
     public static void sendJSONMessage(CommandSender sender, List<BaseComponent> components) {
         if (sender instanceof Player) {
-            ((Player) sender).spigot().sendMessage(components.toArray(new BaseComponent[] {}));
+            try {
+                ((Player) sender).spigot().sendMessage(components.toArray(new BaseComponent[] {}));
+            } catch (Exception ex) {
+                StringBuilder builder = new StringBuilder();
+                components.stream().map(component -> component.toPlainText()).forEach(builder::append);
+                sender.sendMessage(builder.toString());
+             }
         } else {
             StringBuilder builder = new StringBuilder();
             components.stream().map(component -> component.toPlainText()).forEach(message -> {

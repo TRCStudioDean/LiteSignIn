@@ -28,6 +28,10 @@ Online-Duration-Condition:
     Time: 00:03:00
     #今日在线时长累计（启用后，即便玩家中途掉线，今日在线时长也会保留）
     Statistics: true
+    
+#禁止签到的世界
+#当玩家处于列表中的世界时无法进行签到
+Disabled-Worlds: []
 
 #是否启用签到排名榜功能
 #此功能用于登记每日签到玩家的先后顺序
@@ -219,6 +223,9 @@ Permissions:
     Join-Auto-SignIn:
         Default: false
         Permission: signin.joinevent.autosignin
+    Disabled-Worlds-Bypass:
+        Default: false
+        Permission: signin.bypass
     #命令相关权限
     Commands:
         Help: 

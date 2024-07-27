@@ -30,6 +30,9 @@ Online-Duration-Condition:
     Time: 00:03:00
     #Enable statistics (after enabling, even if the player disconnects midway, today's online duration will be retained)
     Statistics: true
+    
+#When players are in a world on the follow list, they cannot to sign-in
+Disabled-Worlds: []
 
 #Multi-group reward mode
 #When players have multiple reward groups' permission at the same time, they will receive their rewards at the same time when sign-in.
@@ -201,6 +204,10 @@ Permissions:
     Join-Auto-SignIn:
         Default: false
         Permission: signin.joinevent.autosignin
+    #Bypass disabled world permission
+    Disabled-Worlds-Bypass:
+        Default: false
+        Permission: signin.bypass
     #About commands permissions
     Commands:
         Help: 

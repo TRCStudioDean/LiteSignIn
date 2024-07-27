@@ -28,6 +28,10 @@ Online-Duration-Condition:
     Time: 00:03:00
     #今日在線時長累計（啟用後，即便玩家中途斷開連結，今日在線時長也會保留）
     Statistics: true
+    
+#禁止簽到的世界
+#當玩家處於清單中的世界時無法進行簽到
+Disabled-Worlds: []
 
 #是否啟用簽到排名榜功能
 #此功能用於登記每日簽到玩家的先後順序
@@ -218,6 +222,9 @@ Permissions:
     Join-Auto-SignIn:
         Default: false
         Permission: signin.joinevent.autosignin
+    Disabled-Worlds-Bypass:
+        Default: false
+        Permission: signin.bypass
     #命令相關權限
     Commands:
         Help: 

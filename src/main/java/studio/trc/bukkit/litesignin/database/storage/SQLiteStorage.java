@@ -36,6 +36,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
 
 public final class SQLiteStorage
     implements Storage
@@ -320,6 +321,7 @@ public final class SQLiteStorage
     
     @Override
     public void signIn() {
+        if (SignInPluginUtils.checkInDisabledWorlds(uuid)) return;
         SignInDate today = SignInDate.getInstance(new Date());
         PlayerSignInEvent event = new PlayerSignInEvent(uuid, today, false);
         Bukkit.getPluginManager().callEvent(event);
@@ -337,6 +339,7 @@ public final class SQLiteStorage
     
     @Override
     public void signIn(SignInDate historicalDate) {
+        if (SignInPluginUtils.checkInDisabledWorlds(uuid)) return;
         historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getDay());
         if (PluginControl.getRetroactiveCardMinimumDate() != null && historicalDate.compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
             return;

@@ -1,6 +1,7 @@
 package studio.trc.bukkit.litesignin.util;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -39,6 +40,13 @@ public class SignInPluginUtils
         } catch (NumberFormatException ex) {
             return false;
         }
+    }
+    
+    public static boolean checkInDisabledWorlds(UUID uuid) {
+        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null && hasPermission(player, "Disabled-Worlds-Bypass")) return false;
+        return !config.getStringList("Disabled-Worlds").isEmpty() && player != null && config.getStringList("Disabled-Worlds").stream().anyMatch(worldName -> player.getWorld().getName().equalsIgnoreCase(worldName));
     }
     
     public static boolean isPlayer(CommandSender sender, boolean report) {

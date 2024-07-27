@@ -42,6 +42,7 @@ public class Join
         Player player = event.getPlayer();
         OnlineTimeRecord.getJoinTimeRecord().put(player.getUniqueId(), System.currentTimeMillis());
         Runnable task = () -> {
+            if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) return;
             Storage data = Storage.getPlayer(player);
             boolean unableToHoldCards = false;
             boolean autoSignIn = false;

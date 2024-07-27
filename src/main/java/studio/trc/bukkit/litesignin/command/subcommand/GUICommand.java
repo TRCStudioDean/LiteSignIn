@@ -31,6 +31,10 @@ public class GUICommand
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         if (SignInPluginUtils.isPlayer(sender, true)) {
             Player player = (Player) sender;
+            if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+                MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
+                return;
+            }
             SignInDate target = SignInDate.getInstance(new Date());
             if (args.length == 1) {
                 Menu.openGUI(player);

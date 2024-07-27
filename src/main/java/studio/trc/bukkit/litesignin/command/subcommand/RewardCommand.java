@@ -370,7 +370,6 @@ public class RewardCommand
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking").getKeys(false).stream().map(value -> RewardType.SPECIAL_RANKING.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES_OF_MONTH.name())) {
-                System.out.println(1);
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month") == null) {
                     return new ArrayList();
                 }

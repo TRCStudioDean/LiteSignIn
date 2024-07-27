@@ -28,6 +28,9 @@ Online-Duration-Condition:
     Time: 00:03:00
     #統計を取るかどうか（有効にすると、プレイヤーが途中で切断しても、今日のオンライン時間は保持されます）
     Statistics: true
+    
+#プレイヤーが以下のリストの世界にいる場合、サインインは使用できません
+Disabled-Worlds: []
 
 #サインインランキング機能を有効にするかどうか
 #この機能は、毎日サインインするプレイヤーの順番を登録するために使用されます。
@@ -216,6 +219,9 @@ Permissions:
     Join-Auto-SignIn:
         Default: false
         Permission: signin.joinevent.autosignin
+    Disabled-Worlds-Bypass:
+        Default: false
+        Permission: signin.bypass
     #コマンド関連の権限
     Commands:
         Help: 

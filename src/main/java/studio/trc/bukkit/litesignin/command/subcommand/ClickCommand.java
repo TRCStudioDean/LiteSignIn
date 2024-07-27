@@ -31,6 +31,10 @@ public class ClickCommand
         if (args.length == 1) {
             if (SignInPluginUtils.isPlayer(sender, true)) {
                 Player player = (Player) sender;
+                if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+                    MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
+                    return;
+                }
                 Storage data = Storage.getPlayer(player);
                 if (data.alreadySignIn()) {
                     placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
@@ -106,6 +110,10 @@ public class ClickCommand
             } else {
                 if (SignInPluginUtils.isPlayer(sender, true)) {
                     Player player = (Player) sender;
+                    if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+                        MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
+                        return;
+                    }
                     SignInDate today = SignInDate.getInstance(new Date());
                     if (date.equals(today)) {
                         player.performCommand("litesignin:signin click");
@@ -248,8 +256,8 @@ public class ClickCommand
 
     @Override
     public List<String> tabComplete(CommandSender sender, String subCommand, String... args) {
-        if (args.length == 2) {
-            return tabGetPlayersName(args, 2);
+        if (args.length == 2 || args.length == 3) {
+            return tabGetPlayersName(args, args.length);
         }
         return new ArrayList();
     }

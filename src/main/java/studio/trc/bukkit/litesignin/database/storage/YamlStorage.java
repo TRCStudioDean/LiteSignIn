@@ -594,20 +594,21 @@ public final class YamlStorage
                         if (history == null) {
                             history = "";
                         }
-                        PreparedStatement statement = sqlConnection.prepareStatement("INSERT INTO PlayerData(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
-                                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                        statement.setString(1, uuid);
-                        statement.setString(2, name);
-                        statement.setInt(3, year);
-                        statement.setInt(4, month);
-                        statement.setInt(5, day);
-                        statement.setInt(6, hour);
-                        statement.setInt(7, minute);
-                        statement.setInt(8, second);
-                        statement.setInt(9, continuous);
-                        statement.setInt(10, retroactivecard);
-                        statement.setString(11, history);
-                        statement.executeUpdate();
+                        try (PreparedStatement statement = sqlConnection.prepareStatement("INSERT INTO PlayerData(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)"
+                                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            statement.setString(1, uuid);
+                            statement.setString(2, name);
+                            statement.setInt(3, year);
+                            statement.setInt(4, month);
+                            statement.setInt(5, day);
+                            statement.setInt(6, hour);
+                            statement.setInt(7, minute);
+                            statement.setInt(8, second);
+                            statement.setInt(9, continuous);
+                            statement.setInt(10, retroactivecard);
+                            statement.setString(11, history);
+                            statement.executeUpdate();
+                        }
                     }
                 }
             }

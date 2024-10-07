@@ -106,13 +106,14 @@ public class MySQLEngine
     public int executeUpdate(String sqlSyntax, String... values) {
         try {
             checkConnection();
-            PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax);
-            int number = 0;
-            for (String value : values) {
-                number++;
-                statement.setString(number, value);
+            try (PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax)) {
+                int number = 0;
+                for (String value : values) {
+                    number++;
+                    statement.setString(number, value);
+                }
+                return statement.executeUpdate();
             }
-            return statement.executeUpdate();
         } catch (SQLException ex) {
             throwSQLException(ex, "ExecuteUpdateFailed", true);
             return 0;
@@ -123,14 +124,15 @@ public class MySQLEngine
     public int[] executeMultiQueries(String sqlSyntax, List<Map<Integer, String>> parameters) {
         try {
             checkConnection();
-            PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax);
-            for (Map<Integer, String> parameter : parameters) {
-                for (int id : parameter.keySet()) {
-                    statement.setString(id, parameter.get(id));
+            try (PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax)) {
+                for (Map<Integer, String> parameter : parameters) {
+                    for (int id : parameter.keySet()) {
+                        statement.setString(id, parameter.get(id));
+                    }
+                    statement.addBatch();
                 }
-                statement.addBatch();
+                return statement.executeBatch();
             }
-            return statement.executeBatch();
         } catch (SQLException ex) {
             throwSQLException(ex, "ExecuteUpdateFailed", true);
             return new int[0];
@@ -141,13 +143,14 @@ public class MySQLEngine
     public ResultSet executeQuery(String sqlSyntax, String... values) {
         try {
             checkConnection();
-            PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax);
-            int number = 0;
-            for (String value : values) {
-                number++;
-                statement.setString(number, value);
+            try (PreparedStatement statement = mysqlConnection.prepareStatement(sqlSyntax)) {
+                int number = 0;
+                for (String value : values) {
+                    number++;
+                    statement.setString(number, value);
+                }
+                return statement.executeQuery();
             }
-            return statement.executeQuery();
         } catch (SQLException ex) {
             throwSQLException(ex, "ExecuteQueryFailed", true);
             return null;
@@ -181,11 +184,13 @@ public class MySQLEngine
                 checkConnection();
                 Statement statement = mysqlConnection.createStatement();
                 statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + getDatabaseName());
+                statement.close();
                 statement = mysqlConnection.createStatement();
                 for (DatabaseTable table : DatabaseTable.values()) {
                     statement.addBatch(table.getCreateTableSyntax(DatabaseType.MYSQL));
                 }
                 statement.executeBatch();
+                statement.close();
             } catch (SQLException ex) {
                 throwSQLException(ex, "InitializationFailed", true);
             }

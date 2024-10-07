@@ -190,6 +190,9 @@ public class SignInGUI
                     if (section.get("Already-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
+                    if (section.get("Already-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Already-SignIn.Amount"));
+                    }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
                         setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
@@ -224,6 +227,9 @@ public class SignInGUI
                     }
                     if (section.get("Missed-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
+                    }
+                    if (section.get("Missed-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Missed-SignIn.Amount"));
                     }
                     if (section.get("Missed-SignIn.Head-Textures") != null) {
                         setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
@@ -279,6 +285,9 @@ public class SignInGUI
                 }
                 if (section.get("Comming-Soon.Head-Owner") != null) {
                     PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));
+                }
+                if (section.get("Comming-Soon.Amount") != null) {
+                    key.setAmount(section.getInt("Comming-Soon.Amount"));
                 }
                 if (section.get("Comming-Soon.Head-Textures") != null) {
                     setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
@@ -774,7 +783,12 @@ public class SignInGUI
             try {
                 Field profileField = skull.getClass().getDeclaredField("profile");
                 profileField.setAccessible(true);
-                profileField.set(skull, profile);
+                try {
+                    profileField.set(skull, profile);
+                } catch (IllegalArgumentException ex) {
+                    Object resolvableProfile = Class.forName("net.minecraft.world.item.component.ResolvableProfile").getConstructor(GameProfile.class).newInstance(profile);
+                    profileField.set(skull, resolvableProfile);
+                }
                 profileField.setAccessible(false);
                 if (version.startsWith("1.20")) {
                     Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");

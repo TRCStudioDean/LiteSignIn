@@ -307,9 +307,7 @@ public final class MySQLStorage
         dates.stream().filter(date -> !record.contains(date.getYear() + "-" + date.getMonth() + "-" + date.getDay())).map(date -> {
             result.add(date);
             return date;
-        }).forEach(date -> {
-            record.add(date.getYear() + "-" + date.getMonth() + "-" + date.getDay());
-        });
+        }).forEach(date -> record.add(date.getYear() + "-" + date.getMonth() + "-" + date.getDay()));
         return result;
     }
     
@@ -535,39 +533,40 @@ public final class MySQLStorage
             sqlConnection.prepareStatement(DatabaseTable.PLAYER_DATA.getDefaultCreateTableSyntax()).executeUpdate();
             MySQLEngine mysql = MySQLEngine.getInstance();
             ResultSet rs = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA));
-            PreparedStatement statement = sqlConnection.prepareStatement("INSERT INTO PlayerData(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            while (rs.next()) {
-                String uuid = rs.getString("UUID");
-                String name = rs.getString("Name");
-                int year = rs.getInt("Year");
-                int month = rs.getInt("Month");
-                int day = rs.getInt("Day");
-                int hour = rs.getInt("Hour");
-                int minute = rs.getInt("Minute");
-                int second = rs.getInt("Second");
-                int continuous = rs.getInt("Continuous");
-                int retroactivecard = rs.getInt("RetroactiveCard");
-                String history = rs.getString("History");
-                if (name == null) {
-                    name = "null";
+            try (PreparedStatement statement = sqlConnection.prepareStatement("INSERT INTO PlayerData(UUID, Name, Year, Month, Day, Hour, Minute, Second, Continuous, RetroactiveCard, History)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                while (rs.next()) {
+                    String uuid = rs.getString("UUID");
+                    String name = rs.getString("Name");
+                    int year = rs.getInt("Year");
+                    int month = rs.getInt("Month");
+                    int day = rs.getInt("Day");
+                    int hour = rs.getInt("Hour");
+                    int minute = rs.getInt("Minute");
+                    int second = rs.getInt("Second");
+                    int continuous = rs.getInt("Continuous");
+                    int retroactivecard = rs.getInt("RetroactiveCard");
+                    String history = rs.getString("History");
+                    if (name == null) {
+                        name = "null";
+                    }
+                    if (history == null) {
+                        history = "";
+                    }
+                    statement.setString(1, uuid);
+                    statement.setString(2, name);
+                    statement.setInt(3, year);
+                    statement.setInt(4, month);
+                    statement.setInt(5, day);
+                    statement.setInt(6, hour);
+                    statement.setInt(7, minute);
+                    statement.setInt(8, second);
+                    statement.setInt(9, continuous);
+                    statement.setInt(10, retroactivecard);
+                    statement.setString(11, history);
+                    statement.addBatch();
                 }
-                if (history == null) {
-                    history = "";
-                }
-                statement.setString(1, uuid);
-                statement.setString(2, name);
-                statement.setInt(3, year);
-                statement.setInt(4, month);
-                statement.setInt(5, day);
-                statement.setInt(6, hour);
-                statement.setInt(7, minute);
-                statement.setInt(8, second);
-                statement.setInt(9, continuous);
-                statement.setInt(10, retroactivecard);
-                statement.setString(11, history);
-                statement.addBatch();
+                statement.executeBatch();
             }
-            statement.executeBatch();
         }
     }
 }

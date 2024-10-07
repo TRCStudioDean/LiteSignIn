@@ -132,19 +132,18 @@ public class SQLiteEngine
             return new int[0];
         }
     }
-
+    
     @Override
-    public ResultSet executeQuery(String sqlSyntax, String... values) {
+    public SQLQuery executeQuery(String sqlSyntax, String... values) {
         try {
             checkConnection();
-            try (PreparedStatement statement = sqliteConnection.prepareStatement(sqlSyntax)) {
-                int number = 0;
-                for (String value : values) {
-                    number++;
-                    statement.setString(number, value);
-                }
-                return statement.executeQuery();
+            PreparedStatement statement = sqliteConnection.prepareStatement(sqlSyntax);
+            int number = 0;
+            for (String value : values) {
+                number++;
+                statement.setString(number, value);
             }
+            return new SQLQuery(statement.executeQuery(), statement);
         } catch (SQLException ex) {
             throwSQLException(ex, "ExecuteQueryFailed", true);
             return null;

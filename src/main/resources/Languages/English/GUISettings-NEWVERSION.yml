@@ -89,6 +89,9 @@ English:
                 - '&fCurrent cumulative check in times: &e{total-number}'
                 Slot: 49
             'OpenMainMenu':
+                #This is a custom button used for example,
+                #You can freely create and delete buttons according to another buttons.
+                #In addition, the option for custom model is "Custom-Model-Data: [integer value]"
                 Item: BOOK
                 Display-Name: '&6Back to main menu.'
                 Close-GUI: false
@@ -238,6 +241,9 @@ Simplified-Chinese:
                 - '&f当前累计签到次数 &e{total-number} &f次'
                 Slot: 49
             'OpenMainMenu':
+                #这是个自定义按钮，用于示范
+                #可以根据格式自由创建与删除按钮
+                #除此之外，自定义模型的选项是“Custom-Model-Data: [整数值]”
                 Item: BOOK
                 Display-Name: '&6返回主菜单'
                 Close-GUI: false
@@ -387,6 +393,9 @@ Traditional-Chinese:
                 - '&f當前累計簽到次數 &e{total-number} &f次'
                 Slot: 49
             'OpenMainMenu':
+                #這是一個自訂按鈕，用來示範
+                #可以根據格式自由建立與刪除按鈕
+                #除此之外，自訂模型的選項是“Custom-Model-Data: [整數值]”
                 Item: BOOK
                 Display-Name: '&6返回主菜單'
                 Close-GUI: false
@@ -537,6 +546,9 @@ Japanese:
                 - '&f合計： &e{total-number} &f回'
                 Slot: 49
             'OpenMainMenu':
+                #これはカスタムボタンで、デモ用です
+                #ボタンはフォーマットに基づいて自由に作成および削除できます
+                #そのほか、カスタムモデルのオプションは「Custom-Model-Data:[整数値]」
                 Item: BOOK
                 Display-Name: '&6メインメニューに戻る'
                 Close-GUI: false

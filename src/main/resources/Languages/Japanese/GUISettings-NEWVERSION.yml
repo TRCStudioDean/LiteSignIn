@@ -89,6 +89,9 @@ Japanese:
                 - '&f合計： &e{total-number} &f回'
                 Slot: 49
             'OpenMainMenu':
+                #これはカスタムボタンで、デモ用です
+                #ボタンはフォーマットに基づいて自由に作成および削除できます
+                #そのほか、カスタムモデルのオプションは「Custom-Model-Data:[整数値]」
                 Item: BOOK
                 Display-Name: '&6メインメニューに戻る'
                 Close-GUI: false
@@ -132,6 +135,158 @@ Japanese:
             'Barrier':
                 Item: GRAY_STAINED_GLASS_PANE
                 Display-Name: '&8分割線'
+                Close-GUI: false
+                Lore: []
+                Slots:
+                - 0
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                - 6
+                - 7
+                - 8
+                - 46
+                - 47
+                - 51
+                - 52
+Simplified-Chinese:
+    SignIn-GUI-Settings:
+        GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
+        Specified-Month-GUI-Name: '&3&l历史月份 &8{month}月'
+        Specified-Year-GUI-Name: '&3&l历史月份 &8{month}月, {year}年'
+        Date-Format: 'yyyy年MM月dd日'
+        Key:
+            Already-SignIn:
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
+                Display-Name: '&a日期 &6{day}号 &a已签到'
+                Lore: 
+                - ''
+                - '&f您已连续签到 &e{continuous} 天&f，继续坚持！'
+                - ''
+                - '&e点击查看 &d{date} &e的排行榜'
+                Close-GUI: true
+                Commands:
+                - 'litesignin leaderboard {dateText}'
+            Comming-Soon:
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
+                Display-Name: '&7日期 &6{day}号 &7未到达'
+                Lore: []
+            Nothing-SignIn:
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
+                Hide-Enchants: true
+                Enchantment:
+                - DURABILITY:10
+                Display-Name: '&e日期 &6{day}号 &e未签到'
+                Lore:
+                - ''
+                - '&7今天您还没有签到！'
+                - ''
+                - '&e点击签到'
+            Missed-SignIn:
+                Item: PLAYER_HEAD
+                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
+                Display-Name: '&7日期 &6{day}号 &7漏签'
+                Lore:
+                - ''
+                - '&7您可以使用&a补签卡&7进行补签'
+                - '&7您拥有的补签卡数量: &6{cards}'
+                - ''
+                - '&e点击补签'
+            Slots:
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+        Others:
+            'About':
+                Item: PLAYER_HEAD
+                Head-Owner: '{player}'
+                Display-Name: '&6关于'
+                Close-GUI: false
+                Lore:
+                - ''
+                - '&f您已连续签到 &e{continuous} &f天'
+                - '&f当前累计签到次数 &e{total-number} &f次'
+                Slot: 49
+            'OpenMainMenu':
+                #这是个自定义按钮，用于示范
+                #可以根据格式自由创建与删除按钮
+                #除此之外，自定义模型的选项是“Custom-Model-Data: [整数值]”
+                Item: BOOK
+                Display-Name: '&6返回主菜单'
+                Close-GUI: false
+                Commands:
+                - 'menu'
+                Lore:
+                - ''
+                - '&e点击返回'
+                Slot: 45
+            'CloseGUI':
+                Item: BARRIER
+                Display-Name: '&6关闭签到界面'
+                Close-GUI: true
+                Messages:
+                - '{prefix}&c已关闭签到界面。'
+                Slot: 53
+            'PreviousPage':
+                Item: PAPER
+                Display-Name: '&d上一页'
+                Lore:
+                - ''
+                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
+                - '&7以切换指定月份与年份的签到菜单查看历史记录'
+                - ''
+                - '&e点击打开 &b{previousPageYear}年{previousPageMonth}月 &e的签到菜单'
+                Slot: 48
+                Commands:
+                - 'signin gui {previousPageMonth} {previousPageYear}'
+            'NextPage':
+                Item: PAPER
+                Display-Name: '&d下一页'
+                Lore:
+                - ''
+                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
+                - '&7以切换指定月份与年份的签到菜单查看历史记录'
+                - ''
+                - '&e点击打开 &b{nextPageYear}年{nextPageMonth}月 &e的签到菜单'
+                Slot: 50
+                Commands:
+                - 'signin gui {nextPageMonth} {nextPageYear}'
+            'Barrier':
+                Item: GRAY_STAINED_GLASS_PANE
+                Display-Name: '&8分割线'
                 Close-GUI: false
                 Lore: []
                 Slots:
@@ -239,6 +394,9 @@ English:
                 - '&fCurrent cumulative check in times: &e{total-number}'
                 Slot: 49
             'OpenMainMenu':
+                #This is a custom button used for example,
+                #You can freely create and delete buttons according to another buttons.
+                #In addition, the option for custom model is "Custom-Model-Data: [integer value]"
                 Item: BOOK
                 Display-Name: '&6Back to main menu.'
                 Close-GUI: false
@@ -282,155 +440,6 @@ English:
             'Barrier':
                 Item: GRAY_STAINED_GLASS_PANE
                 Display-Name: ''
-                Close-GUI: false
-                Lore: []
-                Slots:
-                - 0
-                - 1
-                - 2
-                - 3
-                - 4
-                - 5
-                - 6
-                - 7
-                - 8
-                - 46
-                - 47
-                - 51
-                - 52
-Simplified-Chinese:
-    SignIn-GUI-Settings:
-        GUI-Name: '&c签到菜单 &b&l>>> &8{date}'
-        Specified-Month-GUI-Name: '&3&l历史月份 &8{month}月'
-        Specified-Year-GUI-Name: '&3&l历史月份 &8{month}月, {year}年'
-        Date-Format: 'yyyy年MM月dd日'
-        Key:
-            Already-SignIn:
-                Item: PLAYER_HEAD
-                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTkyZTMxZmZiNTljOTBhYjA4ZmM5ZGMxZmUyNjgwMjAzNWEzYTQ3YzQyZmVlNjM0MjNiY2RiNDI2MmVjYjliNiJ9fX0='
-                Display-Name: '&a日期 &6{day}号 &a已签到'
-                Lore: 
-                - ''
-                - '&f您已连续签到 &e{continuous} 天&f，继续坚持！'
-                - ''
-                - '&e点击查看 &d{date} &e的排行榜'
-                Close-GUI: true
-                Commands:
-                - 'litesignin leaderboard {dateText}'
-            Comming-Soon:
-                Item: PLAYER_HEAD
-                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlhOTk1OTI4MDkwZDg0MmQ0YWZkYjIyOTZmZmUyNGYyZTk0NDI3MjIwNWNlYmE4NDhlZTQwNDZlMDFmMzE2OCJ9fX0='
-                Display-Name: '&7日期 &6{day}号 &7未到达'
-                Lore: []
-            Nothing-SignIn:
-                Item: PLAYER_HEAD
-                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWI5MzRhYjk0YjU2YzM0OGFkYTQyZTIxMjZmNGY5NzQzMjkxYzJiNmVmNDQ5ZGM0ZTM4MzE1ZGM3YjFhYyJ9fX0='
-                Hide-Enchants: true
-                Enchantment:
-                - DURABILITY:10
-                Display-Name: '&e日期 &6{day}号 &e未签到'
-                Lore:
-                - ''
-                - '&7今天您还没有签到！'
-                - ''
-                - '&e点击签到'
-            Missed-SignIn:
-                Item: PLAYER_HEAD
-                Head-Textures: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmViNTg4YjIxYTZmOThhZDFmZjRlMDg1YzU1MmRjYjA1MGVmYzljYWI0MjdmNDYwNDhmMThmYzgwMzQ3NWY3In19fQ=='
-                Display-Name: '&7日期 &6{day}号 &7漏签'
-                Lore:
-                - ''
-                - '&7您可以使用&a补签卡&7进行补签'
-                - '&7您拥有的补签卡数量: &6{cards}'
-                - ''
-                - '&e点击补签'
-            Slots:
-            - 9
-            - 10
-            - 11
-            - 12
-            - 13
-            - 14
-            - 15
-            - 16
-            - 17
-            - 18
-            - 19
-            - 20
-            - 21
-            - 22
-            - 23
-            - 24
-            - 25
-            - 26
-            - 27
-            - 28
-            - 29
-            - 30
-            - 31
-            - 32
-            - 33
-            - 34
-            - 35
-            - 36
-            - 37
-            - 38
-            - 39
-        Others:
-            'About':
-                Item: PLAYER_HEAD
-                Head-Owner: '{player}'
-                Display-Name: '&6关于'
-                Close-GUI: false
-                Lore:
-                - ''
-                - '&f您已连续签到 &e{continuous} &f天'
-                - '&f当前累计签到次数 &e{total-number} &f次'
-                Slot: 49
-            'OpenMainMenu':
-                Item: BOOK
-                Display-Name: '&6返回主菜单'
-                Close-GUI: false
-                Commands:
-                - 'menu'
-                Lore:
-                - ''
-                - '&e点击返回'
-                Slot: 45
-            'CloseGUI':
-                Item: BARRIER
-                Display-Name: '&6关闭签到界面'
-                Close-GUI: true
-                Messages:
-                - '{prefix}&c已关闭签到界面。'
-                Slot: 53
-            'PreviousPage':
-                Item: PAPER
-                Display-Name: '&d上一页'
-                Lore:
-                - ''
-                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
-                - '&7以切换指定月份与年份的签到菜单查看历史记录'
-                - ''
-                - '&e点击打开 &b{previousPageYear}年{previousPageMonth}月 &e的签到菜单'
-                Slot: 48
-                Commands:
-                - 'signin gui {previousPageMonth} {previousPageYear}'
-            'NextPage':
-                Item: PAPER
-                Display-Name: '&d下一页'
-                Lore:
-                - ''
-                - '&7您也可以使用命令 &a/signin gui [月份] [年份]'
-                - '&7以切换指定月份与年份的签到菜单查看历史记录'
-                - ''
-                - '&e点击打开 &b{nextPageYear}年{nextPageMonth}月 &e的签到菜单'
-                Slot: 50
-                Commands:
-                - 'signin gui {nextPageMonth} {nextPageYear}'
-            'Barrier':
-                Item: GRAY_STAINED_GLASS_PANE
-                Display-Name: '&8分割线'
                 Close-GUI: false
                 Lore: []
                 Slots:
@@ -537,6 +546,9 @@ Traditional-Chinese:
                 - '&f當前累計簽到次數 &e{total-number} &f次'
                 Slot: 49
             'OpenMainMenu':
+                #這是一個自訂按鈕，用來示範
+                #可以根據格式自由建立與刪除按鈕
+                #除此之外，自訂模型的選項是“Custom-Model-Data: [整數值]”
                 Item: BOOK
                 Display-Name: '&6返回主菜單'
                 Close-GUI: false

@@ -1,10 +1,11 @@
 package studio.trc.bukkit.litesignin.database;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 
 public interface DatabaseEngine
 {
@@ -46,7 +47,7 @@ public interface DatabaseEngine
      * @param values
      * @return The results.
      */
-    public ResultSet executeQuery(String sqlSyntax, String... values);
+    public SQLQuery executeQuery(String sqlSyntax, String... values);
     
     /**
      * Get database connection intance.

@@ -21,10 +21,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import studio.trc.bukkit.litesignin.database.DatabaseTable;
 
+import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
+import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
@@ -86,72 +87,76 @@ public class SignInQueue
             if (PluginControl.useMySQLStorage()) {
                 MySQLEngine mysql = MySQLEngine.getInstance();
                 mysql.checkConnection();
-                ResultSet rs = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'");
-                clear();
-                while (rs.next()) {
-                    try {
-                        UUID uuid = UUID.fromString(rs.getString("UUID"));
-                        SignInDate time = null;
-                        if (date.equals(SignInDate.getInstance(new Date()))) {
-                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
-                        } else {
-                            Integer hour = null, minute = null, second = null;
-                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                                SignInDate targetDate = SignInDate.getInstance(data);
-                                if (date.equals(targetDate)) {
-                                    if (targetDate.hasTimePeriod()) {
-                                        hour = targetDate.getHour();
-                                        minute = targetDate.getMinute();
-                                        second = targetDate.getSecond();
+                try (SQLQuery query = mysql.executeQuery("SELECT * FROM " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'")) {
+                    ResultSet rs = query.getResult();
+                    clear();
+                    while (rs.next()) {
+                        try {
+                            UUID uuid = UUID.fromString(rs.getString("UUID"));
+                            SignInDate time = null;
+                            if (date.equals(SignInDate.getInstance(new Date()))) {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
+                            } else {
+                                Integer hour = null, minute = null, second = null;
+                                for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                    SignInDate targetDate = SignInDate.getInstance(data);
+                                    if (date.equals(targetDate)) {
+                                        if (targetDate.hasTimePeriod()) {
+                                            hour = targetDate.getHour();
+                                            minute = targetDate.getMinute();
+                                            second = targetDate.getSecond();
+                                        }
+                                        if (hour != null && minute != null && second != null) {
+                                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                                        } else {
+                                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                                        }
+                                        break;
                                     }
-                                    if (hour != null && minute != null && second != null) {
-                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
-                                    } else {
-                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-                                    }
-                                    break;
                                 }
                             }
+                            if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                        if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
                 }
                 lastUpdateTime.put(date, System.currentTimeMillis());
             } else if (PluginControl.useSQLiteStorage()) {
                 SQLiteEngine sqlite = SQLiteEngine.getInstance();
                 sqlite.checkConnection();
-                ResultSet rs = sqlite.executeQuery("SELECT * FROM " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'");
-                clear();
-                while (rs.next()) {
-                    try {
-                        UUID uuid = UUID.fromString(rs.getString("UUID"));
-                        SignInDate time = null;
-                        if (date.equals(SignInDate.getInstance(new Date()))) {
-                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
-                        } else {
-                            Integer hour = null, minute = null, second = null;
-                            for (String data : Arrays.asList(rs.getString("History").split(", "))) {
-                                SignInDate targetDate = SignInDate.getInstance(data);
-                                if (date.equals(targetDate)) {
-                                    if (targetDate.hasTimePeriod()) {
-                                        hour = targetDate.getHour();
-                                        minute = targetDate.getMinute();
-                                        second = targetDate.getSecond();
+                try (SQLQuery query = sqlite.executeQuery("SELECT * FROM " + sqlite.getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE History LIKE '%" + date.getDataText(false) + "%'")) {
+                    ResultSet rs = query.getResult();
+                    clear();
+                    while (rs.next()) {
+                        try {
+                            UUID uuid = UUID.fromString(rs.getString("UUID"));
+                            SignInDate time = null;
+                            if (date.equals(SignInDate.getInstance(new Date()))) {
+                                time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), rs.getInt("Hour"), rs.getInt("Minute"), rs.getInt("Second"));
+                            } else {
+                                Integer hour = null, minute = null, second = null;
+                                for (String data : Arrays.asList(rs.getString("History").split(", "))) {
+                                    SignInDate targetDate = SignInDate.getInstance(data);
+                                    if (date.equals(targetDate)) {
+                                        if (targetDate.hasTimePeriod()) {
+                                            hour = targetDate.getHour();
+                                            minute = targetDate.getMinute();
+                                            second = targetDate.getSecond();
+                                        }
+                                        if (hour != null && minute != null && second != null) {
+                                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
+                                        } else {
+                                            time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
+                                        }
+                                        break;
                                     }
-                                    if (hour != null && minute != null && second != null) {
-                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay(), hour, minute, second);
-                                    } else {
-                                        time = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-                                    }
-                                    break;
                                 }
                             }
+                            if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                        if (time != null) add(new SignInQueueElement(uuid, time, rs.getString("Name")));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
                 }
                 lastUpdateTime.put(date, System.currentTimeMillis());

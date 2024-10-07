@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
 import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
@@ -17,6 +19,7 @@ import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 
 /**
  * Data Storage for Users
@@ -190,8 +193,8 @@ public interface Storage
                 }
             }
             UUID uuid = null;
-            try {
-                ResultSet rs = MySQLEngine.getInstance().executeQuery("SELECT UUID FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername);
+            try (SQLQuery query = MySQLEngine.getInstance().executeQuery("SELECT UUID FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername)) {
+                ResultSet rs = query.getResult();
                 if (rs.next()) {
                     uuid = UUID.fromString(rs.getString("UUID"));
                 }
@@ -204,8 +207,8 @@ public interface Storage
                 }
             }
             UUID uuid = null;
-            try {
-                ResultSet rs = SQLiteEngine.getInstance().executeQuery("SELECT UUID FROM " + SQLiteEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername);
+            try (SQLQuery query = SQLiteEngine.getInstance().executeQuery("SELECT UUID FROM " + SQLiteEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername)) {
+                ResultSet rs = query.getResult();
                 if (rs.next()) {
                     uuid = UUID.fromString(rs.getString("UUID"));
                 }

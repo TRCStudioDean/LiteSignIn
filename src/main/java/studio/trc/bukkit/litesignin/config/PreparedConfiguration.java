@@ -13,18 +13,18 @@ import org.bukkit.inventory.ItemStack;
  * Used to manage configuration files.
  * @author Dean
  */
-public class Configuration
+public class PreparedConfiguration
 {
     private final FileConfiguration config;
     private final ConfigurationType type;
     
-    public Configuration(FileConfiguration config, ConfigurationType type) {
+    public PreparedConfiguration(FileConfiguration config, ConfigurationType type) {
         this.config = config;
         this.type = type;
     }
     
     public void repairConfigurationSection(String path) {
-        if (type.equals(ConfigurationType.CUSTOMITEMS) || type.equals(ConfigurationType.WOODSIGNSETTINGS)) return;
+        if (type.equals(ConfigurationType.CUSTOM_ITEMS) || type.equals(ConfigurationType.WOOD_SIGN_SETTINGS)) return;
         FileConfiguration defaultFile = DefaultConfigurationFile.getDefaultConfig(type);
         config.set(path, defaultFile.get(path) != null ? defaultFile.get(path) : "null");
         saveConfig();

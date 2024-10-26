@@ -22,7 +22,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
@@ -76,8 +76,8 @@ public class WoodSignUtil
     
     public static void loadScripts() {
         scripts.clear();
-        ConfigurationUtil.reloadConfig(ConfigurationType.WOODSIGNSETTINGS);
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.WOODSIGNSETTINGS);
+        ConfigurationUtil.reloadConfig(ConfigurationType.WOOD_SIGN_SETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.WOOD_SIGN_SETTINGS);
         config.getConfigurationSection("Wood-Sign-Scripts").getKeys(false).stream().forEach(sections -> {
             try {
                 String woodSignTitle = sections;
@@ -164,12 +164,12 @@ public class WoodSignUtil
         if (!file.exists()) try {
             file.createNewFile();
         } catch (IOException ex) {
-            Logger.getLogger(WoodSignUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         try {
             database.save(file);
         } catch (IOException ex) {
-            Logger.getLogger(WoodSignUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
     

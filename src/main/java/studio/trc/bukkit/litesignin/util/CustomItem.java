@@ -24,8 +24,8 @@ public class CustomItem
     }
     
     public void delete() {
-        ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).set("Item-Collection." + name, null);
-        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOMITEMS);
+        ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).set("Item-Collection." + name, null);
+        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOM_ITEMS);
     }
     
     public void give(Player player) {
@@ -38,8 +38,8 @@ public class CustomItem
     
     public static List<CustomItem> getItemStackCollection() {
         List<CustomItem> itemList = new ArrayList();
-        for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getConfigurationSection("Item-Collection").getKeys(false)) {
-            ItemStack itemStack = ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getItemStack("Item-Collection." + name);
+        for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getConfigurationSection("Item-Collection").getKeys(false)) {
+            ItemStack itemStack = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getItemStack("Item-Collection." + name);
             if (itemStack != null) {
                 itemList.add(new CustomItem(itemStack, name));
             }
@@ -48,7 +48,7 @@ public class CustomItem
     }
     
     public static CustomItem getCustomItem(String name) {
-        ItemStack is = ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getItemStack("Item-Collection." + name);
+        ItemStack is = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getItemStack("Item-Collection." + name);
         if (is == null) {
             return null;
         }
@@ -61,8 +61,8 @@ public class CustomItem
                 return false;
             }
         }
-        ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).set("Item-Collection." + name, is);
-        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOMITEMS);
+        ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).set("Item-Collection." + name, is);
+        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOM_ITEMS);
         return true;
     }
     

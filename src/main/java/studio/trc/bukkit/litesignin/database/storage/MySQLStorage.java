@@ -19,8 +19,9 @@ import lombok.Getter;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.database.DatabaseTable;
+import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 import studio.trc.bukkit.litesignin.event.custom.PlayerSignInEvent;
 import studio.trc.bukkit.litesignin.event.custom.SignInRewardEvent;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
@@ -37,7 +38,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 
 public final class MySQLStorage
     implements Storage
@@ -64,6 +64,7 @@ public final class MySQLStorage
     private List<SignInDate> history = new ArrayList();
     private final UUID uuid;
     private int retroactiveCard = 0; 
+    private boolean loaded = false;
     
     public MySQLStorage(Player player) {
         uuid = player.getUniqueId();
@@ -109,6 +110,7 @@ public final class MySQLStorage
                             + " VALUES(?, ?, 1970, 1, 1, 0, 0, 0, 0)", uuid.toString(), playerName);
                 }
                 checkContinuousSignIn();
+                loaded = true;
             }
         } catch (SQLException ex) {
             MySQLEngine.getInstance().throwSQLException(ex, "ExecuteQueryFailed", true);
@@ -144,7 +146,7 @@ public final class MySQLStorage
     }
     
     @Override
-    public void giveReward(boolean retroactive) {
+    public void giveReward(SignInDate retroactiveDate) {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Multi-Group-Reward")) {
@@ -152,17 +154,23 @@ public final class MySQLStorage
                 int queue = SignInQueue.getInstance().getRank(uuid);
                 int continuousSignIn = getContinuousSignIn();
                 int totalNumber = getCumulativeNumber();
-                SignInDate today = SignInDate.getInstance(new Date());
-                int week = today.getWeek();
-                int thisMonth = today.getMonth();
                 SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
-                rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
                 rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
-                rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
-                if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
-                else {
+                if (retroactiveDate != null) {
+                    int week = retroactiveDate.getWeek();
+                    int retroactiveMonth = retroactiveDate.getMonth();
+                    rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth()));
+                    rewardQueue.addReward(new SignInSpecialDateReward(group, retroactiveDate));
+                    rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
+                } else {
+                    SignInDate today = SignInDate.getInstance(new Date());
+                    int week = today.getWeek();
+                    int thisMonth = today.getMonth();
+                    rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
+                    rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                     rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
                     rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                     rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
@@ -172,7 +180,7 @@ public final class MySQLStorage
                 }
                 SignInRewardEvent event = new SignInRewardEvent(player, rewardQueue);
                 Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) rewardQueue.run(retroactive);
+                if (!event.isCancelled()) rewardQueue.run(retroactiveDate != null);
             });
         } else {
             SignInGroup group = getGroup();
@@ -180,17 +188,23 @@ public final class MySQLStorage
             int queue = SignInQueue.getInstance().getRank(uuid);
             int continuousSignIn = getContinuousSignIn();
             int totalNumber = getCumulativeNumber();
-            SignInDate today = SignInDate.getInstance(new Date());
-            int week = today.getWeek();
-            int thisMonth = today.getMonth();
             SignInRewardSchedule rewardQueue = new SignInRewardSchedule(this);
-            rewardQueue.addReward(new SignInSpecialDateReward(group, today));
             rewardQueue.addReward(new SignInStatisticsTimeReward(group, totalNumber));
-            rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
             rewardQueue.addReward(new SignInStatisticsTimeCycleReward(group, totalNumber));
-            rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
-            if (retroactive) rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
-            else {
+            if (retroactiveDate != null) {
+                int week = retroactiveDate.getWeek();
+                int retroactiveMonth = retroactiveDate.getMonth();
+                rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth()));
+                rewardQueue.addReward(new SignInSpecialDateReward(group, retroactiveDate));
+                rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
+            } else {
+                SignInDate today = SignInDate.getInstance(new Date());
+                int week = today.getWeek();
+                int thisMonth = today.getMonth();
+                rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
+                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
+                rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialTimeOfMonthReward(group, thisMonth, getContinuousSignInOfMonth()));
@@ -201,7 +215,7 @@ public final class MySQLStorage
             SignInRewardEvent event = new SignInRewardEvent(player, rewardQueue);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
-            rewardQueue.run(retroactive);
+            rewardQueue.run(retroactiveDate != null);
         }
     }
     
@@ -210,7 +224,7 @@ public final class MySQLStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         SignInGroup group = null;
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         for (String groups : config.getStringList("Reward-Settings.Groups-Priority")) {
             if (config.get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
                 if (player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
@@ -230,7 +244,7 @@ public final class MySQLStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         List<SignInGroup> groups = new ArrayList();
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         config.getStringList("Reward-Settings.Groups-Priority").stream()
             .filter(group -> config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission")))
             .forEach(group -> groups.add(new SignInGroup(group)));
@@ -334,7 +348,7 @@ public final class MySQLStorage
         setHistory(clearUselessData(historys), false);
         setContinuousSignIn(SignInDate.getContinuous(historys), true);
         SignInQueue.getInstance().loadQueue();
-        giveReward(false);
+        giveReward(null);
     }
     
     @Override
@@ -372,7 +386,7 @@ public final class MySQLStorage
         }
         setHistory(clearUselessData(historys), false);
         setContinuousSignIn(SignInDate.getContinuous(historys), true);
-        giveReward(true);
+        giveReward(historicalDate);
         lastSignInTime.put(uuid, System.currentTimeMillis());
     }
     
@@ -474,22 +488,24 @@ public final class MySQLStorage
     
     @Override
     public void saveData() {
-        try {
-            MySQLEngine mysql = MySQLEngine.getInstance();
-            mysql.checkConnection();
-            String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
-            mysql.executeUpdate("UPDATE " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " SET Name = ?,"
-                + "Year = " + year + ", "
-                + "Month = " + month + ", "
-                + "Day = " + day + ", "
-                + "Hour = " + hour + ", "
-                + "Minute = " + minute + ", "
-                + "Second = " + second + ", "
-                + "Continuous = " + continuous + ", "
-                + "RetroactiveCard = " + retroactiveCard + ", History = ? WHERE UUID = ?",
-                playerName, history.toString().substring(1, history.toString().length() - 1), uuid.toString());
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (loaded) {
+            try {
+                MySQLEngine mysql = MySQLEngine.getInstance();
+                mysql.checkConnection();
+                String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
+                mysql.executeUpdate("UPDATE " + mysql.getTableSyntax(DatabaseTable.PLAYER_DATA) + " SET Name = ?,"
+                    + "Year = " + year + ", "
+                    + "Month = " + month + ", "
+                    + "Day = " + day + ", "
+                    + "Hour = " + hour + ", "
+                    + "Minute = " + minute + ", "
+                    + "Second = " + second + ", "
+                    + "Continuous = " + continuous + ", "
+                    + "RetroactiveCard = " + retroactiveCard + ", History = ? WHERE UUID = ?",
+                    playerName, history.toString().substring(1, history.toString().length() - 1), uuid.toString());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
     

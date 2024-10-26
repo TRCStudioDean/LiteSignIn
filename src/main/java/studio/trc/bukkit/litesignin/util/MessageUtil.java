@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 
@@ -122,7 +122,7 @@ public class MessageUtil
      * @param configuration config name.
      * @param configPath config path.
      */
-    public static void sendMessage(CommandSender sender, Configuration configuration, String configPath) {
+    public static void sendMessage(CommandSender sender, PreparedConfiguration configuration, String configPath) {
         sendMessage(sender, configuration, configPath, defaultPlaceholders, defaultJsonComponents);
     }
     
@@ -133,7 +133,7 @@ public class MessageUtil
      * @param configPath config path.
      * @param placeholders String placeholders.
      */
-    public static void sendMessage(CommandSender sender, Configuration configuration, String configPath, Map<String, String> placeholders) {
+    public static void sendMessage(CommandSender sender, PreparedConfiguration configuration, String configPath, Map<String, String> placeholders) {
         sendMessage(sender, configuration, configPath, placeholders, defaultJsonComponents);
     }
     
@@ -145,7 +145,7 @@ public class MessageUtil
      * @param placeholders String placeholders.
      * @param jsonComponents JSON messages.
      */
-    public static void sendMessage(CommandSender sender, Configuration configuration, String configPath, Map<String, String> placeholders, Map<String, BaseComponent> jsonComponents) {
+    public static void sendMessage(CommandSender sender, PreparedConfiguration configuration, String configPath, Map<String, String> placeholders, Map<String, BaseComponent> jsonComponents) {
         List<String> messages = configuration.getStringList(getLanguage() + "." + configPath);
         if (messages.isEmpty() && !ConfigurationUtil.getConfig(ConfigurationType.MESSAGES).getString(getLanguage() + "." + configPath).equals("[]")) {
             sendMessage(sender, configuration.getString(getLanguage() + "." + configPath), placeholders, jsonComponents);

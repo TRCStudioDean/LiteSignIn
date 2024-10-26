@@ -42,7 +42,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 public class SignInGUI
 {
     public static SignInInventory getGUI(Player player) {
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
         /**
          * Create chest GUI
          */
@@ -72,7 +72,7 @@ public class SignInGUI
          */
         Inventory gui;
         
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
         
         /**
          * If month = specified month, return basic gui.
@@ -108,7 +108,7 @@ public class SignInGUI
          */
         Inventory gui;
         SignInDate today = SignInDate.getInstance(new Date());
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings");
         
         /**
          * If month = specified month and year = specified year, return basic gui.
@@ -169,7 +169,7 @@ public class SignInGUI
             days[1] = 29;
         }
         SignInDate specifiedDate = SignInDate.getInstance(year, month, 1);
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key");
         if (specifiedDate.compareTo(today) == -1) {
             List<ItemStack> items = new LinkedList();
             List<KeyType> keys = new LinkedList();
@@ -353,7 +353,7 @@ public class SignInGUI
         String totalNumber = String.valueOf(playerdata.getCumulativeNumber());
         String cards = String.valueOf(playerdata.getRetroactiveCard());
         String[] times = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).split("-");
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key");
         int year = Integer.valueOf(times[0]);
         int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
@@ -588,7 +588,7 @@ public class SignInGUI
         String continuous = String.valueOf(playerdata.getContinuousSignIn());
         String totalNumber = String.valueOf(playerdata.getCumulativeNumber());
         String cards = String.valueOf(playerdata.getRetroactiveCard());
-        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others");
+        ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others");
         int nextPageMonth = getNextPageMonth(month);
         int nextPageYear = getNextPageYear(month, year);
         int previousPageMonth = getPreviousPageMonth(month);
@@ -695,7 +695,7 @@ public class SignInGUI
             int previousPageYear,
             SignInDate historicalDate) {
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-        if (historicalDate != null) placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+        if (historicalDate != null) placeholders.put("{date}", historicalDate.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
         placeholders.put("{day}", String.valueOf(day + 1));
         placeholders.put("{continuous}", continuous);
         placeholders.put("{queue}", queue);
@@ -715,7 +715,7 @@ public class SignInGUI
     }
     
     private static void setEnchantments(String configPath, ItemMeta im) {
-        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getStringList(configPath)) {
+        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(configPath)) {
             try {
                 String[] data = name.split(":");
                 boolean invalid = true;
@@ -757,7 +757,7 @@ public class SignInGUI
             version.startsWith("1.13")) return;
         if (is.getItemMeta() == null) return;
         ItemMeta im = is.getItemMeta();
-        String name = ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath);
+        String name = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath);
         if (im == null || name == null) return;
         try {
             im.setCustomModelData(Integer.valueOf(name));
@@ -774,7 +774,7 @@ public class SignInGUI
         String version = Bukkit.getBukkitVersion();
         if (version == null || version.startsWith("1.7")) return;
         ItemMeta im = is.getItemMeta();
-        String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(configPath), player);
+        String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath), player);
         if (im == null || textures == null) return;
         if (is.getItemMeta() instanceof SkullMeta) {
             SkullMeta skull = (SkullMeta) im;

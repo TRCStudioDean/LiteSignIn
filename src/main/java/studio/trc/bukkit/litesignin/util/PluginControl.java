@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.async.AutoSave;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
@@ -74,7 +74,7 @@ public class PluginControl
     }
     
     public static void reloadMySQL() {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         Map<String, String> jdbcOptions = new HashMap();
         config.getConfigurationSection("MySQL-Storage.Options").getKeys(false).stream().forEach(option -> {
             jdbcOptions.put(option, config.getString("MySQL-Storage.Options." + option));
@@ -93,7 +93,7 @@ public class PluginControl
     }
     
     public static void reloadSQLite() {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (SQLiteEngine.getInstance() != null) {
             SQLiteEngine.getInstance().disconnect();
         }
@@ -239,32 +239,32 @@ public class PluginControl
     
     public static ItemStack getRetroactiveCardRequiredItem(Player player) {
         String itemName = ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Retroactive-Card.Required-Item.CustomItem");
-        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Item") != null) {
+        if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Item") != null) {
             ItemStack is;
             try {
-                if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Data") != null) {
-                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getInt("Manual-Settings." + itemName + ".Data"));
+                if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Data") != null) {
+                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getInt("Manual-Settings." + itemName + ".Data"));
                 } else {
-                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1);
+                    is = new ItemStack(Material.valueOf(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Item").toUpperCase()), 1);
                 }
             } catch (IllegalArgumentException ex2) {
                 return null;
             }
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Head-Owner") != null) {
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Head-Owner") != null) {
                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{player}", player.getName());
-                PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemName + ".Head-Owner"), placeholders));
+                PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Head-Owner"), placeholders));
             }
             ItemMeta im = is.getItemMeta();
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
                 List<String> lore = new ArrayList();
-                for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemName + ".Lore")) {
+                for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Lore")) {
                     lore.add(MessageUtil.toPlaceholderAPIResult(MessageUtil.toColor(lores), player));
                 }
                 im.setLore(lore);
             }
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Enchantment") != null) {
-                for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList("Manual-Settings." + itemName + ".Enchantment")) {
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Enchantment") != null) {
+                for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Enchantment")) {
                     String[] data = name.split(":");
                     for (Enchantment enchant : Enchantment.values()) {
                         if (enchant.getName().equalsIgnoreCase(data[0])) {
@@ -275,12 +275,12 @@ public class PluginControl
                     }
                 }
             }
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
             is.setItemMeta(im);
             return is;
-        } else if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).get("Item-Collection." + itemName) != null) {
-            ItemStack is = ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getItemStack("Item-Collection." + itemName);
+        } else if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Item-Collection." + itemName) != null) {
+            ItemStack is = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getItemStack("Item-Collection." + itemName);
             if (is != null) {
                 return is;    
             }

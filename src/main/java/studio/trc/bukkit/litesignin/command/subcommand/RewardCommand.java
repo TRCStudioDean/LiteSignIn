@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
@@ -36,7 +36,7 @@ public class RewardCommand
         if (args.length <= 3) {
             MessageUtil.sendCommandMessage(sender, "Reward.Help", placeholders);
         } else {
-            Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+            PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
             //Check player.
             Player player = Bukkit.getPlayer(args[1]);
             if (player == null) {
@@ -346,7 +346,7 @@ public class RewardCommand
         if (args.length == 2) {
             return tabGetPlayersName(args, 2);
         }
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (args.length == 3) {
             return getTabElements(args, args.length, config.getStringList("Reward-Settings.Groups-Priority"));
         }

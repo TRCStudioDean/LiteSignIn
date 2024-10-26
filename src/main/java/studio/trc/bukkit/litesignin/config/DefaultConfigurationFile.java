@@ -30,7 +30,7 @@ public class DefaultConfigurationFile
     public static void loadDefaultConfigurationFile(ConfigurationType type) {
         String jarPath = MessageUtil.Language.getLocaleLanguage().getFolderName();
         String fileName = type.getFileName();
-        if (type.equals(ConfigurationType.GUISETTINGS)) {
+        if (type.equals(ConfigurationType.GUI_SETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             if (version.startsWith("1.7") || version.startsWith("1.8") || version.startsWith("1.9") || version.startsWith("1.10") || version.startsWith("1.11") || version.startsWith("1.12")) {
                 fileName = "GUISettings-OLDVERSION.yml";
@@ -38,7 +38,7 @@ public class DefaultConfigurationFile
                 fileName = "GUISettings-NEWVERSION.yml";
             }
         }
-        if (type.equals(ConfigurationType.REWARDSETTINGS)) {
+        if (type.equals(ConfigurationType.REWARD_SETTINGS)) {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             if (version.startsWith("1.7") || version.startsWith("1.8") || version.startsWith("1.9") || version.startsWith("1.10") || version.startsWith("1.11") || version.startsWith("1.12")) {
                 fileName = "RewardSettings-OLDVERSION.yml";

@@ -15,22 +15,22 @@ public enum ConfigurationType
     /**
      * GUISettings.yml
      */
-    GUISETTINGS("GUISettings.yml"),
+    GUI_SETTINGS("GUISettings.yml"),
     
     /**
      * RewardSettings.yml
      */
-    REWARDSETTINGS("RewardSettings.yml"),
+    REWARD_SETTINGS("RewardSettings.yml"),
     
     /**
      * CustomItems.yml
      */
-    CUSTOMITEMS("CustomItems.yml"),
+    CUSTOM_ITEMS("CustomItems.yml"),
     
     /**
      * WoodSignSettings.yml
      */
-    WOODSIGNSETTINGS("WoodSignSettings.yml");
+    WOOD_SIGN_SETTINGS("WoodSignSettings.yml");
     
     private final String fileName;
     

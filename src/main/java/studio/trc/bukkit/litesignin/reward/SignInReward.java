@@ -13,6 +13,12 @@ import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 public interface SignInReward
 {
     /**
+     * Give reward.
+     * @param playerData 
+     */
+    public void giveReward(Storage playerData);
+    
+    /**
      * Get SignInReward permission group.
      * @return 
      */
@@ -51,10 +57,4 @@ public interface SignInReward
      * @return 
      */
     public List<ItemStack> getRewardItems(Player player);
-    
-    /**
-     * Give reward.
-     * @param playerData 
-     */
-    public void giveReward(Storage playerData);
 }

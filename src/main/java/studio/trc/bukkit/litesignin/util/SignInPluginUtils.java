@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 
@@ -43,7 +43,7 @@ public class SignInPluginUtils
     }
     
     public static boolean checkInDisabledWorlds(UUID uuid) {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && hasPermission(player, "Disabled-Worlds-Bypass")) return false;
         return !config.getStringList("Disabled-Worlds").isEmpty() && player != null && config.getStringList("Disabled-Worlds").stream().anyMatch(worldName -> player.getWorld().getName().equalsIgnoreCase(worldName));
@@ -58,7 +58,7 @@ public class SignInPluginUtils
     }
     
     public static boolean hasPermission(CommandSender sender, String configPath) {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (config.getBoolean("Permissions." + configPath + ".Default")) return true;
         return sender.hasPermission(config.getString("Permissions." + configPath + ".Permission"));
     }

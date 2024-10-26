@@ -7,7 +7,7 @@ import lombok.Getter;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
@@ -41,16 +41,16 @@ public class SignInSpecialTimeCycleReward
     
     @Override
     public boolean overrideDefaultRewards() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Override-default-rewards");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Override-default-rewards")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Override-default-rewards");
         }
         return false;
     }
     
     @Override
     public List<String> getMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages");
         }
         return new ArrayList();
     }
@@ -67,8 +67,8 @@ public class SignInSpecialTimeCycleReward
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages");
         }
         return new ArrayList();
     }
@@ -79,7 +79,7 @@ public class SignInSpecialTimeCycleReward
     }
     
     private String getSettingPath() {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle")) {
             for (String number : config.getConfigurationSection("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle").getKeys(false)) {
                 if (SignInPluginUtils.isInteger(number) && time % Integer.valueOf(number) == 0) {

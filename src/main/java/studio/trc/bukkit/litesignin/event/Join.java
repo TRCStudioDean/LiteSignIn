@@ -11,7 +11,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -64,7 +63,7 @@ public class Join
                                 for (String hover : array) {
                                     end++;
                                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                    placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
                                     hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
                                     if (end != array.size()) {
                                         hoverText.add(new TextComponent("\n"));
@@ -80,7 +79,7 @@ public class Join
                                 MessageUtil.sendMessage(player, text, placeholders, baseComponents);
                             } else {
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
                                 MessageUtil.sendMessage(player, text, placeholders);
                             }
                         });

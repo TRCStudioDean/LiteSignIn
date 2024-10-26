@@ -8,7 +8,7 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
@@ -40,7 +40,7 @@ public class SignInSpecialTimeOfMonthReward
     }
     
     public String getSettings() {
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + time + ".Valid-Months")) {
             if (config.getIntegerList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + time + ".Valid-Months").contains(month)) {
                 return String.valueOf(time);
@@ -59,8 +59,8 @@ public class SignInSpecialTimeOfMonthReward
     @Override
     public boolean overrideDefaultRewards() {
         if (!isAvailable()) return false;
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards");
         }
         return false;
     }
@@ -68,8 +68,8 @@ public class SignInSpecialTimeOfMonthReward
     @Override
     public List<String> getMessages() {
         if (!isAvailable()) return new ArrayList();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages");
         }
         return new ArrayList();
     }
@@ -89,8 +89,8 @@ public class SignInSpecialTimeOfMonthReward
     @Override
     public List<String> getBroadcastMessages() {
         if (!isAvailable()) return new ArrayList();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages");
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages")) {
+            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages");
         }
         return new ArrayList();
     }

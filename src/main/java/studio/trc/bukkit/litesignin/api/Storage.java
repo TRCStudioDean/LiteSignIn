@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
 import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
@@ -30,9 +28,9 @@ public interface Storage
 {
     /**
      * Give user rewards.
-     * @param retroactive
+     * @param retroactiveDate Date of wanting to retroactively sign-in, if not, it's null.
      */
-    public void giveReward(boolean retroactive);
+    public void giveReward(SignInDate retroactiveDate);
     
     /**
      * Get the year of last sign in.

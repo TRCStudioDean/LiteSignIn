@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.Configuration;
+import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
 import studio.trc.bukkit.litesignin.config.ConfigurationType;
 import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.util.MessageUtil;
@@ -87,19 +87,17 @@ public abstract class SignInRewardUtil
     
     public List<ItemStack> getRewardItems(Player player, String configPath) {
         List<ItemStack> list = new ArrayList();
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
-            config.getStringList(configPath).stream().map(itemData -> getItemFromItemData(player, itemData)).filter(item -> item != null).forEach(item -> {
-                list.add(item);
-            });
+            config.getStringList(configPath).stream().map(itemData -> getItemFromItemData(player, itemData)).filter(item -> item != null).forEach(list::add);
         }
         return list;
     }
     
     public List<SignInRewardCommand> getCommands(String configPath) {
         List<SignInRewardCommand> list = new ArrayList();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).contains(configPath)) {
-            ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getStringList(configPath).stream().forEach(commands -> {
+        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains(configPath)) {
+            ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList(configPath).stream().forEach(commands -> {
                 if (commands.toLowerCase().startsWith("server:")) {
                     list.add(new SignInRewardCommand(SignInRewardCommandType.SERVER, commands.substring(7)));
                 } else if (commands.toLowerCase().startsWith("op:")) {
@@ -125,12 +123,12 @@ public abstract class SignInRewardUtil
             } catch (NumberFormatException ex) {}
             return is;
         } catch (IllegalArgumentException e) {
-            Configuration config = ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS);
+            PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS);
             if (config.contains("Manual-Settings." + itemdata[0] + ".Item")) {
                 ItemStack is;
                 try {
                     if (config.contains("Manual-Settings." + itemdata[0] + ".Data")) {
-                        is = new ItemStack(Material.valueOf(config.getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS).getInt("Reward-Items." + itemdata[0] + ".Data"));
+                        is = new ItemStack(Material.valueOf(config.getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1, (short) ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getInt("Reward-Items." + itemdata[0] + ".Data"));
                     } else {
                         is = new ItemStack(Material.valueOf(config.getString("Manual-Settings." + itemdata[0] + ".Item").toUpperCase()), 1);
                     }
@@ -140,14 +138,12 @@ public abstract class SignInRewardUtil
                 if (config.get("Manual-Settings." + itemdata[0] + ".Head-Owner") != null) {
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{player}", player.getName());
-                    PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUISETTINGS).getString("Manual-Settings." + itemdata[0] + ".Head-Owner"), placeholders));
+                    PluginControl.setHead(is, MessageUtil.replacePlaceholders(player, ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString("Manual-Settings." + itemdata[0] + ".Head-Owner"), placeholders));
                 }
                 ItemMeta im = is.getItemMeta();
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                     List<String> lore = new ArrayList();
-                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> {
-                        lore.add(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(lores, player)));
-                    });
+                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(lores, player))));
                     im.setLore(lore);
                 }
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Enchantment")) {
@@ -187,7 +183,7 @@ public abstract class SignInRewardUtil
     
     public List<SignInSound> getSounds(String configPath) {
         List<SignInSound> sounds = new ArrayList();
-        Configuration config = ConfigurationUtil.getConfig(ConfigurationType.REWARDSETTINGS);
+        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
             config.getStringList(configPath).stream().forEach((value) -> {
                 String[] args = value.split("-");
@@ -213,7 +209,7 @@ public abstract class SignInRewardUtil
     }
     
     private void setEnchantments(String configPath, ItemMeta im) {
-        for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOMITEMS).getStringList(configPath)) {
+        for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList(configPath)) {
             try {
                 String[] data = name.split(":");
                 boolean invalid = true;

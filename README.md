@@ -63,4 +63,8 @@ And more...
 Another placeholders:  
 %litesignin_random_[minimum]_[maximum]% Returns a random value within a specified range of numbers. (This is a placeholder for a gadget type.)
 
+# Video
+[![VIDEO](https://img.youtube.com/vi/46L9jBwhQ0Q/0.jpg)](https://www.youtube.com/watch?v=46L9jBwhQ0Q)
+
+# Statistics
 [![BigImage](https://bstats.org/signatures/bukkit/LiteSignIn.svg)](https://bstats.org/plugin/bukkit/LiteSignIn)

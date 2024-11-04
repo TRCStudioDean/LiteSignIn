@@ -78,7 +78,7 @@ public class Placeholders
             Storage data = Storage.getPlayer(player);
             Map<String, String> cacheMap = cacheOfPlayers.get(uuid);
             if (identifier.equalsIgnoreCase("signed-in")) {
-                result = data.alreadySignIn(SignInDate.getInstance(new Date())) ? MessageUtil.getMessage("Yes") : MessageUtil.getMessage("No");
+                result = String.valueOf(data.alreadySignIn(SignInDate.getInstance(new Date())));
             } else if (identifier.equalsIgnoreCase("queue")) {
                 result = String.valueOf(SignInQueue.getInstance().getRank(player.getUniqueId()));
             } else if (identifier.equalsIgnoreCase("cards_amount")) {
@@ -87,8 +87,16 @@ public class Placeholders
                 result = data.getGroup().getGroupName();
             } else if (identifier.equalsIgnoreCase("statistics")) {
                 result = String.valueOf(data.getCumulativeNumber());
-            } else if (identifier.equalsIgnoreCase("statistics_of_month")) {
-                result = String.valueOf(data.getCumulativeNumberOfMonth());
+            } else if (identifier.startsWith("statistics_of_month")) {
+                if (identifier.equalsIgnoreCase("statistics_of_month")) {
+                    SignInDate date = SignInDate.getInstance(new Date());
+                    result = String.valueOf(data.getCumulativeNumberOfMonth(date.getYear(), date.getMonth()));
+                } else {
+                    String[] time = identifier.split("_");
+                    try {
+                        result = String.valueOf(data.getCumulativeNumberOfMonth(Integer.valueOf(time[3]), Integer.valueOf(time[4])));
+                    } catch (Throwable t) {}
+                }
             } else if (identifier.equalsIgnoreCase("continuous")) {
                 result = String.valueOf(data.getContinuousSignIn());
             } else if (identifier.equalsIgnoreCase("continuous_of_month")) {

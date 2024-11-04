@@ -142,7 +142,7 @@ public final class YamlStorage
                     int week = retroactiveDate.getWeek();
                     int retroactiveMonth = retroactiveDate.getMonth();
                     rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth()));
+                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth(retroactiveDate.getYear(), retroactiveMonth)));
                     rewardQueue.addReward(new SignInSpecialDateReward(group, retroactiveDate));
                     rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
                 } else {
@@ -150,7 +150,7 @@ public final class YamlStorage
                     int week = today.getWeek();
                     int thisMonth = today.getMonth();
                     rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
+                    rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth(today.getYear(), thisMonth)));
                     rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                     rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
                     rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
@@ -176,7 +176,7 @@ public final class YamlStorage
                 int week = retroactiveDate.getWeek();
                 int retroactiveMonth = retroactiveDate.getMonth();
                 rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth()));
+                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, retroactiveMonth, getCumulativeNumberOfMonth(retroactiveDate.getYear(), retroactiveMonth)));
                 rewardQueue.addReward(new SignInSpecialDateReward(group, retroactiveDate));
                 rewardQueue.addReward(new SignInRetroactiveTimeReward(group));
             } else {
@@ -184,7 +184,7 @@ public final class YamlStorage
                 int week = today.getWeek();
                 int thisMonth = today.getMonth();
                 rewardQueue.addReward(new SignInSpecialWeekReward(group, week));
-                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth()));
+                rewardQueue.addReward(new SignInStatisticsTimeOfMonthReward(group, thisMonth, getCumulativeNumberOfMonth(today.getYear(), thisMonth)));
                 rewardQueue.addReward(new SignInSpecialDateReward(group, today));
                 rewardQueue.addReward(new SignInSpecialTimeReward(group, continuousSignIn));
                 rewardQueue.addReward(new SignInSpecialTimeCycleReward(group, continuousSignIn));
@@ -307,8 +307,8 @@ public final class YamlStorage
     }
     
     @Override
-    public int getCumulativeNumberOfMonth() {
-        return SignInDate.getCumulativeNumberOfMonth(clearUselessData(getHistory()));
+    public int getCumulativeNumberOfMonth(int year, int month) {
+        return clearUselessData(getHistory()).stream().filter(record -> record.getYear() == year && record.getMonth() == month).toArray().length;
     }
     
     @Override

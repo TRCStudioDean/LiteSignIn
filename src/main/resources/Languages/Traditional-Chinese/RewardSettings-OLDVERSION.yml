@@ -51,6 +51,7 @@ Reward-Settings:
                     Special-Weeks: true
                     Statistics-Times: false
                     Statistics-Times-Of-Month: false
+                    Statistics-Times-Cycle: false
                 Reward-Items:
                 - 'diamond:1'
                 - 'gold_ingot:3'
@@ -215,6 +216,7 @@ Reward-Settings:
                     Special-Weeks: true
                     Special-Times: true
                     Statistics-Times: false
+                    Statistics-Times-Cycle: false
                 Reward-Items:
                 - 'diamond:2'
                 - 'gold_ingot:6'

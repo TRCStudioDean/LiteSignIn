@@ -398,7 +398,8 @@ public class SignInDate
             month = date.getMonth();
             day = date.getDay();
         }
-        return continuous;
+        SignInDate today = getInstance(new Date());
+        return today.getYear() != year || today.getMonth() != month || today.getDay() != day ? 0 : continuous;
     }
     
     public static int getContinuousOfMonth(List<SignInDate> dates) {
@@ -425,29 +426,7 @@ public class SignInDate
             month = date.getMonth();
             day = date.getDay();
         }
-        return continuous;
-    }
-    
-    public static int getCumulativeNumberOfMonth(List<SignInDate> records) {
-        int total = 0;
-        if (records.isEmpty()) {
-            return total;
-        }
-        int year = records.get(0).getYear();
-        int month = records.get(0).getMonth();
-        for (SignInDate date : records) {
-            date = SignInDate.getInstance(date.getYear(), date.getMonth(), date.getDay());
-            boolean breakSign = true;
-            if (year == date.getYear() && month == date.getMonth()) {
-                total++;
-                breakSign = false;
-            }
-            if (breakSign) {
-                total = 0;
-            }
-            year = date.getYear();
-            month = date.getMonth();
-        }
-        return total;
+        SignInDate today = getInstance(new Date());
+        return today.getYear() != year || today.getMonth() != month || today.getDay() != day ? 0 : continuous;
     }
 }

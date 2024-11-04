@@ -55,7 +55,13 @@ public class LiteSignInThread
                                 return false;
                             }
                             return !(task.isOnlyPlayersOnline() && Bukkit.getOnlinePlayers().isEmpty());
-                        }).forEach(LiteSignInTask::run);
+                        }).forEach(task -> {
+                            try {
+                                task.run();
+                            } catch (Exception ex) {
+                                tasks.remove(task);
+                            }
+                        });
                     }
                 }
                 long speed = ((long) (delay * 1000)) - (System.currentTimeMillis() - usedTime);

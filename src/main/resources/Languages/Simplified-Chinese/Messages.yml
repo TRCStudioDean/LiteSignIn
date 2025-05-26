@@ -174,7 +174,7 @@ Simplified-Chinese:
                 STATISTICS_OF_MONTH: '{prefix}&c参数有误 &e{value}&c， 请在 &a&lSTATISTICS_OF_MONTH&7:[这里输入一个有效的数字:这里输入一个有效的月份] &c例如: &9STATISTICS_OF_MONTH:10:3 &c即3月签到累计10次'
             Invalid-Parameters:
                 SPECIAL_TIMES: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Times&c中的连续签到 &b&l{value} &c次的奖励。'
-                SPECIAL_TIMES: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Times-Cycle&c中的签到 &b&l{value} &c次的奖励。'
+                SPECIAL_TIMES_CYCLE: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Times-Cycle&c中的签到 &b&l{value} &c次的奖励。'
                 SPECIAL_TIMES_OF_MONTH: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Times-Of-Month&c中的月连续签到 &b&l{value} &c的奖励。'
                 SPECIAL_WEEKS: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Weeks&c中的在星期 &b&l{value} &c签到时的奖励。'
                 SPECIAL_DATES: '{prefix}&c参数无效， 请检查&aRewardSettings.yml&c文件中是否设置了关于权限组 &e{group} &c在&aSpecial-Dates&c中的在日期 &b&l{value} &c签到时的奖励。'

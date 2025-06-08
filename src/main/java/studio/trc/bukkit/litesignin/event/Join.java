@@ -52,7 +52,7 @@ public class Join
                 if (!data.alreadySignIn()) {
                     if (PluginControl.autoSignIn() && SignInPluginUtils.hasPermission(player, "Join-Auto-SignIn")) {
                         autoSignIn = true;
-                    } else if (OnlineTimeRecord.signInRequirement(player) == -1) {
+                    } else if (OnlineTimeRecord.getSignInRequirement(player) == -1) {
                         SignInDate date = SignInDate.getInstance(new Date());
                         MessageUtil.getMessageList("Join-Event.Messages").stream().forEach(text -> {
                             if (text.toLowerCase().contains("%opengui%")) {
@@ -149,7 +149,7 @@ public class Join
                 }
             }
             if (autoSignIn) {
-                if (OnlineTimeRecord.signInRequirement(player) == -1) {
+                if (OnlineTimeRecord.getSignInRequirement(player) == -1) {
                     data.signIn();
                 }
             }

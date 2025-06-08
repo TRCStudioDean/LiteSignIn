@@ -49,8 +49,8 @@ public class PluginControl
             SignInQueue.getInstance().loadQueue();
         }
         try {
-            if (!Placeholders.getInstance().isRegistered()) {
-                Placeholders.getInstance().register();
+            if (!PlaceholderAPIImpl.getInstance().isRegistered()) {
+                PlaceholderAPIImpl.getInstance().register();
             }
             SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
         } catch (Error ex) {

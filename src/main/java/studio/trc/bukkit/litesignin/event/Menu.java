@@ -116,7 +116,7 @@ public class Menu
                             if (columns.isKey()) {
                                 SignInDate today = SignInDate.getInstance(new Date());
                                 if (columns.getDate().equals(today) && !data.alreadySignIn()) {
-                                    long requirement = OnlineTimeRecord.signInRequirement(player);
+                                    long requirement = OnlineTimeRecord.getSignInRequirement(player);
                                     if (requirement == -1) {
                                         data.signIn();
                                         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -217,7 +217,7 @@ public class Menu
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void close(InventoryCloseEvent e) {
         if (e.getPlayer() instanceof Player) {
             Player player = (Player) e.getPlayer();

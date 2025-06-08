@@ -41,7 +41,7 @@ public class ClickCommand
                     placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
                     MessageUtil.sendCommandMessage(player, "Click.To-Self.Today-has-been-Signed-In", placeholders);
                 } else {
-                    long requirement = OnlineTimeRecord.signInRequirement(player);
+                    long requirement = OnlineTimeRecord.getSignInRequirement(player);
                     if (requirement == -1) {
                         data.signIn();
                         placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));

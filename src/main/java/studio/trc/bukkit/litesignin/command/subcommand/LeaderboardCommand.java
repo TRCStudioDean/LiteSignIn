@@ -41,7 +41,9 @@ public class LeaderboardCommand
             int numberOfSinglePage = 10;
             try {
                 numberOfSinglePage = Integer.valueOf(MessageUtil.getMessage("Command-Messages.LeaderBoard.Number-Of-Single-Page"));
-            } catch (NumberFormatException ex) {}
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
             final int finalPage = page;
             final int finalNumberOfSinglePage = numberOfSinglePage;
             task = () -> sendLeaderBoard(sender, today, finalPage, finalNumberOfSinglePage);

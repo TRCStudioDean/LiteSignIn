@@ -385,6 +385,9 @@ public class SignInGUI
                     if (section.get("Already-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
+                    if (section.get("Already-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Already-SignIn.Amount"));
+                    }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
                         setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
@@ -412,6 +415,9 @@ public class SignInGUI
                         key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Missed-SignIn.Data"));
                     } else {
                         key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1);
+                    }
+                    if (section.get("Missed-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Missed-SignIn.Amount"));
                     }
                     if (section.get("Missed-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
@@ -457,6 +463,9 @@ public class SignInGUI
                     if (section.get("Already-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
                     }
+                    if (section.get("Already-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Already-SignIn.Amount"));
+                    }
                     if (section.get("Already-SignIn.Head-Textures") != null) {
                         setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
                     }
@@ -484,6 +493,9 @@ public class SignInGUI
                         key = new ItemStack(Material.valueOf(section.getString("Nothing-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Nothing-SignIn.Data"));
                     } else {
                         key = new ItemStack(Material.valueOf(section.getString("Nothing-SignIn.Item").toUpperCase()), i + 1);
+                    }
+                    if (section.get("Nothing-SignIn.Amount") != null) {
+                        key.setAmount(section.getInt("Nothing-SignIn.Amount"));
                     }
                     if (section.get("Nothing-SignIn.Head-Owner") != null) {
                         PluginControl.setHead(key, replace(player, section.getString("Nothing-SignIn.Head-Owner"), "{player}", player.getName()));
@@ -523,6 +535,9 @@ public class SignInGUI
                     }
                 } catch (IllegalArgumentException ex) {
                     key = new ItemStack(Material.BARRIER, i + 1);
+                }
+                if (section.get("Comming-Soon.Amount") != null) {
+                    key.setAmount(section.getInt("Comming-Soon.Amount"));
                 }
                 if (section.get("Comming-Soon.Head-Owner") != null) {
                     PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));

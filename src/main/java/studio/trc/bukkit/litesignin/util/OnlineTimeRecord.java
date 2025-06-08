@@ -31,16 +31,20 @@ public class OnlineTimeRecord
     }
     
     public static void savePlayerOnlineTime(Player player) {
-        onlineTimeRecords.put(player.getUniqueId(), new OnlineTimeRecord(getPlayerOnlineTime(player), SignInDate.getInstance(new Date())));
+        onlineTimeRecords.put(player.getUniqueId(), new OnlineTimeRecord(getTodayOnlineTime(player), SignInDate.getInstance(new Date())));
     }
     
-    public static long getPlayerOnlineTime(Player player) {
-        if (!joinTimeRecord.containsKey(player.getUniqueId())) return 0;
-        SignInDate lastPlayed = SignInDate.getInstance(new Date(joinTimeRecord.get(player.getUniqueId())));
+    public static long getTodayOnlineTime(Player player) {
+        return getTodayOnlineTime(player.getUniqueId());
+    }
+    
+    public static long getTodayOnlineTime(UUID uuid) {
+        if (!joinTimeRecord.containsKey(uuid)) return 0;
+        SignInDate lastPlayed = SignInDate.getInstance(new Date(joinTimeRecord.get(uuid)));
         SignInDate now = SignInDate.getInstance(new Date());
-        if (onlineTimeRecords.containsKey(player.getUniqueId()) && ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Online-Duration-Condition.Statistics")) {
+        if (onlineTimeRecords.containsKey(uuid) && ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Online-Duration-Condition.Statistics")) {
             if (lastPlayed.getYear() == now.getYear() && lastPlayed.getMonth() == now.getMonth() && lastPlayed.getDay() == now.getDay()) {
-                OnlineTimeRecord  record = onlineTimeRecords.get(player.getUniqueId());
+                OnlineTimeRecord  record = onlineTimeRecords.get(uuid);
                 if (record.getRecordTime().getYear() == now.getYear() && record.getRecordTime().getMonth() == now.getMonth() && record.getRecordTime().getDay() == now.getDay()) {
                     return record.getTimeInMillis() + now.getMillisecond() - lastPlayed.getMillisecond();
                 } else {
@@ -58,13 +62,13 @@ public class OnlineTimeRecord
         }
     }
     
-    public static long signInRequirement(Player player) {
+    public static long getSignInRequirement(Player player) {
         PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (config.getBoolean("Online-Duration-Condition.Enabled")) {
             String[] time = config.getString("Online-Duration-Condition.Time").split(":");
             if (time.length == 3 && SignInPluginUtils.isInteger(time[0]) && SignInPluginUtils.isInteger(time[1]) && SignInPluginUtils.isInteger(time[2])) {
                 long requirement = Long.valueOf(time[0]) * 1000 * 60 * 60 + Long.valueOf(time[1]) * 1000 * 60 + Long.valueOf(time[2]) * 1000;
-                return getPlayerOnlineTime(player) >= requirement ? -1 : requirement - getPlayerOnlineTime(player);
+                return getTodayOnlineTime(player) >= requirement ? -1 : requirement - getTodayOnlineTime(player);
             }
         }
         return -1;

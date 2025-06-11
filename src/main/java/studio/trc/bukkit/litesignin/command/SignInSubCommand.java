@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -24,7 +25,7 @@ public interface SignInSubCommand
     public String getName();
     
     /**
-     * Tab complete
+     * Tab complete.
      * @param sender Command sender.
      * @param subCommand The sub command.
      * @param args arguments.

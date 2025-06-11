@@ -61,24 +61,6 @@ GUI-Settings:
         Minimum-Year: 2019
         #最大年
         Minimum-Month: 11
-
-#更新を自動的にチェックするかどうか
-#サーバーが起動するたびに実行され、新しいバージョンが見つかったときに管理者に通知します。
-#この機能により、サーバーが生成するトラフィックが多すぎることはありません（毎回約1kb）
-Updater: true
-
-#データを自動的に保存する
-Auto-Save: 
-    #有効と無効
-    Enabled: false
-    #MySQLモードでのみ有効にするかどうか
-    Only-MySQL: true
-    #冷却時間（分）
-    Delay: 10
-    
-#Metricsを有効にするかどうか
-#詳細については、https://bstats.org/plugin/bukkit/LiteSignIn/11849 を参照してください。
-Metrics: true
     
 #木の看板サインインスクリプト
 #有効にすると、WoodSignSettings.ymlファイルが生成されます。中のこの記事のメモに従って編集してください。
@@ -293,3 +275,12 @@ Permissions:
         Reward:
             Permission: signin.command.reward
             Default: false
+
+#更新を自動的にチェックするかどうか
+#サーバーが起動するたびに実行され、新しいバージョンが見つかったときに管理者に通知します。
+#この機能により、サーバーが生成するトラフィックが多すぎることはありません（毎回約1kb）
+Updater: true
+    
+#Metricsを有効にするかどうか
+#詳細については、https://bstats.org/plugin/bukkit/LiteSignIn/11849 を参照してください。
+Metrics: true

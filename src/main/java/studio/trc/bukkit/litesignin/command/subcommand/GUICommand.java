@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.event.Menu;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class GUICommand
     implements SignInSubCommand
@@ -29,9 +29,9 @@ public class GUICommand
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-        if (SignInPluginUtils.isPlayer(sender, true)) {
+        if (LiteSignInUtils.isPlayer(sender, true)) {
             Player player = (Player) sender;
-            if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+            if (LiteSignInUtils.checkInDisabledWorlds(player.getUniqueId())) {
                 MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
                 return;
             }
@@ -40,7 +40,7 @@ public class GUICommand
                 Menu.openGUI(player);
                 MessageUtil.sendCommandMessage(player, "GUI.Normal");
             } else if (args.length == 2) {
-                if (SignInPluginUtils.hasCommandPermission(sender, "Designated-GUI", true)) {
+                if (LiteSignInUtils.hasCommandPermission(sender, "Designated-GUI", true)) {
                     for (int month = 1;month <= 12;month++) {
                         if (args[1].equals(String.valueOf(month))) {
                             target.setMonth(month);
@@ -60,7 +60,7 @@ public class GUICommand
                     MessageUtil.sendCommandMessage(player, "GUI.Invalid-Month", placeholders);
                 }
             } else if (args.length >= 3) {
-                if (SignInPluginUtils.hasCommandPermission(sender, "Designated-GUI", true)) {
+                if (LiteSignInUtils.hasCommandPermission(sender, "Designated-GUI", true)) {
                     int month = 0;
                     boolean invalidMonth = true;
                     for (int i = 1;i <= 12;i++) {
@@ -112,7 +112,7 @@ public class GUICommand
     @Override
     public List<String> tabComplete(CommandSender sender, String subCommand, String... args) {
         if (args.length == 2) {
-            if (SignInPluginUtils.hasCommandPermission(sender, "Designated-GUI", false)) {
+            if (LiteSignInUtils.hasCommandPermission(sender, "Designated-GUI", false)) {
                 return Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
             }
         }

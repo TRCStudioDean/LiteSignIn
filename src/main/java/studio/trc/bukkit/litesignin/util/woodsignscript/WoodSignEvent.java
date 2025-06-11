@@ -14,9 +14,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 
 import studio.trc.bukkit.litesignin.util.PluginControl;
 

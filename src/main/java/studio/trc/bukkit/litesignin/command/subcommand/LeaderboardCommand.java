@@ -18,15 +18,15 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.queue.SignInQueueElement;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class LeaderboardCommand
     implements SignInSubCommand
@@ -51,7 +51,7 @@ public class LeaderboardCommand
             SignInDate date = SignInDate.getInstance(args[1]);
             if (date != null) {
                 if (!date.equals(today)) {
-                    if (!SignInPluginUtils.hasCommandPermission(sender, "LeaderBoard.Designated-Date", true)) {
+                    if (!LiteSignInUtils.hasCommandPermission(sender, "LeaderBoard.Designated-Date", true)) {
                         return;
                     }
                     if (!PluginControl.useMySQLStorage() && !PluginControl.useSQLiteStorage()) {
@@ -85,7 +85,7 @@ public class LeaderboardCommand
             SignInDate date = SignInDate.getInstance(args[1]);
             if (date != null) {
                 if (!date.equals(today)) {
-                    if (!SignInPluginUtils.hasCommandPermission(sender, "LeaderBoard.Designated-Date", true)) {
+                    if (!LiteSignInUtils.hasCommandPermission(sender, "LeaderBoard.Designated-Date", true)) {
                         return;
                     }
                     if (!PluginControl.useMySQLStorage() && !PluginControl.useSQLiteStorage()) {
@@ -210,7 +210,7 @@ public class LeaderboardCommand
                                             placeholders.put("{time}", timeName);
                                             placeholders.put("{page}", String.valueOf(page));
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                                            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                                             if (end != array.size()) {
                                                 hoverText.add(new TextComponent("\n"));
                                             }
@@ -283,7 +283,7 @@ public class LeaderboardCommand
                                                 placeholders.put("{time}", timeName);
                                                 placeholders.put("{page}", String.valueOf(page));
                                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                                                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                                                 if (end != array.size()) {
                                                     hoverText.add(new TextComponent("\n"));
                                                 }
@@ -313,7 +313,7 @@ public class LeaderboardCommand
                                             placeholders.put("{time}", timeName);
                                             placeholders.put("{page}", String.valueOf(page));
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders)));
+                                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
                                         }
                                     } else {
                                         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -323,7 +323,7 @@ public class LeaderboardCommand
                                         placeholders.put("{time}", timeName);
                                         placeholders.put("{page}", String.valueOf(page));
                                         placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders)));
+                                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
                                     }
                                 }
                             }
@@ -350,7 +350,7 @@ public class LeaderboardCommand
                                         placeholders.put("{time}", timeName);
                                         placeholders.put("{page}", String.valueOf(page));
                                         placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                                         if (end != array.size()) {
                                             hoverText.add(new TextComponent("\n"));
                                         }
@@ -403,7 +403,7 @@ public class LeaderboardCommand
                                                 placeholders.put("{time}", timeName);
                                                 placeholders.put("{page}", String.valueOf(page));
                                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                                                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                                                 if (end != array.size()) {
                                                     hoverText.add(new TextComponent("\n"));
                                                 }
@@ -462,7 +462,7 @@ public class LeaderboardCommand
                                                     placeholders.put("{time}", timeName);
                                                     placeholders.put("{page}", String.valueOf(page));
                                                     placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                    hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                                                    hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                                                     if (end != array.size()) {
                                                         hoverText.add(new TextComponent("\n"));
                                                     }
@@ -491,7 +491,7 @@ public class LeaderboardCommand
                                                 placeholders.put("{time}", timeName);
                                                 placeholders.put("{page}", String.valueOf(page));
                                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders)));
+                                                sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
                                             }
                                         } else {
                                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -501,7 +501,7 @@ public class LeaderboardCommand
                                             placeholders.put("{time}", timeName);
                                             placeholders.put("{page}", String.valueOf(page));
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders)));
+                                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
                                         }
                                     }
                                 }
@@ -546,7 +546,7 @@ public class LeaderboardCommand
                             placeholders.put("{time}", timeFormat);
                             placeholders.put("{page}", String.valueOf(page));
                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                            sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), placeholders)));
+                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), placeholders));
                         } else {
                             for (SignInQueueElement element : userArray) {
                                 String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
@@ -580,7 +580,7 @@ public class LeaderboardCommand
                                 placeholders.put("{time}", timeFormat);
                                 placeholders.put("{page}", String.valueOf(page));
                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders)));
+                                sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
                             }
                         }
                     }
@@ -596,7 +596,7 @@ public class LeaderboardCommand
                     placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                     placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                     placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, message, placeholders)));
+                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, message, placeholders));
                     continue;
                 }
                 Map<String, BaseComponent> baseComponents = new HashMap();
@@ -614,7 +614,7 @@ public class LeaderboardCommand
                         placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                         placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                         placeholders.put("{maxPage}", String.valueOf(maxPage));
-                        hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                         if (end != array.size()) {
                             hoverText.add(new TextComponent("\n"));
                         }
@@ -639,7 +639,7 @@ public class LeaderboardCommand
                         placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                         placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                         placeholders.put("{maxPage}", String.valueOf(maxPage));
-                        hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, placeholders))));
+                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
                         if (end != array.size()) {
                             hoverText.add(new TextComponent("\n"));
                         }
@@ -658,7 +658,7 @@ public class LeaderboardCommand
                     placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                     placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                     placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, message, placeholders)));
+                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, message, placeholders));
                 } else {
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{total}", String.valueOf(queue.size()));

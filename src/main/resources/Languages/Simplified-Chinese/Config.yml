@@ -65,24 +65,6 @@ GUI-Settings:
         #最低月份
         Minimum-Month: 11
 
-#是否检查更新
-#仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
-#此功能并不会造成服务器产生过多流量（每次检测产生约不到1kb网络流量）
-Updater: true
-
-#自动保存数据
-Auto-Save: 
-    #是否启用
-    Enabled: false
-    #是否仅MySQL储存时启用
-    Only-MySQL: true
-    #延迟（分钟）
-    Delay: 10
-    
-#是否启用Metrics
-#详见https://bstats.org/plugin/bukkit/LiteSignIn/11849
-Metrics: true
-
 #木牌签到脚本
 #启用后将生成WoodSignSettings.yml文件，请在该文件中按照注释的帮助进行编辑。
 Wood-Signs-Script: false
@@ -297,3 +279,12 @@ Permissions:
         Reward:
             Permission: signin.command.reward
             Default: false
+
+#是否检查更新
+#仅在启动服务器时运行，将自动检测插件的最新版本及信息，并汇报给控制台及有拥有对应权限的玩家
+#此功能并不会造成服务器产生过多流量（每次检测产生约不到1kb网络流量）
+Updater: true
+    
+#是否启用Metrics
+#详见https://bstats.org/plugin/bukkit/LiteSignIn/11849
+Metrics: true

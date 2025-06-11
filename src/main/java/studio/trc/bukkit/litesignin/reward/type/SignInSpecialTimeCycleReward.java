@@ -7,16 +7,15 @@ import lombok.Getter;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
 import studio.trc.bukkit.litesignin.reward.SignInRewardModule;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.util.SignInSound;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class SignInSpecialTimeCycleReward 
     extends SignInRewardColumn
@@ -79,10 +78,10 @@ public class SignInSpecialTimeCycleReward
     }
     
     private String getSettingPath() {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle")) {
             for (String number : config.getConfigurationSection("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle").getKeys(false)) {
-                if (SignInPluginUtils.isInteger(number) && time % Integer.valueOf(number) == 0) {
+                if (LiteSignInUtils.isInteger(number) && time % Integer.valueOf(number) == 0) {
                     return number;
                 }
             }

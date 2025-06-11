@@ -61,22 +61,6 @@ GUI-Settings:
         Minimum-Year: 2019
         #Minimum month
         Minimum-Month: 11
-
-#Whether to check update
-#Only running at server starting. 
-#It will check the latest version of the plugin, and report to the console and authorized players.
-#This function will not cause the server to generate too much traffic. (Less than 1kb)
-Updater: true
-
-Auto-Save: 
-    Enabled: false
-    Only-MySQL: true
-    #Minute
-    Delay: 10
-    
-#Whether enable Metrics
-#Detailed: https://bstats.org/plugin/bukkit/LiteSignIn/11849
-Metrics: true
     
 #Wood signs script
 #After enabling, WoodSignSettings.yml file will be generated, please edit in the file according to the help of comments.
@@ -279,3 +263,13 @@ Permissions:
         Reward:
             Permission: signin.command.reward
             Default: false
+
+#Whether to check update
+#Only running at server starting. 
+#It will check the latest version of the plugin, and report to the console and authorized players.
+#This function will not cause the server to generate too much traffic. (Less than 1kb)
+Updater: true
+    
+#Whether enable Metrics
+#Detailed: https://bstats.org/plugin/bukkit/LiteSignIn/11849
+Metrics: true

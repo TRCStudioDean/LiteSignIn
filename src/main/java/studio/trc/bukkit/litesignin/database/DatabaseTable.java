@@ -6,8 +6,8 @@ import java.util.List;
 
 import lombok.Getter;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 
 public enum DatabaseTable
 {

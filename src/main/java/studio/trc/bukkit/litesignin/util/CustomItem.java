@@ -8,8 +8,8 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 
 public class CustomItem
 {
@@ -25,7 +25,7 @@ public class CustomItem
     
     public void delete() {
         ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).set("Item-Collection." + name, null);
-        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOM_ITEMS);
+        ConfigurationType.CUSTOM_ITEMS.saveConfig();
     }
     
     public void give(Player player) {
@@ -62,7 +62,7 @@ public class CustomItem
             }
         }
         ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).set("Item-Collection." + name, is);
-        ConfigurationUtil.saveConfig(ConfigurationType.CUSTOM_ITEMS);
+        ConfigurationType.CUSTOM_ITEMS.saveConfig();
         return true;
     }
     

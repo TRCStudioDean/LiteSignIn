@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,14 +20,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public class WoodSignUtil
 {
@@ -43,12 +42,12 @@ public class WoodSignUtil
         if (!file.exists()) try {
             file.createNewFile();
         } catch (IOException ex) {
-            Logger.getLogger(WoodSignUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         try (Reader reader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
             database.load(reader);
         } catch (IOException | InvalidConfigurationException ex) {
-            Logger.getLogger(WoodSignUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         if (database.get("Database") != null) {
             for (String sections : database.getConfigurationSection("Database").getKeys(false)) {
@@ -77,7 +76,7 @@ public class WoodSignUtil
     public static void loadScripts() {
         scripts.clear();
         ConfigurationUtil.reloadConfig(ConfigurationType.WOOD_SIGN_SETTINGS);
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.WOOD_SIGN_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.WOOD_SIGN_SETTINGS);
         config.getConfigurationSection("Wood-Sign-Scripts").getKeys(false).stream().forEach(sections -> {
             try {
                 String woodSignTitle = sections;
@@ -95,7 +94,7 @@ public class WoodSignUtil
             } catch (Exception ex) {
                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{signs}", sections);
-                SignInPluginProperties.sendOperationMessage("WoodSignScriptLoadFailed", placeholders);
+                LiteSignInProperties.sendOperationMessage("WoodSignScriptLoadFailed", placeholders);
             }
         });
     }
@@ -135,10 +134,10 @@ public class WoodSignUtil
         if (reloadFile) loadSigns();
         PluginControl.runBukkitTask(() -> {
             Sign sign = (Sign) block.getState();
-            sign.setLine(0, MessageUtil.toColor(woodSign.getWoodSignText().getLine1()));
-            sign.setLine(1, MessageUtil.toColor(woodSign.getWoodSignText().getLine2()));
-            sign.setLine(2, MessageUtil.toColor(woodSign.getWoodSignText().getLine3()));
-            sign.setLine(3, MessageUtil.toColor(woodSign.getWoodSignText().getLine4()));
+            sign.setLine(0, ColorUtils.toColor(woodSign.getWoodSignText().getLine1()));
+            sign.setLine(1, ColorUtils.toColor(woodSign.getWoodSignText().getLine2()));
+            sign.setLine(2, ColorUtils.toColor(woodSign.getWoodSignText().getLine3()));
+            sign.setLine(3, ColorUtils.toColor(woodSign.getWoodSignText().getLine4()));
             sign.update();
         }, 1);
     }
@@ -179,7 +178,7 @@ public class WoodSignUtil
         if (number > 0) {
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{signs}", String.valueOf(number));
-            SignInPluginProperties.sendOperationMessage("WoodSignScriptCleared", placeholders);
+            LiteSignInProperties.sendOperationMessage("WoodSignScriptCleared", placeholders);
         }
     }
     

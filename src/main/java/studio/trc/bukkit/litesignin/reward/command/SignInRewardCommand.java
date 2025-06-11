@@ -6,7 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class SignInRewardCommand
@@ -34,16 +35,16 @@ public class SignInRewardCommand
         PluginControl.runBukkitTask(() -> {
             switch (type) {
                 case PLAYER: {
-                    player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
+                    player.performCommand(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
                     break;
                 }
                 case OP: {
                     if (player.isOp()) {
-                        player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
+                        player.performCommand(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
                     } else {
                         player.setOp(true);
                         try {
-                            player.performCommand(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
+                            player.performCommand(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
                         } catch (Throwable error) {
                             error.printStackTrace();
                         }
@@ -52,7 +53,7 @@ public class SignInRewardCommand
                     break;
                 }
                 case SERVER: {
-                    Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
+                    Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(command_replaced, player)));
                     break;
                 }
             }

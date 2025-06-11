@@ -13,14 +13,14 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class ClickCommand
     implements SignInSubCommand
@@ -29,9 +29,9 @@ public class ClickCommand
     public void execute(CommandSender sender, String subCommand, String... args) {
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         if (args.length == 1) {
-            if (SignInPluginUtils.isPlayer(sender, true)) {
+            if (LiteSignInUtils.isPlayer(sender, true)) {
                 Player player = (Player) sender;
-                if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+                if (LiteSignInUtils.checkInDisabledWorlds(player.getUniqueId())) {
                     MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
                     return;
                 }
@@ -56,7 +56,7 @@ public class ClickCommand
         } else if (args.length == 2) {
             SignInDate date = SignInDate.getInstance(args[1]);
             if (date == null) {
-                if (!SignInPluginUtils.hasCommandPermission(sender, "Click-Others", false)) {
+                if (!LiteSignInUtils.hasCommandPermission(sender, "Click-Others", false)) {
                     placeholders.put("{date}", args[1]);
                     MessageUtil.sendCommandMessage(sender, "Click.Invalid-Date", placeholders);
                     return;
@@ -108,9 +108,9 @@ public class ClickCommand
                     }
                 }
             } else {
-                if (SignInPluginUtils.isPlayer(sender, true)) {
+                if (LiteSignInUtils.isPlayer(sender, true)) {
                     Player player = (Player) sender;
-                    if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) {
+                    if (LiteSignInUtils.checkInDisabledWorlds(player.getUniqueId())) {
                         MessageUtil.sendMessage(sender, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-SignIn-In-Disabled-World");
                         return;
                     }
@@ -119,7 +119,7 @@ public class ClickCommand
                         player.performCommand("litesignin:signin click");
                         return;
                     }
-                    if (!SignInPluginUtils.hasCommandPermission(sender, "Click", false) || !SignInPluginUtils.hasPermission(sender, "Retroactive-Card.Use")) {
+                    if (!LiteSignInUtils.hasCommandPermission(sender, "Click", false) || !LiteSignInUtils.hasPermission(sender, "Retroactive-Card.Use")) {
                         MessageUtil.sendCommandMessage(sender, "No-Permission");
                         return;
                     }
@@ -128,7 +128,7 @@ public class ClickCommand
                         return;
                     }
                     Storage data = Storage.getPlayer(player);
-                    if (!SignInPluginUtils.hasPermission(sender, "Retroactive-Card.Use") && data.getRetroactiveCard() > 0) {
+                    if (!LiteSignInUtils.hasPermission(sender, "Retroactive-Card.Use") && data.getRetroactiveCard() > 0) {
                         data.takeRetroactiveCard(data.getRetroactiveCard());
                         MessageUtil.sendCommandMessage(sender, "Click.To-Self.Unable-To-Hold");
                     } else if (data.isRetroactiveCardCooldown()) {
@@ -157,7 +157,7 @@ public class ClickCommand
                 }
             }
         } else if (args.length >= 3) {
-            if (!SignInPluginUtils.hasCommandPermission(sender, "Click-Others", false)) {
+            if (!LiteSignInUtils.hasCommandPermission(sender, "Click-Others", false)) {
                 MessageUtil.sendCommandMessage(sender, "No-Permission");
                 return;
             }

@@ -18,17 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
-import studio.trc.bukkit.litesignin.queue.SignInQueue;
-import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
-import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
-import studio.trc.bukkit.litesignin.nms.NMSManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -39,6 +28,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import studio.trc.bukkit.litesignin.api.Storage;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.queue.SignInQueue;
+import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
+import studio.trc.bukkit.litesignin.util.SignInDate;
+import studio.trc.bukkit.litesignin.util.PluginControl;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
+import studio.trc.bukkit.litesignin.nms.NMSManager;
+
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
+
 public class SignInGUI
 {
     public static SignInInventory getGUI(Player player) {
@@ -46,7 +48,7 @@ public class SignInGUI
         /**
          * Create chest GUI
          */
-        Inventory gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(new Date()))));
+        Inventory gui = Bukkit.createInventory(null, 54, ColorUtils.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(new Date()))));
         
         /**
          * Elements
@@ -79,9 +81,9 @@ public class SignInGUI
          */
         Date now = new Date();
         if (month == SignInDate.getInstance(now).getMonth()) {
-            gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(now))));
+            gui = Bukkit.createInventory(null, 54, ColorUtils.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(now))));
         } else {
-            gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
+            gui = Bukkit.createInventory(null, 54, ColorUtils.toColor(replace(player, section.getString("Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
         }
         
         /**
@@ -115,9 +117,9 @@ public class SignInGUI
          */
         if (year == today.getYear()) {
             if (month == today.getMonth()) {
-                gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(new Date()))));
+                gui = Bukkit.createInventory(null, 54, ColorUtils.toColor(replace(player, section.getString("GUI-Name"), "{date}", new SimpleDateFormat(section.getString("Date-Format")).format(new Date()))));
             } else {
-                gui = Bukkit.createInventory(null, 54, MessageUtil.toColor(replace(player, section.getString("Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
+                gui = Bukkit.createInventory(null, 54, ColorUtils.toColor(replace(player, section.getString("Specified-Month-GUI-Name"), "{month}", String.valueOf(month))));
             }
         } else {
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -212,7 +214,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
@@ -250,7 +252,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
                     }
                     if (section.get("Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.MISSED_SIGNIN;
                 }
@@ -308,7 +310,7 @@ public class SignInGUI
                     setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
                 }
                 if (section.get("Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
+                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
                 key.setItemMeta(im);
                 items.add(key);
                 keys.add(KeyType.COMMING_SOON);
@@ -407,7 +409,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
@@ -441,7 +443,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
                     }
                     if (section.get("Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.MISSED_SIGNIN;
                 }
@@ -485,7 +487,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
                     }
                     if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
@@ -519,7 +521,7 @@ public class SignInGUI
                         setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Enchantment", im);
                     }
                     if (section.get("Nothing-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Nothing-SignIn.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Nothing-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
+                    if (section.get("Nothing-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Nothing-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
                     key.setItemMeta(im);
                     keyType = KeyType.NOTHING_SIGNIN;
                 }
@@ -561,7 +563,7 @@ public class SignInGUI
                     setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
                 }
                 if (section.get("Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(MessageUtil.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
+                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
                 key.setItemMeta(im);
                 items.add(key);
                 keys.add(KeyType.COMMING_SOON);
@@ -652,7 +654,7 @@ public class SignInGUI
                     setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment", im);
                 }
                 if (section.get(items + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get(items + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(section.getString(items + ".Display-Name"), player)));
+                if (section.get(items + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(section.getString(items + ".Display-Name"), player)));
                 other.setItemMeta(im);
                 other.setAmount(section.get(items + ".Amount") != null ? section.getInt(items + ".Amount") : 1);
                 if (section.get(items + ".Slots") != null) {
@@ -743,7 +745,7 @@ public class SignInGUI
                         } catch (Exception ex) {
                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                             placeholders.put("{path}", configPath + "." + name);
-                            SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                            LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
                         }
                     }
                 }
@@ -751,12 +753,12 @@ public class SignInGUI
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{enchantment}", data[0]);
                     placeholders.put("{path}", configPath + "." + name);
-                    SignInPluginProperties.sendOperationMessage("InvalidEnchantment", placeholders);
+                    LiteSignInProperties.sendOperationMessage("InvalidEnchantment", placeholders);
                 }
             } catch (Exception ex) {
                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{path}", configPath + "." + name);
-                SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
             }
         }
     }
@@ -780,7 +782,7 @@ public class SignInGUI
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{data}", name);
             placeholders.put("{path}", configPath + "." + name);
-            SignInPluginProperties.sendOperationMessage("InvalidCustomModelData", placeholders);
+            LiteSignInProperties.sendOperationMessage("InvalidCustomModelData", placeholders);
         }
         is.setItemMeta(im);
     }

@@ -8,21 +8,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.async.AutoSave;
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
-import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
-import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
-import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
-import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
-import studio.trc.bukkit.litesignin.event.Menu;
-import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
-import studio.trc.bukkit.litesignin.queue.SignInQueue;
-import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignUtil;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -32,6 +17,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+
+import studio.trc.bukkit.litesignin.Main;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
+import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
+import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
+import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
+import studio.trc.bukkit.litesignin.event.Menu;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
+import studio.trc.bukkit.litesignin.queue.SignInQueue;
+import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignUtil;
 
 public class PluginControl
 {
@@ -52,15 +53,13 @@ public class PluginControl
             if (!PlaceholderAPIImpl.getInstance().isRegistered()) {
                 PlaceholderAPIImpl.getInstance().register();
             }
-            SignInPluginProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
+            LiteSignInProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
         } catch (Error ex) {
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("PlaceholderAPI.Enabled", false);
-            SignInPluginProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
+            LiteSignInProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
         LiteSignInThread.initialize();
-        AutoSave.stopThread();
-        AutoSave.startThread();
         headCacheData.clear();
         if (enableSignScript()) {
             WoodSignUtil.loadScripts();
@@ -69,12 +68,12 @@ public class PluginControl
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{scripts}", String.valueOf(WoodSignUtil.getWoodSignScripts().size()));
             placeholders.put("{signs}", String.valueOf(WoodSignUtil.getAllScriptedSign().size()));
-            SignInPluginProperties.sendOperationMessage("WoodSignScriptLoaded", placeholders);
+            LiteSignInProperties.sendOperationMessage("WoodSignScriptLoaded", placeholders);
         }
     }
     
     public static void reloadMySQL() {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         Map<String, String> jdbcOptions = new HashMap();
         config.getConfigurationSection("MySQL-Storage.Options").getKeys(false).stream().forEach(option -> {
             jdbcOptions.put(option, config.getString("MySQL-Storage.Options." + option));
@@ -93,7 +92,7 @@ public class PluginControl
     }
     
     public static void reloadSQLite() {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (SQLiteEngine.getInstance() != null) {
             SQLiteEngine.getInstance().disconnect();
         }
@@ -181,10 +180,6 @@ public class PluginControl
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("SQLite-Storage.Enabled");
     }
     
-    public static boolean dataAutoSave() {
-        return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Auto-Save.Enabled");
-    }
-    
     public static boolean enableSignInRanking() {
         return ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Enable-Sign-In-Ranking");
     }
@@ -234,7 +229,7 @@ public class PluginControl
     }
     
     public static String getPrefix() {
-        return MessageUtil.toColor(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix"));
+        return ColorUtils.toColor(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Prefix"));
     }
     
     public static ItemStack getRetroactiveCardRequiredItem(Player player) {
@@ -259,7 +254,7 @@ public class PluginControl
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
                 List<String> lore = new ArrayList();
                 for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Lore")) {
-                    lore.add(MessageUtil.toPlaceholderAPIResult(MessageUtil.toColor(lores), player));
+                    lore.add(MessageUtil.toPlaceholderAPIResult(ColorUtils.toColor(lores), player));
                 }
                 im.setLore(lore);
             }
@@ -276,7 +271,7 @@ public class PluginControl
                 }
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
             is.setItemMeta(im);
             return is;
         } else if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Item-Collection." + itemName) != null) {

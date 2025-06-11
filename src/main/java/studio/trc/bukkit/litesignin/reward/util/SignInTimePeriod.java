@@ -1,7 +1,7 @@
 package studio.trc.bukkit.litesignin.reward.util;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 
 public class SignInTimePeriod

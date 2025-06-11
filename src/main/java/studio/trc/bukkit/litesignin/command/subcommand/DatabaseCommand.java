@@ -21,13 +21,14 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class DatabaseCommand
     implements SignInSubCommand
@@ -64,7 +65,7 @@ public class DatabaseCommand
         String subCommandType = args[1];
         if (args.length <= 2) {
             List<String> commands = Arrays.stream(SubCommandType.values())
-                    .filter(type -> SignInPluginUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
+                    .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
             List<String> names = new ArrayList();
@@ -91,18 +92,18 @@ public class DatabaseCommand
 
     private void command_backup(CommandSender sender, String[] args) {
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-        if (SignInPluginUtils.hasCommandPermission(sender, SubCommandType.BACKUP.commandPermissionPath, true)) {
+        if (LiteSignInUtils.hasCommandPermission(sender, SubCommandType.BACKUP.commandPermissionPath, true)) {
             if (!ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Database-Management.Backup.Enabled")) {
                 return;
             }
-            BaseComponent click = new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap())));
+            BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()));
             ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin:signin database confirm");
             List<BaseComponent> hoverText = new ArrayList();
             int end = 0;
             List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
             for (String hover : array) {
                 end++;
-                hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, new HashMap()))));
+                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, new HashMap())));
                 if (end != array.size()) {
                     hoverText.add(new TextComponent("\n"));
                 }
@@ -134,14 +135,14 @@ public class DatabaseCommand
             MessageUtil.sendCommandMessage(sender, "Database.Rollback.File-Not-Exist", placeholders);
             return;
         }
-        BaseComponent click = new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap())));
+        BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()));
         ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin database confirm");
         List<BaseComponent> hoverText = new ArrayList();
         int end = 0;
         List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
         for (String hover : array) {
             end++;
-            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, hover, new HashMap()))));
+            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, new HashMap())));
             if (end != array.size()) {
                 hoverText.add(new TextComponent("\n"));
             }

@@ -14,13 +14,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 import studio.trc.bukkit.litesignin.util.Updater;
 
 public class SignInCommand
@@ -66,7 +66,7 @@ public class SignInCommand
             return;
         }
         SignInSubCommand command = subCommands.get(subCommand);
-        if (SignInPluginUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), true)) command.execute(sender, subCommand, args);
+        if (LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), true)) command.execute(sender, subCommand, args);
     }
     
     private void checkUpdate() {
@@ -81,7 +81,7 @@ public class SignInCommand
     
     private List<String> getCommands(CommandSender sender) {
         List<String> commands = new ArrayList();
-        subCommands.values().stream().filter(command -> SignInPluginUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false)).forEach(command -> {
+        subCommands.values().stream().filter(command -> LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false)).forEach(command -> {
             commands.add(command.getName());
         });
         return commands;
@@ -105,6 +105,6 @@ public class SignInCommand
             return new ArrayList();
         }
         SignInSubCommand command = subCommands.get(subCommand);
-        return SignInPluginUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false) ? subCommands.get(subCommand).tabComplete(sender, subCommand, args) : new ArrayList();
+        return LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false) ? subCommands.get(subCommand).tabComplete(sender, subCommand, args) : new ArrayList();
     }
 }

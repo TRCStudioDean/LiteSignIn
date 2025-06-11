@@ -1,5 +1,6 @@
 package studio.trc.bukkit.litesignin.util;
 
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -14,8 +15,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 
 public class Updater
 {

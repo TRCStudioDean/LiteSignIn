@@ -13,16 +13,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
 import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public abstract class SignInRewardUtil
     implements SignInReward
@@ -56,7 +57,7 @@ public abstract class SignInRewardUtil
                                 placeholders.put("{queue}", queue);
                                 placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                 placeholders.put("{player}", player.getName());
-                                player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, messages, placeholders)));
+                                player.sendMessage(MessageUtil.replacePlaceholders(player, messages, placeholders));
                             });
                             break;
                         }
@@ -68,7 +69,7 @@ public abstract class SignInRewardUtil
                                     placeholders.put("{queue}", queue);
                                     placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                     placeholders.put("{player}", player.getName());
-                                    players.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, messages, placeholders)));
+                                    players.sendMessage(MessageUtil.replacePlaceholders(player, messages, placeholders));
                                 });
                             });
                             break;
@@ -87,7 +88,7 @@ public abstract class SignInRewardUtil
     
     public List<ItemStack> getRewardItems(Player player, String configPath) {
         List<ItemStack> list = new ArrayList();
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
             config.getStringList(configPath).stream().map(itemData -> getItemFromItemData(player, itemData)).filter(item -> item != null).forEach(list::add);
         }
@@ -123,7 +124,7 @@ public abstract class SignInRewardUtil
             } catch (NumberFormatException ex) {}
             return is;
         } catch (IllegalArgumentException e) {
-            PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS);
+            RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS);
             if (config.contains("Manual-Settings." + itemdata[0] + ".Item")) {
                 ItemStack is;
                 try {
@@ -143,14 +144,14 @@ public abstract class SignInRewardUtil
                 ItemMeta im = is.getItemMeta();
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                     List<String> lore = new ArrayList();
-                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(lores, player))));
+                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(lores, player))));
                     im.setLore(lore);
                 }
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Enchantment")) {
                     setEnchantments("Manual-Settings." + itemdata[0] + ".Enchantment", im);
                 }
                 if (config.get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (config.contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(MessageUtil.toColor(MessageUtil.toPlaceholderAPIResult(config.getString("Manual-Settings." + itemdata[0] + ".Display-Name"), player)));
+                if (config.contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(config.getString("Manual-Settings." + itemdata[0] + ".Display-Name"), player)));
                 is.setItemMeta(im);
                 try {
                     if (itemdata[1].contains("-")) {
@@ -183,7 +184,7 @@ public abstract class SignInRewardUtil
     
     public List<SignInSound> getSounds(String configPath) {
         List<SignInSound> sounds = new ArrayList();
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
             config.getStringList(configPath).stream().forEach((value) -> {
                 String[] args = value.split("-");
@@ -197,11 +198,11 @@ public abstract class SignInRewardUtil
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{sound}", args[0]);
                     placeholders.put("{path}", configPath + "." + value);
-                    SignInPluginProperties.sendOperationMessage("InvalidSound", placeholders);
+                    LiteSignInProperties.sendOperationMessage("InvalidSound", placeholders);
                 } catch (Exception ex) {
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{path}", configPath + "." + value);
-                    SignInPluginProperties.sendOperationMessage("InvalidSoundSetting", placeholders);
+                    LiteSignInProperties.sendOperationMessage("InvalidSoundSetting", placeholders);
                 }
             }); 
         }
@@ -228,7 +229,7 @@ public abstract class SignInRewardUtil
                         } catch (Exception ex) {
                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                             placeholders.put("{path}", configPath + "." + name);
-                            SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                            LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
                         }
                     }
                 }
@@ -236,12 +237,12 @@ public abstract class SignInRewardUtil
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{enchantment}", data[0]);
                     placeholders.put("{path}", configPath + "." + name);
-                    SignInPluginProperties.sendOperationMessage("InvalidEnchantment", placeholders);
+                    LiteSignInProperties.sendOperationMessage("InvalidEnchantment", placeholders);
                 }
             } catch (Exception ex) {
                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{path}", configPath + "." + name);
-                SignInPluginProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
+                LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
             }
         }
     }

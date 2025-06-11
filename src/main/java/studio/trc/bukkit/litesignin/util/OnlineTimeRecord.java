@@ -9,9 +9,9 @@ import lombok.Getter;
 
 import org.bukkit.entity.Player;
 
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 
 public class OnlineTimeRecord 
 {
@@ -63,10 +63,10 @@ public class OnlineTimeRecord
     }
     
     public static long getSignInRequirement(Player player) {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (config.getBoolean("Online-Duration-Condition.Enabled")) {
             String[] time = config.getString("Online-Duration-Condition.Time").split(":");
-            if (time.length == 3 && SignInPluginUtils.isInteger(time[0]) && SignInPluginUtils.isInteger(time[1]) && SignInPluginUtils.isInteger(time[2])) {
+            if (time.length == 3 && LiteSignInUtils.isInteger(time[0]) && LiteSignInUtils.isInteger(time[1]) && LiteSignInUtils.isInteger(time[2])) {
                 long requirement = Long.valueOf(time[0]) * 1000 * 60 * 60 + Long.valueOf(time[1]) * 1000 * 60 + Long.valueOf(time[2]) * 1000;
                 return getTodayOnlineTime(player) >= requirement ? -1 : requirement - getTodayOnlineTime(player);
             }

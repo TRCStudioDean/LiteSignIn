@@ -1,11 +1,11 @@
 package studio.trc.bukkit.litesignin;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.command.SignInCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
 import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
@@ -18,7 +18,7 @@ import studio.trc.bukkit.litesignin.nms.NMSManager;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.metrics.Metrics;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 import studio.trc.bukkit.litesignin.util.woodsignscript.WoodSignEvent;
 
 import org.bukkit.Bukkit;
@@ -43,10 +43,10 @@ public class Main
     public void onEnable() {
         main = this;
         
-        SignInPluginProperties.reloadProperties();
+        LiteSignInProperties.reloadProperties();
         
         if (!getDescription().getName().equals("LiteSignIn")) {
-            SignInPluginProperties.sendOperationMessage("PluginNameChange");
+            LiteSignInProperties.sendOperationMessage("PluginNameChange");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -55,7 +55,7 @@ public class Main
         registerEvent();
         PluginControl.reload();
         NMSManager.reloadNMS();
-        SignInPluginProperties.sendOperationMessage("PluginEnabledSuccessfully", MessageUtil.getDefaultPlaceholders());
+        LiteSignInProperties.sendOperationMessage("PluginEnabledSuccessfully", MessageUtil.getDefaultPlaceholders());
         
         //It will run after the server is started.
         PluginControl.runBukkitTask(() -> {
@@ -73,7 +73,7 @@ public class Main
     @Override
     public void onDisable() {
         LiteSignInThread.getTaskThread().setRunning(false);
-        SignInPluginProperties.sendOperationMessage("AsyncThreadStopped", MessageUtil.getDefaultPlaceholders());
+        LiteSignInProperties.sendOperationMessage("AsyncThreadStopped", MessageUtil.getDefaultPlaceholders());
         if (PluginControl.useMySQLStorage()) {
             MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
         } else if (PluginControl.useSQLiteStorage()) {
@@ -112,7 +112,7 @@ public class Main
         pm.registerEvents(new Menu(), Main.getInstance());
         pm.registerEvents(new Quit(), Main.getInstance());
         pm.registerEvents(new WoodSignEvent(), Main.getInstance());
-        SignInPluginProperties.sendOperationMessage("PluginListenerRegistered");
+        LiteSignInProperties.sendOperationMessage("PluginListenerRegistered");
     }
     
     private void registerCommandExecutor() {
@@ -123,6 +123,6 @@ public class Main
         for (SignInSubCommandType subCommandType : SignInSubCommandType.values()) {
             SignInCommand.getSubCommands().put(subCommandType.getSubCommandName(), subCommandType.getSubCommand());
         }
-        SignInPluginProperties.sendOperationMessage("PluginCommandRegistered");
+        LiteSignInProperties.sendOperationMessage("PluginCommandRegistered");
     }
 }

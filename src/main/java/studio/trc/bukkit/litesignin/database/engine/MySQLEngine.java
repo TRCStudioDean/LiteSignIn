@@ -12,14 +12,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import studio.trc.bukkit.litesignin.Main;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.database.DatabaseEngine;
 import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.database.DatabaseType;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public class MySQLEngine
     implements DatabaseEngine
@@ -69,7 +69,7 @@ public class MySQLEngine
             mysqlConnection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + getConnectionURI(), userName, password);
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{database}", "MySQL");
-            SignInPluginProperties.sendOperationMessage("SuccessfullyConnected", placeholders);
+            LiteSignInProperties.sendOperationMessage("SuccessfullyConnected", placeholders);
             initialize();
         } catch (SQLException ex) {
             throwSQLException(ex, "ConnectionFailed", false);
@@ -85,7 +85,7 @@ public class MySQLEngine
                 }
                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{database}", "MySQL");
-                SignInPluginProperties.sendOperationMessage("Disconnected", placeholders);
+                LiteSignInProperties.sendOperationMessage("Disconnected", placeholders);
             } catch (SQLException ex) {
                 throwSQLException(ex, "ConnectionError", false);
             }
@@ -165,7 +165,7 @@ public class MySQLEngine
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{database}", "MySQL");
         placeholders.put("{error}", exception.getLocalizedMessage() != null ? exception.getLocalizedMessage() : "null");
-        SignInPluginProperties.sendOperationMessage(path, placeholders);
+        LiteSignInProperties.sendOperationMessage(path, placeholders);
         try {
             if (reconnect && mysqlConnection.isClosed()) {
                 connect();

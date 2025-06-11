@@ -1,5 +1,6 @@
 package studio.trc.bukkit.litesignin.util;
 
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import java.util.Map;
 import java.util.UUID;
 
@@ -7,11 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 
-public class SignInPluginUtils
+public class LiteSignInUtils
 {
     /*
      * Special prompts
@@ -42,8 +43,17 @@ public class SignInPluginUtils
         }
     }
     
+    public static boolean isFloat(String value) {
+        try {
+            Float.valueOf(value);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+    
     public static boolean checkInDisabledWorlds(UUID uuid) {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && hasPermission(player, "Disabled-Worlds-Bypass")) return false;
         return !config.getStringList("Disabled-Worlds").isEmpty() && player != null && config.getStringList("Disabled-Worlds").stream().anyMatch(worldName -> player.getWorld().getName().equalsIgnoreCase(worldName));
@@ -58,7 +68,7 @@ public class SignInPluginUtils
     }
     
     public static boolean hasPermission(CommandSender sender, String configPath) {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.CONFIG);
         if (config.getBoolean("Permissions." + configPath + ".Default")) return true;
         return sender.hasPermission(config.getString("Permissions." + configPath + ".Permission"));
     }

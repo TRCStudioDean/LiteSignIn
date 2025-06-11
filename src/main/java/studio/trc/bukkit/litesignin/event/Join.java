@@ -18,9 +18,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
@@ -28,7 +28,7 @@ import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class Join
     implements Listener
@@ -41,16 +41,16 @@ public class Join
         Player player = event.getPlayer();
         OnlineTimeRecord.getJoinTimeRecord().put(player.getUniqueId(), System.currentTimeMillis());
         Runnable task = () -> {
-            if (SignInPluginUtils.checkInDisabledWorlds(player.getUniqueId())) return;
+            if (LiteSignInUtils.checkInDisabledWorlds(player.getUniqueId())) return;
             Storage data = Storage.getPlayer(player);
             boolean unableToHoldCards = false;
             boolean autoSignIn = false;
-            if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Hold")) {
+            if (!LiteSignInUtils.hasPermission(player, "Retroactive-Card.Hold")) {
                 unableToHoldCards = true;
             }
             if (PluginControl.enableJoinEvent()) {
                 if (!data.alreadySignIn()) {
-                    if (PluginControl.autoSignIn() && SignInPluginUtils.hasPermission(player, "Join-Auto-SignIn")) {
+                    if (PluginControl.autoSignIn() && LiteSignInUtils.hasPermission(player, "Join-Auto-SignIn")) {
                         autoSignIn = true;
                     } else if (OnlineTimeRecord.getSignInRequirement(player) == -1) {
                         SignInDate date = SignInDate.getInstance(new Date());
@@ -64,7 +64,7 @@ public class Join
                                     end++;
                                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                                     placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                                    hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
+                                    hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(player, hover, placeholders)));
                                     if (end != array.size()) {
                                         hoverText.add(new TextComponent("\n"));
                                     }
@@ -94,7 +94,7 @@ public class Join
             PluginControl.runBukkitTask(task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20));
         }
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
-            if (SignInPluginUtils.hasPermission(player, "Updater")) {
+            if (LiteSignInUtils.hasPermission(player, "Updater")) {
                 String nowVersion = Main.getInstance().getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
                     if (text.toLowerCase().contains("%link%")) {
@@ -109,7 +109,7 @@ public class Join
                             placeholders.put("{version}", Updater.getNewVersion());
                             placeholders.put("{link}", Updater.getLink());
                             placeholders.put("{description}", Updater.getDescription());
-                            hoverText.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, hover, placeholders))));
+                            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(player, hover, placeholders)));
                             if (end != array.size()) {
                                 hoverText.add(new TextComponent("\n"));
                             }

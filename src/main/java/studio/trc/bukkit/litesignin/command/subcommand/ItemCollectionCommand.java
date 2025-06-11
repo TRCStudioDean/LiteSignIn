@@ -6,20 +6,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.nms.NMSManager;
 import studio.trc.bukkit.litesignin.util.CustomItem;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class ItemCollectionCommand
     implements SignInSubCommand
@@ -56,7 +61,7 @@ public class ItemCollectionCommand
         String subCommandType = args[1];
         if (args.length <= 2) {
             List<String> commands = Arrays.stream(SubCommandType.values())
-                    .filter(type -> SignInPluginUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
+                    .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
             List<String> names = new ArrayList();
@@ -65,10 +70,10 @@ public class ItemCollectionCommand
             });
             return names;
         } else {
-            if (subCommandType.equalsIgnoreCase("delete") && SignInPluginUtils.hasCommandPermission(sender, SubCommandType.DELETE.commandPermissionPath, false)) {
+            if (subCommandType.equalsIgnoreCase("delete") && LiteSignInUtils.hasCommandPermission(sender, SubCommandType.DELETE.commandPermissionPath, false)) {
                 return tab_delete(args);
             }
-            if (subCommandType.equalsIgnoreCase("give") && SignInPluginUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, false)) {
+            if (subCommandType.equalsIgnoreCase("give") && LiteSignInUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, false)) {
                 return tab_give(args);
             }
         }
@@ -81,7 +86,7 @@ public class ItemCollectionCommand
     }
 
     private void command_list(CommandSender sender, String[] args) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.LIST.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.LIST.commandPermissionPath, true)) {
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -106,14 +111,14 @@ public class ItemCollectionCommand
                         });
                         placeholders.put("%list%", list.toString());
                         placeholders.put("{amount}", String.valueOf(itemList.size()));
-                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, text, placeholders)));
+                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, text, placeholders));
                         continue;
                     }
                     String[] splitMessage = text.split("%list%");
                     List<BaseComponent> bc = new ArrayList();
                     for (int i = 0;i < splitMessage.length;i++) {
                         placeholders.put("{amount}", String.valueOf(itemList.size()));
-                        bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
+                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
                         if (i < splitMessage.length - 1 || text.endsWith("%list%")) {
                             bc.addAll(Arrays.asList(NMSManager.getJsonItemStackArray(itemList)));
                         }
@@ -121,17 +126,17 @@ public class ItemCollectionCommand
                     MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{amount}", String.valueOf(itemList.size()));
-                    sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, text, placeholders)));
+                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, text, placeholders));
                 }
             }
         }
     }
 
     private void command_add(CommandSender sender, String[] args) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.ADD.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.ADD.commandPermissionPath, true)) {
             return;
         }
-        if (!SignInPluginUtils.isPlayer(sender, true)) {
+        if (!LiteSignInUtils.isPlayer(sender, true)) {
             return;
         }
         if (args.length == 2) {
@@ -153,14 +158,14 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name);
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders)));
+                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders));
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").split("%item%");
                     List<BaseComponent> bc = new ArrayList();
                     for (int i = 0;i < splitMessage.length;i++) {
                         placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
+                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").endsWith("%item%")) {
                             bc.add(NMSManager.getJsonItemStack(is));
                         }
@@ -178,7 +183,7 @@ public class ItemCollectionCommand
     }
 
     private void command_delete(CommandSender sender, String[] args) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.DELETE.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.DELETE.commandPermissionPath, true)) {
             return;
         }
         if (args.length == 2) {
@@ -197,14 +202,14 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name); 
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders)));
+                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders));
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").split("%item%");
                     List<BaseComponent> bc = new ArrayList();
                     for (int i = 0;i < splitMessage.length;i++) {
                         placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
+                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").endsWith("%item%")) {
                             bc.add(NMSManager.getJsonItemStack(item.getItemStack()));
                         }
@@ -223,14 +228,14 @@ public class ItemCollectionCommand
     }
 
     private void command_give(CommandSender sender, String[] args) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, true)) {
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         if (args.length == 2) {
             MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Help");
         } else if (args.length == 3) {
-            if (!SignInPluginUtils.isPlayer(sender, true)) {
+            if (!LiteSignInUtils.isPlayer(sender, true)) {
                 return;
             }
             CustomItem ci = CustomItem.getCustomItem(args[2]);
@@ -249,14 +254,14 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name); 
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders)));
+                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders));
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").split("%item%");
                     List<BaseComponent> bc = new ArrayList();
                     for (int i = 0;i < splitMessage.length;i++) {
                         placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders))));
+                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").endsWith("%item%")) {
                             bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }
@@ -291,7 +296,7 @@ public class ItemCollectionCommand
                         placeholders.put("%item%", name);
                         placeholders.put("{player}", player.getName());
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders)));
+                        sender.sendMessage(MessageUtil.replacePlaceholders(player, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders));
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").split("%item%");
@@ -299,7 +304,7 @@ public class ItemCollectionCommand
                     for (int i = 0;i < splitMessage.length;i++) {
                         placeholders.put("{player}", player.getName());
                         placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, splitMessage[i], placeholders))));
+                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(player, splitMessage[i], placeholders)));
                         if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").endsWith("%item%")) {
                             bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
                         }

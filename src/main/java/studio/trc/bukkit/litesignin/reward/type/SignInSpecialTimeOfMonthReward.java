@@ -8,9 +8,9 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
 import studio.trc.bukkit.litesignin.reward.SignInRewardModule;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
@@ -40,7 +40,7 @@ public class SignInSpecialTimeOfMonthReward
     }
     
     public String getSettings() {
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + time + ".Valid-Months")) {
             if (config.getIntegerList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + time + ".Valid-Months").contains(month)) {
                 return String.valueOf(time);

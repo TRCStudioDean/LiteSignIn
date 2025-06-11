@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class RetroactiveCardCommand
     implements SignInSubCommand
@@ -33,7 +33,7 @@ public class RetroactiveCardCommand
         } else {
             Player player;
             if (args.length == 3) {
-                if (SignInPluginUtils.isPlayer(sender, true)) {
+                if (LiteSignInUtils.isPlayer(sender, true)) {
                     player = (Player) sender;
                 } else {
                     return;
@@ -66,7 +66,7 @@ public class RetroactiveCardCommand
         String subCommandType = args[1];
         if (args.length <= 2) {
             List<String> commands = Arrays.stream(SubCommandType.values())
-                    .filter(type -> SignInPluginUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
+                    .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
             List<String> names = new ArrayList();
@@ -88,7 +88,7 @@ public class RetroactiveCardCommand
     }
 
     private void command_give(CommandSender sender, String[] args, Player player) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.GIVE.commandPermissionPath, true)) {
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -130,7 +130,7 @@ public class RetroactiveCardCommand
     }
 
     private void command_set(CommandSender sender, String[] args, Player player) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.SET.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.SET.commandPermissionPath, true)) {
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -172,7 +172,7 @@ public class RetroactiveCardCommand
     }
 
     private void command_take(CommandSender sender, String[] args, Player player) {
-        if (!SignInPluginUtils.hasCommandPermission(sender, SubCommandType.TAKE.commandPermissionPath, true)) {
+        if (!LiteSignInUtils.hasCommandPermission(sender, SubCommandType.TAKE.commandPermissionPath, true)) {
             return;
         }
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();

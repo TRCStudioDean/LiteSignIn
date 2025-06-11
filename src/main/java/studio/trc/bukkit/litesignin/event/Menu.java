@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
@@ -21,7 +21,7 @@ import studio.trc.bukkit.litesignin.gui.SignInInventory;
 import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 
 import org.bukkit.Bukkit;
@@ -134,10 +134,10 @@ public class Menu
                                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Insufficient-Online-Time", placeholders);
                                     }
                                 } else if (PluginControl.enableRetroactiveCard()) {
-                                    if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Hold") && data.getRetroactiveCard() > 0) {
+                                    if (!LiteSignInUtils.hasPermission(player, "Retroactive-Card.Hold") && data.getRetroactiveCard() > 0) {
                                         data.takeRetroactiveCard(data.getRetroactiveCard());
                                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Unable-To-Hold");
-                                    } else if (!SignInPluginUtils.hasPermission(player, "Retroactive-Card.Use")) {
+                                    } else if (!LiteSignInUtils.hasPermission(player, "Retroactive-Card.Use")) {
                                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.No-Permission");
                                     } else if (today.compareTo(columns.getDate()) >= 0 && !data.alreadySignIn(columns.getDate())) {
                                         if (PluginControl.getRetroactiveCardMinimumDate() != null && columns.getDate().compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
@@ -183,7 +183,7 @@ public class Menu
                                 }
                                 if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
                                     ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> {
-                                        player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
+                                        player.sendMessage(MessageUtil.replacePlaceholders(player, message, placeholders));
                                     });
                                 }
                             } else {
@@ -204,7 +204,7 @@ public class Menu
                                     }
                                     if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
                                         ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> {
-                                            player.sendMessage(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, message, placeholders)));
+                                            player.sendMessage(MessageUtil.replacePlaceholders(player, message, placeholders));
                                         });
                                     }
                                 }
@@ -235,9 +235,9 @@ public class Menu
     
     public void runCommand(Player player, String commands, Map<String, String> placeholders) {
         if (commands.toLowerCase().startsWith("server:")) {
-            Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.toColor(MessageUtil.replacePlaceholders(player, commands.substring(7), placeholders)));
+            Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtil.replacePlaceholders(player, commands.substring(7), placeholders));
         } else if (commands.toLowerCase().startsWith("op:")) {
-            String command = MessageUtil.toColor(MessageUtil.replacePlaceholders(player, commands.substring(3), placeholders));
+            String command = MessageUtil.replacePlaceholders(player, commands.substring(3), placeholders);
             if (player.isOp()) {
                 player.performCommand(command);
             } else {
@@ -250,7 +250,7 @@ public class Menu
                 player.setOp(false);
             }
         } else {
-            player.performCommand(MessageUtil.toColor(MessageUtil.replacePlaceholders(player, commands, placeholders)));
+            player.performCommand(MessageUtil.replacePlaceholders(player, commands, placeholders));
         }
     }
 }

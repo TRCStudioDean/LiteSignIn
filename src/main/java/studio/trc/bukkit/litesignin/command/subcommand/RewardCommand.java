@@ -16,16 +16,16 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.reward.SignInReward;
 import studio.trc.bukkit.litesignin.reward.type.*;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.util.SignInTimePeriod;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public class RewardCommand
     implements SignInSubCommand
@@ -36,11 +36,11 @@ public class RewardCommand
         if (args.length <= 3) {
             MessageUtil.sendCommandMessage(sender, "Reward.Help", placeholders);
         } else {
-            PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+            RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
             //Check player.
             Player player = Bukkit.getPlayer(args[1]);
             if (player == null) {
-                SignInPluginUtils.playerNotExist(sender, args[1]);
+                LiteSignInUtils.playerNotExist(sender, args[1]);
             }
             placeholders.put("{player}", player.getName());
             //Check sign-in group.
@@ -117,7 +117,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_WEEKS", placeholders);
                             return;
                         }
@@ -141,7 +141,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES", placeholders);
                             return;
                         }
@@ -165,7 +165,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_RANKING", placeholders);
                             return;
                         }
@@ -214,7 +214,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS", placeholders);
                             return;
                         }
@@ -239,7 +239,7 @@ public class RewardCommand
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
                         String[] elements = value.split(":");
-                        if (!SignInPluginUtils.isInteger(elements[0]) || !SignInPluginUtils.isInteger(elements[1])) {
+                        if (!LiteSignInUtils.isInteger(elements[0]) || !LiteSignInUtils.isInteger(elements[1])) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_OF_MONTH", placeholders);
                             return;
                         }
@@ -265,7 +265,7 @@ public class RewardCommand
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
                         String[] elements = value.split(":");
-                        if (!SignInPluginUtils.isInteger(elements[0]) || !SignInPluginUtils.isInteger(elements[1])) {
+                        if (!LiteSignInUtils.isInteger(elements[0]) || !LiteSignInUtils.isInteger(elements[1])) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_OF_MONTH", placeholders);
                             return;
                         }
@@ -290,7 +290,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.SPECIAL_TIMES_CYCLE", placeholders);
                             return;
                         }
@@ -314,7 +314,7 @@ public class RewardCommand
                         placeholders.put("{rewardType}", rewardType.getConfigName());
                         String value = args[3].substring(args[3].indexOf(":") + 1);
                         placeholders.put("{value}", value);
-                        if (!SignInPluginUtils.isInteger(value)) {
+                        if (!LiteSignInUtils.isInteger(value)) {
                             MessageUtil.sendCommandMessage(sender, "Reward.Wrong-Parameters.STATISTICS_CYCLE", placeholders);
                             return;
                         }
@@ -346,7 +346,7 @@ public class RewardCommand
         if (args.length == 2) {
             return tabGetPlayersName(args, 2);
         }
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (args.length == 3) {
             return getTabElements(args, args.length, config.getStringList("Reward-Settings.Groups-Priority"));
         }

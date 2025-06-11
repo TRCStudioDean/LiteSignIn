@@ -17,14 +17,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import studio.trc.bukkit.litesignin.api.Storage;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.PreparedConfiguration;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.event.custom.PlayerSignInEvent;
 import studio.trc.bukkit.litesignin.event.custom.SignInRewardEvent;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.SignInDate;
-import studio.trc.bukkit.litesignin.util.SignInPluginUtils;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.reward.*;
 import studio.trc.bukkit.litesignin.reward.type.*;
@@ -205,7 +205,7 @@ public final class YamlStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         SignInGroup group = null;
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         for (String groups : config.getStringList("Reward-Settings.Groups-Priority")) {
             if (config.get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
                 if (player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
@@ -225,7 +225,7 @@ public final class YamlStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         List<SignInGroup> groups = new ArrayList();
-        PreparedConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         config.getStringList("Reward-Settings.Groups-Priority").stream()
             .filter(group -> config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission")))
             .forEach(group -> groups.add(new SignInGroup(group)));
@@ -368,7 +368,7 @@ public final class YamlStorage
     
     @Override
     public void signIn() {
-        if (SignInPluginUtils.checkInDisabledWorlds(uuid)) return;
+        if (LiteSignInUtils.checkInDisabledWorlds(uuid)) return;
         SignInDate today = SignInDate.getInstance(new Date());
         PlayerSignInEvent event = new PlayerSignInEvent(uuid, today, false);
         Bukkit.getPluginManager().callEvent(event);
@@ -385,7 +385,7 @@ public final class YamlStorage
     
     @Override
     public void signIn(SignInDate historicalDate) {
-        if (SignInPluginUtils.checkInDisabledWorlds(uuid)) return;
+        if (LiteSignInUtils.checkInDisabledWorlds(uuid)) return;
         historicalDate = SignInDate.getInstance(historicalDate.getYear(), historicalDate.getMonth(), historicalDate.getDay());
         if (PluginControl.getRetroactiveCardMinimumDate() != null && historicalDate.compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
             return;

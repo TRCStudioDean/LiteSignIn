@@ -8,15 +8,15 @@ import lombok.Setter;
 
 import org.bukkit.Bukkit;
 
-import studio.trc.bukkit.litesignin.config.ConfigurationType;
-import studio.trc.bukkit.litesignin.config.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.util.PluginControl;
-import studio.trc.bukkit.litesignin.util.SignInPluginProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public class LiteSignInThread
     extends Thread
@@ -84,7 +84,7 @@ public class LiteSignInThread
             }, -1, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getLong("MySQL-Storage.Wait-Timeout"), false));
         }
         
-        SignInPluginProperties.sendOperationMessage("AsyncThreadStarted", MessageUtil.getDefaultPlaceholders());
+        LiteSignInProperties.sendOperationMessage("AsyncThreadStarted", MessageUtil.getDefaultPlaceholders());
         taskThread.start();
     }
     

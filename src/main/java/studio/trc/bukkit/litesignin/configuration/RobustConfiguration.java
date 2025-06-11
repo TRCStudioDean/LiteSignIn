@@ -1,50 +1,49 @@
-package studio.trc.bukkit.litesignin.config;
+package studio.trc.bukkit.litesignin.configuration;
 
-import studio.trc.bukkit.litesignin.util.MessageUtil;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Bukkit;
 
+import lombok.Getter;
+
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import studio.trc.bukkit.litesignin.message.MessageUtil;
 
 /**
  * Used to manage configuration files.
  * @author Dean
  */
-public class PreparedConfiguration
+public class RobustConfiguration
 {
-    private final FileConfiguration config;
+    @Getter
     private final ConfigurationType type;
-    
-    public PreparedConfiguration(FileConfiguration config, ConfigurationType type) {
-        this.config = config;
+    @Getter
+    private final YamlConfiguration config;
+
+    public RobustConfiguration(ConfigurationType type) {
         this.type = type;
+        this.config = type.getConfig();
     }
     
     public void repairConfigurationSection(String path) {
-        if (type.equals(ConfigurationType.CUSTOM_ITEMS) || type.equals(ConfigurationType.WOOD_SIGN_SETTINGS)) return;
-        FileConfiguration defaultFile = DefaultConfigurationFile.getDefaultConfig(type);
+        YamlConfiguration defaultFile = DefaultConfigurationFile.getDefaultConfig(type);
         config.set(path, defaultFile.get(path) != null ? defaultFile.get(path) : "null");
-        saveConfig();
+        type.saveConfig();
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{config}", type.getFileName());
         placeholders.put("{path}", path);
-        MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Repaired-Config-Section", placeholders);
+        MessageUtil.sendMessage(Bukkit.getConsoleSender(), ConfigurationType.MESSAGES.getRobustConfig(), "Repaired-Config-Section", placeholders);
     }
     
     public Object get(String path) {
         return config.get(path);
-    }
-
-    public String getString(String path) {
-        if (config.get(path) == null) {
-            repairConfigurationSection(path);
-            return config.getString(path);
-        } else {
-            return config.getString(path);
-        }
     }
 
     public int getInt(String path) {
@@ -56,6 +55,10 @@ public class PreparedConfiguration
         }
     }
 
+    public int getInt(String path, int def) {
+        return config.get(path) != null ? getInt(path) : def;
+    }
+
     public double getDouble(String path) {
         if (config.get(path) == null) {
             repairConfigurationSection(path);
@@ -63,6 +66,10 @@ public class PreparedConfiguration
         } else {
             return config.getDouble(path);
         }
+    }
+
+    public double getDouble(String path, double def) {
+        return config.get(path) != null ? getDouble(path) : def;
     }
 
     public long getLong(String path) {
@@ -74,15 +81,42 @@ public class PreparedConfiguration
         }
     }
 
+    public long getLong(String path, long def) {
+        return config.get(path) != null ? getLong(path) : def;
+    }
+
     public boolean getBoolean(String path) {
         if (config.get(path) == null) {
-            if (type.equals(ConfigurationType.CONFIG)) {
-                repairConfigurationSection(path);
-                return config.getBoolean(path);
-            }
-            return false;
+            repairConfigurationSection(path);
+            return config.getBoolean(path);
         } else {
             return config.getBoolean(path);
+        }
+    }
+
+    public boolean getBoolean(String path, boolean def) {
+        return config.get(path) != null ? getBoolean(path) : def;
+    }
+
+    public String getString(String path) {
+        if (config.get(path) == null) {
+            repairConfigurationSection(path);
+            return config.getString(path);
+        } else {
+            return config.getString(path);
+        }
+    }
+
+    public String getString(String path, String def) {
+        return config.get(path) != null ? getString(path) : def;
+    }
+
+    public List getList(String path) {
+        if (config.get(path) == null) {
+            repairConfigurationSection(path);
+            return config.getList(path);
+        } else {
+            return config.getList(path);
         }
     }
 
@@ -113,6 +147,10 @@ public class PreparedConfiguration
         }
     }
 
+    public ItemStack getItemStack(String path, ItemStack def) {
+        return config.get(path) != null ? getItemStack(path) : def;
+    }
+
     public ConfigurationSection getConfigurationSection(String path) {
         if (config.get(path) == null) {
             repairConfigurationSection(path);
@@ -121,24 +159,20 @@ public class PreparedConfiguration
             return config.getConfigurationSection(path);
         }
     }
-
+    
     public boolean contains(String path) {
         return config.contains(path);
     }
 
-    public void set(String path, Object obj) {
-        config.set(path, obj);
+    public void load(Reader reader) throws IOException, InvalidConfigurationException {
+        config.load(reader);
     }
     
-    public void saveConfig() {
-        ConfigurationUtil.saveConfig(type);
+    public void set(String path, Object value) {
+        config.set(path, value);
     }
-    
-    public FileConfiguration getRawConfig() {
-        return config;
-    }
-    
-    public ConfigurationType getConfigType() {
-        return type;
+
+    public void save(File file) throws IOException {
+        config.save(file);
     }
 }

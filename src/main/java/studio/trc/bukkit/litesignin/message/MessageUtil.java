@@ -419,6 +419,8 @@ public class MessageUtil
                 } else {
                     return TRADITIONAL_CHINESE;
                 }
+            } else if (language.equalsIgnoreCase("ja")) {
+                return JAPANESE;
             } else {
                 return ENGLISH;
             }

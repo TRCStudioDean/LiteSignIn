@@ -57,7 +57,7 @@ public abstract class SignInRewardUtil
                                 placeholders.put("{queue}", queue);
                                 placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                 placeholders.put("{player}", player.getName());
-                                player.sendMessage(MessageUtil.replacePlaceholders(player, messages, placeholders));
+                                MessageUtil.sendMessage(player, messages, placeholders);
                             });
                             break;
                         }
@@ -69,7 +69,7 @@ public abstract class SignInRewardUtil
                                     placeholders.put("{queue}", queue);
                                     placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                     placeholders.put("{player}", player.getName());
-                                    players.sendMessage(MessageUtil.replacePlaceholders(player, messages, placeholders));
+                                    MessageUtil.sendMessage(players, messages, placeholders);
                                 });
                             });
                             break;

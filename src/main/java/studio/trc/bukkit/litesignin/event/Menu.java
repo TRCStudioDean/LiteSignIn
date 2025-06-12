@@ -25,6 +25,7 @@ import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -93,6 +94,7 @@ public class Menu
             Player player = (Player) e.getWhoClicked();
             if (menuOpening.get(player.getUniqueId()) != null) {
                 e.setCancelled(true);
+                YamlConfiguration guiConfig = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfig();
                 if (e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
                     if (BackupUtil.isBackingUp()) {
                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
@@ -142,7 +144,7 @@ public class Menu
                                     } else if (today.compareTo(columns.getDate()) >= 0 && !data.alreadySignIn(columns.getDate())) {
                                         if (PluginControl.getRetroactiveCardMinimumDate() != null && columns.getDate().compareTo(PluginControl.getRetroactiveCardMinimumDate()) < 0) {
                                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{date}", PluginControl.getRetroactiveCardMinimumDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                            placeholders.put("{date}", PluginControl.getRetroactiveCardMinimumDate().getName(guiConfig.getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
                                             MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Minimum-Date", placeholders);
                                         } else if (data.isRetroactiveCardCooldown()) {
                                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -152,7 +154,7 @@ public class Menu
                                             data.takeRetroactiveCard(PluginControl.getRetroactiveCardQuantityRequired());
                                             data.signIn(columns.getDate());
                                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{date}", columns.getDate().getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                            placeholders.put("{date}", columns.getDate().getName(guiConfig.getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
                                             placeholders.put("{continuous}", String.valueOf(data.getContinuousSignIn()));
                                             placeholders.put("{queue}", String.valueOf(SignInQueue.getInstance().getRank(data.getUserUUID())));
                                             MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "GUI-SignIn-Messages.Retroactive-SignIn-Messages", placeholders);
@@ -166,7 +168,7 @@ public class Menu
                                 } else {
                                     MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Unable-To-Re-SignIn");
                                 }
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Close-GUI")) {
+                                if (guiConfig.getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Close-GUI")) {
                                     player.closeInventory();
                                 }
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -176,19 +178,15 @@ public class Menu
                                 placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
                                 placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                                 placeholders.put("{player}", player.getName());
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
-                                    ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands").stream().forEach(commands -> {
-                                        runCommand(player, commands, placeholders);
-                                    });
+                                if (guiConfig.contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands")) {
+                                    guiConfig.getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Commands").stream().forEach(commands -> runCommand(player, commands, placeholders));
                                 }
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
-                                    ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> {
-                                        player.sendMessage(MessageUtil.replacePlaceholders(player, message, placeholders));
-                                    });
+                                if (guiConfig.contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages")) {
+                                    guiConfig.getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key." + columns.getKeyType().getSectionName() + ".Messages").stream().forEach(message -> MessageUtil.sendMessage(player, message, placeholders));
                                 }
                             } else {
-                                if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName())) {
-                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Close-GUI")) {
+                                if (guiConfig.contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName())) {
+                                    if (guiConfig.getBoolean(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Close-GUI")) {
                                         player.closeInventory();
                                     }
                                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -197,15 +195,11 @@ public class Menu
                                     placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
                                     placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
                                     placeholders.put("{player}", player.getName());
-                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
-                                        ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands").stream().forEach(commands -> {
-                                            runCommand(player, commands, placeholders);
-                                        });
+                                    if (guiConfig.contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands")) {
+                                        guiConfig.getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Commands").stream().forEach(commands -> runCommand(player, commands, placeholders));
                                     }
-                                    if (ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
-                                        ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> {
-                                            player.sendMessage(MessageUtil.replacePlaceholders(player, message, placeholders));
-                                        });
+                                    if (guiConfig.contains(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages")) {
+                                        guiConfig.getStringList(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + columns.getButtonName() + ".Messages").stream().forEach(message -> MessageUtil.sendMessage(player, message, placeholders));
                                     }
                                 }
                             }

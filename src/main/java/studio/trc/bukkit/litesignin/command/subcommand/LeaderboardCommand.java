@@ -313,7 +313,7 @@ public class LeaderboardCommand
                                             placeholders.put("{time}", timeName);
                                             placeholders.put("{page}", String.valueOf(page));
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
+                                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
                                         }
                                     } else {
                                         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -323,7 +323,7 @@ public class LeaderboardCommand
                                         placeholders.put("{time}", timeName);
                                         placeholders.put("{page}", String.valueOf(page));
                                         placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
+                                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
                                     }
                                 }
                             }
@@ -491,7 +491,7 @@ public class LeaderboardCommand
                                                 placeholders.put("{time}", timeName);
                                                 placeholders.put("{page}", String.valueOf(page));
                                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
+                                                MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
                                             }
                                         } else {
                                             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -501,7 +501,7 @@ public class LeaderboardCommand
                                             placeholders.put("{time}", timeName);
                                             placeholders.put("{page}", String.valueOf(page));
                                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
+                                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
                                         }
                                     }
                                 }
@@ -546,7 +546,7 @@ public class LeaderboardCommand
                             placeholders.put("{time}", timeFormat);
                             placeholders.put("{page}", String.valueOf(page));
                             placeholders.put("{maxPage}", String.valueOf(maxPage));
-                            sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), placeholders));
+                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), placeholders);
                         } else {
                             for (SignInQueueElement element : userArray) {
                                 String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
@@ -580,7 +580,7 @@ public class LeaderboardCommand
                                 placeholders.put("{time}", timeFormat);
                                 placeholders.put("{page}", String.valueOf(page));
                                 placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders));
+                                MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
                             }
                         }
                     }
@@ -596,7 +596,7 @@ public class LeaderboardCommand
                     placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                     placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                     placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, message, placeholders));
+                    MessageUtil.sendMessage(sender, message, placeholders);
                     continue;
                 }
                 Map<String, BaseComponent> baseComponents = new HashMap();
@@ -658,7 +658,7 @@ public class LeaderboardCommand
                     placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
                     placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
                     placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, message, placeholders));
+                    MessageUtil.sendMessage(sender, message, placeholders);
                 } else {
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{total}", String.valueOf(queue.size()));

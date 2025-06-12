@@ -50,11 +50,15 @@ public class PluginControl
             SignInQueue.getInstance().loadQueue();
         }
         try {
-            if (!PlaceholderAPIImpl.getInstance().isRegistered()) {
-                PlaceholderAPIImpl.getInstance().register();
+            if (ConfigurationType.CONFIG.getRobustConfig().getBoolean("PlaceholderAPI.Enabled")) {
+                if (!PlaceholderAPIImpl.getInstance().isRegistered()) {
+                    PlaceholderAPIImpl.getInstance().register();
+                }
+                MessageUtil.setEnabledPAPI(true);
+                LiteSignInProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
             }
-            LiteSignInProperties.sendOperationMessage("FindThePlaceholderAPI", MessageUtil.getDefaultPlaceholders());
         } catch (Error ex) {
+            MessageUtil.setEnabledPAPI(false);
             ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("PlaceholderAPI.Enabled", false);
             LiteSignInProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
         }

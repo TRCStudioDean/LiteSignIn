@@ -111,7 +111,7 @@ public class ItemCollectionCommand
                         });
                         placeholders.put("%list%", list.toString());
                         placeholders.put("{amount}", String.valueOf(itemList.size()));
-                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, text, placeholders));
+                        MessageUtil.sendMessage(sender, text, placeholders);
                         continue;
                     }
                     String[] splitMessage = text.split("%list%");
@@ -126,7 +126,7 @@ public class ItemCollectionCommand
                     MessageUtil.sendJSONMessage(sender, bc);
                 } else {
                     placeholders.put("{amount}", String.valueOf(itemList.size()));
-                    sender.sendMessage(MessageUtil.replacePlaceholders(sender, text, placeholders));
+                    MessageUtil.sendMessage(sender, text, placeholders);
                 }
             }
         }
@@ -158,7 +158,7 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name);
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders));
+                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders);
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").split("%item%");
@@ -202,7 +202,7 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name); 
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders));
+                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders);
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").split("%item%");
@@ -254,7 +254,7 @@ public class ItemCollectionCommand
                         }
                         placeholders.put("%item%", name); 
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders));
+                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders);
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").split("%item%");
@@ -296,7 +296,7 @@ public class ItemCollectionCommand
                         placeholders.put("%item%", name);
                         placeholders.put("{player}", player.getName());
                         placeholders.put("{name}", args[2]);
-                        sender.sendMessage(MessageUtil.replacePlaceholders(player, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders));
+                        MessageUtil.sendMessage(player, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders);
                         return;
                     }
                     String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").split("%item%");

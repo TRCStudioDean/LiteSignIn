@@ -56,7 +56,7 @@ public class LiteSignInProperties
         CommandSender sender = Bukkit.getConsoleSender();
         if (propertiesFile.containsKey(path)) {
             String message = propertiesFile.getProperty(path);
-            sender.sendMessage(MessageUtil.replacePlaceholders(sender, message, placeholders));
+            MessageUtil.sendMessage(sender, message, placeholders);
         }
     }
     

@@ -39,6 +39,7 @@ public class PluginControl
     public static void reload() {
         ConfigurationUtil.reloadConfig();
         MessageUtil.loadPlaceholders();
+        MessageUtil.setAdventureAvailable();
         YamlStorage.cache.clear();
         SQLiteStorage.cache.clear();
         MySQLStorage.cache.clear();
@@ -59,7 +60,6 @@ public class PluginControl
             }
         } catch (Error ex) {
             MessageUtil.setEnabledPAPI(false);
-            ConfigurationUtil.getConfig(ConfigurationType.CONFIG).set("PlaceholderAPI.Enabled", false);
             LiteSignInProperties.sendOperationMessage("PlaceholderAPINotFound", MessageUtil.getDefaultPlaceholders());
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);

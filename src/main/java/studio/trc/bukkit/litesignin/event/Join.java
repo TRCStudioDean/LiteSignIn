@@ -1,15 +1,7 @@
 package studio.trc.bukkit.litesignin.event;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +15,7 @@ import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
+import studio.trc.bukkit.litesignin.message.JSONComponent;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.Updater;
@@ -56,27 +49,9 @@ public class Join
                         SignInDate date = SignInDate.getInstance(new Date());
                         MessageUtil.getMessageList("Join-Event.Messages").stream().forEach(text -> {
                             if (text.toLowerCase().contains("%opengui%")) {
-                                BaseComponent click = new TextComponent(MessageUtil.getMessage("Join-Event.Open-GUI"));
-                                List<BaseComponent> hoverText = new ArrayList();
-                                int end = 0;
-                                List<String> array = MessageUtil.getMessageList("Join-Event.Hover-Text");
-                                for (String hover : array) {
-                                    end++;
-                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
-                                    hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(player, hover, placeholders)));
-                                    if (end != array.size()) {
-                                        hoverText.add(new TextComponent("\n"));
-                                    }
-                                }
-                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin gui");
-                                click.setClickEvent(ce);
-                                click.setHoverEvent(he);
-                                Map<String, BaseComponent> baseComponents = new HashMap();
-                                baseComponents.put("%opengui%", click);
+                                JSONComponent jsonComponent = new JSONComponent(MessageUtil.getMessage("Join-Event.Open-GUI"), MessageUtil.getMessageList("Join-Event.Hover-Text"), "RUN_COMMAND", "/litesignin:signin gui");
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                MessageUtil.sendMessage(player, text, placeholders, baseComponents);
+                                MessageUtil.sendMessageWithJSONComponent(player, text, placeholders, "%openGUI%", jsonComponent);
                             } else {
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                                 placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
@@ -98,30 +73,9 @@ public class Join
                 String nowVersion = Main.getInstance().getDescription().getVersion();
                 MessageUtil.getMessageList("Updater.Checked").stream().forEach(text -> {
                     if (text.toLowerCase().contains("%link%")) {
-                        BaseComponent click = new TextComponent(MessageUtil.getMessage("Updater.Link.Message"));
-                        List<BaseComponent> hoverText = new ArrayList();
-                        int end = 0;
-                        List<String> array = MessageUtil.getMessageList("Updater.Link.Hover-Text");
-                        for (String hover : array) {
-                            end++;
-                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                            placeholders.put("{nowVersion}", nowVersion);
-                            placeholders.put("{version}", Updater.getNewVersion());
-                            placeholders.put("{link}", Updater.getLink());
-                            placeholders.put("{description}", Updater.getDescription());
-                            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(player, hover, placeholders)));
-                            if (end != array.size()) {
-                                hoverText.add(new TextComponent("\n"));
-                            }
-                        }
-                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                        ClickEvent ce = new ClickEvent(ClickEvent.Action.OPEN_URL, Updater.getLink());
-                        click.setClickEvent(ce);
-                        click.setHoverEvent(he);
-                        Map<String, BaseComponent> baseComponents = new HashMap();
-                        baseComponents.put("%link%", click);
+                        JSONComponent jsonComponent = new JSONComponent(MessageUtil.getMessage("Updater.Link.Message"), MessageUtil.getMessageList("Updater.Link.Hover-Text"), "OPEN_URL", Updater.getLink());
                         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                        MessageUtil.sendMessage(player, text, placeholders, baseComponents);
+                        MessageUtil.sendMessageWithJSONComponent(player, text, placeholders, "%link%", jsonComponent);
                     } else {
                         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                         placeholders.put("{nowVersion}", nowVersion);

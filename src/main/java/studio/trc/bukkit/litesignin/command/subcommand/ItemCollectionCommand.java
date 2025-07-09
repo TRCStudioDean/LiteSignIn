@@ -1,6 +1,5 @@
 package studio.trc.bukkit.litesignin.command.subcommand;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
-import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.nms.NMSManager;
+import studio.trc.bukkit.litesignin.util.AdventureUtils;
 import studio.trc.bukkit.litesignin.util.CustomItem;
 import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
@@ -94,41 +93,33 @@ public class ItemCollectionCommand
         if (itemList.isEmpty()) {
             MessageUtil.sendCommandMessage(sender, "ItemCollection.List.Empty");
         } else {
-            for (String text : MessageUtil.getMessageList("Command-Messages.ItemCollection.List.Messages")) {
+            placeholders.put("{amount}", String.valueOf(itemList.size()));
+            MessageUtil.getMessageList("Command-Messages.ItemCollection.List.Messages").stream().forEach(text -> {
                 if (text.toLowerCase().contains("%list%")) {
-                    if (!(sender instanceof Player)) {
-                        StringBuilder list = new StringBuilder();
-                        itemList.stream().map(items -> {
-                            String name;
-                            try {
-                                name = items.getItemStack().getItemMeta().hasDisplayName() ? items.getItemStack().getItemMeta().getDisplayName() : (String) items.getClass().getMethod("getI18NDisplayName").invoke(items.getItemStack());
-                            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                                name = items.getItemStack().getItemMeta().hasDisplayName() ? items.getItemStack().getItemMeta().getDisplayName() : items.getItemStack().getType().toString().toLowerCase().replace("_", " ");
+                    if (MessageUtil.useAdventure()) {
+                        MessageUtil.sendAdventureMessage(sender, text, placeholders, AdventureUtils.getItemDisplay(itemList));
+                    } else {
+                        String[] splitMessage = text.split("%list%");
+                        List<BaseComponent> message = new ArrayList<>();
+                        List<BaseComponent> components = new ArrayList<>();
+                        for (int i = 0;i < itemList.size();i++) {
+                            components.add(NMSManager.getBungeeJSONItemStack(itemList.get(i).getItemStack()));
+                            if (i != itemList.size() - 1) {
+                                components.add(new TextComponent(", "));
                             }
-                            return name;
-                        }).forEach(name -> {
-                            list.append(name).append(", ");
-                        });
-                        placeholders.put("%list%", list.toString());
-                        placeholders.put("{amount}", String.valueOf(itemList.size()));
-                        MessageUtil.sendMessage(sender, text, placeholders);
-                        continue;
-                    }
-                    String[] splitMessage = text.split("%list%");
-                    List<BaseComponent> bc = new ArrayList();
-                    for (int i = 0;i < splitMessage.length;i++) {
-                        placeholders.put("{amount}", String.valueOf(itemList.size()));
-                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
-                        if (i < splitMessage.length - 1 || text.endsWith("%list%")) {
-                            bc.addAll(Arrays.asList(NMSManager.getJsonItemStackArray(itemList)));
                         }
+                        for (int i = 0;i < splitMessage.length;i++) {
+                            message.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
+                            if (i < splitMessage.length - 1 || text.endsWith("%list%")) {
+                                message.addAll(components);
+                            }
+                        }
+                        MessageUtil.sendBungeeJSONMessage(sender, message);
                     }
-                    MessageUtil.sendJSONMessage(sender, bc);
                 } else {
-                    placeholders.put("{amount}", String.valueOf(itemList.size()));
                     MessageUtil.sendMessage(sender, text, placeholders);
                 }
-            }
+            });
         }
     }
 
@@ -148,33 +139,8 @@ public class ItemCollectionCommand
             if (is == null && is.getType().equals(Material.AIR)) {
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Add.Doesnt-Have-Item-In-Hand");
             } else if (CustomItem.addItemAsCollection(is, args[2])) {
-                if (MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").toLowerCase().contains("%item%")) {
-                    if (!(sender instanceof Player)) {
-                        String name;
-                        try {
-                            name = is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : (String) is.getClass().getMethod("getI18NDisplayName").invoke(is);
-                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                            name = is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : is.getType().toString().toLowerCase().replace("_", " ");
-                        }
-                        placeholders.put("%item%", name);
-                        placeholders.put("{name}", args[2]);
-                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders);
-                        return;
-                    }
-                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").split("%item%");
-                    List<BaseComponent> bc = new ArrayList();
-                    for (int i = 0;i < splitMessage.length;i++) {
-                        placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
-                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully").endsWith("%item%")) {
-                            bc.add(NMSManager.getJsonItemStack(is));
-                        }
-                    }
-                    MessageUtil.sendJSONMessage(sender, bc);
-                } else {
-                    placeholders.put("{name}", args[2]);
-                    MessageUtil.sendCommandMessage(sender, "ItemCollection.Add.Successfully", placeholders);
-                }
+                placeholders.put("{name}", args[2]);
+                MessageUtil.sendMessageWithItem(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Add.Successfully"), placeholders, is);
             } else {
                 placeholders.put("{name}", args[2]);
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Add.Already-Exist", placeholders);
@@ -192,34 +158,8 @@ public class ItemCollectionCommand
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             CustomItem item = CustomItem.getCustomItem(args[2]);
             if (item != null) {
-                if (MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").toLowerCase().contains("%item%")) {
-                    if (!(sender instanceof Player)) {
-                        String name;
-                        try {
-                            name = item.getItemStack().getItemMeta().hasDisplayName() ? item.getItemStack().getItemMeta().getDisplayName() : (String) item.getItemStack().getClass().getMethod("getI18NDisplayName").invoke(item.getItemStack());
-                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                            name = item.getItemStack().getItemMeta().hasDisplayName() ? item.getItemStack().getItemMeta().getDisplayName() : item.getItemStack().getType().toString().toLowerCase().replace("_", " ");
-                        }
-                        placeholders.put("%item%", name); 
-                        placeholders.put("{name}", args[2]);
-                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders);
-                        return;
-                    }
-                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").split("%item%");
-                    List<BaseComponent> bc = new ArrayList();
-                    for (int i = 0;i < splitMessage.length;i++) {
-                        placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
-                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully").endsWith("%item%")) {
-                            bc.add(NMSManager.getJsonItemStack(item.getItemStack()));
-                        }
-                    }
-                    MessageUtil.sendJSONMessage(sender, bc);
-                    item.delete();
-                } else {
-                    placeholders.put("{name}", args[2]);
-                    MessageUtil.sendCommandMessage(sender, "ItemCollection.Delete.Successfully", placeholders);
-                }
+                item.delete();
+                MessageUtil.sendMessageWithItem(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Delete.Successfully"), placeholders, item.getItemStack());
             } else {
                 placeholders.put("{name}", args[2]);
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Delete.Not-Exist", placeholders);
@@ -238,39 +178,13 @@ public class ItemCollectionCommand
             if (!LiteSignInUtils.isPlayer(sender, true)) {
                 return;
             }
-            CustomItem ci = CustomItem.getCustomItem(args[2]);
-            if (ci == null) {
+            CustomItem item = CustomItem.getCustomItem(args[2]);
+            if (item == null) {
                 placeholders.put("{name}", args[2]);
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Not-Exist", placeholders);
             } else {
-                ci.give((Player) sender);
-                if (MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").toLowerCase().contains("%item%")) {
-                    if (!(sender instanceof Player)) {
-                        String name;
-                        try {
-                            name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : (String) ci.getItemStack().getClass().getMethod("getI18NDisplayName").invoke(ci.getItemStack());
-                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                            name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : ci.getItemStack().getType().toString().toLowerCase().replace("_", " ");
-                        }
-                        placeholders.put("%item%", name); 
-                        placeholders.put("{name}", args[2]);
-                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders);
-                        return;
-                    }
-                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").split("%item%");
-                    List<BaseComponent> bc = new ArrayList();
-                    for (int i = 0;i < splitMessage.length;i++) {
-                        placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(sender, splitMessage[i], placeholders)));
-                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself").endsWith("%item%")) {
-                            bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
-                        }
-                    }
-                    MessageUtil.sendJSONMessage(sender, bc);
-                } else {
-                    placeholders.put("{name}", args[2]);
-                    MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Give-Yourself", placeholders);
-                }
+                item.give((Player) sender);
+                MessageUtil.sendMessageWithItem(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Yourself"), placeholders, item.getItemStack());
             }
         } else if (args.length >= 4) {
             Player player = Bukkit.getPlayer(args[3]);
@@ -279,42 +193,13 @@ public class ItemCollectionCommand
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Player-Offline", placeholders);
                 return;
             }
-            CustomItem ci = CustomItem.getCustomItem(args[2]);
-            if (ci == null) {
+            CustomItem item = CustomItem.getCustomItem(args[2]);
+            if (item == null) {
                 placeholders.put("{name}", args[2]);
                 MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Not-Exist", placeholders);
             } else {
-                ci.give(player);
-                if (MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").toLowerCase().contains("%item%")) {
-                    if (!(sender instanceof Player)) {
-                        String name;
-                        try {
-                            name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : (String) ci.getItemStack().getClass().getMethod("getI18NDisplayName").invoke(ci.getItemStack());
-                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                            name = ci.getItemStack().getItemMeta().hasDisplayName() ? ci.getItemStack().getItemMeta().getDisplayName() : ci.getItemStack().getType().toString().toLowerCase().replace("_", " ");
-                        }
-                        placeholders.put("%item%", name);
-                        placeholders.put("{player}", player.getName());
-                        placeholders.put("{name}", args[2]);
-                        MessageUtil.sendMessage(player, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders);
-                        return;
-                    }
-                    String[] splitMessage = MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").split("%item%");
-                    List<BaseComponent> bc = new ArrayList();
-                    for (int i = 0;i < splitMessage.length;i++) {
-                        placeholders.put("{player}", player.getName());
-                        placeholders.put("{name}", args[2]);
-                        bc.add(new TextComponent(MessageUtil.replacePlaceholders(player, splitMessage[i], placeholders)));
-                        if (i < splitMessage.length - 1 || MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others").endsWith("%item%")) {
-                            bc.add(NMSManager.getJsonItemStack(ci.getItemStack()));
-                        }
-                    }
-                    MessageUtil.sendJSONMessage(sender, bc);
-                } else {
-                    placeholders.put("{player}", player.getName());
-                    placeholders.put("{name}", args[2]);
-                    MessageUtil.sendCommandMessage(sender, "ItemCollection.Give.Give-Others", placeholders);
-                }
+                item.give(player);
+                MessageUtil.sendMessageWithItem(sender, MessageUtil.getMessage("Command-Messages.ItemCollection.Give.Give-Others"), placeholders, item.getItemStack());
             }
         }
     }

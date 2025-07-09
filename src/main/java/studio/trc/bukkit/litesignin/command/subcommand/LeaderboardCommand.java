@@ -5,11 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -20,6 +16,7 @@ import studio.trc.bukkit.litesignin.command.SignInSubCommand;
 import studio.trc.bukkit.litesignin.command.SignInSubCommandType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
+import studio.trc.bukkit.litesignin.message.JSONComponent;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.queue.SignInQueue;
 import studio.trc.bukkit.litesignin.queue.SignInQueueElement;
@@ -151,8 +148,8 @@ public class LeaderboardCommand
     public SignInSubCommandType getCommandType() {
         return SignInSubCommandType.LEADERBOARD;
     }
-
-    private void sendLeaderBoard(CommandSender sender, SignInDate date, int page, int nosp) {
+    
+    private void sendLeaderBoard(CommandSender sender, SignInDate date, int page, int numberOfSinglePage) {
         SignInQueue queue = SignInQueue.getInstance(date);
         if (queue.isEmpty()) {
             Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
@@ -160,7 +157,8 @@ public class LeaderboardCommand
             MessageUtil.sendCommandMessage(sender, "LeaderBoard.Empty", placeholders);
             return;
         }
-        int maxPage = queue.size() % nosp == 0 ? queue.size() / nosp : queue.size() / nosp + 1;
+        int arraySize = queue.size();
+        int maxPage = arraySize % numberOfSinglePage == 0 ? arraySize / numberOfSinglePage : arraySize / numberOfSinglePage + 1;
         if (page > maxPage) {
             page = 1;
         }
@@ -168,353 +166,27 @@ public class LeaderboardCommand
             page = maxPage;
         }
         boolean today = date.equals(SignInDate.getInstance(new Date()));
+        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
+        int ranking = sender instanceof Player ? queue.getRank(((Player) sender).getUniqueId()) : -1;
         String listFormatPath = today ? "Today" : "Historical-Date";
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+        placeholders.put("{date}", dateName);
+        placeholders.put("{total}", String.valueOf(arraySize));
+        placeholders.put("{page}", String.valueOf(page));
+        placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
+        placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
+        placeholders.put("{maxPage}", String.valueOf(maxPage));
         for (String message : today ? 
                 MessageUtil.getMessageList("Command-Messages.LeaderBoard.LeaderBoard-Messages") : 
                 MessageUtil.getMessageList("Command-Messages.LeaderBoard.Historical-Date-LeaderBoard-Messages")) {
             if (message.toLowerCase().contains("%leaderboard%")) {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
-                    int ranking = queue.getRank(player.getUniqueId());
-                    for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                        List<SignInQueueElement> userArray = queue.getRankingUser(rank);
-                        if (userArray.isEmpty()) continue;
-                        if (ranking != rank) {
-                            if (userArray.size() == 1) {
-                                SignInQueueElement element = userArray.get(0);
-                                String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players").toLowerCase().contains("%player%")) {
-                                    String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
-                                    if (name == null) {
-                                        OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                        if (offlineplayer != null) {
-                                            name = offlineplayer.getName();
-                                        }
-                                    }
-                                    if (name != null) {
-                                        Map<String, String> playerName = new HashMap();
-                                        playerName.put("{player}", name);
-                                        BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), playerName));
-                                        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName));
-                                        List<BaseComponent> hoverText = new ArrayList();
-                                        int end = 0;
-                                        List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                        for (String hover : array) {
-                                            end++;
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{player}", name);
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                                            if (end != array.size()) {
-                                                hoverText.add(new TextComponent("\n"));
-                                            }
-                                        }
-                                        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                        click.setClickEvent(ce);
-                                        click.setHoverEvent(he);
-                                        Map<String, BaseComponent> baseComponents = new HashMap();
-                                        baseComponents.put("%player%", click);
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{player}", name);
-                                        placeholders.put("{total}", String.valueOf(queue.size()));
-                                        placeholders.put("{date}", dateName);
-                                        placeholders.put("{ranking}", String.valueOf(rank));
-                                        placeholders.put("{time}", timeName);
-                                        placeholders.put("{page}", String.valueOf(page));
-                                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders, baseComponents);
-                                    } else {
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        Map<String, String> uuid = new HashMap();
-                                        uuid.put("{uuid}", element.getUUID().toString());
-                                        placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                        placeholders.put("{total}", String.valueOf(queue.size()));
-                                        placeholders.put("{date}", dateName);
-                                        placeholders.put("{ranking}", String.valueOf(rank));
-                                        placeholders.put("{time}", timeName);
-                                        placeholders.put("{page}", String.valueOf(page));
-                                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders);
-                                    }
-                                } else {
-                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{total}", String.valueOf(queue.size()));
-                                    placeholders.put("{date}", dateName);
-                                    placeholders.put("{ranking}", String.valueOf(rank));
-                                    placeholders.put("{time}", timeName);
-                                    placeholders.put("{page}", String.valueOf(page));
-                                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders);
-                                }
-                            } else {
-                                for (SignInQueueElement user : userArray) {
-                                    SignInQueueElement element = user;
-                                    String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                    String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                    if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players").toLowerCase().contains("%player%")) {
-                                        String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
-                                        if (name == null) {
-                                            OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                            if (offlineplayer != null) {
-                                                name = offlineplayer.getName();
-                                            }
-                                        }
-                                        if (name != null) {
-                                            Map<String, String> playerName = new HashMap();
-                                            playerName.put("{player}", name);
-                                            BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), playerName));
-                                            ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName));
-                                            List<BaseComponent> hoverText = new ArrayList();
-                                            int end = 0;
-                                            List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                            for (String hover : array) {
-                                                end++;
-                                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                                placeholders.put("{player}", name);
-                                                placeholders.put("{total}", String.valueOf(queue.size()));
-                                                placeholders.put("{date}", dateName);
-                                                placeholders.put("{ranking}", String.valueOf(rank));
-                                                placeholders.put("{time}", timeName);
-                                                placeholders.put("{page}", String.valueOf(page));
-                                                placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                                                if (end != array.size()) {
-                                                    hoverText.add(new TextComponent("\n"));
-                                                }
-                                            }
-                                            HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                            click.setClickEvent(ce);
-                                            click.setHoverEvent(he);
-                                            Map<String, BaseComponent> baseComponents = new HashMap();
-                                            baseComponents.put("%player%", click);
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{player}", name);
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders, baseComponents);
-                                        } else {
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            Map<String, String> uuid = new HashMap();
-                                            uuid.put("{uuid}", element.getUUID().toString());
-                                            placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
-                                        }
-                                    } else {
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{total}", String.valueOf(queue.size()));
-                                        placeholders.put("{date}", dateName);
-                                        placeholders.put("{ranking}", String.valueOf(rank));
-                                        placeholders.put("{time}", timeName);
-                                        placeholders.put("{page}", String.valueOf(page));
-                                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (userArray.size() == 1) {
-                                String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                String timeName = queue.getElement(player.getUniqueId()).getSignInDate().hasTimePeriod() ? queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Self").toLowerCase().contains("%player%")) {
-                                    String name = player.getName();
-                                    Map<String, String> playerName = new HashMap();
-                                    playerName.put("{player}", name);
-                                    BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self"), playerName));
-                                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName));
-                                    List<BaseComponent> hoverText = new ArrayList();
-                                    int end = 0;
-                                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                    for (String hover : array) {
-                                        end++;
-                                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                        placeholders.put("{player}", name);
-                                        placeholders.put("{total}", String.valueOf(queue.size()));
-                                        placeholders.put("{date}", dateName);
-                                        placeholders.put("{ranking}", String.valueOf(rank));
-                                        placeholders.put("{time}", timeName);
-                                        placeholders.put("{page}", String.valueOf(page));
-                                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                                        if (end != array.size()) {
-                                            hoverText.add(new TextComponent("\n"));
-                                        }
-                                    }
-                                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                    click.setHoverEvent(he);
-                                    click.setClickEvent(ce);
-                                    Map<String, BaseComponent> baseComponents = new HashMap();
-                                    baseComponents.put("%player%", click);
-                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{player}", name);
-                                    placeholders.put("{total}", String.valueOf(queue.size()));
-                                    placeholders.put("{date}", dateName);
-                                    placeholders.put("{ranking}", String.valueOf(rank));
-                                    placeholders.put("{time}", timeName);
-                                    placeholders.put("{page}", String.valueOf(page));
-                                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders, baseComponents);
-                                } else {
-                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                    placeholders.put("{total}", String.valueOf(queue.size()));
-                                    placeholders.put("{date}", dateName);
-                                    placeholders.put("{ranking}", String.valueOf(rank));
-                                    placeholders.put("{time}", timeName);
-                                    placeholders.put("{page}", String.valueOf(page));
-                                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders);
-                                }
-                            } else {
-                                for (SignInQueueElement user : userArray) {
-                                    if (user.getUUID().equals(player.getUniqueId())) {
-                                        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                        String timeName = queue.getElement(player.getUniqueId()).getSignInDate().hasTimePeriod() ? queue.getElement(player.getUniqueId()).getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                        if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self").toLowerCase().contains("%player%")) {
-                                            String name = player.getName();
-                                            Map<String, String> playerName = new HashMap();
-                                            playerName.put("{player}", name);
-                                            BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self"), playerName));
-                                            ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName));
-                                            List<BaseComponent> hoverText = new ArrayList();
-                                            int end = 0;
-                                            List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                            for (String hover : array) {
-                                                end++;
-                                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                                placeholders.put("{player}", name);
-                                                placeholders.put("{total}", String.valueOf(queue.size()));
-                                                placeholders.put("{date}", dateName);
-                                                placeholders.put("{ranking}", String.valueOf(rank));
-                                                placeholders.put("{time}", timeName);
-                                                placeholders.put("{page}", String.valueOf(page));
-                                                placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                                                if (end != array.size()) {
-                                                    hoverText.add(new TextComponent("\n"));
-                                                }
-                                            }
-                                            HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                            click.setHoverEvent(he);
-                                            click.setClickEvent(ce);
-                                            Map<String, BaseComponent> baseComponents = new HashMap();
-                                            baseComponents.put("%player%", click);
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{player}", name);
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self", placeholders, baseComponents);
-                                        } else {
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Self", placeholders);
-                                        }
-                                    } else {
-                                        SignInQueueElement element = user;
-                                        String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-                                        String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                        if (MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players").toLowerCase().contains("%player%")) {
-                                            String name = element.getName() != null ? element.getName() : null;
-                                            if (name == null) {
-                                                OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                                if (offlineplayer != null) {
-                                                    name = offlineplayer.getName();
-                                                }
-                                            }
-                                            if (name != null) {
-                                                Map<String, String> playerName = new HashMap();
-                                                playerName.put("{player}", name);
-                                                BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), playerName));
-                                                ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName));
-                                                List<BaseComponent> hoverText = new ArrayList();
-                                                int end = 0;
-                                                List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover");
-                                                for (String hover : array) {
-                                                    end++;
-                                                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                                    placeholders.put("{player}", name);
-                                                    placeholders.put("{total}", String.valueOf(queue.size()));
-                                                    placeholders.put("{date}", dateName);
-                                                    placeholders.put("{ranking}", String.valueOf(rank));
-                                                    placeholders.put("{time}", timeName);
-                                                    placeholders.put("{page}", String.valueOf(page));
-                                                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                    hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                                                    if (end != array.size()) {
-                                                        hoverText.add(new TextComponent("\n"));
-                                                    }
-                                                }
-                                                HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                                                click.setClickEvent(ce);
-                                                click.setHoverEvent(he);
-                                                Map<String, BaseComponent> baseComponents = new HashMap();
-                                                baseComponents.put("%player%", click);
-                                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                                placeholders.put("{total}", String.valueOf(queue.size()));
-                                                placeholders.put("{date}", dateName);
-                                                placeholders.put("{ranking}", String.valueOf(rank));
-                                                placeholders.put("{time}", timeName);
-                                                placeholders.put("{page}", String.valueOf(page));
-                                                placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders, baseComponents);
-                                            } else {
-                                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                                Map<String, String> uuid = new HashMap();
-                                                uuid.put("{uuid}", element.getUUID().toString());
-                                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                                placeholders.put("{total}", String.valueOf(queue.size()));
-                                                placeholders.put("{date}", dateName);
-                                                placeholders.put("{ranking}", String.valueOf(rank));
-                                                placeholders.put("{time}", timeName);
-                                                placeholders.put("{page}", String.valueOf(page));
-                                                placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                                MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
-                                            }
-                                        } else {
-                                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                            placeholders.put("{total}", String.valueOf(queue.size()));
-                                            placeholders.put("{date}", dateName);
-                                            placeholders.put("{ranking}", String.valueOf(rank));
-                                            placeholders.put("{time}", timeName);
-                                            placeholders.put("{page}", String.valueOf(page));
-                                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    for (int rank = page * nosp - nosp + 1;rank <= queue.size() && rank <= page * nosp;rank++) {
-                        List<SignInQueueElement> userArray = queue.getRankingUser(rank);
-                        if (userArray.isEmpty()) continue;
-                        //Whether there are multiple players signing in at the same time in the same second
-                        if (userArray.size() == 1) {
-                            SignInQueueElement element = userArray.get(0);
+                for (int rank = page * numberOfSinglePage - numberOfSinglePage + 1; rank <= arraySize && rank <= page * numberOfSinglePage; rank++) {
+                    List<SignInQueueElement> tiedForUsers = queue.getRankingUser(rank);
+                    if (tiedForUsers.isEmpty()) continue;
+                    if (ranking != rank) {
+                        if (tiedForUsers.size() == 1) {
+                            SignInQueueElement element = tiedForUsers.get(0);
+                            String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
                             String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
                             if (name == null) {
                                 OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
@@ -522,33 +194,28 @@ public class LeaderboardCommand
                                     name = offlineplayer.getName();
                                 }
                             }
-                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                            String playerName;
-                            if (name != null) {
-                                Map<String, String> subPlaceholders = new HashMap();
-                                subPlaceholders.put("{player}", name);
-                                playerName = MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), subPlaceholders);
-                            } else {
-                                Map<String, String> subPlaceholders = new HashMap();
-                                subPlaceholders.put("{uuid}", element.getUUID().toString());
-                                playerName = MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), subPlaceholders);
-                            }
-                            placeholders.put("%player%", playerName);
-                            placeholders.put("{total}", String.valueOf(queue.size()));
-                            placeholders.put("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
                             placeholders.put("{ranking}", String.valueOf(rank));
-                            String timeFormat;
-                            if (element.getSignInDate().hasTimePeriod()) {
-                                timeFormat = element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
+                            placeholders.put("{time}", timeName);
+                            if (name != null) {
+                                placeholders.put("{player}", name);
+                                JSONComponent component = new JSONComponent(
+                                    MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), placeholders),
+                                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, placeholders)).collect(Collectors.toList()),
+                                    "RUN_COMMAND",
+                                    "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), placeholders)
+                                );
+                                MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders, "%player%", component);
                             } else {
-                                timeFormat = MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                Map<String, String> uuid = new HashMap();
+                                uuid.put("{uuid}", element.getUUID().toString());
+                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders);
                             }
-                            placeholders.put("{time}", timeFormat);
-                            placeholders.put("{page}", String.valueOf(page));
-                            placeholders.put("{maxPage}", String.valueOf(maxPage));
-                            MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players"), placeholders);
                         } else {
-                            for (SignInQueueElement element : userArray) {
+                            for (SignInQueueElement user : tiedForUsers) {
+                                SignInQueueElement element = user;
+                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
                                 String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
                                 if (name == null) {
                                     OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
@@ -556,119 +223,111 @@ public class LeaderboardCommand
                                         name = offlineplayer.getName();
                                     }
                                 }
-                                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                                String playerName;
-                                if (name != null) {
-                                    Map<String, String> subPlaceholders = new HashMap();
-                                    subPlaceholders.put("{player}", name);
-                                    playerName = MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), subPlaceholders);
-                                } else {
-                                    Map<String, String> subPlaceholders = new HashMap();
-                                    subPlaceholders.put("{uuid}", element.getUUID().toString());
-                                    playerName = MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), subPlaceholders);
-                                }
-                                placeholders.put("%player%", playerName);
-                                placeholders.put("{total}", String.valueOf(queue.size()));
-                                placeholders.put("{date}", element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
                                 placeholders.put("{ranking}", String.valueOf(rank));
-                                String timeFormat;
-                                if (element.getSignInDate().hasTimePeriod()) {
-                                    timeFormat = element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format"));
+                                placeholders.put("{time}", timeName);
+                                if (name != null) {
+                                    Map<String, String> playerName = new HashMap();
+                                    playerName.put("{player}", name);
+                                    JSONComponent component = new JSONComponent(
+                                        MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), playerName),
+                                        MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, playerName)).collect(Collectors.toList()),
+                                        "RUN_COMMAND",
+                                        "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName)
+                                    );
+                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players", placeholders, "%player%", component);
                                 } else {
-                                    timeFormat = MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                    Map<String, String> uuid = new HashMap();
+                                    uuid.put("{uuid}", element.getUUID().toString());
+                                    placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                    placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players", placeholders);
                                 }
-                                placeholders.put("{time}", timeFormat);
-                                placeholders.put("{page}", String.valueOf(page));
-                                placeholders.put("{maxPage}", String.valueOf(maxPage));
-                                MessageUtil.sendMessage(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players"), placeholders);
+                            }
+                        }
+                    } else {
+                        if (tiedForUsers.size() == 1) {
+                            SignInQueueElement element = tiedForUsers.get(0);
+                            String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                            String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
+                            if (name == null) {
+                                OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
+                                if (offlineplayer != null) {
+                                    name = offlineplayer.getName();
+                                }
+                            }
+                            placeholders.put("{ranking}", String.valueOf(rank));
+                            placeholders.put("{time}", timeName);
+                            if (name != null) {
+                                placeholders.put("{player}", name);
+                                JSONComponent component = new JSONComponent(
+                                    MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self"), placeholders),
+                                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, placeholders)).collect(Collectors.toList()),
+                                    "RUN_COMMAND",
+                                    "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), placeholders)
+                                );
+                                MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders, "%player%", component);
+                            } else {
+                                Map<String, String> uuid = new HashMap();
+                                uuid.put("{uuid}", element.getUUID().toString());
+                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders);
+                            }
+                        } else {
+                            for (SignInQueueElement user : tiedForUsers) {
+                                String target;
+                                if (user.getUUID().equals(((Player) sender).getUniqueId())) {
+                                    target = "Self";
+                                } else {
+                                    target = "Other-Players";
+                                }
+                                SignInQueueElement element = user;
+                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
+                                String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
+                                if (name == null) {
+                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
+                                    if (offlineplayer != null) {
+                                        name = offlineplayer.getName();
+                                    }
+                                }
+                                placeholders.put("{ranking}", String.valueOf(rank));
+                                placeholders.put("{time}", timeName);
+                                if (name != null) {
+                                    Map<String, String> playerName = new HashMap();
+                                    playerName.put("{player}", name);
+                                    JSONComponent component = new JSONComponent(
+                                        MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text." + target), playerName),
+                                        MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, playerName)).collect(Collectors.toList()),
+                                        "RUN_COMMAND",
+                                        "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName)
+                                    );
+                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking." + target, placeholders, "%player%", component);
+                                } else {
+                                    Map<String, String> uuid = new HashMap();
+                                    uuid.put("{uuid}", element.getUUID().toString());
+                                    placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                    placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking." + target, placeholders);
+                                }
                             }
                         }
                     }
                 }
             } else {
-                if (!(sender instanceof Player)) {
-                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                    placeholders.put("%previousPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"));
-                    placeholders.put("%nextPage%", MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"));
-                    placeholders.put("{total}", String.valueOf(queue.size()));
-                    placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
-                    placeholders.put("{page}", String.valueOf(page));
-                    placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
-                    placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
-                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    MessageUtil.sendMessage(sender, message, placeholders);
-                    continue;
-                }
-                Map<String, BaseComponent> baseComponents = new HashMap();
-                if (message.toLowerCase().contains("%previouspage%")) {
-                    BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"));
-                    List<BaseComponent> hoverText = new ArrayList();
-                    int end = 0;
-                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover");
-                    for (String hover : array) {
-                        end++;
-                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                        placeholders.put("{total}", String.valueOf(queue.size()));
-                        placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
-                        placeholders.put("{page}", String.valueOf(page));
-                        placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
-                        placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
-                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                        if (end != array.size()) {
-                            hoverText.add(new TextComponent("\n"));
-                        }
-                    }
-                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText(false) + " " + (page - 1));
-                    click.setClickEvent(ce);
-                    click.setHoverEvent(he);
-                    baseComponents.put("%previousPage%", click);
-                }
-                if (message.toLowerCase().contains("%nextpage%")) {
-                    BaseComponent click = new TextComponent(MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"));
-                    List<BaseComponent> hoverText = new ArrayList();
-                    int end = 0;
-                    List<String> array = MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover");
-                    for (String hover : array) {
-                        end++;
-                        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                        placeholders.put("{total}", String.valueOf(queue.size()));
-                        placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
-                        placeholders.put("{page}", String.valueOf(page));
-                        placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
-                        placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
-                        placeholders.put("{maxPage}", String.valueOf(maxPage));
-                        hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, placeholders)));
-                        if (end != array.size()) {
-                            hoverText.add(new TextComponent("\n"));
-                        }
-                    }
-                    HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-                    ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin leaderboard " + date.getDataText(false) + " " + (page + 1));
-                    click.setClickEvent(ce);
-                    click.setHoverEvent(he);
-                    baseComponents.put("%nextPage%", click);
-                }
-                if (baseComponents.isEmpty()) {
-                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                    placeholders.put("{total}", String.valueOf(queue.size()));
-                    placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
-                    placeholders.put("{page}", String.valueOf(page));
-                    placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
-                    placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
-                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    MessageUtil.sendMessage(sender, message, placeholders);
-                } else {
-                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                    placeholders.put("{total}", String.valueOf(queue.size()));
-                    placeholders.put("{date}", date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format")));
-                    placeholders.put("{page}", String.valueOf(page));
-                    placeholders.put("{previousPage}", String.valueOf(page == 1 ? maxPage : page - 1));
-                    placeholders.put("{nextPage}", String.valueOf(page == maxPage ? 1 : page + 1));
-                    placeholders.put("{maxPage}", String.valueOf(maxPage));
-                    MessageUtil.sendMessage(sender, message, placeholders, baseComponents);
-                }
+                Map<String, JSONComponent> components = new HashMap<>();
+                components.put("%previousPage%", new JSONComponent(
+                    MessageUtil.getMessage("Command-Messages.LeaderBoard.Previous-Page.Text"), 
+                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Previous-Page.Hover"),
+                    "RUN_COMMAND",
+                    "/litesignin:signin leaderboard " + date.getDataText(false) + " " + (page - 1)
+                ));
+                components.put("%nextPage%", new JSONComponent(
+                    MessageUtil.getMessage("Command-Messages.LeaderBoard.Next-Page.Text"), 
+                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Next-Page.Hover"),
+                    "RUN_COMMAND",
+                    "/litesignin:signin leaderboard " + date.getDataText(false) + " " + (page + 1)
+                ));
+                MessageUtil.sendMixedMessage(sender, message, placeholders, components, placeholders);
             }
         }
     }

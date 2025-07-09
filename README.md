@@ -68,3 +68,8 @@ Another placeholders:
 
 # Statistics
 [![BigImage](https://bstats.org/signatures/bukkit/LiteSignIn.svg)](https://bstats.org/plugin/bukkit/LiteSignIn)
+
+## My Updating Plugins:
+**LiteAnnouncer: [https://www.spigotmc.org/resources/84664/](https://www.spigotmc.org/resources/84664/)**  
+**LiteCommandEditor: [https://www.spigotmc.org/resources/117987/](https://www.spigotmc.org/resources/117987/)**  
+**GlobalMarketPlus: [https://www.spigotmc.org/resources/103648/](https://www.spigotmc.org/resources/103648/)**

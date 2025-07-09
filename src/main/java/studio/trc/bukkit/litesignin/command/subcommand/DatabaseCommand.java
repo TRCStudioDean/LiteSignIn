@@ -10,11 +10,6 @@ import java.util.stream.Collectors;
 
 import lombok.Getter;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,7 +21,7 @@ import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
-import studio.trc.bukkit.litesignin.message.color.ColorUtils;
+import studio.trc.bukkit.litesignin.message.JSONComponent;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
@@ -96,26 +91,8 @@ public class DatabaseCommand
             if (!ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Database-Management.Backup.Enabled")) {
                 return;
             }
-            BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()));
-            ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin:signin database confirm");
-            List<BaseComponent> hoverText = new ArrayList();
-            int end = 0;
-            List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
-            for (String hover : array) {
-                end++;
-                hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, new HashMap())));
-                if (end != array.size()) {
-                    hoverText.add(new TextComponent("\n"));
-                }
-            }
-            HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-            click.setClickEvent(ce);
-            click.setHoverEvent(he);
-            Map<String, BaseComponent> baseComponents = new HashMap();
-            baseComponents.put("%button%", click);
-            MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm").stream().forEach(message -> {
-                MessageUtil.sendMessage(sender, message, placeholders, baseComponents);
-            });
+            JSONComponent jsonComponent = new JSONComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()), MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover"), "RUN_COMMAND", "/litesignin:signin database confirm");
+            MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm").stream().forEach(message -> MessageUtil.sendMessageWithJSONComponent(sender, message, placeholders, "%button%", jsonComponent));
             confirmCache.put(sender, Confirm.BACKUP);
         }
     }
@@ -135,26 +112,8 @@ public class DatabaseCommand
             MessageUtil.sendCommandMessage(sender, "Database.Rollback.File-Not-Exist", placeholders);
             return;
         }
-        BaseComponent click = new TextComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()));
-        ClickEvent ce = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/litesignin database confirm");
-        List<BaseComponent> hoverText = new ArrayList();
-        int end = 0;
-        List<String> array = MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover");
-        for (String hover : array) {
-            end++;
-            hoverText.add(new TextComponent(MessageUtil.replacePlaceholders(sender, hover, new HashMap())));
-            if (end != array.size()) {
-                hoverText.add(new TextComponent("\n"));
-            }
-        }
-        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText.toArray(new BaseComponent[] {}));
-        click.setClickEvent(ce);
-        click.setHoverEvent(he);
-        Map<String, BaseComponent> baseComponents = new HashMap();
-        baseComponents.put("%button%", click);
-        MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm").stream().forEach(message -> {
-            MessageUtil.sendMessage(sender, message, placeholders, baseComponents);
-        });
+        JSONComponent jsonComponent = new JSONComponent(MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.Database.Confirm.Button.Text"), new HashMap()), MessageUtil.getMessageList("Command-Messages.Database.Confirm.Button.Hover"), "RUN_COMMAND", "/litesignin:signin database confirm");
+        MessageUtil.getMessageList("Command-Messages.Database.Confirm.Need-Confirm").stream().forEach(message -> MessageUtil.sendMessageWithJSONComponent(sender, message, placeholders, "%button%", jsonComponent));
         Confirm confirm = Confirm.ROLLBACK;
         confirm.setTargetFile(file);
         confirmCache.put(sender, confirm);

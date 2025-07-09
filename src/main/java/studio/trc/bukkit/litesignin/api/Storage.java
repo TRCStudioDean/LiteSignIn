@@ -10,6 +10,7 @@ import studio.trc.bukkit.litesignin.database.storage.YamlStorage;
 import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.engine.MySQLEngine;
 import studio.trc.bukkit.litesignin.database.engine.SQLiteEngine;
+import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 import studio.trc.bukkit.litesignin.database.DatabaseTable;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
@@ -17,7 +18,6 @@ import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import studio.trc.bukkit.litesignin.database.engine.SQLQuery;
 
 /**
  * Data Storage for Users
@@ -185,11 +185,13 @@ public interface Storage
     
     public static Storage getPlayer(String playername) {
         if (PluginControl.useMySQLStorage()) {
-            for (MySQLStorage data : MySQLStorage.cache.values()) {
-                if (data.getName().equalsIgnoreCase(playername)) {
-                    return data;
+            try {
+                for (MySQLStorage data : MySQLStorage.cache.values()) {
+                    if (data.getName().equalsIgnoreCase(playername)) {
+                        return data;
+                    }
                 }
-            }
+            } catch (Exception ex) {}
             UUID uuid = null;
             try (SQLQuery query = MySQLEngine.getInstance().executeQuery("SELECT UUID FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername)) {
                 ResultSet rs = query.getResult();
@@ -199,11 +201,13 @@ public interface Storage
             } catch (SQLException ex) {}
             return uuid != null ? MySQLStorage.getPlayerData(uuid) : null;
         } else if (PluginControl.useSQLiteStorage()) {
-            for (SQLiteStorage data : SQLiteStorage.cache.values()) {
-                if (data.getName().equalsIgnoreCase(playername)) {
-                    return data;
+            try {
+                for (SQLiteStorage data : SQLiteStorage.cache.values()) {
+                    if (data.getName().equalsIgnoreCase(playername)) {
+                        return data;
+                    }
                 }
-            }
+            } catch (Exception ex) {}
             UUID uuid = null;
             try (SQLQuery query = SQLiteEngine.getInstance().executeQuery("SELECT UUID FROM " + SQLiteEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA) + " WHERE Name = ?", playername)) {
                 ResultSet rs = query.getResult();

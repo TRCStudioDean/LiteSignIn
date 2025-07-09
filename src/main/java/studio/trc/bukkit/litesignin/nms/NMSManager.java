@@ -1,23 +1,23 @@
 package studio.trc.bukkit.litesignin.nms;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import studio.trc.bukkit.litesignin.util.CustomItem;
+import studio.trc.bukkit.litesignin.util.AdventureUtils;
+
 
 public class NMSManager
 {
@@ -58,70 +58,74 @@ public class NMSManager
                 itemStack = Class.forName("net.minecraft.server." + getPackageName() + ".ItemStack"); 
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(NMSManager.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             nmsFound = false;
         }
     }
-    
-    public static BaseComponent[] getJsonItemStackArray(List<CustomItem> itemStackList) {
-        List<BaseComponent> text = new ArrayList();
-        for (int i = 0;i < itemStackList.size();i++) {
-            if (itemStackList.get(i) != null && !itemStackList.get(i).getItemStack().getType().equals(Material.AIR)) {
-                text.add(getJsonItemStack(itemStackList.get(i).getItemStack(), itemStackList.get(i).getName()));
-                if (i < itemStackList.size() - 1) {
-                    text.add(new TextComponent(", "));
-                }
-            }
-        }
-        return text.toArray(new BaseComponent[] {});
-    }
-    
-    public static BaseComponent getJsonItemStack(ItemStack is) {
-        String text;
+
+    public static void setItemHover(ItemStack item, BaseComponent component) {
         try {
-            text = is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : (String) is.getClass().getMethod("getI18NDisplayName").invoke(is);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            text = is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : is.getType().toString().toLowerCase().replace("_", " ");
-        }
-        if (is != null && !is.getType().equals(Material.AIR)) {
-            BaseComponent tc = new TextComponent(text);
-            ComponentBuilder cb = new ComponentBuilder(getJsonAsNBTTagCompound(is));
-            tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, cb.create()));
-            return tc;
-        }
-        return null;
-    }
-    
-    public static BaseComponent getJsonItemStack(ItemStack is, String text) {
-        if (is != null && !is.getType().equals(Material.AIR)) {
-            BaseComponent tc = new TextComponent(text);
-            ComponentBuilder cb = new ComponentBuilder(getJsonAsNBTTagCompound(is));
-            tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, cb.create()));
-            return tc;
-        }
-        return null;
-    }
-    
-    public static String getJsonAsNBTTagCompound(ItemStack is) {
-        try {
-            Object mcStack = craftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, is);
-            Object NBTTagCompound = nbtTagCompound.newInstance();
-            Method saveMethod = Arrays.stream(itemStack.getDeclaredMethods()).filter(method -> method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(nbtTagCompound) && method.getReturnType().equals(nbtTagCompound)).findFirst().orElse(null);
-            if (saveMethod != null) {
-                if (saveMethod.isAccessible()) {
-                    saveMethod.invoke(mcStack, NBTTagCompound);
+            Item hoverItem = new Item(
+                item.getType().getKey().toString(),
+                item.getAmount(),
+                ItemTag.ofNbt(item.getItemMeta() != null ? (String) ItemMeta.class.getMethod("getAsString").invoke(item.getItemMeta()) : "")
+            );
+            component.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_ITEM, hoverItem));
+        } catch (Throwable t) {
+            try {
+                Object mcStack = craftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, item);
+                Object NBTTagCompound = nbtTagCompound.newInstance();
+                Method saveMethod = Arrays.stream(itemStack.getDeclaredMethods()).filter(method -> method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(nbtTagCompound) && method.getReturnType().equals(nbtTagCompound)).findFirst().orElse(null);
+                if (saveMethod != null) {
+                    if (saveMethod.isAccessible()) {
+                        saveMethod.invoke(mcStack, NBTTagCompound);
+                    } else {
+                        saveMethod.setAccessible(true);
+                        saveMethod.invoke(mcStack, NBTTagCompound);
+                        saveMethod.setAccessible(false);
+                    }
                 } else {
-                    saveMethod.setAccessible(true);
-                    saveMethod.invoke(mcStack, NBTTagCompound);
-                    saveMethod.setAccessible(false);
+                    nbtTagCompound.getMethod("putString", String.class, String.class).invoke(NBTTagCompound, "id", item.getType().getKey().toString());
+                    nbtTagCompound.getMethod("putByte", String.class, byte.class).invoke(NBTTagCompound, "Count", (byte) item.getAmount());
                 }
-            } else {
-                nbtTagCompound.getMethod("putString", String.class, String.class).invoke(NBTTagCompound, "id", is.getType().getKey().getNamespace() + ":" + is.getType().getKey().getKey());
-                nbtTagCompound.getMethod("putByte", String.class, byte.class).invoke(NBTTagCompound, "Count", (byte) is.getAmount());
+                component.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(NBTTagCompound.toString()).create()));
+            } catch (Throwable t1) {
+                t1.printStackTrace();
             }
-            return NBTTagCompound.toString();
-        } catch (Exception ex) {
-            return is.getType().name();
         }
+    }
+
+    public static Object setItemHover(ItemStack item, Object component) {
+        return AdventureUtils.toComponent(component).hoverEvent(HoverEventSource.class.cast(item));
+    }
+    
+    public static Object getAdventureJSONItemStack(ItemStack item) {
+        if (item != null && !item.getType().equals(Material.AIR)) {
+            try {
+                String translationKey = Material.class.getMethod("translationKey").invoke(item.getType()).toString();
+                return setItemHover(item, Component.translatable(translationKey));
+            } catch (Exception ex) {
+                return setItemHover(item, AdventureUtils.serializeText(toDisplayName(item.getType().name())));
+            }
+        }
+        return Component.text("");
+    }
+    
+    public static TextComponent getBungeeJSONItemStack(ItemStack item) {
+        if (item != null && !item.getType().equals(Material.AIR)) {
+            TextComponent component = new TextComponent(toDisplayName(item.getType().name()));
+            setItemHover(item, component);
+            return component;
+        }
+        return new TextComponent();
+    }
+    
+    private static String toDisplayName(String text) {
+        String[] words = text.split("_", -1);
+        for (int i = 0;i < words.length;i++) {
+            if (words[i].length() <= 1) continue;
+            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
+        }
+        return String.join(" ", words);
     }
 }

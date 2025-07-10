@@ -257,9 +257,7 @@ public class PluginControl
             ItemMeta im = is.getItemMeta();
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
                 List<String> lore = new ArrayList();
-                for (String lores : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Lore")) {
-                    lore.add(MessageUtil.toPlaceholderAPIResult(ColorUtils.toColor(lores), player));
-                }
+                ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Lore").stream().forEach(lores -> lore.add(MessageUtil.toPlaceholderAPIResult(player, ColorUtils.toColor(lores))));
                 im.setLore(lore);
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Enchantment") != null) {
@@ -275,7 +273,7 @@ public class PluginControl
                 }
             }
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Display-Name"), player)));
+            if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getString("Manual-Settings." + itemName + ".Display-Name"))));
             is.setItemMeta(im);
             return is;
         } else if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Item-Collection." + itemName) != null) {

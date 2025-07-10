@@ -134,7 +134,7 @@ public class JSONComponent
                     hoverEvent = AdventureUtils.showText(String.join("\n", hoverContent.stream().map(hover -> MessageUtil.replacePlaceholders(hover, placeholders)).collect(Collectors.toList())));
                 }
                 if (clickAction != null) {
-                    clickEvent = AdventureUtils.getClickEvent(clickAction, MessageUtil.doBasicProcessing(clickContent));
+                    clickEvent = AdventureUtils.getClickEvent(clickAction, MessageUtil.replacePlaceholders(clickContent, placeholders));
                 }
             } catch (Exception ex) {
                 placeholders.put("{exception}", ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : "null");

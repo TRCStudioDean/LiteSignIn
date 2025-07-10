@@ -139,6 +139,7 @@ public class ColorUtils
      * @return 
      */
     public static String toColor(String text) {
+        if (text == null) return null;
         try {
             //Preliminary coloring
             String content = ChatColor.translateAlternateColorCodes('&', text);

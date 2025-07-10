@@ -654,7 +654,7 @@ public class SignInGUI
                     setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment", im);
                 }
                 if (section.get(items + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get(items + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(section.getString(items + ".Display-Name"), player)));
+                if (section.get(items + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, section.getString(items + ".Display-Name"))));
                 other.setItemMeta(im);
                 other.setAmount(section.get(items + ".Amount") != null ? section.getInt(items + ".Amount") : 1);
                 if (section.get(items + ".Slots") != null) {
@@ -791,7 +791,7 @@ public class SignInGUI
         String version = Bukkit.getBukkitVersion();
         if (version == null || version.startsWith("1.7")) return;
         ItemMeta im = is.getItemMeta();
-        String textures = MessageUtil.toPlaceholderAPIResult(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath), player);
+        String textures = MessageUtil.toPlaceholderAPIResult(player, ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath));
         if (im == null || textures == null) return;
         if (is.getItemMeta() instanceof SkullMeta) {
             SkullMeta skull = (SkullMeta) im;

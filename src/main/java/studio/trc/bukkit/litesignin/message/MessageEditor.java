@@ -22,7 +22,7 @@ public class MessageEditor
             if (section.isPlaceholder()) {
                 components.add(section.getBungeeComponent());
             } else {
-                components.add(new TextComponent(MessageUtil.toPlaceholderAPIResult(section.getText(), sender).replace("/n", "\n")));
+                components.add(new TextComponent(MessageUtil.toPlaceholderAPIResult(sender, section.getText()).replace("/n", "\n")));
             }
         });
         return components;
@@ -35,7 +35,7 @@ public class MessageEditor
             if (section.isPlaceholder()) {
                 component = component == null ? AdventureUtils.toComponent(section.getAdventureComponent()) : component.append(AdventureUtils.toComponent(section.getAdventureComponent()));
             } else {
-                String text = MessageUtil.toPlaceholderAPIResult(section.getText(), sender).replace("/n", "\n");
+                String text = MessageUtil.toPlaceholderAPIResult(sender, section.getText()).replace("/n", "\n");
                 component = component == null ? AdventureUtils.serializeText(text) : component.append(AdventureUtils.serializeText(text));
             }
         }

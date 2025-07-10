@@ -144,14 +144,14 @@ public abstract class SignInRewardUtil
                 ItemMeta im = is.getItemMeta();
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Lore")) {
                     List<String> lore = new ArrayList();
-                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(lores, player))));
+                    config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, lores))));
                     im.setLore(lore);
                 }
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Enchantment")) {
                     setEnchantments("Manual-Settings." + itemdata[0] + ".Enchantment", im);
                 }
                 if (config.get("Manual-Settings." + itemdata[0] + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (config.contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(config.getString("Manual-Settings." + itemdata[0] + ".Display-Name"), player)));
+                if (config.contains("Manual-Settings." + itemdata[0] + ".Display-Name")) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, config.getString("Manual-Settings." + itemdata[0] + ".Display-Name"))));
                 is.setItemMeta(im);
                 try {
                     if (itemdata[1].contains("-")) {

@@ -251,7 +251,7 @@ public class MessageUtil
     }
     
     public static String replacePlaceholders(String message, Map<String, String> placeholders, boolean toColor) {
-        if (message == null || placeholders.isEmpty()) return message;
+        if (message == null || placeholders.isEmpty()) return ColorUtils.toColor(message);
         StringBuilder builder = new StringBuilder();
         try {
             //Execute replacements
@@ -273,7 +273,7 @@ public class MessageUtil
     }
     
     public static String replacePlaceholders(CommandSender sender, String message, Map<String, String> placeholders) {
-        if (message == null || placeholders.isEmpty()) return message;
+        if (message == null || placeholders.isEmpty()) return ColorUtils.toColor(message);
         StringBuilder builder = new StringBuilder();
         try {
             //Execute replacements
@@ -291,14 +291,14 @@ public class MessageUtil
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return ColorUtils.toColor(message);
+        return ColorUtils.toColor(toPlaceholderAPIResult(sender, message));
     }
     
     public static String escape(String text) {
         return text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]").replace("{", "\\{").replace("}", "\\}").replace("+", "\\+").replace("*", "\\*").replace("|", "\\|").replace("?", "\\?").replace("$", "\\$").replace("^", "\\^");
     }
     
-    public static String toPlaceholderAPIResult(String text, CommandSender sender) {
+    public static String toPlaceholderAPIResult(CommandSender sender, String text) {
         return text != null && isEnabledPAPI() && sender instanceof Player ? PlaceholderAPI.setPlaceholders((Player) sender, text) : text;
     }
     

@@ -2,6 +2,7 @@ package studio.trc.bukkit.litesignin.event;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,8 +50,14 @@ public class Join
                         SignInDate date = SignInDate.getInstance(new Date());
                         MessageUtil.getMessageList("Join-Event.Messages").stream().forEach(text -> {
                             if (text.toLowerCase().contains("%opengui%")) {
-                                JSONComponent jsonComponent = new JSONComponent(MessageUtil.getMessage("Join-Event.Open-GUI"), MessageUtil.getMessageList("Join-Event.Hover-Text"), "RUN_COMMAND", "/litesignin:signin gui");
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                                placeholders.put("{date}", date.getName(ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Date-Format")));
+                                JSONComponent jsonComponent = new JSONComponent(
+                                    MessageUtil.replacePlaceholders(player, MessageUtil.getMessage("Join-Event.Open-GUI"), placeholders),
+                                    MessageUtil.getMessageList("Join-Event.Hover-Text").stream().map(line -> MessageUtil.replacePlaceholders(player, line, placeholders)).collect(Collectors.toList()),
+                                    "RUN_COMMAND",
+                                    "/litesignin:signin gui"
+                                );
                                 MessageUtil.sendMessageWithJSONComponent(player, text, placeholders, "%openGUI%", jsonComponent);
                             } else {
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();

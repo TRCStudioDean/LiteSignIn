@@ -246,7 +246,7 @@ public final class MySQLStorage
         List<SignInGroup> groups = new ArrayList();
         RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         config.getStringList("Reward-Settings.Groups-Priority").stream()
-            .filter(group -> config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission")))
+            .filter(group -> group.equalsIgnoreCase("Default") || (config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission"))))
             .forEach(group -> groups.add(new SignInGroup(group)));
         if (groups.isEmpty() && config.get("Reward-Settings.Permission-Groups.Default") != null) {
             groups.add(new SignInGroup("Default"));

@@ -205,16 +205,16 @@ public final class YamlStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         SignInGroup group = null;
-        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
-        for (String groups : config.getStringList("Reward-Settings.Groups-Priority")) {
-            if (config.get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
-                if (player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
+        RobustConfiguration rewardSettings = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        for (String groups : rewardSettings.getStringList("Reward-Settings.Groups-Priority")) {
+            if (rewardSettings.get("Reward-Settings.Permission-Groups." + groups + ".Permission") != null) {
+                if (player.hasPermission(rewardSettings.getString("Reward-Settings.Permission-Groups." + groups + ".Permission"))) {
                     group = new SignInGroup(groups);
                     break;
                 }
             }
         }
-        if (group == null && config.get("Reward-Settings.Permission-Groups.Default") != null) {
+        if (group == null && rewardSettings.get("Reward-Settings.Permission-Groups.Default") != null) {
             group = new SignInGroup("Default");
         }
         return group;
@@ -225,11 +225,11 @@ public final class YamlStorage
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
         List<SignInGroup> groups = new ArrayList();
-        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
-        config.getStringList("Reward-Settings.Groups-Priority").stream()
-            .filter(group -> config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission")))
+        RobustConfiguration rewardSettings = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        rewardSettings.getStringList("Reward-Settings.Groups-Priority").stream()
+            .filter(group -> group.equalsIgnoreCase("Default") || (rewardSettings.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(rewardSettings.getString("Reward-Settings.Permission-Groups." + group + ".Permission"))))
             .forEach(group -> groups.add(new SignInGroup(group)));
-        if (groups.isEmpty() && config.get("Reward-Settings.Permission-Groups.Default") != null) {
+        if (groups.isEmpty() && rewardSettings.get("Reward-Settings.Permission-Groups.Default") != null) {
             groups.add(new SignInGroup("Default"));
         }
         return groups;

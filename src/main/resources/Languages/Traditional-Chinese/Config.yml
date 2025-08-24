@@ -81,8 +81,8 @@ Async-Thread-Settings:
         Leaderboard-View: false
         #加載玩家數據
         Load-Data: true
-        #打開GUI（由於加載頭顱可能造成卡頓，故默認啟用此選項）
-        Open-GUI: true
+        #打開GUI
+        Open-GUI: false
     
 #補簽卡
 Retroactive-Card:

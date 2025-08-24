@@ -23,6 +23,7 @@ import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
+import studio.trc.bukkit.litesignin.util.SkullManager;
 
 public class Join
     implements Listener
@@ -47,6 +48,7 @@ public class Join
                     if (PluginControl.autoSignIn() && LiteSignInUtils.hasPermission(player, "Join-Auto-SignIn")) {
                         autoSignIn = true;
                     } else if (OnlineTimeRecord.getSignInRequirement(player) == -1) {
+                        LiteSignInThread.runTask(() -> SkullManager.refreshTextureByDefaultMethod(player.getUniqueId(), player.getName()));
                         SignInDate date = SignInDate.getInstance(new Date());
                         MessageUtil.getMessageList("Join-Event.Messages").stream().forEach(text -> {
                             if (text.toLowerCase().contains("%opengui%")) {

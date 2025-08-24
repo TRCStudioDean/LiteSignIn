@@ -40,6 +40,7 @@ import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 import studio.trc.bukkit.litesignin.nms.NMSManager;
 
 import studio.trc.bukkit.litesignin.message.color.ColorUtils;
+import studio.trc.bukkit.litesignin.util.SkullManager;
 
 public class SignInGUI
 {
@@ -794,30 +795,7 @@ public class SignInGUI
         String textures = MessageUtil.toPlaceholderAPIResult(player, ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath));
         if (im == null || textures == null) return;
         if (is.getItemMeta() instanceof SkullMeta) {
-            SkullMeta skull = (SkullMeta) im;
-            GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
-            profile.getProperties().put("textures", new Property("textures", textures));
-            try {
-                Field profileField = skull.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                try {
-                    profileField.set(skull, profile);
-                } catch (IllegalArgumentException ex) {
-                    Object resolvableProfile = Class.forName("net.minecraft.world.item.component.ResolvableProfile").getConstructor(GameProfile.class).newInstance(profile);
-                    profileField.set(skull, resolvableProfile);
-                }
-                profileField.setAccessible(false);
-                if (version.startsWith("1.20")) {
-                    Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");
-                    Method writeGameProfile = Arrays.stream(NMSManager.gameProfileSerializer.getMethods()).filter(method -> method.getParameterTypes().length == 2 && method.getParameterTypes()[0].equals(NMSManager.nbtTagCompound) && method.getParameterTypes()[1].equals(profile.getClass()) && method.getReturnType().equals(NMSManager.nbtTagCompound)).findFirst().orElse(null);
-                    if (writeGameProfile != null) {
-                        serializedProfileField.setAccessible(true);
-                        serializedProfileField.set(skull, writeGameProfile.invoke(null, NMSManager.nbtTagCompound.getConstructor().newInstance(), profile));
-                        serializedProfileField.setAccessible(false);
-                    }
-                }
-            } catch (Exception e) {}
-            is.setItemMeta(skull);
+            is.setItemMeta(SkullManager.getHeadWithTextures(textures).getItemMeta());
         }
     }
 }

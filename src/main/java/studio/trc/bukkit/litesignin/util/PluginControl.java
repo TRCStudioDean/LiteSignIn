@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -64,7 +66,6 @@ public class PluginControl
         }
         Bukkit.getOnlinePlayers().stream().filter(ps -> Menu.menuOpening.containsKey(ps.getUniqueId())).forEachOrdered(Player::closeInventory);
         LiteSignInThread.initialize();
-        headCacheData.clear();
         if (enableSignScript()) {
             WoodSignUtil.loadScripts();
             WoodSignUtil.loadSigns();
@@ -117,34 +118,28 @@ public class PluginControl
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
     
-    /**
-     * Heads' cache data.
-     */
-    private static final Map<String, ItemMeta> headCacheData = new HashMap();
-    
     public static void setHead(ItemStack is, String name) {
-        if (Bukkit.getBukkitVersion().startsWith("1.7") || Bukkit.getBukkitVersion().startsWith("1.8") || Bukkit.getBukkitVersion().startsWith("1.9") || Bukkit.getBukkitVersion().startsWith("1.10") || Bukkit.getBukkitVersion().startsWith("1.11") || Bukkit.getBukkitVersion().startsWith("1.12")) {
-            if (is.getType().equals(Material.valueOf("SKULL_ITEM")) && is.getData().getData() == 3) {
-                if (headCacheData.containsKey(name)) {
-                    is.setItemMeta(headCacheData.get(name));
-                } else {
-                    SkullMeta sm = (SkullMeta) is.getItemMeta();
-                    sm.setOwner(name);
-                    headCacheData.put(name, sm);
-                    is.setItemMeta(sm);
-                }
-            }
+        if (name == null) return;
+        Player player = Bukkit.getPlayer(name);
+        String playerName;
+        UUID uuid;
+        if (player != null) {
+            uuid = player.getUniqueId();
+            playerName = player.getName();
         } else {
-            if (is.getType().equals(Material.PLAYER_HEAD)) {
-                if (headCacheData.containsKey(name)) {
-                    is.setItemMeta(headCacheData.get(name));
-                } else {
-                    SkullMeta sm = (SkullMeta) is.getItemMeta();
-                    sm.setOwningPlayer(Bukkit.getOfflinePlayer(name));
-                    headCacheData.put(name, sm);
-                    is.setItemMeta(sm);
-                }
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+            if (offlinePlayer != null) {
+                uuid = offlinePlayer.getUniqueId();
+                playerName = offlinePlayer.getName();
+            } else {
+                return;
             }
+        }
+        String texture = SkullManager.getBase64Meta().get(uuid);
+        if (texture != null) {
+            is.setItemMeta(SkullManager.getHeadWithTextures(texture).getItemMeta());
+        } else {
+            LiteSignInThread.runTask(() -> SkullManager.refreshTextureByDefaultMethod(uuid, playerName));
         }
     }
     

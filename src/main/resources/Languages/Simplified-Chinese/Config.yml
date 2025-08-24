@@ -82,8 +82,8 @@ Async-Thread-Settings:
         Leaderboard-View: false
         #加载玩家数据
         Load-Data: true
-        #打开GUI（由于加载头颅可能造成卡顿，故默认启用此选项）
-        Open-GUI: true
+        #打开GUI
+        Open-GUI: false
     
 #补签卡
 Retroactive-Card:

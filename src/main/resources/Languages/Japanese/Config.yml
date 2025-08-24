@@ -78,8 +78,8 @@ Async-Thread-Settings:
         Leaderboard-View: false
         #プレイヤーのデータを読み込む
         Load-Data: true
-        #GUI を開く (ヘッドをロードすると遅延が発生する可能性があるため、このオプションはデフォルトで有効になっています)
-        Open-GUI: true
+        #GUI を開く
+        Open-GUI: false
     
 #遡及カード
 #過去の日を補うためにそれを使用してす

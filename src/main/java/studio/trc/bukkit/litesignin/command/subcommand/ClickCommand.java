@@ -259,7 +259,7 @@ public class ClickCommand
         if (args.length == 2 || args.length == 3) {
             return tabGetPlayersName(args, args.length);
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

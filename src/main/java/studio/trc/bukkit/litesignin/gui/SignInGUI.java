@@ -1,22 +1,14 @@
 package studio.trc.bukkit.litesignin.gui;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -37,8 +29,6 @@ import studio.trc.bukkit.litesignin.gui.SignInGUIColumn.KeyType;
 import studio.trc.bukkit.litesignin.util.SignInDate;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
-import studio.trc.bukkit.litesignin.nms.NMSManager;
-
 import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.util.SkullManager;
 
@@ -54,7 +44,7 @@ public class SignInGUI
         /**
          * Elements
          */
-        List<SignInGUIColumn> columns = new ArrayList();
+        List<SignInGUIColumn> columns = new ArrayList<>();
         
         getKey(player).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
@@ -90,7 +80,7 @@ public class SignInGUI
         /**
          * Elements
          */
-        List<SignInGUIColumn> columns = new ArrayList();
+        List<SignInGUIColumn> columns = new ArrayList<>();
         
         getKey(player, month).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
@@ -132,7 +122,7 @@ public class SignInGUI
         /**
          * Elements
          */
-        List<SignInGUIColumn> columns = new ArrayList();
+        List<SignInGUIColumn> columns = new ArrayList<>();
         
         getKey(player, month, year).stream().map(items -> {
             gui.setItem(items.getKeyPostion(), items.getItemStack());
@@ -174,8 +164,8 @@ public class SignInGUI
         SignInDate specifiedDate = SignInDate.getInstance(year, month, 1);
         ConfigurationSection section = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfigurationSection(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key");
         if (specifiedDate.compareTo(today) == -1) {
-            List<ItemStack> items = new LinkedList();
-            List<KeyType> keys = new LinkedList();
+            List<ItemStack> items = new ArrayList<>();
+            List<KeyType> keys = new ArrayList<>();
             for (int i = 0;i < days[month - 1];i++) {
                 SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
                 ItemStack key;
@@ -204,7 +194,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Already-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -242,7 +232,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Missed-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Missed-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -273,8 +263,8 @@ public class SignInGUI
             }
             return set;
         } else {
-            List<ItemStack> items = new LinkedList();
-            List<KeyType> keys = new LinkedList();
+            List<ItemStack> items = new ArrayList<>();
+            List<KeyType> keys = new ArrayList<>();
             for (int i = 0;i < days[month - 1];i++) {
                 ItemStack key;
                 try {
@@ -300,7 +290,7 @@ public class SignInGUI
                 }
                 ItemMeta im = key.getItemMeta();
                 if (section.get("Comming-Soon.Lore") != null) {
-                    List<String> lore = new ArrayList();
+                    List<String> lore = new ArrayList<>();
                     Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, null);
                     section.getStringList("Comming-Soon.Lore").stream().forEach(lores -> {
                         lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -368,8 +358,8 @@ public class SignInGUI
         int nextPageYear = getNextPageYear(month, year);
         int previousPageMonth = getPreviousPageMonth(month);
         int previousPageYear = getPreviousPageYear(month, year);
-        List<ItemStack> items = new LinkedList();
-        List<KeyType> keys = new LinkedList();
+        List<ItemStack> items = new ArrayList<>();
+        List<KeyType> keys = new ArrayList<>();
         for (int i = 0;i < days[month - 1];i++) {
             SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
             if (i + 1 < day) {
@@ -399,7 +389,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Already-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -433,7 +423,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Missed-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Missed-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -477,7 +467,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Already-SignIn.Lore") != null)  {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -511,7 +501,7 @@ public class SignInGUI
                     }
                     ItemMeta im = key.getItemMeta();
                     if (section.get("Nothing-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList();
+                        List<String> lore = new ArrayList<>();
                         Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                         section.getStringList("Nothing-SignIn.Lore").stream().forEach(lores -> {
                             lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -553,7 +543,7 @@ public class SignInGUI
                 }
                 ItemMeta im = key.getItemMeta();
                 if (section.get("Comming-Soon.Lore") != null) {
-                    List<String> lore = new ArrayList();
+                    List<String> lore = new ArrayList<>();
                     Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                     section.getStringList("Comming-Soon.Lore").stream().forEach(lores -> {
                         lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
@@ -634,7 +624,7 @@ public class SignInGUI
                 }
                 ItemMeta im = other.getItemMeta();
                 if (section.get(items + ".Lore") != null) {
-                    List<String> lore = new ArrayList();
+                    List<String> lore = new ArrayList<>();
                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{continuous}", continuous);
                     placeholders.put("{queue}", queue);

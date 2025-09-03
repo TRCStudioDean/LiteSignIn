@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
 import studio.trc.bukkit.litesignin.Main;
@@ -251,7 +250,7 @@ public class PluginControl
             }
             ItemMeta im = is.getItemMeta();
             if (ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).get("Manual-Settings." + itemName + ".Lore") != null) {
-                List<String> lore = new ArrayList();
+                List<String> lore = new ArrayList<>();
                 ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getStringList("Manual-Settings." + itemName + ".Lore").stream().forEach(lores -> lore.add(MessageUtil.toPlaceholderAPIResult(player, ColorUtils.toColor(lores))));
                 im.setLore(lore);
             }
@@ -308,13 +307,13 @@ public class PluginControl
     }
 
     private static long backupFilesAcquisitionTime = 0;
-    private static List<String> backupFiles = new ArrayList();
+    private static List<String> backupFiles = new ArrayList<>();
     
     public static List<String> getBackupFiles() {
         if (System.currentTimeMillis() - backupFilesAcquisitionTime <= 5000) {
             return backupFiles;
         }
-        List<String> list = new ArrayList();
+        List<String> list = new ArrayList<>();
         File folder = new File(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getString("Database-Management.Rollback.Backup-Folder-Path"));
         if (!folder.exists()) return list;
         File[] files = folder.listFiles();

@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.thread;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class LiteSignInThread
     @Setter
     private boolean running = false;
     @Getter
-    private final List<LiteSignInTask> tasks = new LinkedList();
+    private final List<LiteSignInTask> tasks = new ArrayList<>();
     
     @Getter
     private final double delay;
@@ -41,7 +41,7 @@ public class LiteSignInThread
     @Override
     public void run() {
         running = true;
-        List<LiteSignInTask> cache = new LinkedList();
+        List<LiteSignInTask> cache = new ArrayList<>();
         while (running) {
             try {
                 long usedTime = System.currentTimeMillis();

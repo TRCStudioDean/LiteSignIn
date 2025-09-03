@@ -37,7 +37,7 @@ public class CustomItem
     }
     
     public static List<CustomItem> getItemStackCollection() {
-        List<CustomItem> itemList = new ArrayList();
+        List<CustomItem> itemList = new ArrayList<>();
         for (String name : ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getConfigurationSection("Item-Collection").getKeys(false)) {
             ItemStack itemStack = ConfigurationUtil.getConfig(ConfigurationType.CUSTOM_ITEMS).getItemStack("Item-Collection." + name);
             if (itemStack != null) {

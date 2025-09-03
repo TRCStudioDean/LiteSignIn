@@ -352,7 +352,7 @@ public class RewardCommand
         }
         if (args.length == 4) {
             if (config.get("Reward-Settings.Permission-Groups." + args[2]) == null) {
-                return new ArrayList();
+                return new ArrayList<>();
             }
             if (!args[3].contains(":")) {
                 List<String> types = Arrays.stream(RewardType.values())
@@ -361,19 +361,19 @@ public class RewardCommand
                 return getTabElements(args, args.length, types);
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_DATES.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Dates").getKeys(false).stream().map(value -> RewardType.SPECIAL_DATES.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_RANKING.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Ranking").getKeys(false).stream().map(value -> RewardType.SPECIAL_RANKING.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES_OF_MONTH.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
-                List<String> values = new ArrayList();
+                List<String> values = new ArrayList<>();
                 config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month").getKeys(false).stream().forEach(value -> {
                     if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month." + value + ".Valid-Months") != null) {
                         config.getIntegerList("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times-Of-Month." + value + ".Valid-Months").stream().forEach(month -> {
@@ -386,9 +386,9 @@ public class RewardCommand
                 return getTabElements(args, args.length, values);
             } else if (args[3].toUpperCase().startsWith(RewardType.STATISTICS_OF_MONTH.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
-                List<String> values = new ArrayList();
+                List<String> values = new ArrayList<>();
                 config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month").getKeys(false).stream().forEach(value -> {
                     if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month." + value + ".Valid-Months") != null) {
                         config.getIntegerList("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times-Of-Month." + value + ".Valid-Months").stream().forEach(month -> {
@@ -401,27 +401,27 @@ public class RewardCommand
                 return getTabElements(args, args.length, values);
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIMES.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Times").getKeys(false).stream().map(value -> RewardType.SPECIAL_TIMES.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_TIME_PERIODS.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Time-periods").getKeys(false).stream().map(value -> RewardType.SPECIAL_TIME_PERIODS.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.SPECIAL_WEEKS.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Special-Weeks").getKeys(false).stream().map(value -> RewardType.SPECIAL_WEEKS.name() + ":" + value).collect(Collectors.toList()));
             } else if (args[3].toUpperCase().startsWith(RewardType.STATISTICS.name())) {
                 if (config.get("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times") == null) {
-                    return new ArrayList();
+                    return new ArrayList<>();
                 }
                 return getTabElements(args, args.length, config.getConfigurationSection("Reward-Settings.Permission-Groups." + args[2] + ".Statistics-Times").getKeys(false).stream().map(value -> RewardType.STATISTICS.name() + ":" + value).collect(Collectors.toList()));
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

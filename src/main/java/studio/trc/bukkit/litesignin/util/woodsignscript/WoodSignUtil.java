@@ -32,7 +32,7 @@ import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public class WoodSignUtil
 {
-    private static final List<WoodSign> scripts = new ArrayList();
+    private static final List<WoodSign> scripts = new ArrayList<>();
     private static final Map<Location, WoodSign> scriptedSigns = new HashMap();
     private static final FileConfiguration database = new YamlConfiguration();
     
@@ -183,7 +183,7 @@ public class WoodSignUtil
     }
     
     public static void clickScript(Player player, WoodSign scriptedSign) {
-        List<SignInRewardCommand> list = new ArrayList();
+        List<SignInRewardCommand> list = new ArrayList<>();
         scriptedSign.getWoodSignCommand().stream().forEach(command -> {
             if (command.toLowerCase().startsWith("server:")) {
                 list.add(new SignInRewardCommand(SignInRewardCommandType.SERVER, command.substring(7)));

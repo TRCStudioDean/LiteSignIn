@@ -51,7 +51,7 @@ public class SignInSpecialTimeCycleReward
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SignInSpecialTimeCycleReward
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Cycle." + setting + ".Broadcast-Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

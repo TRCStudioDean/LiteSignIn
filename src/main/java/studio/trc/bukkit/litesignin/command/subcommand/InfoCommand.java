@@ -68,7 +68,7 @@ public class InfoCommand
         if (args.length == 2) {
             return tabGetPlayersName(args, 2);
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

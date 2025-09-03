@@ -26,7 +26,7 @@ public class ReloadCommand
 
     @Override
     public List<String> tabComplete(CommandSender sender, String subCommand, String... args) {
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

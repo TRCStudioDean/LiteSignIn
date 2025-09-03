@@ -55,7 +55,7 @@ public class SignInCommand
         } else if (args.length > 1) {
             return tabComplete(sender, args);
         } else {
-            return new ArrayList();
+            return new ArrayList<>();
         }
     }
     
@@ -80,7 +80,7 @@ public class SignInCommand
     }
     
     private List<String> getCommands(CommandSender sender) {
-        List<String> commands = new ArrayList();
+        List<String> commands = new ArrayList<>();
         subCommands.values().stream().filter(command -> LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false)).forEach(command -> {
             commands.add(command.getName());
         });
@@ -90,7 +90,7 @@ public class SignInCommand
     private List<String> getNormallyTabComplete(CommandSender sender, String args) {
         List<String> commands = getCommands(sender);
         if (args != null) {
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             commands.stream().filter(command -> command.toLowerCase().startsWith(args.toLowerCase())).forEach(command -> {
                 names.add(command);
             });
@@ -102,9 +102,9 @@ public class SignInCommand
     private List<String> tabComplete(CommandSender sender, String[] args) {
         String subCommand = args[0].toLowerCase();
         if (subCommands.get(subCommand) == null) {
-            return new ArrayList();
+            return new ArrayList<>();
         }
         SignInSubCommand command = subCommands.get(subCommand);
-        return LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false) ? subCommands.get(subCommand).tabComplete(sender, subCommand, args) : new ArrayList();
+        return LiteSignInUtils.hasCommandPermission(sender, command.getCommandType().getCommandPermissionPath(), false) ? subCommands.get(subCommand).tabComplete(sender, subCommand, args) : new ArrayList<>();
     }
 }

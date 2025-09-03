@@ -36,7 +36,7 @@ public class SignInNormalReward
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Normal-Time.Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Normal-Time.Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SignInNormalReward
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Normal-Time.Broadcast-Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Normal-Time.Broadcast-Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

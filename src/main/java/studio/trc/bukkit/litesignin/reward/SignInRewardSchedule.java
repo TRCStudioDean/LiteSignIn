@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import studio.trc.bukkit.litesignin.api.Storage;
@@ -12,7 +12,7 @@ import studio.trc.bukkit.litesignin.reward.type.SignInNormalReward;
  */
 public class SignInRewardSchedule
 {
-    private final List<SignInReward> queue = new LinkedList();
+    private final List<SignInReward> queue = new ArrayList<>();
     private final Storage playerData;
     
     public SignInRewardSchedule(Storage playerData) {

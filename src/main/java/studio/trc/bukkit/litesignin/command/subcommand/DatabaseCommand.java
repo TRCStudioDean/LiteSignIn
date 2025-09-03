@@ -63,21 +63,21 @@ public class DatabaseCommand
                     .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             commands.stream().filter(command -> command.toLowerCase().startsWith(subCommandType.toLowerCase())).forEach(command -> {
                 names.add(command);
             });
             return names;
         } else {
             if (args[1].equalsIgnoreCase("rollback")) {
-                List<String> list = new ArrayList();
+                List<String> list = new ArrayList<>();
                 PluginControl.getBackupFiles().stream().filter(fileName -> fileName.toLowerCase().startsWith(args[2].toLowerCase())).forEach(fileName -> {
                     list.add(fileName);
                 });
                 return list;
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

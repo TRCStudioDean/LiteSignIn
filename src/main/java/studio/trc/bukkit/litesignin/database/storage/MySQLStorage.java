@@ -61,7 +61,7 @@ public final class MySQLStorage
     @Getter
     private String name = null;
     @Getter
-    private List<SignInDate> history = new ArrayList();
+    private List<SignInDate> history = new ArrayList<>();
     private final UUID uuid;
     private int retroactiveCard = 0; 
     private boolean loaded = false;
@@ -95,13 +95,13 @@ public final class MySQLStorage
                     second = rs.getObject("Second") != null ? rs.getInt("Second") : 0;
                     retroactiveCard = rs.getObject("RetroactiveCard") != null ? rs.getInt("RetroactiveCard") : 0;
                     if (rs.getObject("History") != null && !rs.getString("History").equals("")) {
-                        List<SignInDate> list = new ArrayList();
+                        List<SignInDate> list = new ArrayList<>();
                         for (String data : Arrays.asList(rs.getString("History").split(", "))) {
                             list.add(SignInDate.getInstance(data));
                         }
                         history = list;
                     } else {
-                        history = new ArrayList();
+                        history = new ArrayList<>();
                     }
                 } else {
                     String playerName = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid) != null ? Bukkit.getOfflinePlayer(uuid).getName() : "null";
@@ -243,7 +243,7 @@ public final class MySQLStorage
     public List<SignInGroup> getAllGroup() {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
-        List<SignInGroup> groups = new ArrayList();
+        List<SignInGroup> groups = new ArrayList<>();
         RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         config.getStringList("Reward-Settings.Groups-Priority").stream()
             .filter(group -> group.equalsIgnoreCase("Default") || (config.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(config.getString("Reward-Settings.Permission-Groups." + group + ".Permission"))))
@@ -318,8 +318,8 @@ public final class MySQLStorage
     @Override
     public List<SignInDate> clearUselessData(List<SignInDate> dates) {
         if (dates.size() == 1) return dates;
-        List<SignInDate> result = new ArrayList();
-        List<String> record = new ArrayList();
+        List<SignInDate> result = new ArrayList<>();
+        List<String> record = new ArrayList<>();
         dates.stream().filter(date -> !record.contains(date.getYear() + "-" + date.getMonth() + "-" + date.getDay())).map(date -> {
             result.add(date);
             return date;
@@ -363,7 +363,7 @@ public final class MySQLStorage
         if (event.isCancelled()) {
             return;
         }
-        List<SignInDate> historys = new ArrayList();
+        List<SignInDate> historys = new ArrayList<>();
         boolean added = false;
         if (!getHistory().isEmpty()) {
             for (SignInDate records : getHistory()) {
@@ -434,7 +434,7 @@ public final class MySQLStorage
             if (player == null) return;
             ItemStack card = PluginControl.getRetroactiveCardRequiredItem(player);
             if (card == null) return;
-            List<ItemStack> itemOnInv = new ArrayList();
+            List<ItemStack> itemOnInv = new ArrayList<>();
             for (ItemStack is : player.getInventory().getContents()) {
                 if (is != null && !is.getType().equals(Material.AIR)) {
                     ItemMeta im = is.getItemMeta();

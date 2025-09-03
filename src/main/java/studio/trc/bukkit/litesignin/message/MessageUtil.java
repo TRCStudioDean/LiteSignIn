@@ -398,10 +398,11 @@ public class MessageUtil
     public static void setAdventureAvailable() {
         try {
             adventureAPI = Class.forName("net.kyori.adventure.text.Component");
+            CommandSender.class.getMethod("sendMessage", adventureAPI);
             adventureAvailable = !Bukkit.getBukkitVersion().startsWith("1.7") && !Bukkit.getBukkitVersion().startsWith("1.8") && !Bukkit.getBukkitVersion().startsWith("1.9") && !Bukkit.getBukkitVersion().startsWith("1.10") &&
                 !Bukkit.getBukkitVersion().startsWith("1.11") && !Bukkit.getBukkitVersion().startsWith("1.12") && !Bukkit.getBukkitVersion().startsWith("1.13") && !Bukkit.getBukkitVersion().startsWith("1.14") &&
                 !Bukkit.getBukkitVersion().startsWith("1.15") && !Bukkit.getBukkitVersion().startsWith("1.16") && !Bukkit.getBukkitVersion().startsWith("1.17");
-        } catch (ClassNotFoundException ex) {
+        } catch (Exception ex) {
             adventureAvailable = false;
         }
     }

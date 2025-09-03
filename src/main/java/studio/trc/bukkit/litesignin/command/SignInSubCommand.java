@@ -47,13 +47,13 @@ public interface SignInSubCommand
     default List<String> tabGetPlayersName(String[] args, int length) {
         if (args.length == length) {
             List<String> onlines = Bukkit.getOnlinePlayers().stream().map(player -> player.getName()).collect(Collectors.toList());
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             onlines.stream().filter(command -> command.toLowerCase().startsWith(args[length - 1].toLowerCase())).forEach(command -> {
                 names.add(command);
             });
             return names;
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
     
     /**
@@ -64,12 +64,12 @@ public interface SignInSubCommand
      */
     default List<String> getTabElements(String[] args, int length, Collection<String> elements) {
         if (args.length == length) {
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             elements.stream().filter(command -> command.toLowerCase().startsWith(args[length - 1].toLowerCase())).forEach(command -> {
                 names.add(command);
             });
             return names;
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 }

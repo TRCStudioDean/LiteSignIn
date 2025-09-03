@@ -257,7 +257,7 @@ public class SignInQueue
     }
     
     public List<SignInQueueElement> getUnknownTimesElement() {
-        List<SignInQueueElement> list = new ArrayList();
+        List<SignInQueueElement> list = new ArrayList<>();
         for (SignInQueueElement element : new ArrayList<>(this)) {
             if (!element.getSignInDate().hasTimePeriod()) {
                 list.add(element);
@@ -289,7 +289,7 @@ public class SignInQueue
     
     public List<SignInQueueElement> getRankingUser(int ranking) {
         checkUpdate();
-        List<SignInQueueElement> result = new ArrayList();
+        List<SignInQueueElement> result = new ArrayList<>();
         for (SignInQueueElement element : new ArrayList<>(this)) {
             if (getRank(element.getUUID()) == ranking) {
                 result.add(element);
@@ -308,7 +308,7 @@ public class SignInQueue
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                List<String> array = new ArrayList();
+                List<String> array = new ArrayList<>();
                 for (SignInQueueElement element : this) {
                     array.add(element.toString());
                 }

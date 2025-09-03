@@ -63,7 +63,7 @@ public class ItemCollectionCommand
                     .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             commands.stream().filter(command -> command.toLowerCase().startsWith(subCommandType.toLowerCase())).forEach(command -> {
                 names.add(command);
             });
@@ -76,7 +76,7 @@ public class ItemCollectionCommand
                 return tab_give(args);
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -205,7 +205,7 @@ public class ItemCollectionCommand
     }
 
     private List<String> tab_delete(String[] args) {
-        List<String> list = new ArrayList();
+        List<String> list = new ArrayList<>();
         if (args.length == 3) {
             CustomItem.getItemStackCollection().stream().filter(customItem -> customItem.getName().toLowerCase().startsWith(args[2].toLowerCase())).forEach(customItem -> {
                 list.add(customItem.getName());
@@ -215,7 +215,7 @@ public class ItemCollectionCommand
     }
 
     private List<String> tab_give(String[] args) {
-        List<String> list = new ArrayList();
+        List<String> list = new ArrayList<>();
         if (args.length == 3) {
             CustomItem.getItemStackCollection().stream().filter(customItem -> customItem.getName().toLowerCase().startsWith(args[2].toLowerCase())).forEach(customItem -> {
                 list.add(customItem.getName());

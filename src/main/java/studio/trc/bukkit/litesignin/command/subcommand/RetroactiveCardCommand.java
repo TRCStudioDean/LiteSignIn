@@ -69,7 +69,7 @@ public class RetroactiveCardCommand
                     .filter(type -> LiteSignInUtils.hasCommandPermission(sender, type.getCommandPermissionPath(), false))
                     .map(type -> type.getCommandName())
                     .collect(Collectors.toList());
-            List<String> names = new ArrayList();
+            List<String> names = new ArrayList<>();
             commands.stream().filter(command -> command.toLowerCase().startsWith(subCommandType.toLowerCase())).forEach(command -> {
                 names.add(command);
             });
@@ -79,7 +79,7 @@ public class RetroactiveCardCommand
                 return tabGetPlayersName(args, 4);
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

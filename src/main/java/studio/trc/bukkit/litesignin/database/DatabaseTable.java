@@ -79,7 +79,7 @@ public enum DatabaseTable
         }
         if (non) return builder.toString();
         builder.append(", PRIMARY KEY (");
-        List<String> primaryKeys = new ArrayList();
+        List<String> primaryKeys = new ArrayList<>();
         elements.stream().filter(element -> element.isPrimaryKey()).forEach(element -> {
             primaryKeys.add(element.getField());
         });

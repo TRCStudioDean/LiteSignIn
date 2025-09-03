@@ -24,7 +24,7 @@ public class LiteSignInProperties
         try {
             propertiesFile.load(Main.class.getResourceAsStream("/Languages/" + MessageUtil.Language.getLocaleLanguage().getFolderName() + ".properties"));
             sendOperationMessage("LanguageLoaded");
-            List<String> authors = new ArrayList();
+            List<String> authors = new ArrayList<>();
             switch (MessageUtil.Language.getLocaleLanguage()) {
                 case SIMPLIFIED_CHINESE: {
                     authors.add("红色创意工作室 (TRC Studio)");

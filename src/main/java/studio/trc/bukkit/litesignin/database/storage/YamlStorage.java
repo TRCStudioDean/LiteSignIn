@@ -224,7 +224,7 @@ public final class YamlStorage
     public List<SignInGroup> getAllGroup() {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return null;
-        List<SignInGroup> groups = new ArrayList();
+        List<SignInGroup> groups = new ArrayList<>();
         RobustConfiguration rewardSettings = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         rewardSettings.getStringList("Reward-Settings.Groups-Priority").stream()
             .filter(group -> group.equalsIgnoreCase("Default") || (rewardSettings.get("Reward-Settings.Permission-Groups." + group + ".Permission") != null && player.hasPermission(rewardSettings.getString("Reward-Settings.Permission-Groups." + group + ".Permission"))))
@@ -323,7 +323,7 @@ public final class YamlStorage
 
     @Override
     public List<SignInDate> getHistory() {
-        List<SignInDate> history = new ArrayList();
+        List<SignInDate> history = new ArrayList<>();
         if (config.get("History") != null) {
             config.getStringList("History").stream().forEach(data -> {
                 history.add(SignInDate.getInstance(data));
@@ -345,8 +345,8 @@ public final class YamlStorage
     @Override
     public List<SignInDate> clearUselessData(List<SignInDate> dates) {
         if (dates.size() == 1) return dates;
-        List<SignInDate> result = new ArrayList();
-        List<String> record = new ArrayList();
+        List<SignInDate> result = new ArrayList<>();
+        List<String> record = new ArrayList<>();
         dates.stream().filter(date -> !record.contains(date.getYear() + "-" + date.getMonth() + "-" + date.getDay())).map(date -> {
             result.add(date);
             return date;
@@ -358,7 +358,7 @@ public final class YamlStorage
     
     @Override
     public void setHistory(List<SignInDate> history, boolean saveData) {
-        List<String> data = new ArrayList();
+        List<String> data = new ArrayList<>();
         history.stream().forEach(dates -> {
             data.add(dates.getDataText(dates.hasTimePeriod()));
         });
@@ -395,7 +395,7 @@ public final class YamlStorage
         if (event.isCancelled()) {
             return;
         }
-        List<SignInDate> historys = new ArrayList();
+        List<SignInDate> historys = new ArrayList<>();
         boolean added = false;
         if (!getHistory().isEmpty()) {
             for (SignInDate records : getHistory()) {
@@ -449,7 +449,7 @@ public final class YamlStorage
             if (player == null) return;
             ItemStack retroactiveCard = PluginControl.getRetroactiveCardRequiredItem(player);
             if (retroactiveCard == null) return;
-            List<ItemStack> itemOnInv = new ArrayList();
+            List<ItemStack> itemOnInv = new ArrayList<>();
             for (ItemStack is : player.getInventory().getContents()) {
                 if (is != null && !is.getType().equals(Material.AIR)) {
                     ItemMeta im = is.getItemMeta();

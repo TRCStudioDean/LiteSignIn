@@ -54,36 +54,36 @@ public class SignInSpecialTimePeriodReward
 
     @Override
     public List<String> getMessages() {
-        if (!isAvailable()) return new ArrayList();
+        if (!isAvailable()) return new ArrayList<>();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
     public List<SignInRewardCommand> getCommands() {
-        if (!isAvailable()) return new ArrayList();
+        if (!isAvailable()) return new ArrayList<>();
         return super.getCommands("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Commands");
     }
 
     @Override
     public List<ItemStack> getRewardItems(Player player) {
-        return isAvailable() ? super.getRewardItems(player, "Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Reward-Items") : new ArrayList();
+        return isAvailable() ? super.getRewardItems(player, "Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Reward-Items") : new ArrayList<>();
     }
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (!isAvailable()) return new ArrayList();
+        if (!isAvailable()) return new ArrayList<>();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Broadcast-Messages")) {
             return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Broadcast-Messages");
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
     public List<SignInSound> getSounds() {
-        if (!isAvailable()) return new ArrayList();
+        if (!isAvailable()) return new ArrayList<>();
         return super.getSounds("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Time-periods." + setting + ".Play-Sounds");
     }
 }

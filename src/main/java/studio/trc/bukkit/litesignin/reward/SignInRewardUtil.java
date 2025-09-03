@@ -87,7 +87,7 @@ public abstract class SignInRewardUtil
     }
     
     public List<ItemStack> getRewardItems(Player player, String configPath) {
-        List<ItemStack> list = new ArrayList();
+        List<ItemStack> list = new ArrayList<>();
         RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
             config.getStringList(configPath).stream().map(itemData -> getItemFromItemData(player, itemData)).filter(item -> item != null).forEach(list::add);
@@ -96,7 +96,7 @@ public abstract class SignInRewardUtil
     }
     
     public List<SignInRewardCommand> getCommands(String configPath) {
-        List<SignInRewardCommand> list = new ArrayList();
+        List<SignInRewardCommand> list = new ArrayList<>();
         if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains(configPath)) {
             ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList(configPath).stream().forEach(commands -> {
                 if (commands.toLowerCase().startsWith("server:")) {
@@ -143,7 +143,7 @@ public abstract class SignInRewardUtil
                 }
                 ItemMeta im = is.getItemMeta();
                 if (config.contains("Manual-Settings." + itemdata[0] + ".Lore")) {
-                    List<String> lore = new ArrayList();
+                    List<String> lore = new ArrayList<>();
                     config.getStringList("Manual-Settings." + itemdata[0] + ".Lore").stream().forEach(lores -> lore.add(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, lores))));
                     im.setLore(lore);
                 }
@@ -183,7 +183,7 @@ public abstract class SignInRewardUtil
     }
     
     public List<SignInSound> getSounds(String configPath) {
-        List<SignInSound> sounds = new ArrayList();
+        List<SignInSound> sounds = new ArrayList<>();
         RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
         if (config.contains(configPath)) {
             config.getStringList(configPath).stream().forEach((value) -> {

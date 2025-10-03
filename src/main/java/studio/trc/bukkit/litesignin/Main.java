@@ -62,6 +62,15 @@ public class Main
             if (PluginControl.enableUpdater()) {
                 Updater.checkUpdate();
             }
+            if (!MessageUtil.useAdventure()) {
+                try {
+                    if (Integer.valueOf(Bukkit.getBukkitVersion().split("\\.")[1]) > 19) {
+                        LiteSignInProperties.sendOperationMessage("UnsupportedCore", MessageUtil.getDefaultPlaceholders());
+                    }
+                } catch (Throwable ex) {
+                    LiteSignInProperties.sendOperationMessage("UnsupportedCore", MessageUtil.getDefaultPlaceholders());
+                }
+            }
         }, 0);
         
         //Metrics

@@ -18,13 +18,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import studio.trc.bukkit.litesignin.util.AdventureUtils;
 
-
 public class NMSManager
 {
     public static Class<?> craftItemStack;
-    public static Class<?> nbtTagCompound;
-    public static Class<?> gameProfileSerializer;
-    public static Class<?> itemStack;
+    public static Class<?> nbtTagCompound = null;
+//    public static Class<?> gameProfileSerializer1 = null;
+    public static Class<?> itemStack = null;
     public static boolean nmsFound;
     
     public static String getPackageName() {
@@ -47,23 +46,30 @@ public class NMSManager
         }
         
         //net.minecraft.server
-        try {
-            if (Bukkit.getBukkitVersion().startsWith("1.17") || Bukkit.getBukkitVersion().startsWith("1.18") || Bukkit.getBukkitVersion().startsWith("1.19") || Bukkit.getBukkitVersion().startsWith("1.20") || Bukkit.getBukkitVersion().startsWith("1.21")) {
+        if (!Bukkit.getBukkitVersion().startsWith("1.7") && !Bukkit.getBukkitVersion().startsWith("1.8") && !Bukkit.getBukkitVersion().startsWith("1.9") && !Bukkit.getBukkitVersion().startsWith("1.10")
+            && !Bukkit.getBukkitVersion().startsWith("1.11") && !Bukkit.getBukkitVersion().startsWith("1.12") && !Bukkit.getBukkitVersion().startsWith("1.13") && !Bukkit.getBukkitVersion().startsWith("1.14")
+            && !Bukkit.getBukkitVersion().startsWith("1.15") && !Bukkit.getBukkitVersion().startsWith("1.16")) {
+            try {
                 nbtTagCompound = Class.forName("net.minecraft.nbt.NBTTagCompound");
-                gameProfileSerializer = Class.forName("net.minecraft.nbt.GameProfileSerializer");
+//                gameProfileSerializer = Class.forName("net.minecraft.nbt.GameProfileSerializer");
                 itemStack = Class.forName("net.minecraft.world.item.ItemStack");
-            } else {
-                nbtTagCompound = Class.forName("net.minecraft.server." + getPackageName() + ".NBTTagCompound");
-                gameProfileSerializer = Class.forName("net.minecraft.server." + getPackageName() + ".GameProfileSerializer");
-                itemStack = Class.forName("net.minecraft.server." + getPackageName() + ".ItemStack"); 
+            } catch (ClassNotFoundException ex) {
+                // 1.21.9+ No longer needed.
             }
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-            nmsFound = false;
+        } else {
+            try {
+                nbtTagCompound = Class.forName("net.minecraft.server." + getPackageName() + ".NBTTagCompound");
+//                gameProfileSerializer = Class.forName("net.minecraft.server." + getPackageName() + ".GameProfileSerializer");
+                itemStack = Class.forName("net.minecraft.server." + getPackageName() + ".ItemStack"); 
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                nmsFound = false;
+            }
         }
     }
 
     public static void setItemHover(ItemStack item, BaseComponent component) {
+        if (nbtTagCompound == null) return;
         try {
             Item hoverItem = new Item(
                 item.getType().getKey().toString(),

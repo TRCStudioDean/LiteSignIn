@@ -1,9 +1,12 @@
 package studio.trc.bukkit.litesignin.util;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,8 +24,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-
-import studio.trc.bukkit.litesignin.nms.NMSManager;
 
 public class SkullManager
 {
@@ -78,7 +79,7 @@ public class SkullManager
         }
     }
     
-    private static String getHeadTexturesFromHead(ItemStack headItem) {
+    public static String getHeadTexturesFromHead(ItemStack headItem) {
         if (Bukkit.getBukkitVersion().startsWith("1.7") || headItem == null) return null;
         if (headItem.getItemMeta() instanceof SkullMeta) {
             SkullMeta skull = (SkullMeta) headItem.getItemMeta();
@@ -99,7 +100,7 @@ public class SkullManager
                     }
                 }
                 if (profile != null) {
-                    Property property = profile.getProperties().get("textures").stream().findFirst().orElse(null);
+                    Property property = getProperties(profile).get("textures").stream().findFirst().orElse(null);
                     if (property != null) {
                         try {
                             return property.getValue();
@@ -124,30 +125,71 @@ public class SkullManager
         ItemStack headItem = getDefaultHead();
         if (Bukkit.getBukkitVersion().startsWith("1.7") || textures == null) return headItem;
         SkullMeta skull = (SkullMeta) headItem.getItemMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
-        profile.getProperties().put("textures", new Property("textures", textures));
+        GameProfile profile = generateGameProfile(textures);
         Field profileField;
         try {
             profileField = skull.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             try {
                 profileField.set(skull, profile);
-            } catch (IllegalArgumentException ex) {
-                Object resolvableProfile = Class.forName("net.minecraft.world.item.component.ResolvableProfile").getConstructor(GameProfile.class).newInstance(profile);
-                profileField.set(skull, resolvableProfile);
-            }
-            profileField.set(skull, profile);
-            if (Bukkit.getBukkitVersion().startsWith("1.20")) {
-                Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");
-                Method writeGameProfile = Arrays.stream(NMSManager.gameProfileSerializer.getMethods()).filter(method -> method.getParameterTypes().length == 2 && method.getParameterTypes()[0].equals(NMSManager.nbtTagCompound) && method.getParameterTypes()[1].equals(profile.getClass()) && method.getReturnType().equals(NMSManager.nbtTagCompound)).findFirst().orElse(null);
-                if (writeGameProfile != null) {
-                    serializedProfileField.setAccessible(true);
-                    serializedProfileField.set(skull, writeGameProfile.invoke(null, NMSManager.nbtTagCompound.getConstructor().newInstance(), profile));
-                    serializedProfileField.setAccessible(false);
+            } catch (IllegalArgumentException ex) { //1.21+
+                try {
+                    Object resolvableProfile = Class.forName("net.minecraft.world.item.component.ResolvableProfile").getConstructor(GameProfile.class).newInstance(profile);
+                    profileField.set(skull, resolvableProfile);
+                } catch (NoSuchMethodException ex1) { //1.21.9+
+                    profileField.set(skull, Class.forName("net.minecraft.world.item.component.ResolvableProfile").getMethod("createResolved", GameProfile.class).invoke(null, profile));
                 }
             }
-        } catch (Exception ex) {}
+//            if (Bukkit.getBukkitVersion().startsWith("1.20")) { // This is historical legacy code with unclear functionality, so it is temporarily commented out.
+//                Field serializedProfileField = skull.getClass().getDeclaredField("serializedProfile");
+//                Method writeGameProfile = Arrays.stream(NMSManager.gameProfileSerializer.getMethods()).filter(method -> method.getParameterTypes().length == 2 && method.getParameterTypes()[0].equals(NMSManager.nbtTagCompound) && method.getParameterTypes()[1].equals(profile.getClass()) && method.getReturnType().equals(NMSManager.nbtTagCompound)).findFirst().orElse(null);
+//                if (writeGameProfile != null) {
+//                    serializedProfileField.setAccessible(true);
+//                    serializedProfileField.set(skull, writeGameProfile.invoke(null, NMSManager.nbtTagCompound.getConstructor().newInstance(), profile));
+//                    serializedProfileField.setAccessible(false);
+//                }
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         headItem.setItemMeta(skull);
         return headItem;
+    }
+    
+    public static PropertyMap getProperties(GameProfile profile) {
+        try {
+            return profile.getProperties();
+        } catch (NoSuchMethodError error) { // 1.21.9+
+            try {
+                return (PropertyMap) profile.getClass().getMethod("properties").invoke(profile);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
+    public static GameProfile generateGameProfile(String textures) {
+        try {
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "Skull");
+            profile.getProperties().put("textures", new Property("textures", textures));
+            return profile;
+        } catch (NoSuchMethodError error) { // 1.21.9+
+            try {
+                Multimap map = ArrayListMultimap.create();
+                map.put("textures", new Property("textures", textures));
+                PropertyMap propertyMap = PropertyMap.class.getConstructor(com.google.common.collect.Multimap.class).newInstance(map);
+                GameProfile profile = GameProfile.class.getConstructor(UUID.class, String.class, PropertyMap.class)
+                .newInstance(
+                    UUID.randomUUID(),
+                    "Skull",
+                    propertyMap
+                );
+                return profile;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
     }
 }

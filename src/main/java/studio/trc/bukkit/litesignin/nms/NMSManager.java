@@ -69,7 +69,6 @@ public class NMSManager
     }
 
     public static void setItemHover(ItemStack item, BaseComponent component) {
-        if (nbtTagCompound == null) return;
         try {
             Item hoverItem = new Item(
                 item.getType().getKey().toString(),
@@ -79,6 +78,7 @@ public class NMSManager
             component.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_ITEM, hoverItem));
         } catch (Throwable t) {
             try {
+                if (nbtTagCompound == null) return;
                 Object mcStack = craftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, item);
                 Object NBTTagCompound = nbtTagCompound.newInstance();
                 Method saveMethod = Arrays.stream(itemStack.getDeclaredMethods()).filter(method -> method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(nbtTagCompound) && method.getReturnType().equals(nbtTagCompound)).findFirst().orElse(null);

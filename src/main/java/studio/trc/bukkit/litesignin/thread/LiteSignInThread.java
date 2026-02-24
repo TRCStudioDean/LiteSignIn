@@ -2,11 +2,10 @@ package studio.trc.bukkit.litesignin.thread;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.bukkit.Bukkit;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
@@ -28,41 +27,45 @@ public class LiteSignInThread
     @Setter
     private boolean running = false;
     @Getter
-    private final List<LiteSignInTask> tasks = new ArrayList<>();
+    private final List<LiteSignInTask> tasks = new CopyOnWriteArrayList<>();
     
     @Getter
     private final double delay;
     
-    public LiteSignInThread(double delay) {
-        super("LiteSignIn-Pool");
+    public LiteSignInThread(String name, double delay) {
+        super(name);
         this.delay = delay;
     }
 
     @Override
     public void run() {
         running = true;
-        List<LiteSignInTask> cache = new ArrayList<>();
+        List<LiteSignInTask> waitToExecute = new ArrayList<>();
+        List<LiteSignInTask> waitToRemove = new ArrayList<>();
         while (running) {
             try {
                 long usedTime = System.currentTimeMillis();
-                if (!BackupUtil.isBackingUp() && !RollBackUtil.isRollingback()) {
-                    synchronized (tasks) {
-                        cache.clear();
-                        cache.addAll(tasks);
-                        cache.stream().filter(task -> {
-                            if (task.getTotalExecuteTimes() != -1 && task.getExecuteTimes() >= task.getTotalExecuteTimes()) {
-                                tasks.remove(task);
-                                return false;
-                            }
-                            return !(task.isOnlyPlayersOnline() && Bukkit.getOnlinePlayers().isEmpty());
-                        }).forEach(task -> {
-                            try {
-                                task.run();
-                            } catch (Exception ex) {
-                                tasks.remove(task);
-                            }
-                        });
+                if (!tasks.isEmpty() && !BackupUtil.isBackingUp() && !RollBackUtil.isRollingback()) {
+                    waitToExecute.addAll(tasks);
+                    waitToExecute.stream().filter(task -> {
+                        if (task.getTotalExecuteTimes() != -1 && task.getExecuteTimes() >= task.getTotalExecuteTimes()) {
+                            waitToRemove.add(task);
+                            return false;
+                        }
+                        return true;
+                    }).forEach(task -> {
+                        try {
+                            task.run();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                            waitToRemove.add(task);
+                        }
+                    });
+                    if (!waitToRemove.isEmpty()) {
+                        waitToRemove.stream().forEach(tasks::remove);
+                        waitToRemove.clear();
                     }
+                    if (!waitToExecute.isEmpty()) waitToExecute.clear();
                 }
                 long speed = ((long) (delay * 1000)) - (System.currentTimeMillis() - usedTime);
                 if (speed >= 0) sleep(speed);
@@ -76,12 +79,12 @@ public class LiteSignInThread
         if (taskThread != null && taskThread.running) {
             taskThread.running = false;
         }
-        taskThread = new LiteSignInThread(ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay"));
+        taskThread = new LiteSignInThread("LiteSignIn-TaskThread", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay"));
         
         if (PluginControl.useMySQLStorage()) {
             taskThread.tasks.add(new LiteSignInTask(() -> {
                 MySQLEngine.getInstance().executeQuery("SELECT COUNT(*) FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA));
-            }, -1, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getLong("MySQL-Storage.Wait-Timeout"), false));
+            }, -1, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getLong("MySQL-Storage.Wait-Timeout")));
         }
         
         LiteSignInProperties.sendOperationMessage("AsyncThreadStarted", MessageUtil.getDefaultPlaceholders());
@@ -89,14 +92,10 @@ public class LiteSignInThread
     }
     
     public static void runTask(Runnable task) {
-        synchronized (taskThread.tasks) {
-            taskThread.tasks.add(new LiteSignInTask(task, 1, 0));
-        }
+        taskThread.tasks.add(new LiteSignInTask(task, 1, 0));
     }
     
     public static void runTask(Runnable task, double second) {
-        synchronized (taskThread.tasks) {
-            taskThread.tasks.add(new LiteSignInTask(task, 1, (long) (1D / ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay") * second)));
-        }
+        taskThread.tasks.add(new LiteSignInTask(task, 1, (long) (1D / ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay") * second)));
     }
 }

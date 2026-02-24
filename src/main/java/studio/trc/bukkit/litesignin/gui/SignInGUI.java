@@ -1,5 +1,6 @@
 package studio.trc.bukkit.litesignin.gui;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -137,8 +139,53 @@ public class SignInGUI
         return new SignInInventory(gui, columns, month, year);
     }
     
+    private static ItemStack getButtonItem(Player player, Map<String, String> placeholders, ConfigurationSection section, String path, int amount) {
+        ItemStack result;
+        try {
+            if (section.get(path + ".Data") != null) {
+                result = new ItemStack(Material.valueOf(section.getString(path + ".Item").toUpperCase()), amount, (short) section.getInt(path + ".Data"));
+            } else {
+                result = new ItemStack(Material.valueOf(section.getString(path + ".Item").toUpperCase()), amount);
+            }
+        } catch (IllegalArgumentException ex) {
+            result = new ItemStack(Material.BARRIER, amount);
+        }
+        if (section.get(path + ".Head-Owner") != null) {
+            PluginControl.setHead(result, replace(player, section.getString(path + ".Head-Owner"), "{player}", player.getName()));
+        }
+        if (section.get(path + ".Amount") != null) {
+            result.setAmount(Integer.valueOf(MessageUtil.replacePlaceholders(player, section.getString(path + ".Amount"), placeholders)));
+        }
+        if (section.get(path + ".Head-Textures") != null) {
+            setHeadTextures(player, placeholders, section, path, result);
+        }
+        if (section.get(path + ".Custom-Model-Data") != null) {
+            setCustomModelData(player, placeholders, section, path, result);
+        }
+        if (section.get(path + ".Item-Model") != null) {
+            setItemModel(player, placeholders, section, path, result);
+        }
+        if (section.get(path + ".Enchantment") != null) {
+            setEnchantments(section, path, result);
+        }
+        ItemMeta im = result.getItemMeta();
+        if (section.get(path + ".Lore") != null) {
+            List<String> lore = new ArrayList<>();
+            section.getStringList(path + ".Lore").stream().forEach(lores -> lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders)));
+            im.setLore(lore);
+        }
+        if (section.get(path + ".Hide-Enchants") != null) {
+            PluginControl.hideEnchants(im);
+        }
+        if (section.get(path + ".Display-Name") != null) {
+            im.setDisplayName(MessageUtil.replacePlaceholders(player, section.getString(path + ".Display-Name"), placeholders));
+        }
+        result.setItemMeta(im);
+        return result;
+    }
+    
     /**
-     * Return key buttons.
+     * Get calender's key buttons.
      * @param player 
      * @param month specified month.
      * @param year specified year.
@@ -168,83 +215,14 @@ public class SignInGUI
             List<KeyType> keys = new ArrayList<>();
             for (int i = 0;i < days[month - 1];i++) {
                 SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
+                Map<String, String> placeholders = getPlaceholdersOfKeyButton(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
                 ItemStack key;
                 KeyType keyType;
                 if (playerdata.alreadySignIn(historicalDate)) {
-                    try {
-                        if (section.get("Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Already-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (section.get("Already-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Already-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Already-SignIn.Amount"));
-                    }
-                    if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Already-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Already-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Already-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                    key = getButtonItem(player, placeholders, section, "Already-SignIn", i + 1);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
-                    try {
-                        if (section.get("Missed-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Missed-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (section.get("Missed-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Missed-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Missed-SignIn.Amount"));
-                    }
-                    if (section.get("Missed-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Missed-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Missed-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Missed-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Missed-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                    key = getButtonItem(player, placeholders, section, "Missed-SignIn", i + 1);
                     keyType = KeyType.MISSED_SIGNIN;
                 }
                 items.add(key);
@@ -266,44 +244,9 @@ public class SignInGUI
             List<ItemStack> items = new ArrayList<>();
             List<KeyType> keys = new ArrayList<>();
             for (int i = 0;i < days[month - 1];i++) {
-                ItemStack key;
-                try {
-                    if (section.get("Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.valueOf(section.getString("Comming-Soon.Item").toUpperCase()), i + 1, (short) section.getInt("Comming-Soon.Data"));
-                    } else {
-                        key = new ItemStack(Material.valueOf(section.getString("Comming-Soon.Item").toUpperCase()), i + 1);
-                    }
-                } catch (IllegalArgumentException ex) {
-                    key = new ItemStack(Material.BARRIER, i + 1);
-                }
-                if (section.get("Comming-Soon.Head-Owner") != null) {
-                    PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));
-                }
-                if (section.get("Comming-Soon.Amount") != null) {
-                    key.setAmount(section.getInt("Comming-Soon.Amount"));
-                }
-                if (section.get("Comming-Soon.Head-Textures") != null) {
-                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
-                }
-                if (section.get("Comming-Soon.Custom-Model-Data") != null) {
-                    setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Custom-Model-Data", key);
-                }
-                ItemMeta im = key.getItemMeta();
-                if (section.get("Comming-Soon.Lore") != null) {
-                    List<String> lore = new ArrayList<>();
-                    Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, null);
-                    section.getStringList("Comming-Soon.Lore").stream().forEach(lores -> {
-                        lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                    });
-                    im.setLore(lore);
-                }
-                if (section.get("Comming-Soon.Enchantment") != null) {
-                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
-                }
-                if (section.get("Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
-                key.setItemMeta(im);
-                items.add(key);
+                SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
+                Map<String, String> placeholders = getPlaceholdersOfKeyButton(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
+                items.add(getButtonItem(player, placeholders, section, "Comming-Soon", i + 1));
                 keys.add(KeyType.COMMING_SOON);
             }
             if (section.get("Slots") != null) {
@@ -322,7 +265,7 @@ public class SignInGUI
     }
     
     /**
-     * Return key buttons.
+     * Get calender's key buttons.
      * @param player 
      * @param month specified month.
      * @return 
@@ -361,81 +304,16 @@ public class SignInGUI
         List<ItemStack> items = new ArrayList<>();
         List<KeyType> keys = new ArrayList<>();
         for (int i = 0;i < days[month - 1];i++) {
-            SignInDate historicalDate = SignInDate.getInstance(year, month, i + 1);
+            SignInDate date = SignInDate.getInstance(year, month, i + 1);
+            Map<String, String> placeholders = getPlaceholdersOfKeyButton(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, date);
             if (i + 1 < day) {
                 ItemStack key;
                 KeyType keyType;
-                if (playerdata.alreadySignIn(historicalDate)) {
-                    try {
-                        if (section.get("Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Already-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (section.get("Already-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Already-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Already-SignIn.Amount"));
-                    }
-                    if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Already-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Already-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Already-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                if (playerdata.alreadySignIn(date)) {
+                    key = getButtonItem(player, placeholders, section, "Already-SignIn", i + 1);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
-                    if (section.get("Missed-SignIn.Data") != null) {
-                        key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Missed-SignIn.Data"));
-                    } else {
-                        key = new ItemStack(Material.valueOf(section.getString("Missed-SignIn.Item").toUpperCase()), i + 1);
-                    }
-                    if (section.get("Missed-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Missed-SignIn.Amount"));
-                    }
-                    if (section.get("Missed-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Missed-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Missed-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Missed-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Missed-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Missed-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Missed-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Missed-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Missed-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Missed-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Missed-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                    key = getButtonItem(player, placeholders, section, "Missed-SignIn", i + 1);
                     keyType = KeyType.MISSED_SIGNIN;
                 }
                 items.add(key);
@@ -443,120 +321,17 @@ public class SignInGUI
             } else if (i + 1 == day) {
                 ItemStack key;
                 KeyType keyType;
-                if (playerdata.alreadySignIn(historicalDate)) {
-                    try {
-                        if (section.get("Already-SignIn.Data") != null) {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Already-SignIn.Data"));
-                        } else {
-                            key = new ItemStack(Material.valueOf(section.getString("Already-SignIn.Item").toUpperCase()), i + 1);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        key = new ItemStack(Material.BARRIER, i + 1);
-                    }
-                    if (section.get("Already-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Already-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Already-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Already-SignIn.Amount"));
-                    }
-                    if (section.get("Already-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Already-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Already-SignIn.Lore") != null)  {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Already-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Already-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Already-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Already-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Already-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Already-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                if (playerdata.alreadySignIn(date)) {
+                    key = getButtonItem(player, placeholders, section, "Already-SignIn", i + 1);
                     keyType = KeyType.ALREADY_SIGNIN;
                 } else {
-                    if (section.get("Nothing-SignIn.Data") != null) {
-                        key = new ItemStack(Material.valueOf(section.getString("Nothing-SignIn.Item").toUpperCase()), i + 1, (short) section.getInt("Nothing-SignIn.Data"));
-                    } else {
-                        key = new ItemStack(Material.valueOf(section.getString("Nothing-SignIn.Item").toUpperCase()), i + 1);
-                    }
-                    if (section.get("Nothing-SignIn.Amount") != null) {
-                        key.setAmount(section.getInt("Nothing-SignIn.Amount"));
-                    }
-                    if (section.get("Nothing-SignIn.Head-Owner") != null) {
-                        PluginControl.setHead(key, replace(player, section.getString("Nothing-SignIn.Head-Owner"), "{player}", player.getName()));
-                    }
-                    if (section.get("Nothing-SignIn.Head-Textures") != null) {
-                        setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Head-Textures", key);
-                    }
-                    if (section.get("Nothing-SignIn.Custom-Model-Data") != null) {
-                        setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Custom-Model-Data", key);
-                    }
-                    ItemMeta im = key.getItemMeta();
-                    if (section.get("Nothing-SignIn.Lore") != null) {
-                        List<String> lore = new ArrayList<>();
-                        Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                        section.getStringList("Nothing-SignIn.Lore").stream().forEach(lores -> {
-                            lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                        });
-                        im.setLore(lore);
-                    }
-                    if (section.get("Nothing-SignIn.Enchantment") != null) {
-                        setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Nothing-SignIn.Enchantment", im);
-                    }
-                    if (section.get("Nothing-SignIn.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                    if (section.get("Nothing-SignIn.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Nothing-SignIn.Display-Name"), "{day}", String.valueOf(i + 1))));
-                    key.setItemMeta(im);
+                    key = getButtonItem(player, placeholders, section, "Nothing-SignIn", i + 1);
                     keyType = KeyType.NOTHING_SIGNIN;
                 }
                 items.add(key);
                 keys.add(keyType);
             } else if (i + 1 > day) {
-                ItemStack key;
-                try {
-                    if (section.get("Comming-Soon.Data") != null) {
-                        key = new ItemStack(Material.valueOf(section.getString("Comming-Soon.Item").toUpperCase()), i + 1, (short) section.getInt("Comming-Soon.Data"));
-                    } else {
-                        key = new ItemStack(Material.valueOf(section.getString("Comming-Soon.Item").toUpperCase()), i + 1);
-                    }
-                } catch (IllegalArgumentException ex) {
-                    key = new ItemStack(Material.BARRIER, i + 1);
-                }
-                if (section.get("Comming-Soon.Amount") != null) {
-                    key.setAmount(section.getInt("Comming-Soon.Amount"));
-                }
-                if (section.get("Comming-Soon.Head-Owner") != null) {
-                    PluginControl.setHead(key, replace(player, section.getString("Comming-Soon.Head-Owner"), "{player}", player.getName()));
-                }
-                if (section.get("Comming-Soon.Head-Textures") != null) {
-                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Head-Textures", key);
-                }
-                if (section.get("Comming-Soon.Custom-Model-Data") != null) {
-                    setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Custom-Model-Data", key);
-                }
-                ItemMeta im = key.getItemMeta();
-                if (section.get("Comming-Soon.Lore") != null) {
-                    List<String> lore = new ArrayList<>();
-                    Map<String, String> placeholders = getPlaceholdersOfItemLore(i, continuous, queue, totalNumber, cards, nextPageMonth, nextPageYear, previousPageMonth, previousPageYear, historicalDate);
-                    section.getStringList("Comming-Soon.Lore").stream().forEach(lores -> {
-                        lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                    });
-                    im.setLore(lore);
-                }
-                if (section.get("Comming-Soon.Enchantment") != null) {
-                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Key.Comming-Soon.Enchantment", im);
-                }
-                if (section.get("Comming-Soon.Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get("Comming-Soon.Display-Name") != null) im.setDisplayName(ColorUtils.toColor(replace(player, section.getString("Comming-Soon.Display-Name"), "{day}", String.valueOf(i + 1))));
-                key.setItemMeta(im);
-                items.add(key);
+                items.add(getButtonItem(player, placeholders, section, "Comming-Soon", i + 1));
                 keys.add(KeyType.COMMING_SOON);
             }
         }
@@ -603,55 +378,20 @@ public class SignInGUI
         int previousPageYear = getPreviousPageYear(month, year);
         if (section != null) {
             section.getKeys(false).stream().forEach(items -> {
-                ItemStack other;
-                try {
-                    if (section.get(items + ".Data") != null) {
-                        other = new ItemStack(Material.valueOf(section.getString(items + ".Item").toUpperCase()), 1, (short) section.getInt(items + ".Data"));
-                    } else {
-                        other = new ItemStack(Material.valueOf(section.getString(items + ".Item").toUpperCase()), 1);
-                    }
-                } catch (IllegalArgumentException ex) {
-                    other = new ItemStack(Material.BARRIER);
-                }
-                if (section.get(items + ".Head-Owner") != null) {
-                    PluginControl.setHead(other, replace(player, section.getString(items + ".Head-Owner"), "{player}", player.getName()));
-                }
-                if (section.get(items + ".Head-Textures") != null) {
-                    setHeadTextures(player, MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Head-Textures", other);
-                }
-                if (section.get(items + ".Custom-Model-Data") != null) {
-                    setCustomModelData(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Custom-Model-Data", other);
-                }
-                ItemMeta im = other.getItemMeta();
-                if (section.get(items + ".Lore") != null) {
-                    List<String> lore = new ArrayList<>();
-                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
-                    placeholders.put("{continuous}", continuous);
-                    placeholders.put("{queue}", queue);
-                    placeholders.put("{total-number}", totalNumber);
-                    placeholders.put("{cards}", cards);
-                    placeholders.put("{month}", String.valueOf(month));
-                    placeholders.put("{year}", String.valueOf(year));
-                    placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
-                    placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
-                    placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
-                    placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
-                    section.getStringList(items + ".Lore").stream().forEach(lores -> {
-                        lore.add(MessageUtil.replacePlaceholders(player, lores, placeholders));
-                    });
-                    im.setLore(lore);
-                }
-                if (section.get(items + ".Enchantment") != null) {
-                    setEnchantments(MessageUtil.getLanguage() + ".SignIn-GUI-Settings.Others." + items + ".Enchantment", im);
-                }
-                if (section.get(items + ".Hide-Enchants") != null) PluginControl.hideEnchants(im);
-                if (section.get(items + ".Display-Name") != null) im.setDisplayName(ColorUtils.toColor(MessageUtil.toPlaceholderAPIResult(player, section.getString(items + ".Display-Name"))));
-                other.setItemMeta(im);
-                other.setAmount(section.get(items + ".Amount") != null ? section.getInt(items + ".Amount") : 1);
+                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                placeholders.put("{continuous}", continuous);
+                placeholders.put("{queue}", queue);
+                placeholders.put("{total-number}", totalNumber);
+                placeholders.put("{cards}", cards);
+                placeholders.put("{month}", String.valueOf(month));
+                placeholders.put("{year}", String.valueOf(year));
+                placeholders.put("{nextPageMonth}", String.valueOf(nextPageMonth));
+                placeholders.put("{nextPageYear}", String.valueOf(nextPageYear));
+                placeholders.put("{previousPageMonth}", String.valueOf(previousPageMonth));
+                placeholders.put("{previousPageYear}", String.valueOf(previousPageYear));
+                ItemStack other = getButtonItem(player, placeholders, section, items, 1);
                 if (section.get(items + ".Slots") != null) {
-                    for (int slot : section.getIntegerList(items + ".Slots")) {
-                        set.add(new SignInGUIColumn(other, slot, items));
-                    }
+                    section.getIntegerList(items + ".Slots").stream().forEach((slot) -> set.add(new SignInGUIColumn(other, slot, items)));
                 }
                 if (section.get(items + ".Slot") != null) {
                     set.add(new SignInGUIColumn(other, section.getInt(items + ".Slot"), items));
@@ -691,7 +431,7 @@ public class SignInGUI
         return year - 1;
     }
     
-    private static Map<String, String> getPlaceholdersOfItemLore(
+    private static Map<String, String> getPlaceholdersOfKeyButton(
             int day,
             String continuous,
             String queue,
@@ -722,8 +462,11 @@ public class SignInGUI
         return MessageUtil.replacePlaceholders(player, text, placeholders);
     }
     
-    private static void setEnchantments(String configPath, ItemMeta im) {
-        for (String name : ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getStringList(configPath)) {
+    private static void setEnchantments(ConfigurationSection section, String configPath, ItemStack is) {
+        ItemMeta im = is.getItemMeta();
+        if (im == null) return;
+        Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+        for (String name : section.getStringList(configPath + ".Enchantments")) {
             try {
                 String[] data = name.split(":");
                 boolean invalid = true;
@@ -734,27 +477,25 @@ public class SignInGUI
                             invalid = false;
                             break;
                         } catch (Exception ex) {
-                            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                             placeholders.put("{path}", configPath + "." + name);
                             LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
                         }
                     }
                 }
                 if (invalid) {
-                    Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                     placeholders.put("{enchantment}", data[0]);
                     placeholders.put("{path}", configPath + "." + name);
                     LiteSignInProperties.sendOperationMessage("InvalidEnchantment", placeholders);
                 }
             } catch (Exception ex) {
-                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                 placeholders.put("{path}", configPath + "." + name);
                 LiteSignInProperties.sendOperationMessage("InvalidEnchantmentSetting", placeholders);
             }
         }
+        is.setItemMeta(im);
     }
     
-    private static void setCustomModelData(String configPath, ItemStack is) {
+    private static void setCustomModelData(Player player, Map<String, String> placeholders, ConfigurationSection section, String configPath, ItemStack is) {
         String version = Bukkit.getBukkitVersion();
         if (version.startsWith("1.7") ||
             version.startsWith("1.8") ||
@@ -763,14 +504,13 @@ public class SignInGUI
             version.startsWith("1.11") ||
             version.startsWith("1.12") || 
             version.startsWith("1.13")) return;
-        if (is.getItemMeta() == null) return;
         ItemMeta im = is.getItemMeta();
-        String name = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath);
-        if (im == null || name == null) return;
+        if (im == null) return;
+        String name = MessageUtil.replacePlaceholders(player, section.getString(configPath + ".Custom-Model-Data"), placeholders);
+        if (name == null) return;
         try {
             im.setCustomModelData(Integer.valueOf(name));
         } catch (Exception ex) {
-            Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
             placeholders.put("{data}", name);
             placeholders.put("{path}", configPath + "." + name);
             LiteSignInProperties.sendOperationMessage("InvalidCustomModelData", placeholders);
@@ -778,12 +518,53 @@ public class SignInGUI
         is.setItemMeta(im);
     }
     
-    private static void setHeadTextures(Player player, String configPath, ItemStack is) {
+    private static void setItemModel(Player player, Map<String, String> placeholders, ConfigurationSection section, String configPath, ItemStack is) {
+        String version = Bukkit.getBukkitVersion();
+        if (version.startsWith("1.7") ||
+            version.startsWith("1.8") ||
+            version.startsWith("1.9") ||
+            version.startsWith("1.10") ||
+            version.startsWith("1.11") ||
+            version.startsWith("1.12") || 
+            version.startsWith("1.13") || 
+            version.startsWith("1.14") || 
+            version.startsWith("1.15") || 
+            version.startsWith("1.16") || 
+            version.startsWith("1.17") || 
+            version.startsWith("1.18") || 
+            version.startsWith("1.19")) {
+            return;
+        }
+        ItemMeta im = is.getItemMeta();
+        if (im == null) return;
+        String name = MessageUtil.replacePlaceholders(player, section.getString(configPath + ".Item-Model"), placeholders);
+        if (name == null) return;
+        String[] modelInfo = name.split(":");
+        try {
+            Method method = im.getClass().getMethod("setItemModel", NamespacedKey.class);
+            if (!method.isAccessible()) {
+                method.setAccessible(true);
+            }
+            if (modelInfo.length == 2) {
+                method.invoke(im, new NamespacedKey(modelInfo[0], modelInfo[1]));
+            } else {
+                method.invoke(im, NamespacedKey.minecraft(modelInfo[0]));
+            }
+        } catch (Exception ex) {
+            placeholders.put("{data}", name);
+            placeholders.put("{path}", configPath + "." + name);
+            LiteSignInProperties.sendOperationMessage("InvalidItemModel", placeholders);
+        }
+        is.setItemMeta(im);
+    }
+    
+    private static void setHeadTextures(Player player, Map<String, String> placeholders, ConfigurationSection section, String configPath, ItemStack is) {
         String version = Bukkit.getBukkitVersion();
         if (version == null || version.startsWith("1.7")) return;
         ItemMeta im = is.getItemMeta();
-        String textures = MessageUtil.toPlaceholderAPIResult(player, ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getString(configPath));
-        if (im == null || textures == null) return;
+        if (im == null) return;
+        String textures = MessageUtil.replacePlaceholders(player, section.getString(configPath + ".Head-Textures"), placeholders);
+        if (textures == null) return;
         if (is.getItemMeta() instanceof SkullMeta) {
             is.setItemMeta(SkullManager.getHeadWithTextures(textures).getItemMeta());
         }

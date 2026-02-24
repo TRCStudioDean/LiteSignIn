@@ -11,8 +11,6 @@ public class LiteSignInTask
     @Getter
     private final long tickInterval;
     @Getter
-    private final boolean onlyPlayersOnline;
-    @Getter
     private long executeTimes = 0;
     @Getter
     private long tickedTimes = 0;
@@ -21,14 +19,6 @@ public class LiteSignInTask
         this.task = task;
         this.totalExecuteTimes = totalExecuteTimes;
         this.tickInterval = tickInterval;
-        onlyPlayersOnline = false;
-    }
-
-    public LiteSignInTask(Runnable task, long totalExecuteTimes, long tickInterval, boolean onlyPlayersOnline) {
-        this.task = task;
-        this.totalExecuteTimes = totalExecuteTimes;
-        this.tickInterval = tickInterval;
-        this.onlyPlayersOnline = onlyPlayersOnline;
     }
     
     public void run() {

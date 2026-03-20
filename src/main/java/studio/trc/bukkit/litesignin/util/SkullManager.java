@@ -29,9 +29,14 @@ public class SkullManager
 {
     @Getter
     private static final Map<UUID, String> base64Meta = new ConcurrentHashMap<>();
-    private static final Gson gson = new Gson();
+    // In order to avoid NoClassDefFoundError in 1.7.10
+    private static Object gson = null;
     
     public static void refreshTexture(UUID uuid, String name) {
+        if (Bukkit.getBukkitVersion().startsWith("1.7")) return;
+        if (gson == null) {
+            gson = new Gson();
+        }
         if (base64Meta.containsKey(uuid)) return;
         if (UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()).equals(uuid)) {
             return;
@@ -46,12 +51,13 @@ public class SkullManager
                     source.append('\n');
                 }
             }
-            JsonObject json = gson.fromJson(source.toString(), JsonObject.class);
+            JsonObject json = ((Gson) gson).fromJson(source.toString(), JsonObject.class);
             base64Meta.put(uuid, json.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString());
         } catch (Exception ex) {}
     }
     
     public static void refreshTextureByDefaultMethod(UUID uuid, String name) {
+        if (Bukkit.getBukkitVersion().startsWith("1.7")) return;
         if (base64Meta.containsKey(uuid)) return;
         try {
             ItemStack head = getDefaultHead();

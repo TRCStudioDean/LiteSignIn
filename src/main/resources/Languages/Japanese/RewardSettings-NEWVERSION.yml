@@ -208,7 +208,6 @@ Reward-Settings:
                 Disabled-Modules:
                     Special-Dates: true
                     Special-Weeks: true
-                    Special-Times: true
                     Statistics-Times: false
                     Statistics-Times-Cycle: false
                 Reward-Items:

@@ -18,6 +18,7 @@ import studio.trc.bukkit.litesignin.database.util.BackupUtil;
 import studio.trc.bukkit.litesignin.database.util.RollBackUtil;
 import studio.trc.bukkit.litesignin.message.JSONComponent;
 import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.Updater;
 import studio.trc.bukkit.litesignin.util.SignInDate;
@@ -75,7 +76,7 @@ public class Join
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Async-Thread-Settings.Async-Task-Settings.Load-Data")) {
             LiteSignInThread.runTask(task, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay"));
         } else {
-            PluginControl.runBukkitTask(task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20));
+            BukkitSchedulerManager.runBukkitTask(task, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Join-Event.Delay") * 20), player);
         }
         if (Updater.isFoundANewVersion() && PluginControl.enableUpdater()) {
             if (LiteSignInUtils.hasPermission(player, "Updater")) {
@@ -104,7 +105,7 @@ public class Join
     }
     
     public void schedule(Storage data, Player player, boolean unableToHoldCards, boolean autoSignIn) {
-        PluginControl.runBukkitTask(() -> {
+        BukkitSchedulerManager.runBukkitTask(() -> {
             if (unableToHoldCards) {
                 if (data.getRetroactiveCard() > 0) {
                     data.takeRetroactiveCard(data.getRetroactiveCard());
@@ -116,6 +117,6 @@ public class Join
                     data.signIn();
                 }
             }
-        }, 0);
+        }, 0, player);
     }
 }

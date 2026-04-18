@@ -78,7 +78,7 @@ Async-Thread-Settings:
     #你可以選擇將某些任務歸類為異步任務
     Async-Task-Settings:
         #排行榜查看
-        Leaderboard-View: false
+        Leaderboard-View: true
         #加載玩家數據
         Load-Data: true
         #打開GUI

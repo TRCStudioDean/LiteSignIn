@@ -7,6 +7,7 @@ import java.util.Map;
 
 import lombok.Getter;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,12 +30,13 @@ public class SignInRetroactiveTimeReward
     public SignInRetroactiveTimeReward(SignInGroup group) {
         this.group = group;
         collection = new HashMap<>();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules")) {
-            collection.put(SignInRewardModule.SPECIAL_DATE, ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
-            collection.put(SignInRewardModule.SPECIAL_WEEK, ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
-            collection.put(SignInRewardModule.STATISTICS_TIME, ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
-            collection.put(SignInRewardModule.STATISTICS_TIME_OF_MONTH, ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Month"));
-            collection.put(SignInRewardModule.STATISTICS_TIME_CYCLE, ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Cycle"));
+        YamlConfiguration settings = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getConfig();
+        if (settings.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules")) {
+            collection.put(SignInRewardModule.SPECIAL_DATE, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
+            collection.put(SignInRewardModule.SPECIAL_WEEK, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
+            collection.put(SignInRewardModule.STATISTICS_TIME, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
+            collection.put(SignInRewardModule.STATISTICS_TIME_OF_MONTH, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Month"));
+            collection.put(SignInRewardModule.STATISTICS_TIME_CYCLE, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Cycle"));
         }
     }
 

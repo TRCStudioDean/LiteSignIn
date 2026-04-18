@@ -33,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 
 public class Menu
     implements Listener
@@ -79,23 +80,23 @@ public class Menu
     }
     
     public static void callEvent(SignInGUIOpenEvent event, Player player, SignInInventory inventory) {
-        PluginControl.runBukkitTask(() -> {
+        BukkitSchedulerManager.runBukkitTask(() -> {
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 player.openInventory(inventory.getInventory());
                 menuOpening.put(player.getUniqueId(), inventory);
             }
-        }, 0);
+        }, 0, player);
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void click(InventoryClickEvent e) {
-        if (e.getWhoClicked() instanceof Player) {
-            Player player = (Player) e.getWhoClicked();
+    public void click(InventoryClickEvent event) {
+        if (event.getWhoClicked() instanceof Player) {
+            Player player = (Player) event.getWhoClicked();
             if (menuOpening.get(player.getUniqueId()) != null) {
-                e.setCancelled(true);
+                event.setCancelled(true);
                 YamlConfiguration guiConfig = ConfigurationUtil.getConfig(ConfigurationType.GUI_SETTINGS).getConfig();
-                if (e.getClickedInventory() != null && InventoryType.CHEST.equals(e.getClickedInventory().getType())) {
+                if (event.getClickedInventory() != null && InventoryType.CHEST.equals(event.getClickedInventory().getType())) {
                     if (BackupUtil.isBackingUp()) {
                         MessageUtil.sendMessage(player, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Database-Management.Backup.BackingUp");
                         player.closeInventory();
@@ -112,7 +113,7 @@ public class Menu
                     int nextPageYear = inv.getNextPageYear();
                     int previousPageMonth = inv.getPreviousPageMonth();
                     int previousPageYear = inv.getPreviousPageYear();
-                    int slot = e.getSlot();
+                    int slot = event.getSlot();
                     for (SignInGUIColumn columns : inv.getButtons()) {
                         if (columns.getKeyPostion() == slot) {
                             if (columns.isKey()) {
@@ -212,16 +213,17 @@ public class Menu
     }
     
     @EventHandler(ignoreCancelled = true)
-    public void close(InventoryCloseEvent e) {
-        if (e.getPlayer() instanceof Player) {
-            Player player = (Player) e.getPlayer();
+    public void close(InventoryCloseEvent event) {
+        if (event.getPlayer() instanceof Player) {
+            Player player = (Player) event.getPlayer();
             if (menuOpening.get(player.getUniqueId()) != null) {
                 menuOpening.remove(player.getUniqueId());
-                PluginControl.runBukkitTask(() -> {
-                    if (player.getOpenInventory().equals(e.getView())) {
+                // Delay 1 tick for safety close.
+                BukkitSchedulerManager.runBukkitTask(() -> {
+                    if (player.getOpenInventory().equals(event.getView())) {
                         player.closeInventory();
                     }
-                }, 0);
+                }, 0, player);
                 Bukkit.getPluginManager().callEvent(new SignInGUICloseEvent(player));
             }
         }

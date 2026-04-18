@@ -207,10 +207,7 @@ Reward-Settings:
             Retroactive-Time:
                 Disabled-Modules:
                     Special-Dates: true
-                    Special-Weeks: true
                     Special-Times: true
-                    Statistics-Times: false
-                    Statistics-Times-Cycle: false
                 Reward-Items:
                 - 'diamond:2'
                 - 'gold_ingot:6'

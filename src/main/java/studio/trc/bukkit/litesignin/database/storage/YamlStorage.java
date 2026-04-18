@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import studio.trc.bukkit.litesignin.api.Storage;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
@@ -42,7 +42,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public final class YamlStorage
     implements Storage
 {
-    public static final Map<UUID, YamlStorage> cache = new HashMap();
+    public static final Map<UUID, YamlStorage> cache = new ConcurrentHashMap();
     
     private final UUID uuid;
     private final FileConfiguration config = new YamlConfiguration();

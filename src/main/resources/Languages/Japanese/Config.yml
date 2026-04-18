@@ -75,7 +75,7 @@ Async-Thread-Settings:
     #特定のタスクを非同期タスクとして設定することを選択できます。
     Async-Task-Settings:
         #リーダーボード ビュー (コマンド /litesignin leaderboard)
-        Leaderboard-View: false
+        Leaderboard-View: true
         #プレイヤーのデータを読み込む
         Load-Data: true
         #GUI を開く

@@ -11,6 +11,7 @@ import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.database.storage.SQLiteStorage;
 import studio.trc.bukkit.litesignin.database.storage.MySQLStorage;
+import studio.trc.bukkit.litesignin.thread.LiteSignInThread;
 import studio.trc.bukkit.litesignin.util.OnlineTimeRecord;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
@@ -18,16 +19,18 @@ public class Quit
     implements Listener
 {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void quit(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
+    public void quit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
         if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Online-Duration-Condition.Enabled")) {
             OnlineTimeRecord.savePlayerOnlineTime(player);
         }
-        Storage.getPlayer(player).saveData();
-        if (PluginControl.useMySQLStorage()) {
-            MySQLStorage.cache.remove(player.getUniqueId());
-        } else if (PluginControl.useSQLiteStorage()) {
-            SQLiteStorage.cache.remove(player.getUniqueId());
-        }
+        LiteSignInThread.runTask(() -> {
+            Storage.getPlayer(player).saveData();
+            if (PluginControl.useMySQLStorage()) {
+                MySQLStorage.cache.remove(player.getUniqueId());
+            } else if (PluginControl.useSQLiteStorage()) {
+                SQLiteStorage.cache.remove(player.getUniqueId());
+            }
+        });
     }
 }

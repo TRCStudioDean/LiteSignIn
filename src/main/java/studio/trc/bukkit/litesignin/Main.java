@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 
 /**
  * Do not resell the source code of this plug-in.
@@ -58,7 +59,7 @@ public class Main
         LiteSignInProperties.sendOperationMessage("PluginEnabledSuccessfully", MessageUtil.getDefaultPlaceholders());
         
         //It will run after the server is started.
-        PluginControl.runBukkitTask(() -> {
+        BukkitSchedulerManager.runBukkitTask(() -> {
             if (PluginControl.enableUpdater()) {
                 Updater.checkUpdate();
             }
@@ -71,7 +72,7 @@ public class Main
                     LiteSignInProperties.sendOperationMessage("UnsupportedCore", MessageUtil.getDefaultPlaceholders());
                 }
             }
-        }, 0);
+        }, 0, null);
         
         //Metrics
         if (PluginControl.enableMetrics()) {

@@ -75,11 +75,11 @@ Async-Thread-Settings:
     #You can choose to set certain tasks as asynchronous tasks.
     Async-Task-Settings:
         #Leaderboard view (command /litesignin leaderboard)
-        Leaderboard-View: false
+        Leaderboard-View: true
         #Load player's data
         Load-Data: true
         #Open GUI (this option is enabled by default because loading heads may cause lag)
-        Open-GUI: true
+        Open-GUI: false
     
 #Retroactive Card
 #Its role is to supplement the missing sign-in date.

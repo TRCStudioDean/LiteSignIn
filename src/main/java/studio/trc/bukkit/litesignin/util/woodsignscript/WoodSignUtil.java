@@ -27,7 +27,7 @@ import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.message.color.ColorUtils;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
-import studio.trc.bukkit.litesignin.util.PluginControl;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
 
 public class WoodSignUtil
@@ -132,14 +132,14 @@ public class WoodSignUtil
         database.set("Database." + number + ".Script", woodSign.getWoodSignTitle());
         saveScriptedSigns();
         if (reloadFile) loadSigns();
-        PluginControl.runBukkitTask(() -> {
+        BukkitSchedulerManager.runBukkitTask(() -> {
             Sign sign = (Sign) block.getState();
             sign.setLine(0, ColorUtils.toColor(woodSign.getWoodSignText().getLine1()));
             sign.setLine(1, ColorUtils.toColor(woodSign.getWoodSignText().getLine2()));
             sign.setLine(2, ColorUtils.toColor(woodSign.getWoodSignText().getLine3()));
             sign.setLine(3, ColorUtils.toColor(woodSign.getWoodSignText().getLine4()));
             sign.update();
-        }, 1);
+        }, 1, location);
     }
     
     public static boolean removeWoodSignScript(Location location) {

@@ -15,7 +15,7 @@ public class SaveCommand
 {
     @Override
     public void execute(CommandSender sender, String subCommand, String... args) {
-        PluginControl.savePlayerData();
+        PluginControl.savePlayersData();
         MessageUtil.sendCommandMessage(sender, "Save");
     }
 

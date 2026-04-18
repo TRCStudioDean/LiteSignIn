@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class SignInRewardCommand
@@ -30,32 +31,33 @@ public class SignInRewardCommand
     public void runWithThePlayer(Player player) {
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{player}", player.getName());
-        String command_replaced = MessageUtil.replacePlaceholders(player, command, placeholders);
-        PluginControl.runBukkitTask(() -> {
-            switch (type) {
-                case PLAYER: {
-                    player.performCommand(command_replaced);
-                    break;
-                }
-                case OP: {
-                    if (player.isOp()) {
-                        player.performCommand(command_replaced);
-                    } else {
+        String processedCommand = MessageUtil.replacePlaceholders(player, command, placeholders);
+        switch (type) {
+            case PLAYER: {
+                BukkitSchedulerManager.runBukkitTask(() -> player.performCommand(processedCommand), 0, player);
+                break;
+            }
+            case OP: {
+                if (player.isOp()) {
+                    BukkitSchedulerManager.runBukkitTask(() -> player.performCommand(processedCommand), 0, player);
+                } else {
+                    BukkitSchedulerManager.runBukkitTask(() -> {
                         player.setOp(true);
                         try {
-                            player.performCommand(command_replaced);
+                            player.performCommand(processedCommand);
                         } catch (Throwable error) {
                             error.printStackTrace();
+                        } finally {
+                            player.setOp(false);
                         }
-                        player.setOp(false);
-                    }
-                    break;
+                    }, 0,player);
                 }
-                case SERVER: {
-                    Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), command_replaced);
-                    break;
-                }
+                break;
             }
-        }, 0);
+            case SERVER: {
+                BukkitSchedulerManager.runBukkitTask(() -> Main.getInstance().getServer().dispatchCommand(Bukkit.getConsoleSender(), processedCommand), 0, null);
+                break;
+            }
+        }
     }
 }

@@ -104,7 +104,7 @@ public class PluginControl
         SQLiteEngine.getInstance().connect();
     }
     
-    public static void savePlayerData() {
+    public static void savePlayersData() {
         YamlStorage.cache.values().stream().forEach(YamlStorage::saveData);
         MySQLStorage.cache.values().stream().forEach(MySQLStorage::saveData);
         SQLiteStorage.cache.values().stream().forEach(SQLiteStorage::saveData);
@@ -323,29 +323,5 @@ public class PluginControl
         backupFiles = list;
         backupFilesAcquisitionTime = System.currentTimeMillis();
         return list;
-    }
-    
-    public static void runBukkitTask(Runnable task, long delay) {
-        try {
-            if (delay == 0) {
-                Bukkit.getScheduler().runTask(Main.getInstance(), task);
-            } else {
-                Bukkit.getScheduler().runTaskLater(Main.getInstance(), task, delay);
-            }
-        } catch (UnsupportedOperationException ex) {
-            //Folia suppport (test)
-            Consumer runnable = run -> task.run();
-            try {
-                Object globalRegionScheduler = Bukkit.class.getMethod("getGlobalRegionScheduler").invoke(null);
-                if (delay == 0) {
-                    globalRegionScheduler.getClass().getMethod("run", Plugin.class, Consumer.class).invoke(globalRegionScheduler, Main.getInstance(), runnable);
-                } else {
-                    globalRegionScheduler.getClass().getMethod("runDelayed", Plugin.class, Consumer.class, long.class).invoke(globalRegionScheduler, Main.getInstance(), runnable, delay);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                task.run();
-            }
-        }
     }
 }

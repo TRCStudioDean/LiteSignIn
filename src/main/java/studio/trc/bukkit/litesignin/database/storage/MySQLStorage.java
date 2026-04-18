@@ -9,10 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.Getter;
 
@@ -42,7 +42,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public final class MySQLStorage
     implements Storage
 {
-    public static final Map<UUID, MySQLStorage> cache = new HashMap();
+    public static final Map<UUID, MySQLStorage> cache = new ConcurrentHashMap();
     
     @Getter
     private int continuous = 0;

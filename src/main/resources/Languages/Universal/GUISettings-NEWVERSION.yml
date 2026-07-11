@@ -90,7 +90,7 @@ Simplified-Chinese:
             'OpenMainMenu':
                 #这是个自定义按钮，用于示范
                 #可以根据格式自由创建与删除按钮
-                #除此之外，自定义模型的选项是“Custom-Model-Data: [整数值]”
+                #除此之外，自定义模型的选项是“Custom-Model-Data: [整数值]” 以及 “Item-Model: [命名空间]”
                 Item: BOOK
                 Display-Name: '&6返回主菜单'
                 Close-GUI: false
@@ -243,7 +243,7 @@ English:
             'OpenMainMenu':
                 #This is a custom button used for example,
                 #You can freely create and delete buttons according to another buttons.
-                #In addition, the option for custom model is "Custom-Model-Data: [integer value]"
+                #In addition, the option for custom model is "Custom-Model-Data: [Number]" and "Item-Model: [Namespace]"
                 Item: BOOK
                 Display-Name: '&6Back to main menu.'
                 Close-GUI: false
@@ -395,7 +395,7 @@ Traditional-Chinese:
             'OpenMainMenu':
                 #這是一個自訂按鈕，用來示範
                 #可以根據格式自由建立與刪除按鈕
-                #除此之外，自訂模型的選項是“Custom-Model-Data: [整數值]”
+                #除此之外，自訂模型的選項是“Custom-Model-Data: [整數值]” 以及 “Item-Model: [命名空間]”
                 Item: BOOK
                 Display-Name: '&6返回主菜單'
                 Close-GUI: false
@@ -548,7 +548,7 @@ Japanese:
             'OpenMainMenu':
                 #これはカスタムボタンで、デモ用です
                 #ボタンはフォーマットに基づいて自由に作成および削除できます
-                #そのほか、カスタムモデルのオプションは「Custom-Model-Data:[整数値]」
+                #そのほか、カスタムモデルのオプションは「Custom-Model-Data:[整数値]」と「Item-Model:[名前空間]」
                 Item: BOOK
                 Display-Name: '&6メインメニューに戻る'
                 Close-GUI: false

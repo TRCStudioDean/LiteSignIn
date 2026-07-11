@@ -29,6 +29,9 @@ Online-Duration-Condition:
     #統計を取るかどうか（有効にすると、プレイヤーが途中で切断しても、今日のオンライン時間は保持されます）
     Statistics: true
     
+#プレイヤーのボーナスを表示するかどうか
+Reward-Message: true
+    
 #プレイヤーが以下のリストの世界にいる場合、サインインは使用できません
 Disabled-Worlds: []
 
@@ -204,6 +207,9 @@ Permissions:
     Disabled-Worlds-Bypass:
         Default: false
         Permission: signin.bypass
+    Reward-Message:
+        Default: false
+        Permission: signin.rewardmessage
     #コマンド関連の権限
     Commands:
         Help: 

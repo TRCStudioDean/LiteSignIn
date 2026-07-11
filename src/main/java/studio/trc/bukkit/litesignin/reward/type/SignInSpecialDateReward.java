@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward.type;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.util.SignInDate;
@@ -32,23 +33,25 @@ public class SignInSpecialDateReward
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.SPECIAL_DATE;
+        return SignInRewardModule.SPECIAL_DATES;
     }
     
     @Override
     public boolean overrideDefaultRewards() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Override-default-rewards");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Override-default-rewards")) {
+            return config.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Override-default-rewards");
         }
         return false;
     }
 
     @Override
     public List<String> getMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -63,10 +66,11 @@ public class SignInSpecialDateReward
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Broadcast-Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Broadcast-Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Dates." + date.getMonthAsString() + "-" + date.getDayAsString() + ".Broadcast-Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override

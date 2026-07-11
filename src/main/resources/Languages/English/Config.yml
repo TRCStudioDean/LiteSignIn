@@ -31,6 +31,9 @@ Online-Duration-Condition:
     #Enable statistics (after enabling, even if the player disconnects midway, today's online duration will be retained)
     Statistics: true
     
+#Whether to display the player's sign-in rewarded.
+Reward-Message: true
+    
 #When players are in a world on the follow list, they cannot to sign-in
 Disabled-Worlds: []
 
@@ -192,6 +195,9 @@ Permissions:
     Disabled-Worlds-Bypass:
         Default: false
         Permission: signin.bypass
+    Reward-Message:
+        Default: false
+        Permission: signin.rewardmessage
     #About commands permissions
     Commands:
         Help: 

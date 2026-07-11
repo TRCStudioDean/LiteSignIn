@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.api.Storage;
+import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
@@ -33,7 +34,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
 
 public class Menu
     implements Listener

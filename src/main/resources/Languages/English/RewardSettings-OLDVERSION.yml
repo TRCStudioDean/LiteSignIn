@@ -46,10 +46,11 @@ Reward-Settings:
                 Disabled-Modules:
                     #It is recommended to enable it to prevent players from directly receiving special rewards on certain special dates.
                     Special-Dates: true
-                    Special-Weeks: true
+                    Special-Week-Days: true
                     Statistics-Times: false
                     Statistics-Times-Of-Month: false
                     Statistics-Times-Cycle: false
+                    Custom-Date-And-Time-Periods: false
                 Play-Sounds: 
                 - 'ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
@@ -90,8 +91,8 @@ Reward-Settings:
                     - '{prefix}&aYou periodically consecutive signed in three days, get extra reward: &bGolden Apple x1'
                     Reward-Items:
                     - 'golden_apple:1'
-            #Triggered when sign-in in on a speical week.
-            Special-Weeks:
+            #Triggered when sign-in in on a special week days.
+            Special-Week-Days:
                 #Sunday
                 7:
                     Override-default-rewards: false
@@ -114,7 +115,47 @@ Reward-Settings:
                     - '{prefix}&aYou periodically signed in for 100 days in a row and got 5K coins reward.'
                     Commands:
                     - 'server:eco give {player} 5000'
+            # Triggered when checking in during custom date and time periods  
+            Custom-Date-And-Time-Periods:  
+                #Format:  
+                #   "Year-Month-Day" represents a specific date  
+                #   "Hour:Minute:Second" represents a specific time  
+                #   "Year-Month-Day Hour:Minute:Second" represents a specific date and time  
+                #   "Year-Month-Day Hour:Minute:Second ~ Year-Month-Day Hour:Minute:Second" represents a specific date-time range (from start to end)  
+                #Examples:  
+                #   '2015-8-11' means check-in is valid all day on August 11, 2015  
+                #   '8:00:00' means check-in is valid at 8:00:00 every day  
+                #   '2015-8-11~2025-8-11' means check-in is valid from August 11, 2015 to August 11, 2025  
+                #   '8:00:00~12:00:00' means check-in is valid from 8:00:00 to 12:00:00 every day  
+                #Combined usage:  
+                #   '2015-8-11 12:00:00' means check-in is valid at 12:00:00 on August 11, 2015  
+                #   '2015-8-11 12:00:00~2025-8-11 12:00:00' means check-in is valid from 12:00:00 on August 11, 2015 to 12:00:00 on August 11, 2025  
+                #Notes:  
+                #At least one of date and time must be provided, and there must be a space between them.  
+                #Date can be written as "Month-Day" or just "Day", which makes it valid every year or every month.  
+                #Use "~" to connect two time periods.  
+                #The following conditions can coexist, that is, if multiple date and time periods are met simultaneously,
+                #multiple rewards can be obtained.
+                '2015-8-11~2025-8-11': #From 00:00 on August 11, 2015 to 00:00 on August 11, 2025  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '12:00:00~15:00:00': #From 12:00:00 to 15:00:00 every day  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '2015-8-11 12:00:00~2025-8-11 15:00:00': #From 12:00:00 on August 11, 2015 to 15:00:00 on August 11, 2025  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '12-25 19:00:00 ~ 23:59:59': #From 19:00:00 to 23:59:59 on Christmas Day  
+                    Override-default-rewards: false  
+                    Messages:   
+                    - '{prefix}&aIt is Christmas Eve tonight, Merry Christmas to you.'  
+                    Reward-Items:  
+                    - 'apple:64'  
             #Triggered when signing in on a special date.
+            #Note: This configuration entry is deprecated; the more advanced option "Custom-Date-And-Time-Periods" is recommended.  
             Special-Dates:
                 #Format: Month-Day (Be careful not to correspond to "1-1" on January 1, it should be "01-01")
                 '12-25':
@@ -124,6 +165,7 @@ Reward-Settings:
                     Reward-Items:
                     - 'apple:64'
             #Triggered when signing in at a special time periods.
+            #Note: This configuration entry is deprecated; the more advanced option "Custom-Date-And-Time-Periods" is recommended.  
             Special-Time-periods:
                 #Format: Hour:Minute:Second
                 #Minimum: 00:00:00 , Maximum: 23:59:59
@@ -132,10 +174,10 @@ Reward-Settings:
                 #         '12' is '12:00:00-12:59:59' period.
                 #Ten thirty at night
                 '22:30:00':
-                    #Option type： On_Time, After_This_Time, Before_This_Time
+                    #Option type： ON_TIME, AFTER_THIS_TIME, BEFORE_THIS_TIME
                     #Corresponding to: sign in on time, sign in after this time, sign in before this time.
-                    Option: After_This_Time #Sign in after 22:30:00
-                    #Time limit. If Type is not On_Time, you can set a threshold.
+                    Option: AFTER_THIS_TIME #Sign in after 22:30:00
+                    #Time limit. If Type is not ON_TIME, you can set a threshold.
                     #"23:59:59" Will be triggered every day from 22:30:00 to 23:59:59.
                     Time-Limit: '23:59:59'
                     Override-default-rewards: true
@@ -145,7 +187,7 @@ Reward-Settings:
                     - 'milk_bucket:1'
                 #Three o'clock in the morning
                 '03:00:00':
-                    Option: Before_This_Time #Sign in before 03:00:00
+                    Option: BEFORE_THIS_TIME #Sign in before 03:00:00
                     #Triggered between 03:00:00 and 00:00:00.
                     Time-Limit: '00:00:00'
                     Override-default-rewards: true

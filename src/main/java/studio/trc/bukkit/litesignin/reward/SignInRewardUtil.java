@@ -3,6 +3,7 @@ package studio.trc.bukkit.litesignin.reward;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommandType;
 import studio.trc.bukkit.litesignin.reward.util.SignInSound;
 import studio.trc.bukkit.litesignin.util.PluginControl;
 import studio.trc.bukkit.litesignin.util.LiteSignInProperties;
+import studio.trc.bukkit.litesignin.util.LiteSignInUtils;
 
 public abstract class SignInRewardUtil
     implements SignInReward
@@ -33,11 +35,16 @@ public abstract class SignInRewardUtil
         String queue = String.valueOf(SignInQueue.getInstance().getRank(playerData.getUserUUID()));
         if (playerData.getPlayer() != null) {
             Player player = playerData.getPlayer();
+            List<ItemStack> rewardItems = getRewardItems(player);
+            List<SignInRewardCommand> signinRewardCommands = getCommands();
+            List<String> messages = getMessages();
+            List<String> broadcast = getBroadcastMessages();
+            List<SignInSound> sounds = getSounds();
             for (String taskName : ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getStringList("Reward-Task-Sequence")) {
                 try {
                     switch (SignInRewardTask.valueOf(taskName.toUpperCase())) {
                         case ITEMS_REWARD: {
-                            getRewardItems(player).stream().forEach(item -> {
+                            rewardItems.stream().forEach(item -> {
                                 if (player.getInventory().firstEmpty() != -1) {
                                     player.getInventory().addItem(item);
                                 } else {
@@ -47,41 +54,51 @@ public abstract class SignInRewardUtil
                             break;
                         }
                         case COMMANDS_EXECUTION: {
-                            getCommands().stream().forEach(commands -> commands.runWithThePlayer(player));
+                            signinRewardCommands.stream().forEach(commands -> commands.runWithThePlayer(player));
                             break;
                         }
                         case MESSAGES_SENDING: {
-                            getMessages().stream().forEach(messages -> {
+                            messages.stream().forEach(message -> {
                                 Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                                 placeholders.put("{continuous}", String.valueOf(playerData.getContinuousSignIn()));
                                 placeholders.put("{queue}", queue);
                                 placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                 placeholders.put("{player}", player.getName());
-                                MessageUtil.sendMessage(player, messages, placeholders);
+                                MessageUtil.sendMessage(player, message, placeholders);
                             });
                             break;
                         }
                         case BROADCAST_MESSAGES_SENDING: {
-                            getBroadcastMessages().stream().forEach(messages -> {
+                            broadcast.stream().forEach(message -> {
                                 Bukkit.getOnlinePlayers().stream().forEach(players -> {
                                     Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
                                     placeholders.put("{continuous}", String.valueOf(playerData.getContinuousSignIn()));
                                     placeholders.put("{queue}", queue);
                                     placeholders.put("{total-number}", String.valueOf(playerData.getCumulativeNumber()));
                                     placeholders.put("{player}", player.getName());
-                                    MessageUtil.sendMessage(players, messages, placeholders);
+                                    MessageUtil.sendMessage(players, message, placeholders);
                                 });
                             });
                             break;
                         }
                         case PLAYSOUNDS: {
-                            getSounds().stream().forEach(sounds -> sounds.playSound(player));
+                            sounds.stream().forEach(sound -> sound.playSound(player));
                             break;
                         }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+            if (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getBoolean("Reward-Message") && 
+                (!rewardItems.isEmpty() || !signinRewardCommands.isEmpty() || !messages.isEmpty() || !broadcast.isEmpty() || !sounds.isEmpty())) {
+                Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
+                placeholders.put("{player}", playerData.getName());
+                placeholders.put("{group}", getGroup().getGroupName());
+                placeholders.put("{rewardType}", getModule().getDisplayName());
+                Stream.concat(Bukkit.getOnlinePlayers().stream(), Stream.of(Bukkit.getConsoleSender()))
+                    .filter(p -> LiteSignInUtils.hasPermission(p, "Reward-Message"))
+                    .forEach(p -> MessageUtil.sendMessage(p, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Reward-Message", placeholders));
             }
         }
     }

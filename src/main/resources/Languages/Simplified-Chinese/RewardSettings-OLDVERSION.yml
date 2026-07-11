@@ -48,10 +48,11 @@ Reward-Settings:
                 Disabled-Modules:
                     #建议开启， 以防止玩家直接获得某些特殊日期的专属奖励
                     Special-Dates: true
-                    Special-Weeks: true
+                    Special-Week-Days: true
                     Statistics-Times: false
                     Statistics-Times-Of-Month: false
                     Statistics-Times-Cycle: false
+                    Custom-Date-And-Time-Periods: false
                 Reward-Items:
                 - 'diamond:1'
                 - 'gold_ingot:3'
@@ -95,8 +96,8 @@ Reward-Settings:
                     - '{prefix}&a你周期性连续签到了三天，额外奖励一个金苹果！'
                     Reward-Items:
                     - 'golden_apple:1'
-            #特别周签到时触发
-            Special-Weeks:
+            #特别星期签到时触发
+            Special-Week-Days:
                 #周日
                 7:
                     Override-default-rewards: false
@@ -119,7 +120,46 @@ Reward-Settings:
                     - '{prefix}&a签到次数100次，获得&e5000&a游戏硬币。'
                     Commands:
                     - 'server:eco give {player} 5000'
+            #在自定义日期时间段的进行签到时触发
+            Custom-Date-And-Time-Periods:
+                #格式：
+                #    "年-月-日" 代表具体日期
+                #    "时-分-秒" 代表具体时间
+                #    "年-月-日 时:分:秒" 代表具体日期时间
+                #    "年-月-日 时:分:秒 ~ 年-月-日 时:分:秒" 代表具体日期时间段（从开始到结束）
+                #示例: 
+                #    '2015-8-11' 即2015年8月11日全天签到有效 
+                #    '8:00:00' 即每一天的8:00:00签到有效
+                #    '2015-8-11~2025-8-11' 即2015年8月11日到2025年8月11日签到有效
+                #    '8:00:00~12:00:00' 即每一天的8:00:00到12:00:00签到有效
+                #混合使用:
+                #    '2015-8-11 12:00:00' 即2015年8月11日的12时0分0秒签到有效
+                #    '2015-8-11 12:00:00~2025-8-11 12:00:00' 即2015年8月11日的12时0分0秒到2025年8月11日的12时0分0秒时签到有效
+                #注意: 
+                #日期和时间必须至少有其中一个，它们之间之间需要有空格。
+                #日期可以只填写"月份-日期"或"日期"，代表每年、每月都有效。
+                #使用"~"符号代表连接两个时间段。
+                #以下条件可以共存，即如果同时满足多个日期时间段，则可以获取多个奖励。
+                '2015-8-11~2025-8-11': #从2015年8月11日零时到2025年8月11日零时
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '12:00:00~15:00:00': #每日12时0分0秒到15时0分0秒
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '2015-8-11 12:00:00~2025-8-11 15:00:00': #2015年8月11日12时0分0秒到2025年8月11日15时0分0秒
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '12-25 19:00:00 ~ 23:59:59': #圣诞节当天19点0分0秒到23点59分59秒
+                    Override-default-rewards: false
+                    Messages: 
+                    - '{prefix}&a现在是圣诞夜，祝您圣诞快乐。'
+                    Reward-Items:
+                    - 'apple:64'
             #在特殊日期进行签到时触发
+            #注：当前配置项已过时，推荐更高级的配置项 "Custom-Date-And-Time-Periods"
             Special-Dates:
                 #格式: MM-dd （月-日）注意不要把如一月一号写成“1-1”，而是“01-01”
                 '12-25':
@@ -129,6 +169,7 @@ Reward-Settings:
                     Reward-Items:
                     - 'apple:64'
             #在特殊时间段进行签到时触发
+            #注：当前配置项已过时，推荐更高级的配置项 "Custom-Date-And-Time-Periods"
             Special-Time-periods:
                 #格式： 时:分:秒， 从左往右
                 #最小值: 00:00:00 ,最大值: 23:59:59
@@ -137,9 +178,9 @@ Reward-Settings:
                 #    '12' 指 '12:00:00-12:59:59'
                 #晚上十点半
                 '22:30:00':
-                    #检测方案，分别为： On_Time, After_This_Time, Before_This_Time
+                    #检测方案，分别为： ON_TIME, AFTER_THIS_TIME, BEFORE_THIS_TIME
                     #分别对应： 准时签到， 在这之后签到， 在这之前签到
-                    Option: After_This_Time #在22:30:00之后签到
+                    Option: AFTER_THIS_TIME #在22:30:00之后签到
                     #时间限制，如果您的方案是准时签到以外的方案，你可以在这里设置上限时间
                     #“23:59:59” 在这里表示将会在每一天的22:30:00到23:59:59签到时触发
                     Time-Limit: '23:59:59'
@@ -151,7 +192,7 @@ Reward-Settings:
                     - 'milk_bucket:1'
                 #凌晨三点
                 '03:00:00':
-                    Option: Before_This_Time #在03:00:00之前签到
+                    Option: BEFORE_THIS_TIME #在03:00:00之前签到
                     #03:00:00前到00:00:00时签到时触发
                     Time-Limit: '00:00:00'
                     Override-default-rewards: true

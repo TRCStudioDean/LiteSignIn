@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward.type;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
 import studio.trc.bukkit.litesignin.reward.SignInRewardModule;
@@ -36,18 +37,20 @@ public class SignInSpecialRankingReward
     
     @Override
     public boolean overrideDefaultRewards() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Override-default-rewards");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Override-default-rewards")) {
+            return config.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Override-default-rewards");
         }
         return false;
     }
 
     @Override
     public List<String> getMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -62,10 +65,11 @@ public class SignInSpecialRankingReward
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Broadcast-Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Broadcast-Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Ranking." + ranking + ".Broadcast-Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override

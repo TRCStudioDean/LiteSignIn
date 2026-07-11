@@ -33,6 +33,9 @@ Online-Duration-Condition:
 #当玩家处于列表中的世界时无法进行签到
 Disabled-Worlds: []
 
+#是否显示玩家的奖励领取信息
+Reward-Message: true
+
 #是否启用签到排名榜功能
 #此功能用于登记每日签到玩家的先后顺序
 Enable-Sign-In-Ranking: true
@@ -208,6 +211,9 @@ Permissions:
     Disabled-Worlds-Bypass:
         Default: false
         Permission: signin.bypass
+    Reward-Message:
+        Default: false
+        Permission: signin.rewardmessage
     #命令相关权限
     Commands:
         Help: 

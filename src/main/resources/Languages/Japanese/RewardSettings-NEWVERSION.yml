@@ -47,10 +47,11 @@ Reward-Settings:
                 #禁止されているモジュール
                 Disabled-Modules:
                     Special-Dates: true
-                    Special-Weeks: true
+                    Special-Week-Days: true
                     Statistics-Times: false
                     Statistics-Times-Of-Month: false
                     Statistics-Times-Cycle: false
+                    Custom-Date-And-Time-Periods: false
                 Play-Sounds: 
                 - 'ENTITY_EXPERIENCE_ORB_PICKUP-1-1-FALSE'
                 Reward-Items:
@@ -95,7 +96,7 @@ Reward-Settings:
                     Reward-Items:
                     - 'golden_apple:1'
             #特別な曜日
-            Special-Weeks:
+            Special-Week-Days:
                 #日曜日
                 7:
                     Override-default-rewards: false
@@ -118,16 +119,56 @@ Reward-Settings:
                     - '{prefix}&aサインインは100回に達し、&e5000&aゲームコインを獲得します。'
                     Commands:
                     - 'server:eco give {player} 5000'
+            #カスタム日時期間中にチェックインするとトリガーされます  
+            Custom-Date-And-Time-Periods:  
+                #書式:  
+                #   "年-月-日" は特定の日付を表します  
+                #   "時:分:秒" は特定の時刻を表します  
+                #   "年-月-日 時:分:秒" は特定の日時を表します  
+                #   "年-月-日 時:分:秒 ~ 年-月-日 時:分:秒" は特定の日時期間（開始から終了まで）を表します  
+                #例:  
+                #   '2015-8-11' は2015年8月11日終日チェックイン有効  
+                #   '8:00:00' は毎日8:00:00のチェックインが有効  
+                #   '2015-8-11~2025-8-11' は2015年8月11日から2025年8月11日までチェックイン有効  
+                #   '8:00:00~12:00:00' は毎日8:00:00から12:00:00までチェックイン有効  
+                #複合使用:  
+                #   '2015-8-11 12:00:00' は2015年8月11日12時0分0秒のチェックインが有効  
+                #   '2015-8-11 12:00:00~2025-8-11 12:00:00' は2015年8月11日12時0分0秒から2025年8月11日12時0分0秒までのチェックインが有効  
+                #注意:  
+                #日付と時刻のうち少なくとも一方は必須で、両者の間にはスペースが必要です。  
+                #日付は"月-日"または"日"のみも記述可能で、毎年・毎月有効となります。  
+                #"~"記号で二つの期間を接続します。  
+                #以下の条件は共存することができ、つまり複数の日付期間を同時に満たすと、複数の報酬を得ることができる。
+                '2015-8-11~2025-8-11': #2015年8月11日0時から2025年8月11日0時まで  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '12:00:00~15:00:00': #毎日12時0分0秒から15時0分0秒まで  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '2015-8-11 12:00:00~2025-8-11 15:00:00': #2015年8月11日12時0分0秒から2025年8月11日15時0分0秒まで  
+                    Override-default-rewards: false  
+                    Reward-Items:  
+                    - 'diamond:1'  
+                '12-25 19:00:00 ~ 23:59:59': #クリスマス当日19時0分0秒から23時59分59秒まで  
+                    Override-default-rewards: false  
+                    Messages:   
+                    - '{prefix}&a今夜はクリスマス・イブ、メリークリスマスをお楽しみください。'  
+                    Reward-Items:  
+                    - 'apple:64'  
             #特別な日
-            Special-Dates:
+            #注：本設定項目は非推奨です。より高度な設定項目 "Custom-Date-And-Time-Periods" を推奨します。  
+            Special-Dates:  
                 #書式: MM-dd （月-日）注意！ 1月1日は「1-1」ではなく「01-01」と書いてください。
-                '12-25':
-                    Override-default-rewards: false
-                    Messages: 
-                    - '{prefix}&a今日はクリスマス、メリークリスマスです！'
-                    Reward-Items:
-                    - 'apple:64'
+                '12-25':  
+                    Override-default-rewards: false  
+                    Messages:   
+                    - '{prefix}&a今日はクリスマス、メリークリスマスです！'  
+                    Reward-Items:  
+                    - 'apple:64'  
             #毎日の特別な期間
+            #注：本設定項目は非推奨です。より高度な設定項目 "Custom-Date-And-Time-Periods" を推奨します。  
             Special-Time-periods:
                 #書式：時：分：秒、左から右へ
                 #最小: 00:00:00 、 最大: 23:59:59
@@ -135,9 +176,9 @@ Reward-Settings:
                 #例: '12:00' は '12:00:00-12:00:59' の意味です
                 #    '12' は '12:00:00-12:59:59' の意味です
                 '22:30:00':
-                    #オプション： On_Time, After_This_Time, Before_This_Time
+                    #オプション： ON_TIME, AFTER_THIS_TIME, BEFORE_THIS_TIME
                     #その意味では： 現在の時刻、 この後、 この前
-                    Option: After_This_Time #22:30:00以後にサインインする
+                    Option: AFTER_THIS_TIME #22:30:00以後にサインインする
                     #制限時間
                     #"23:59:59" て記入しての意味は、每日22:30:00 〜 23:59:59です。
                     Time-Limit: '23:59:59'
@@ -147,7 +188,7 @@ Reward-Settings:
                     Reward-Items:
                     - 'milk_bucket:1'
                 '03:00:00':
-                    Option: Before_This_Time #03:00:00より前
+                    Option: BEFORE_THIS_TIME #03:00:00より前
                     Time-Limit: '00:00:00' #00:00:00 〜 03:00:00
                     Override-default-rewards: false
                     Messages: 

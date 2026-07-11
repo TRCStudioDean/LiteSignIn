@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.message.MessageUtil;
 import studio.trc.bukkit.litesignin.util.BukkitSchedulerManager;
-import studio.trc.bukkit.litesignin.util.PluginControl;
 
 public class SignInRewardCommand
 {

@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward.type;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -53,51 +53,54 @@ public class SignInSpecialTimeOfMonthReward
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.SPECIAL_TIME_OF_MONTH;
+        return SignInRewardModule.SPECIAL_TIMES_OF_MONTH;
     }
     
     @Override
     public boolean overrideDefaultRewards() {
         if (!isAvailable()) return false;
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards")) {
+            return config.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Override-default-rewards");
         }
         return false;
     }
     
     @Override
     public List<String> getMessages() {
-        if (!isAvailable()) return new ArrayList<>();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages");
+        if (!isAvailable()) return Collections.EMPTY_LIST;
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public List<SignInRewardCommand> getCommands() {
-        if (!isAvailable()) return new ArrayList<>();
+        if (!isAvailable()) return Collections.EMPTY_LIST;
         return super.getCommands("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Commands");
     }
 
     @Override
     public List<ItemStack> getRewardItems(Player player) {
-        if (!isAvailable()) return new ArrayList<>();
+        if (!isAvailable()) return Collections.EMPTY_LIST;
         return super.getRewardItems(player, "Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Reward-Items");
     }
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (!isAvailable()) return new ArrayList<>();
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages");
+        if (!isAvailable()) return Collections.EMPTY_LIST;
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Broadcast-Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public List<SignInSound> getSounds() {
-        if (!isAvailable()) return new ArrayList<>();
+        if (!isAvailable()) return Collections.EMPTY_LIST;
         return super.getSounds("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times-Of-Month." + settings + ".Play-Sounds");
     }
 }

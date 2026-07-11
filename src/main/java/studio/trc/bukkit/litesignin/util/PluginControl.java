@@ -7,19 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
-import studio.trc.bukkit.litesignin.Main;
 import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
@@ -39,6 +37,7 @@ public class PluginControl
 {
     public static void reload() {
         ConfigurationUtil.reloadConfig();
+        heritageProcess();
         MessageUtil.loadPlaceholders();
         MessageUtil.setAdventureAvailable();
         YamlStorage.cache.clear();
@@ -323,5 +322,17 @@ public class PluginControl
         backupFiles = list;
         backupFilesAcquisitionTime = System.currentTimeMillis();
         return list;
+    }
+    
+    /**
+     * Processing some heritage settings.
+     */
+    private static void heritageProcess() {
+        // Special-Weeks -> Special-Week-Days
+        YamlConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getConfig();
+        config.getConfigurationSection("Reward-Settings.Permission-Groups").getKeys(false).forEach(section -> 
+            config.getConfigurationSection("Reward-Settings.Permission-Groups." + section).getKeys(false).stream()
+                .filter(rewardName -> rewardName.equalsIgnoreCase("Special-Weeks"))
+                .forEach(rewardInfo -> config.set("Reward-Settings.Permission-Groups." + section + ".Special-Week-Days", config.getConfigurationSection("Reward-Settings.Permission-Groups." + section + "." + rewardInfo))));
     }
 }

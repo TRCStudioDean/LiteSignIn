@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward.type;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.command.SignInRewardCommand;
 import studio.trc.bukkit.litesignin.reward.SignInRewardColumn;
@@ -31,23 +32,25 @@ public class SignInSpecialTimeReward
 
     @Override
     public SignInRewardModule getModule() {
-        return SignInRewardModule.SPECIAL_TIME;
+        return SignInRewardModule.SPECIAL_TIMES;
     }
     
     @Override
     public boolean overrideDefaultRewards() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Override-default-rewards")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Override-default-rewards");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Override-default-rewards")) {
+            return config.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Override-default-rewards");
         }
         return false;
     }
     
     @Override
     public List<String> getMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -62,10 +65,11 @@ public class SignInSpecialTimeReward
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Broadcast-Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Broadcast-Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Special-Times." + time + ".Broadcast-Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override

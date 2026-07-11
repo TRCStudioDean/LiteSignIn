@@ -1,64 +1,84 @@
 package studio.trc.bukkit.litesignin.reward;
 
+import lombok.Getter;
+
+import studio.trc.bukkit.litesignin.message.MessageUtil;
+
 public enum SignInRewardModule
 {
     /**
-     * Normal reward.
+     * Normal time
      */
-    NORMAL,
-    
+    NORMAL_TIME("Normal-Time"),
+
     /**
-     * Using retroactive card's reward.
+     * Retroactive time
      */
-    RETROACTIVE_TIME,
-    
+    RETROACTIVE_TIME("Retroactive-Time"),
+
     /**
-     * Special date's reward.
+     * Special times
      */
-    SPECIAL_DATE,
-    
+    SPECIAL_TIMES("Special-Times"),
+
     /**
-     * Special time's reward.
+     * Special week days
      */
-    SPECIAL_TIME,
-    
+    SPECIAL_WEEK_DAYS("Special-Week-Days"),
+
     /**
-     * Special time period's reward.
+     * Special dates
      */
-    SPECIAL_TIME_PERIOD,
-    
+    SPECIAL_DATES("Special-Dates"),
+
     /**
-     * Special weeks's reward.
+     * Special ranking
      */
-    SPECIAL_WEEK,
-    
+    SPECIAL_RANKING("Special-Ranking"),
+
     /**
-     * Special sign-in ranking's reward.
+     * Special time periods
      */
-    SPECIAL_RANKING,
-    
+    SPECIAL_TIME_PERIODS("Special-Time-periods"),
+
     /**
-     * Statistics time's reward.
+     * Statistics times
      */
-    STATISTICS_TIME,
-    
+    STATISTICS_TIMES("Statistics-Times"),
+
     /**
-     * Special time of month's reward.
+     * Special times of month
      */
-    SPECIAL_TIME_OF_MONTH,
-    
+    SPECIAL_TIMES_OF_MONTH("Special-Times-Of-Month"),
+
     /**
-     * Statistics time of month's reward.
+     * Statistics times of month
      */
-    STATISTICS_TIME_OF_MONTH,
-    
+    STATISTICS_TIMES_OF_MONTH("Statistics-Times-Of-Month"),
+
     /**
-     * Special time's cycle reward.
+     * Special times cycle
      */
-    SPECIAL_TIME_CYCLE,
-    
+    SPECIAL_TIMES_CYCLE("Special-Times-Cycle"),
+
     /**
-     * Statistics time's cycle reward.
+     * Statistics times cycle
      */
-    STATISTICS_TIME_CYCLE;
+    STATISTICS_TIMES_CYCLE("Statistics-Times-Cycle"),
+
+    /**
+     * Custom date and time periods
+     */
+    CUSTOM_DATE_AND_TIME_PERIOD("Custom-Date-And-Time-Periods");
+
+    @Getter
+    private final String configPath;
+
+    private SignInRewardModule(String configPath) {
+        this.configPath = configPath;
+    }
+    
+    public String getDisplayName() {
+        return MessageUtil.getMessage("Reward-Types." + configPath);
+    }
 }

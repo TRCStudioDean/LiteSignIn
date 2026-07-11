@@ -48,10 +48,11 @@ Reward-Settings:
                 Disabled-Modules:
                     #建議開啟， 以防止玩家直接獲得某些特殊日期的專屬獎勵
                     Special-Dates: true
-                    Special-Weeks: true
+                    Special-Week-Days: true
                     Statistics-Times: false
                     Statistics-Times-Of-Month: false
                     Statistics-Times-Cycle: false
+                    Custom-Date-And-Time-Periods: false
                 Reward-Items:
                 - 'diamond:1'
                 - 'gold_ingot:3'
@@ -95,8 +96,8 @@ Reward-Settings:
                     - '{prefix}&a你周期性連續簽到了三天，額外獎勵一個金蘋果！'
                     Reward-Items:
                     - 'golden_apple:1'
-            #特別週簽到時觸發
-            Special-Weeks:
+            #特別星期簽到時觸發
+            Special-Week-Days:
                 #週日
                 7:
                     Override-default-rewards: false
@@ -119,7 +120,46 @@ Reward-Settings:
                     - '{prefix}&a簽到次數100次，獲得&e5000&a遊戲硬幣。'
                     Commands:
                     - 'server:eco give {player} 5000'
+            #在自訂日期時間段的進行簽到時觸發
+            Custom-Date-And-Time-Periods:
+                #格式：
+                #    "年-月-日" 代表具體日期
+                #    "時-分-秒" 代表具體時間
+                #    "年-月-日 時:分:秒" 代表具體日期時間
+                #    "年-月-日 時:分:秒 ~ 年-月-日 時:分:秒" 代表具體日期時段（從開始到結束）
+                #範例:
+                #    '2015-8-11' 即2015年8月11日全天簽到有效
+                #    '8:00:00' 即每天的8:00:00簽到有效
+                #    '2015-8-11~2025-8-11' 即2015年8月11日至2025年8月11日簽到有效
+                #    '8:00:00~12:00:00' 即每天的8:00:00到12:00:00簽到有效
+                #混合使用:
+                #    '2015-8-11 12:00:00' 即2015年8月11日的12時0分0秒簽到有效
+                #    '2015-8-11 12:00:00~2025-8-11 12:00:00' 即2015年8月11日的120分0秒到2025年8月11日的12時0分0秒時簽到有效
+                #注意:
+                #日期和時間必須至少有其中一個，它們之間之間需要有空格。 
+                #日期可以只填寫"月份-日期"或"日期"，代表每年、每月都有效。 
+                #使用"~"符號代表連接兩個時間段。 
+                #以下條件可以共存，即如果同時滿足多個日期時間段，則可以獲得多個獎勵。
+                2015-8-11~2025-8-11': #從2015年8月11日零到2025年8月11日零時
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '12:00:00~15:00:00': #每日12時0分0秒到15時0分0秒
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '2015-8-11 12:00:00~2025-8-11 15:00:00': #2015年8月11日12時0分0秒到2025年8月11日15時0分0秒
+                    Override-default-rewards: false
+                    Reward-Items:
+                    - 'diamond:1'
+                '12-25 19:00:00 ~ 23:59:59': #聖誕節當天19點0分0秒到23點59分59秒
+                    Override-default-rewards: false
+                    Messages:
+                    '{prefix}&a現在是聖誕夜，祝您聖誕快樂。 '
+                    Rward-Items:
+                    'apple:64'
             #在特殊日期進行簽到時觸發
+            #附註：目前設定項已過時，建議更進階的設定項 "Custom-Date-And-Time-Periods"
             Special-Dates:
                 #格式: MM-dd （月-日）注意不要把如一月一號寫成“1-1”，而是“01-01”
                 '12-25':
@@ -137,9 +177,9 @@ Reward-Settings:
                 # '12' 指 '12:00:00-12:59:59'
                 #晚上十點半
                 '22:30:00':
-                    #檢測方案，分別為： On_Time, After_This_Time, Before_This_Time
+                    #檢測方案，分別為： ON_TIME, AFTER_THIS_TIME, BEFORE_THIS_TIME
                     #分別對應： 準時簽到， 在這之後簽到， 在這之前簽到
-                    Option: After_This_Time #在22:30:00之後簽到
+                    Option: AFTER_THIS_TIME #在22:30:00之後簽到
                     #時間限制，如果您的方案是準時簽到以外的方案，你可以在這裡設置上限時間
                     #“23:59:59” 在這裡表示將會在每一天的22:30:00到23:59:59簽到時觸發
                     Time-Limit: '23:59:59'
@@ -150,7 +190,7 @@ Reward-Settings:
                     - 'milk_bucket:1'
                 #凌晨三點
                 '03:00:00':
-                    Option: Before_This_Time #在03:00:00之前簽到
+                    Option: BEFORE_THIS_TIME #在03:00:00之前簽到
                     #03:00:00前到00:00:00時簽到時觸發
                     Time-Limit: '00:00:00'
                     Override-default-rewards: true

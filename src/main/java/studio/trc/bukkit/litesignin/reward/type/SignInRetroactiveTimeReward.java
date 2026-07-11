@@ -1,6 +1,6 @@
 package studio.trc.bukkit.litesignin.reward.type;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
+import studio.trc.bukkit.litesignin.configuration.RobustConfiguration;
 import studio.trc.bukkit.litesignin.reward.util.SignInGroup;
 import studio.trc.bukkit.litesignin.reward.SignInRewardModule;
 import studio.trc.bukkit.litesignin.reward.SignInRewardRetroactive;
@@ -32,11 +33,12 @@ public class SignInRetroactiveTimeReward
         collection = new HashMap<>();
         YamlConfiguration settings = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getConfig();
         if (settings.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules")) {
-            collection.put(SignInRewardModule.SPECIAL_DATE, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
-            collection.put(SignInRewardModule.SPECIAL_WEEK, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Weeks"));
-            collection.put(SignInRewardModule.STATISTICS_TIME, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
-            collection.put(SignInRewardModule.STATISTICS_TIME_OF_MONTH, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Month"));
-            collection.put(SignInRewardModule.STATISTICS_TIME_CYCLE, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Cycle"));
+            collection.put(SignInRewardModule.SPECIAL_DATES, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Dates"));
+            collection.put(SignInRewardModule.SPECIAL_WEEK_DAYS, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Special-Week-Days"));
+            collection.put(SignInRewardModule.STATISTICS_TIMES, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times"));
+            collection.put(SignInRewardModule.STATISTICS_TIMES_OF_MONTH, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Month"));
+            collection.put(SignInRewardModule.STATISTICS_TIMES_CYCLE, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Statistics-Times-Of-Cycle"));
+            collection.put(SignInRewardModule.CUSTOM_DATE_AND_TIME_PERIOD, settings.getBoolean("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Disabled-Modules.Custom-Date-And-Time-Periods"));
         }
     }
 
@@ -52,10 +54,11 @@ public class SignInRetroactiveTimeReward
 
     @Override
     public List<String> getMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -70,10 +73,11 @@ public class SignInRetroactiveTimeReward
 
     @Override
     public List<String> getBroadcastMessages() {
-        if (ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Broadcast-Messages")) {
-            return ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS).getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Broadcast-Messages");
+        RobustConfiguration config = ConfigurationUtil.getConfig(ConfigurationType.REWARD_SETTINGS);
+        if (config.contains("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Broadcast-Messages")) {
+            return config.getStringList("Reward-Settings.Permission-Groups." + group.getGroupName() + ".Retroactive-Time.Broadcast-Messages");
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override

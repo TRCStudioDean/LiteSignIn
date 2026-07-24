@@ -1,11 +1,14 @@
 package studio.trc.bukkit.litesignin.thread;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import org.bukkit.Bukkit;
 
 import studio.trc.bukkit.litesignin.configuration.ConfigurationType;
 import studio.trc.bukkit.litesignin.configuration.ConfigurationUtil;
@@ -57,7 +60,10 @@ public class LiteSignInThread
                         try {
                             task.run();
                         } catch (Throwable t) {
-                            t.printStackTrace();
+                            MessageUtil.sendMessage(Bukkit.getConsoleSender(), "&c" + (t.getMessage() != null ? (t.getClass().getName() + ": " + t.getMessage()) : t.getClass().getName()));
+                            Arrays.stream(t.getStackTrace()).forEach(trace -> MessageUtil.sendMessage(Bukkit.getConsoleSender(), "    &cat " + trace));
+                            MessageUtil.sendMessage(Bukkit.getConsoleSender(), "&cCursed by:");
+                            Arrays.stream(task.getOriginalStackTrace()).forEach(trace -> MessageUtil.sendMessage(Bukkit.getConsoleSender(), "    &cat " + trace));
                             waitToRemove.add(task);
                         }
                     });
@@ -79,12 +85,13 @@ public class LiteSignInThread
         if (taskThread != null && taskThread.running) {
             taskThread.running = false;
         }
-        taskThread = new LiteSignInThread("LiteSignIn-TaskThread", ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay"));
+        double delay = ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getDouble("Async-Thread-Settings.Task-Thread-Delay");
+        taskThread = new LiteSignInThread("LiteSignIn-TaskThread", delay);
         
         if (PluginControl.useMySQLStorage()) {
             taskThread.tasks.add(new LiteSignInTask(() -> {
                 MySQLEngine.getInstance().executeQuery("SELECT COUNT(*) FROM " + MySQLEngine.getInstance().getTableSyntax(DatabaseTable.PLAYER_DATA));
-            }, -1, ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getLong("MySQL-Storage.Wait-Timeout")));
+            }, -1, (long) (ConfigurationUtil.getConfig(ConfigurationType.CONFIG).getLong("MySQL-Storage.Wait-Timeout") / delay)));
         }
         
         LiteSignInProperties.sendOperationMessage("AsyncThreadStarted", MessageUtil.getDefaultPlaceholders());

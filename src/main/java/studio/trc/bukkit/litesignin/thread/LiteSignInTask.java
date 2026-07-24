@@ -14,11 +14,14 @@ public class LiteSignInTask
     private long executeTimes = 0;
     @Getter
     private long tickedTimes = 0;
+    @Getter
+    private final StackTraceElement[] originalStackTrace;
 
     public LiteSignInTask(Runnable task, long totalExecuteTimes, long tickInterval) {
         this.task = task;
         this.totalExecuteTimes = totalExecuteTimes;
         this.tickInterval = tickInterval;
+        originalStackTrace = Thread.currentThread().getStackTrace();
     }
     
     public void run() {

@@ -97,7 +97,7 @@ public abstract class SignInRewardUtil
                 placeholders.put("{group}", getGroup().getGroupName());
                 placeholders.put("{rewardType}", getModule().getDisplayName());
                 Stream.concat(Bukkit.getOnlinePlayers().stream(), Stream.of(Bukkit.getConsoleSender()))
-                    .filter(p -> LiteSignInUtils.hasPermission(p, "Reward-Message"))
+                    .filter(p -> LiteSignInUtils.hasPermission(p, "Reward-Message") && p != null)
                     .forEach(p -> MessageUtil.sendMessage(p, ConfigurationUtil.getConfig(ConfigurationType.MESSAGES), "Reward-Message", placeholders));
             }
         }

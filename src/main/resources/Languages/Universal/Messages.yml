@@ -8,7 +8,7 @@ Simplified-Chinese:
     Insufficient-Online-Time: '{prefix}&c今日在线时间不足，请等待 &e{minute} &c分钟后再进行签到。'
     Player-Only: '{prefix}&c控制台不能使用这个命令.'
     Player-Not-Exist: '{prefix}&c玩家 &e{player} &c不存在！'
-    Reward-Message: '{prefix}&a玩家 &c{player} &a获得了奖励。 所在权限组: &d&l&n{group}， &a奖励类型: &e{rewardType}&a。'
+    Reward-Message: '{prefix}&a玩家 &c{player} &a获得了奖励。 所在权限组: &d&l&n{group}&a， 奖励类型: &e{rewardType}&a。'
     Reward-Types:
         Normal-Time: '默认奖励'
         Retroactive-Time: '补签奖励'
@@ -338,7 +338,7 @@ Traditional-Chinese:
     Unable-To-SignIn-In-Disabled-World: '{prefix}&c目前世界無法進行簽到。'
     Repaired-Config-Section: '{prefix}&c插件無法獲取配置文件 &e{config} &c路徑 &7{path}&c, 已通過獲取默認配置文件進行修復.'
     Insufficient-Online-Time: '{prefix}&c今日線上時間不足，請等待 &e{minute} &c分鐘後再進行簽到。'
-    Reward-Message: '{prefix}&a玩家 &c{player} &a獲得了獎勵。 所在權限組: &d&l&n{group}， &a獎勵類型: &e{rewardType}&a。 '
+    Reward-Message: '{prefix}&a玩家 &c{player} &a獲得了獎勵。 所在權限組: &d&l&n{group}&a， 獎勵類型: &e{rewardType}&a。 '
     Reward-Types:
         Normal-Time: '預設獎勵'
         Retroactive-Time: '補簽獎勵'
@@ -670,7 +670,7 @@ English:
     Unable-To-SignIn-In-Disabled-World: '{prefix}&cThis world cannot use the sign-in function.'
     Repaired-Config-Section: '{prefix}&cPlugin cannot obtain the configuration file &e{config} &c path &7{path}&c, which has been fixed by obtaining the default configuration file.'
     Insufficient-Online-Time: '{prefix}&cThere is not enough online time today. Please wait for &e{minute} &cminute before signing in.'
-    Reward-Message: '{prefix}&aPlayer &c{player} &areceived rewards. Group: &d&l&n{group}, &areward type: &e{rewardType}&a.'
+    Reward-Message: '{prefix}&aPlayer &c{player} &areceived rewards. Group: &d&l&n{group}&a, reward type: &e{rewardType}&a.'
     Reward-Types:
         Normal-Time: 'Normal Reward'
         Retroactive-Time: 'Retroactive Reward'
@@ -1000,7 +1000,7 @@ Japanese:
     Unable-To-SignIn-In-Disabled-World: '{prefix}&c現在の世界ではサインインできません。'
     Repaired-Config-Section: '{prefix}&cプラグインは構成ファイル&e{config}&cのパス&e{path}&cを取得できません。この問題は解決されました。（デフォルトの構成ファイルから）'
     Insufficient-Online-Time: '{prefix}&c今日はオンライン時間が足りません。&e{minute}&c分を待ってからサインインしてください。'
-    Reward-Message: '{prefix}&aプレイヤー &c{player} &aが報酬を獲得しました。所属権限グループ：&d&l&n{group}、&a報酬タイプ：&e{rewardType}&a。'
+    Reward-Message: '{prefix}&aプレイヤー &c{player} &aが報酬を獲得しました。所属権限グループ：&d&l&n{group}&a、報酬タイプ：&e{rewardType}&a。'
     Reward-Types:
         Normal-Time: 'デフォルトアワード'
         Retroactive-Time: '補填アワード'

@@ -1,6 +1,7 @@
 package studio.trc.bukkit.litesignin.command.subcommand;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -167,7 +168,6 @@ public class LeaderboardCommand
         }
         boolean today = date.equals(SignInDate.getInstance(new Date()));
         String dateName = date.getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Date-Format"));
-        int ranking = sender instanceof Player ? queue.getRank(((Player) sender).getUniqueId()) : -1;
         String listFormatPath = today ? "Today" : "Historical-Date";
         Map<String, String> placeholders = MessageUtil.getDefaultPlaceholders();
         placeholders.put("{date}", dateName);
@@ -180,12 +180,18 @@ public class LeaderboardCommand
                 MessageUtil.getMessageList("Command-Messages.LeaderBoard.LeaderBoard-Messages") : 
                 MessageUtil.getMessageList("Command-Messages.LeaderBoard.Historical-Date-LeaderBoard-Messages")) {
             if (message.toLowerCase().contains("%leaderboard%")) {
-                for (int rank = page * numberOfSinglePage - numberOfSinglePage + 1; rank <= arraySize && rank <= page * numberOfSinglePage; rank++) {
-                    List<SignInQueueElement> tiedForUsers = queue.getRankingUser(rank);
-                    if (tiedForUsers.isEmpty()) continue;
-                    if (ranking != rank) {
-                        if (tiedForUsers.size() == 1) {
-                            SignInQueueElement element = tiedForUsers.get(0);
+                Map<Integer, List<SignInQueueElement>> rankingsMap = queue.getRankings();
+                List<Integer> sortedRanks = new ArrayList<>(rankingsMap.keySet());
+                Collections.sort(sortedRanks);
+                int startIndex = (page - 1) * numberOfSinglePage;
+                int endIndex = Math.min(startIndex + numberOfSinglePage, arraySize);
+                int currentIndex = 0;
+                for (int rank : sortedRanks) {
+                    List<SignInQueueElement> tiedForUsers = rankingsMap.get(rank);
+                    boolean isTied = tiedForUsers.size() > 1;
+                    for (SignInQueueElement element : tiedForUsers) {
+                        if (currentIndex >= startIndex && currentIndex < endIndex) {
+                            boolean isSelf = sender instanceof Player && element.getUUID().equals(((Player) sender).getUniqueId());
                             String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
                             String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
                             if (name == null) {
@@ -196,103 +202,10 @@ public class LeaderboardCommand
                             }
                             placeholders.put("{ranking}", String.valueOf(rank));
                             placeholders.put("{time}", timeName);
+                            String category = isTied ? "Tiel-Ranking" : "Usually";
+                            String target = isSelf ? "Self" : "Other-Players";
                             if (name != null) {
-                                placeholders.put("{player}", name);
-                                JSONComponent component = new JSONComponent(
-                                    MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), placeholders),
-                                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, placeholders)).collect(Collectors.toList()),
-                                    "RUN_COMMAND",
-                                    "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), placeholders)
-                                );
-                                MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders, "%player%", component);
-                            } else {
-                                Map<String, String> uuid = new HashMap();
-                                uuid.put("{uuid}", element.getUUID().toString());
-                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Other-Players", placeholders);
-                            }
-                        } else {
-                            for (SignInQueueElement user : tiedForUsers) {
-                                SignInQueueElement element = user;
-                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
-                                if (name == null) {
-                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                    if (offlineplayer != null) {
-                                        name = offlineplayer.getName();
-                                    }
-                                }
-                                placeholders.put("{ranking}", String.valueOf(rank));
-                                placeholders.put("{time}", timeName);
-                                if (name != null) {
-                                    Map<String, String> playerName = new HashMap();
-                                    playerName.put("{player}", name);
-                                    JSONComponent component = new JSONComponent(
-                                        MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Other-Players"), playerName),
-                                        MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, playerName)).collect(Collectors.toList()),
-                                        "RUN_COMMAND",
-                                        "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName)
-                                    );
-                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players", placeholders, "%player%", component);
-                                } else {
-                                    Map<String, String> uuid = new HashMap();
-                                    uuid.put("{uuid}", element.getUUID().toString());
-                                    placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                    placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking.Other-Players", placeholders);
-                                }
-                            }
-                        }
-                    } else {
-                        if (tiedForUsers.size() == 1) {
-                            SignInQueueElement element = tiedForUsers.get(0);
-                            String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                            String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
-                            if (name == null) {
-                                OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                if (offlineplayer != null) {
-                                    name = offlineplayer.getName();
-                                }
-                            }
-                            placeholders.put("{ranking}", String.valueOf(rank));
-                            placeholders.put("{time}", timeName);
-                            if (name != null) {
-                                placeholders.put("{player}", name);
-                                JSONComponent component = new JSONComponent(
-                                    MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text.Self"), placeholders),
-                                    MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, placeholders)).collect(Collectors.toList()),
-                                    "RUN_COMMAND",
-                                    "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), placeholders)
-                                );
-                                MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders, "%player%", component);
-                            } else {
-                                Map<String, String> uuid = new HashMap();
-                                uuid.put("{uuid}", element.getUUID().toString());
-                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Usually.Self", placeholders);
-                            }
-                        } else {
-                            for (SignInQueueElement user : tiedForUsers) {
-                                String target;
-                                if (user.getUUID().equals(((Player) sender).getUniqueId())) {
-                                    target = "Self";
-                                } else {
-                                    target = "Other-Players";
-                                }
-                                SignInQueueElement element = user;
-                                String timeName = element.getSignInDate().hasTimePeriod() ? element.getSignInDate().getName(MessageUtil.getMessage("Command-Messages.LeaderBoard.Time-Format")) : MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Time");
-                                String name = element.getName() != null && !element.getName().equals("null") ? element.getName() : null;
-                                if (name == null) {
-                                    OfflinePlayer offlineplayer = Bukkit.getOfflinePlayer(element.getUUID());
-                                    if (offlineplayer != null) {
-                                        name = offlineplayer.getName();
-                                    }
-                                }
-                                placeholders.put("{ranking}", String.valueOf(rank));
-                                placeholders.put("{time}", timeName);
-                                if (name != null) {
+                                if (isTied) {
                                     Map<String, String> playerName = new HashMap();
                                     playerName.put("{player}", name);
                                     JSONComponent component = new JSONComponent(
@@ -301,17 +214,28 @@ public class LeaderboardCommand
                                         "RUN_COMMAND",
                                         "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), playerName)
                                     );
-                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking." + target, placeholders, "%player%", component);
+                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + "." + category + "." + target, placeholders, "%player%", component);
                                 } else {
-                                    Map<String, String> uuid = new HashMap();
-                                    uuid.put("{uuid}", element.getUUID().toString());
-                                    placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                    placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
-                                    MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + ".Tiel-Ranking." + target, placeholders);
+                                    placeholders.put("{player}", name);
+                                    JSONComponent component = new JSONComponent(
+                                        MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Text." + target), placeholders),
+                                        MessageUtil.getMessageList("Command-Messages.LeaderBoard.Player-Show.Hover").stream().map(line -> MessageUtil.replacePlaceholders(sender, line, placeholders)).collect(Collectors.toList()),
+                                        "RUN_COMMAND",
+                                        "/" + MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Player-Show.Command"), placeholders)
+                                    );
+                                    MessageUtil.sendCommandMessageWithJSONComponent(sender, "LeaderBoard.List-Format." + listFormatPath + "." + category + "." + target, placeholders, "%player%", component);
                                 }
+                            } else {
+                                Map<String, String> uuid = new HashMap();
+                                uuid.put("{uuid}", element.getUUID().toString());
+                                placeholders.put("%player%", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                placeholders.put("{player}", MessageUtil.replacePlaceholders(sender, MessageUtil.getMessage("Command-Messages.LeaderBoard.Unknown-Player"), uuid));
+                                MessageUtil.sendCommandMessage(sender, "LeaderBoard.List-Format." + listFormatPath + "." + category + "." + target, placeholders);
                             }
                         }
+                        currentIndex++;
                     }
+                    if (currentIndex >= endIndex) break;
                 }
             } else {
                 Map<String, JSONComponent> components = new HashMap<>();

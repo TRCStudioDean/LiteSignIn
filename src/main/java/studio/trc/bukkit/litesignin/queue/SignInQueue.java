@@ -288,14 +288,17 @@ public class SignInQueue
     }
     
     public List<SignInQueueElement> getRankingUser(int ranking) {
+        return getRankings().get(ranking);
+    }
+    
+    public Map<Integer, List<SignInQueueElement>> getRankings() {
         checkUpdate();
-        List<SignInQueueElement> result = new ArrayList<>();
-        for (SignInQueueElement element : new ArrayList<>(this)) {
-            if (getRank(element.getUUID()) == ranking) {
-                result.add(element);
-            }
-        }
-        return result;
+        Map<Integer, List<SignInQueueElement>> rankings = new HashMap<>();
+        new ArrayList<>(this).stream().forEach(element -> {
+            int rank = getRank(element.getUUID());
+            rankings.computeIfAbsent(rank, k -> new ArrayList<>()).add(element);
+        });
+        return rankings;
     }
     
     public void saveData() {

@@ -234,13 +234,13 @@ public class SignInQueue
         }
         int rank = 1;
         if (user.getSignInDate().hasTimePeriod()) {
-            for (SignInQueueElement element : this) {
+            for (SignInQueueElement element : new ArrayList<>(this)) {
                 if (user.getSignInDate().compareTo(element.getSignInDate()) > 0 && element.getSignInDate().hasTimePeriod()) {
                     rank++;
                 }
             }
         } else {
-            for (SignInQueueElement element : this) {
+            for (SignInQueueElement element : new ArrayList<>(this)) {
                 if (element.getSignInDate().hasTimePeriod()) {
                     rank++;
                 }
